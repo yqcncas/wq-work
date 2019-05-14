@@ -15,6 +15,7 @@
     "pages/addGroup/main",
     "pages/CustomType/main",
     "pages/Introduction/main",
+    "pages/businesscard/showQrcode/main",
     "pages/GroupCard/main"
   ],
   "window": {

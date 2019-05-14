@@ -34,7 +34,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 1,
+			"current": 10,
 			"list": [
 				{
 					"id": 1,
@@ -51,7 +51,7 @@
 					"scene": null
 				},
 				{
-					"id": 3,
+					"id": 2,
 					"name": "名片",
 					"pathName": "pages/businesscard/main",
 					"query": "",
@@ -103,6 +103,13 @@
 					"id": -1,
 					"name": "群名片",
 					"pathName": "pages/GroupCard/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 10,
+					"name": "名片11",
+					"pathName": "pages/businesscard/showQrcode/main",
 					"query": "",
 					"scene": null
 				}

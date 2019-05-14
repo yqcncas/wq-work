@@ -35,7 +35,6 @@ export default {
     display: table;
     width: 100%;
     height: 100%;
-    padding-bottom: ~'120rpx';
     background: #F2F2F2!important;
   }
 .container {

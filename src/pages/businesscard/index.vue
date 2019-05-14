@@ -226,6 +226,13 @@
           mores: '点击了解更多'
         }]
       }
+    },
+    methods: {
+      routerTo (url) {
+        wx.navigateTo({
+          url
+        })
+      }
     }
   }
 </script>
