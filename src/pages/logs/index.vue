@@ -73,52 +73,54 @@
         </div>
       </div>
       <!--底部查找-->
-        <div class="cardHold-ft" v-for="(items,indexs) in letter" :key="items">
-          <div class="cardHold-ftM" >
-            <div class="cardHold-ftName" :id = 'items'>
-              <p>{{items}}</p>
-            </div>
-            <div class="cardHold-ftMain">
-              <div class="cardHold-ftMain-ct" v-for="(item,index) in commitInfo" :key="index">
-                <div class="center" @touchstart="touchStart($event)" @touchend="touchEnd($event,index)" :data-type="item.type" >
-                  <div class="cardHold-ftMain-ct-img" @click="recover(index)">
-                    <img src="../../../static/images/tiangou.jpg"/>
-                  </div>
-                  <div v-if="item.grade === 'V1' " class="cardHold-ftMain-rt" @click="recover(index)">
-                    <span class="icon">{{ item.icon }}</span>
-                    <span class="name">{{ item.name }}</span>
-                    <span class="job">{{ item.job }}</span>
-                    <span class="status">{{ item.status }}</span>
-                    <span class="grade">{{ item.grade }}</span>
-                    <p class="company">{{ item.company }}</p>
-                    <div class="phone">
-                      <img src="../../../static/images/call.png"/>
+        <div class="padds">
+          <div class="cardHold-ft" v-for="(items,indexs) in letter" :key="items">
+            <div class="cardHold-ftM" >
+              <div class="cardHold-ftName" :id = 'items'>
+                <p>{{items}}</p>
+              </div>
+              <div class="cardHold-ftMain">
+                <div class="cardHold-ftMain-ct" v-for="(item,index) in commitInfo" :key="index">
+                  <div class="center" @touchstart="touchStart($event)" @touchend="touchEnd($event,index)" :data-type="item.type" >
+                    <div class="cardHold-ftMain-ct-img" @click="recover(index)">
+                      <img src="../../../static/images/tiangou.jpg"/>
                     </div>
-                  </div>
-                  <div v-else-if="item.grade === 'V2' " class="cardHold-ftMain-rt2 " @click="recover(index)">
-                    <span class="icon">{{ item.icon }}</span>
-                    <span class="name">{{ item.name }}</span>
-                    <span class="job">{{ item.job }}</span>
-                    <span class="status">{{ item.status }}</span>
-                    <span class="grade">{{ item.grade }}</span>
-                    <p class="company">{{ item.company }}</p>
-                    <div class="phone">
-                      <img src="../../../static/images/call.png"/>
+                    <div v-if="item.grade === 'V1' " class="cardHold-ftMain-rt" @click="recover(index)">
+                      <span class="icon">{{ item.icon }}</span>
+                      <span class="name">{{ item.name }}</span>
+                      <span class="job">{{ item.job }}</span>
+                      <span class="status">{{ item.status }}</span>
+                      <span class="grade">{{ item.grade }}</span>
+                      <p class="company">{{ item.company }}</p>
+                      <div class="phone">
+                        <img src="../../../static/images/call.png"/>
+                      </div>
                     </div>
-                  </div>
-                  <div v-else class="cardHold-ftMain-rt3" @click="recover(index)">
-                    <span class="icon">{{ item.icon }}</span>
-                    <span class="name">{{ item.name }}</span>
-                    <span class="job">{{ item.job }}</span>
-                    <span class="status">{{ item.status }}</span>
-                    <span class="grade">{{ item.grade }}</span>
-                    <p class="company">{{ item.company }}</p>
-                    <div class="phone">
-                      <img src="../../../static/images/call.png"/>
+                    <div v-else-if="item.grade === 'V2' " class="cardHold-ftMain-rt2 " @click="recover(index)">
+                      <span class="icon">{{ item.icon }}</span>
+                      <span class="name">{{ item.name }}</span>
+                      <span class="job">{{ item.job }}</span>
+                      <span class="status">{{ item.status }}</span>
+                      <span class="grade">{{ item.grade }}</span>
+                      <p class="company">{{ item.company }}</p>
+                      <div class="phone">
+                        <img src="../../../static/images/call.png"/>
+                      </div>
                     </div>
-                  </div>
-                  <div class="delete" @click="delect(index)">
-                    删除
+                    <div v-else class="cardHold-ftMain-rt3" @click="recover(index)">
+                      <span class="icon">{{ item.icon }}</span>
+                      <span class="name">{{ item.name }}</span>
+                      <span class="job">{{ item.job }}</span>
+                      <span class="status">{{ item.status }}</span>
+                      <span class="grade">{{ item.grade }}</span>
+                      <p class="company">{{ item.company }}</p>
+                      <div class="phone">
+                        <img src="../../../static/images/call.png"/>
+                      </div>
+                    </div>
+                    <div class="delete" @click="delect(index)">
+                      删除
+                    </div>
                   </div>
                 </div>
               </div>
@@ -210,7 +212,7 @@ export default {
     wx.getSystemInfo({
       success: function (res) {
         console.log('res', res.windowHeight)
-        that.windowHeight = res.windowHeight
+        that.windowHeight = res.windowHeight + 22
       }
     })
   },
