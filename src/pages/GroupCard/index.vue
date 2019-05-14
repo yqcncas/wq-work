@@ -108,6 +108,13 @@
           status: '已认证',
           job: '技术总监',
           type: 0
+        }, {
+          icon: '企',
+          name: '李松阳',
+          company: '浙江万仟科技有限公司',
+          status: '已认证',
+          job: '技术总监',
+          type: 0
         }]
       }
     },

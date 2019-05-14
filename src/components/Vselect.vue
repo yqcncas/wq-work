@@ -159,7 +159,7 @@
     padding-left: ~'20rpx';
   }
   .active{
-    color:#fe7723;
+    color:#2A94EC;
   }
   .options{
     animation: ~'5rpx';

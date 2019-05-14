@@ -85,6 +85,14 @@
           Companyname: '浙江万仟科技有限公司'
         }, {
           headImg: '../../static/images/gongzhonghao.jpg',
+          name: '李松阳1',
+          job: '技术总监',
+          status: '已认证',
+          eye: 10,
+          star: 10,
+          Companyname: '浙江万仟科技有限公司'
+        }, {
+          headImg: '../../static/images/gongzhonghao.jpg',
           name: '李松阳',
           job: '技术总监',
           status: '已认证',
