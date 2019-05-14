@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "名片夹",
+  "navigationBarTextStyle": "white",
+  "navigationStyle": "custom",
+  "enablePullDownRefresh":false,
+  "disableScroll": true
+}

@@ -1,0 +1,112 @@
+{
+	"description": "项目配置文件。",
+	"setting": {
+		"urlCheck": false,
+		"es6": true,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true,
+		"nodeModules": true,
+		"autoAudits": true,
+		"uglifyFileName": true
+	},
+	"miniprogramRoot": "dist/wx/",
+	"compileType": "miniprogram",
+	"appid": "wx208fcc9a5833f86d",
+	"projectname": "seas-card",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"currentL": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": 4,
+			"list": [
+				{
+					"id": 1,
+					"name": "修改",
+					"pathName": "pages/index/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 2,
+					"name": "企业认证",
+					"pathName": "pages/attestation/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 3,
+					"name": "名片",
+					"pathName": "pages/businesscard/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 4,
+					"name": "雷达",
+					"pathName": "pages/radar/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 4,
+					"name": "分类",
+					"pathName": "pages/classify/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 6,
+					"name": "创建群名片",
+					"pathName": "pages/addGroup/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "自定义群类型",
+					"pathName": "pages/CustomType/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "群简介",
+					"pathName": "pages/Introduction/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 10,
+					"name": "群",
+					"pathName": "pages/group/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "群名片",
+					"pathName": "pages/GroupCard/main",
+					"query": "",
+					"scene": null
+				}
+			]
+		}
+	}
+}
