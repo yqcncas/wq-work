@@ -47,7 +47,7 @@ export default {
 <style lang="less" scoped>
 .ma-trans-page {
   width: 100%;
-  height: 150%;
+  height: 100%;
   background-image: linear-gradient(to bottom, #2e81ff, #5fc1ff);
   color: #fff;
   font-size: ~'28rpx';
