@@ -37,7 +37,7 @@
                     <submit class="cardHold-top-main-footer-share">
                       <span><i class="iconfont iconfenxiang"></i>分享名片</span>
                     </submit>
-                     <submit class="cardHold-top-main-footer-look">
+                     <submit class="cardHold-top-main-footer-look" @click="routerTo(`./showQrcode/index?companyName=${companyName}&logo=${logo}&qrcode=${qrCodeUrl}&name=${name}&job=${job}&imgUrl=${imgUrl}`)">
                        <i class="iconfont iconiconfontsaomiaoerweima-copy"></i>
                        <span>名片码</span>
                     </submit>
@@ -51,7 +51,7 @@
       <div class="cardHold-main">
         <div class="cardHold-main-me">
           <div class="cardHold-main-mes">
-            <div class="cardHold-blok">
+            <div class="cardHold-blok" @click="goRadar">
               <div class="cardHold-Img">
                 <img src="../../../static/images/leida.png">
               </div>
@@ -60,7 +60,7 @@
                 <P class="cardHold-blok-J">客户数据追踪、统计、AI分析</P>
               </div>
             </div>
-            <div class="cardHold-blok">
+            <div class="cardHold-blok" @click="goGroup">
               <div class="cardHold-Img1">
                 <img src="../../../static/images/qun.png">
               </div>
@@ -150,7 +150,7 @@ export default {
   data () {
     return {
       userInfo: {},
-      selectNavIndex: 0,
+      selectNavIndex: 1,
       needButton: true,
       handButton: true,
       indexShow: false,
@@ -281,6 +281,21 @@ export default {
       } else {
         return 'AAA'
       }
+    },
+    goRadar () {
+      wx.navigateTo({
+        url: '../radar/main'
+      })
+    },
+    goGroup () {
+      wx.navigateTo({
+        url: '../GroupCard/main'
+      })
+    },
+    routerTo (url) {
+      wx.navigateTo({
+        url
+      })
     }
   }
 }

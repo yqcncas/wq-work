@@ -1,6 +1,5 @@
 {
     "navigationBarTitleText": "雷达",
-    "disableScroll": true,
-   "navigationBarBackgroundColor": "#2A94EC",
+    "navigationBarBackgroundColor": "#2A94EC",
     "navigationBarTextStyle": "white"
 }

@@ -16,7 +16,15 @@
     "pages/CustomType/main",
     "pages/Introduction/main",
     "pages/businesscard/showQrcode/main",
-    "pages/GroupCard/main"
+    "pages/logs/showQrcode/main",
+    "pages/message/main",
+    "pages/introduce/main",
+    "pages/product/main",
+    "pages/addProduct/main",
+    "pages/GroupCard/main",
+    "pages/release/main",
+    "pages/resEdit/main",
+    "pages/OthersCard/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -31,7 +39,13 @@
     "selectedColor": "#333",
     "borderStyle": "white",
 
-    "list": [{
+    "list": [
+      {
+        "text": "我的名片",
+        "pagePath": "pages/businesscard/main",
+        "iconPath": "static/images/my.png",
+        "selectedIconPath": "static/images/my-se.png"
+      },{
       "text": "名片夹",
       "pagePath": "pages/logs/main",
       "iconPath": "static/images/personcard.png",

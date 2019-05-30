@@ -1,7 +1,7 @@
 <template>
   <div class="GroupCard">
     <div class="top">
-      <div class="card" v-for="(item,index) in Groups" :key="index">
+      <div class="card" v-for="(item,index) in Groups" :key="index" @click="router()">
         <div class="subject">
           <span class="headImage"><img :src="item.src"></span>
           <div class="con">
@@ -144,6 +144,11 @@
       // 删除
       delect (index) {
         this.commitInfo.splice(index, 1)
+      },
+      router () {
+        wx.navigateTo({
+          url: '../group/main'
+        })
       }
     }
   }

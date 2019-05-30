@@ -1,6 +1,6 @@
 module.exports = {
   SHOP_ID: '1',
-  BASE_URL: 'https://api.wq1516.com/server',
+  BASE_URL: 'http://api.wq1516.com:8989',
   //'http://192.168.1.225:8989
   //https://api.wq1516.com/server
   //https://api.tzyizan.com'

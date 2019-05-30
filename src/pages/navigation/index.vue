@@ -9,7 +9,7 @@
         :btnText="btnText">
       </vue-tab-bar>
       <div class="top">
-        <section class="sec-nav">
+        <section class="sec-nav" @click="getInto">
           <navigation-bar
             :back-visible="true"
             :home-path="'/pages/index/main'"></navigation-bar>
@@ -24,6 +24,7 @@
           </p>
         </div>
       </div>
+
       <div class="main">
         <div class="test">
           <div class="testNav">
@@ -40,16 +41,16 @@
             <div v-if="tab===1">
                 <swiper class="swiper" :indicator-dots="indicatorDots" :autoplay="autoplay" :circular= 'circular' :interval="interval" :duration="duration">
                     <swiper-item>
-                      <span class="lf-main" v-for="(item, index) in Types" :key="index">
-                        <span class="Typesrc"><img :src="item.src"></span>
-                        <span class="title">{{ item.title }}</span>
+                      <span class="lf-main" v-for="(item, index) in Types" :key="index" @click="routerTo(item.url)">
+                        <span class="Typesrc"><img :src="item.imgUrl"></span>
+                        <span class="title">{{ item.tradeName }}</span>
                       </span>
                       <!--<image :src="item.url" class="slide-image" mode="aspectFill"/>-->
                     </swiper-item>
                     <swiper-item>
                       <span class="lf-main" v-for="(item, index) in Types1" :key="index">
-                        <span class="Typesrc"><img :src="item.src"></span>
-                        <span class="title">{{ item.title }}</span>
+                        <span class="Typesrc"><img :src="item.imgUrl"></span>
+                        <span class="title">{{ item.tradeName }}</span>
                       </span>
                       <!--<image :src="item.url" class="slide-image" mode="aspectFill"/>-->
                     </swiper-item>
@@ -69,6 +70,9 @@
           </div>
         </div>
       </div>
+
+
+
       <div class="fotter" v-if="status === 1">
         <div class="test1">
           <div class="testNav1">
@@ -82,22 +86,24 @@
           </div>
           <div class="conts">
             <div class="conts-main" v-if="tabs===1">
-              <div class="card" v-for="(item,index) in cards" :key="index">
-                <span><img :src="item.headImg"></span>
+              <div class="card" v-for="(item,index) in cards" :key="index" @click="goToCard(item.id)">
+                <span><img :src="item.imgUrl"></span>
                 <div class="card-main">
                   <div class="qiye">
                     <span class="img"><s>企</s></span>
-                    <b>{{ item.name }}</b>
+                    <b>{{ item.name === '' ?  item.nick_Name:item.nickName }}</b>
                     <span class="job">{{ item.job }}</span>
-                    <span v-if="!item.status" class="status">无状态</span>
-                    <span v-else class="status">{{ item.status }}</span>
+                    <span v-if="item.isCertification === 0" class="status">已认证</span>
+                    <span v-else class="status">无状态</span>
                   </div>
-                  <p class="comyname">{{ item.Companyname}}</p>
+                  <p class="comyname" v-if="item.salesCompanyName === null">无公司</p>
+                  <p class="comyname" v-else>{{ item.salesCompanyName}}</p>
                 </div>
                 <div class="card-right">
-                  <p class="eye"><img src="../../../static/images/eye.png"/><span>{{ item.eye }}</span> </p>
-                  <p class="star"><img src="../../../static/images/star.png"/><span>{{ item.star }}</span> </p>
-                  <i><img src="../../../static/images/addpersonal.png"/></i>
+                  <p class="eye"><img src="../../../static/images/eye.png"/><span>{{ item.browseCount }}</span> </p>
+                  <p class="star"><img src="../../../static/images/star.png"/><span>{{ item.praiseCount }}</span> </p>
+                  <i v-if="item.isCollect === 0" @click="getCollect(item.id)"><img src="../../../static/images/addpersonal.png"/></i>
+                  <i v-else></i>
                 </div>
               </div>
             </div>
@@ -138,103 +144,62 @@
           </div>
         </div>
         <div class="conts">
-          <div class="conts-mains" v-if="info===1">
-            <div class="infoCard">
-              <span class="headImg"><img src="../../../static/images/gongzhonghao.jpg"></span>
+          <div class="conts-mains" v-if="info === 1 ">
+            <div class="infoCard" v-for="(item, index) in Message" :key="index">
+              <span class="headImg"><img :src="item.imgUrl"></span>
               <div class="infoCard-main">
                 <div class="infoTop">
-                  <span class="headName">李颂扬</span>
+                  <span class="headName">{{item.name}}</span>
                   <span class="headMap">
-                    <s class="headMaps">浙江温岭</s>·<s>100次浏览</s>
+                    <s class="headMaps">{{ item.address }}</s>·<s>&nbsp; {{ item.browseCount }}次浏览</s>
                   </span>
                   <span class="headTitle">
-                    空间看垃圾堆了卡记录的借口啦来到了卡就绿卡就对了卡机看了多久啊离开卡里克多久啦大家垃圾堆了阿姐了解垃圾堆了阿克苏垃圾啊卡里克多久啦大家垃圾堆了阿姐了解垃圾堆了阿
+                  {{ item.title }}
+                  </span>
+                  <span class="headImage" v-if="item.imgUrlList != 0">
+                    <a  v-for="(itemA, index_) in item.imgUrlList" :key="index_">
+                       <i @click="previewImg" :data-index='index_' :data-id="item.id"><img :src="itemA" lazy-load /> </i>
+                    </a>
+                  </span>
+                  <span class="headVideo"  v-if="item.video !== ''">
+                     <video
+                       id="myVideo"
+                       :src="item.video"
+                       controls
+                     ></video>
                   </span>
                   <span class="headFotter">
-                    <span class="headTime">昨天14：00</span>
-                    <span v-if="zan === 1" class="headZan"><img src="../../../static/images/zan.png"/> </span>
-                    <span v-else class="headZan"><img src="../../../static/images/zan-se.png"/> </span>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div class="infoCard">
-              <span class="headImg"><img src="../../../static/images/gongzhonghao.jpg"></span>
-              <div class="infoCard-main">
-                <div class="infoTop">
-                  <span class="headName">李颂扬</span>
-                  <span class="headMap">
-                    <s class="headMaps">浙江温岭</s>· <s>100次浏览</s>
-                  </span>
-                  <span class="headTitle">
-                    空间看垃圾堆了卡记录的借口啦来到了卡就绿卡就对了卡机看了多久啊离开卡里克多久啦大家垃圾堆了阿姐了解垃圾堆了阿克苏垃圾啊卡里克多久啦大家垃圾堆了阿姐了解垃圾堆了阿
-                  </span>
-                  <span class="headImage">
-                   <i><img src="../../../static/images/gongzhonghao.jpg"/> </i>
-                   <i><img src="../../../static/images/gongzhonghao.jpg"/> </i>
-                   <i><img src="../../../static/images/gongzhonghao.jpg"/> </i>
-                    <i><img src="../../../static/images/gongzhonghao.jpg"/> </i>
-                   <i><img src="../../../static/images/gongzhonghao.jpg"/> </i>
-                   <i><img src="../../../static/images/gongzhonghao.jpg"/> </i>
-                    <i><img src="../../../static/images/gongzhonghao.jpg"/> </i>
-                   <i><img src="../../../static/images/gongzhonghao.jpg"/> </i>
-                   <i><img src="../../../static/images/gongzhonghao.jpg"/> </i>
-                  </span>
-                  <span class="headFotter">
-                    <span class="headTime">昨天14：00</span>
-                    <span class="headZan"><img src="../../../static/images/zan.png"/> </span>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div class="infoCard">
-              <span class="headImg"><img src="../../../static/images/gongzhonghao.jpg"></span>
-              <div class="infoCard-main">
-                <div class="infoTop">
-                  <span class="headName">李颂扬</span>
-                  <span class="headMap">
-                    <s class="headMaps">浙江温岭</s>·<s>100次浏览</s>
-                  </span>
-                  <span class="headTitle">
-                    空间看垃圾堆了卡记录的借口啦来到了卡就绿卡就对了卡机看了多久啊离开卡里克多久啦大家垃圾堆了阿姐了解垃圾堆了阿克苏垃圾啊卡里克多久啦大家垃圾堆了阿姐了解垃圾堆了阿
-                  </span>
-                  <span class="headVideo">
-                    <video controls>
-                     <source src="https://oss.wq1516.com/salesVideo/201904260909511556240991808.mp4" type="video/mp4"><!--兼容IE9+、Chrome和Safari-->
-                    </video>
-                    <!--<video src="../../../static/images/mei.mp4"></video>-->
-                  </span>
-                  <span class="headFotter">
-                    <span class="headTime">昨天14：00</span>
-                    <span class="headZan"><img src="../../../static/images/zan.png"/> </span>
+                    <span class="headTime">{{ item.createDate }}</span>
+                    <span v-if="item.isLike === 0" class="headZan" @click="thumbsUp(item.id,0)"><img src="../../../static/images/zan.png"/> </span>
+                    <span v-else class="headZan" @click="thumbsUp(item.id,1)"><img src="../../../static/images/zan-se.png"/> </span>
                   </span>
                 </div>
               </div>
             </div>
           </div>
-          <div class="conts-mains" v-else>
+          <div class="conts-mains"  v-else>
             <div class="infoCard">
-            <span class="headImg"><img src="../../../static/images/gongzhonghao.jpg"></span>
-            <div class="infoCard-main">
-              <div class="infoTop">
-                <span class="headName">李颂扬</span>
-                <span class="headMap">
-                    <s class="headMaps">浙江温岭</s>·<s>100次浏览</s>
+              <span class="headImg"><img src="../../../static/images/gongzhonghao.jpg"></span>
+                <div class="infoCard-main">
+                  <div class="infoTop">
+                  <span class="headName">李颂扬</span>
+                  <span class="headMap">
+                  <s class="headMaps">浙江温岭</s>·<s>100次浏览</s>
                   </span>
-                <span class="headTitle">
-                    空间看垃圾堆了卡记录的借口啦来到了卡就绿卡就对了卡机看了多久啊离开卡里克多久啦大家垃圾堆了阿姐了解垃圾堆了阿克苏垃圾啊卡里克多久啦大家垃圾堆了阿姐了解垃圾堆了阿
+                  <span class="headTitle">
+                  空间看垃圾堆了卡记录的借口啦来到了卡就绿卡就对了卡机看了多久啊离开卡里克多久啦大家垃圾堆了阿姐了解垃圾堆了阿克苏垃圾啊卡里克多久啦大家垃圾堆了阿姐了解垃圾堆了阿
                   </span>
-                <span class="headFotter">
-                    <span class="headTime">昨天14：00</span>
-                    <span class="headZan"><img src="../../../static/images/zan.png"/> </span>
+                  <span class="headFotter">
+                  <span class="headTime">昨天14：00</span>
+                  <span class="headZan"><img src="../../../static/images/zan.png"/> </span>
                   </span>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
           </div>
         </div>
       </div>
-    </div>
   </scroll-view>
 </template>
 
@@ -254,11 +219,12 @@ export default {
       info: 1,
       status: 1,
       zan: 2,
+      isCollect: '',
       cardRen: '热门名片',
       cardsMap: '附近名片',
       infoTitle: '附近消息',
       infoTop: '推荐信息',
-      selectNavIndex: 1,
+      selectNavIndex: 2,
       needButton: true,
       handButton: true,
       btnText: '附近',
@@ -267,94 +233,17 @@ export default {
       circular: true,
       interval: 3000,
       duration: 500,
-      Types: [
-        {
-          title: '互联网',
-          src: '../../static/svg/hu.svg'
-        },
-        {
-          title: '文化传媒',
-          src: '../../static/svg/wen.svg'
-        },
-        {
-          title: '服装零售',
-          src: '../../static/svg/fu.svg'
-        },
-        {
-          title: '加工制造',
-          src: '../../static/svg/jia.svg'
-        },
-        {
-          title: '交通物流',
-          src: '../../static/svg/jiao.svg'
-        },
-        {
-          title: '金融保险',
-          src: '../../static/svg/jin.svg'
-        },
-        {
-          title: '机械机电',
-          src: '../../static/svg/ji.svg'
-        },
-        {
-          title: '家电电器',
-          src: '../../static/svg/home.svg'
-        },
-        {
-          title: '房地产',
-          src: '../../static/svg/fang.svg'
-        },
-        {
-          title: '印刷包装',
-          src: '../../static/svg/yin.svg'
-        }
-      ],
-      Types1: [ {
-        title: '安全防护',
-        src: '../../static/svg/an.svg'
-      },
-      {
-        title: '环保绿化',
-        src: '../../static/svg/huan.svg'
-      },
-      {
-        title: '农林牧渔',
-        src: '../../static/svg/nong.svg'
-      },
-      {
-        title: '旅游休闲',
-        src: '../../static/svg/lv.svg'
-      },
-      {
-        title: '冶金矿产',
-        src: '../../static/svg/zhi.svg'
-      },
-      {
-        title: '文化教育',
-        src: '../../static/svg/wen.svg'
-      },
-      {
-        title: '医药卫生',
-        src: '../../static/svg/yi.svg'
-      },
-      {
-        title: '体育健康',
-        src: '../../static/svg/ti.svg'
-      },
-      {
-        title: '家电电器',
-        src: '../../static/svg/home.svg'
-      },
-      {
-        title: '轻工业',
-        src: '../../static/svg/qin.svg'
-      }],
+      Message: [],
+      Types: [],
+      Types1: [],
       Types2: [ {
         title: '同城跑腿',
+        url: '../classify/main',
         src: '../../static/svg/information/tong.svg'
       },
       {
         title: '相亲交友',
+        url: '../classify/main',
         src: '../../static/svg/information/xiang.svg'
       },
       {
@@ -389,63 +278,7 @@ export default {
         title: '其他',
         src: '../../static/svg/information/qi.svg'
       }],
-      cards: [{
-        headImg: '../../static/images/gongzhonghao.jpg',
-        name: '李松阳',
-        job: '技术总监',
-        status: '已认证',
-        eye: 10,
-        star: 10,
-        Companyname: '浙江万仟科技有限公司'
-      }, {
-        headImg: '../../static/images/gongzhonghao.jpg',
-        name: '李松阳',
-        job: '技术总监',
-        status: '已认证',
-        eye: 10,
-        star: 10,
-        Companyname: '浙江万仟科技有限公司'
-      }, {
-        headImg: '../../static/images/gongzhonghao.jpg',
-        name: '李松阳',
-        job: '技术总监',
-        status: '已认证',
-        eye: 10,
-        star: 10,
-        Companyname: '浙江万仟科技有限公司'
-      }, {
-        headImg: '../../static/images/gongzhonghao.jpg',
-        name: '李松阳',
-        job: '技术总监',
-        status: '已认证',
-        eye: 10,
-        star: 10,
-        Companyname: '浙江万仟科技有限公司'
-      }, {
-        headImg: '../../static/images/gongzhonghao.jpg',
-        name: '李松阳',
-        job: '技术总监',
-        status: '已认证',
-        eye: 10,
-        star: 10,
-        Companyname: '浙江万仟科技有限公司'
-      }, {
-        headImg: '../../static/images/gongzhonghao.jpg',
-        name: '李松阳',
-        job: '技术总监',
-        status: '已认证',
-        eye: 10,
-        star: 10,
-        Companyname: '浙江万仟科技有限公司'
-      }, {
-        headImg: '../../static/images/gongzhonghao.jpg',
-        name: '李松阳',
-        job: '技术总监',
-        status: '已认证',
-        eye: 10,
-        star: 10,
-        Companyname: '浙江万仟科技有限公司'
-      }],
+      cards: [],
       enclosure: [{
         headImg: '../../static/images/gongzhonghao.jpg',
         name: '李松阳',
@@ -466,9 +299,162 @@ export default {
     }
   },
   onShow () {
+    this.doLogin()
     wx.hideTabBar()
   },
+  onLoad () {
+    this.trade()
+    this.tradeA()
+    this.getCard()
+  },
   methods: {
+    // 预览图片
+    previewImg (e) {
+      console.log(e)
+      var index = e.currentTarget.dataset.index
+      var imgArr = this.message[e.currentTarget.dataset.id].imgUrlList
+      console.log(imgArr)
+      var tempFilePaths = imgArr
+      wx.previewImage({
+        current: tempFilePaths[index],
+        urls: [tempFilePaths.toString()]
+      })
+    },
+    // 调用登录接口
+    doLogin () {
+      wx.login({
+        success: function (res) {
+          if (res.code) {
+            // 发起网络请求
+            wx.request({
+              url: `http://api.wq1516.com:8989/server/platformUser/login`,
+              method: 'post',
+              data: {
+                code: res.code,
+                id: 1
+              },
+              success: function (e) {
+                console.log('1', e)
+                wx.setStorageSync('token', e.data.data.token)
+                wx.setStorageSync('businessId', e.data.data.businessId)
+                wx.setStorageSync('userId', e.data.data.id)
+                const token = wx.getStorageSync('token') // 获取本地token
+                console.log('10', token)
+              }
+            })
+          } else {
+            console.log('获取用户登录态失败！' + res.errMsg)
+          }
+        }
+      })
+    },
+    // 人脉集市
+    trade () {
+      this.$fly.request({
+        method: 'get', // post/get 请求方式
+        url: 'server/trade/selectAll',
+        body: {
+          'pageNum': 1, 'pageSize': 10
+        }
+      }).then(res => {
+        this.Types = res.data.list
+      }).catch(err => {
+        console.log(err.status, err.message)
+      })
+    },
+    // 人脉集市
+    tradeA () {
+      this.$fly.request({
+        method: 'get', // post/get 请求方式
+        url: 'server/trade/selectAll',
+        body: {
+          'pageNum': 2, 'pageSize': 10
+        }
+      }).then(res => {
+        this.Types1 = res.data.list
+      }).catch(err => {
+        console.log(err.status, err.message)
+      })
+    },
+    // 信息广场 动态消息
+    tradeInfor () {
+      const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
+      const userId = wx.getStorageSync('userId') // 获取本地userId
+      this.$fly.request({
+        method: 'get', // post/get 请求方式
+        url: 'server/dynamic/selectAll',
+        body: {
+          'pageNum': 0,
+          'pageSize': 0,
+          'businessId': businessId,
+          'userId': userId
+        }
+      }).then(res => {
+        console.log('22', res.data.list)
+        this.Message = res.data.list
+        // 时间戳转换成特定日期格式
+        let today = this.moment().format('YYYY/MM/DD')
+        let yesterday = this.moment(new Date()).add(-1, 'days').format('YYYY/MM/DD')
+        const newList = res.data.list
+        newList.map(item => {
+          let temp = this.moment(item.createDate)
+          let tempData = this.moment(item.createDate).format('YYYY/MM/DD')
+          if (tempData === today) {
+            item.createDate = temp.format('A hh:mm')
+          } else if (tempData === yesterday) {
+            item.createDate = '昨天'
+          } else if (this.moment(Date.now() - 3 * 24 * 60 * 60 * 1000) < item.createDate) {
+            item.createDate = temp.format('dddd')
+          } else {
+            item.createDate = tempData
+          }
+        })
+      }).catch(err => {
+        console.log(err.status, err.message)
+      })
+    },
+    // 获取人脉即使热门名片
+    getCard () {
+      const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
+      const userId = wx.getStorageSync('userId') // 获取本地userId
+      this.$fly.request({
+        method: 'get', // post/get 请求方式
+        url: 'server/platformSalesman/getByCode',
+        body: {
+          'pageNum': 1,
+          'pageSize': 10,
+          'businessId': businessId,
+          'userId': userId
+        }
+      }).then(res => {
+        console.log('22', res)
+        this.cards = res.data.list
+      }).catch(err => {
+        console.log(err.status, err.message)
+      })
+    },
+    // 获取收藏
+    getCollect (id) {
+      const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
+      const userId = wx.getStorageSync('userId') // 获取本地userId
+      this.$fly.request({
+        method: 'post', // post/get 请求方式
+        url: 'server/platformUserSalesman/insert',
+        body: {
+          'salesmanId': id,
+          'userId': userId,
+          'businessId': businessId
+        }
+      }).then(res => {
+        if (res.code === 200) {
+          const that = this
+          that.getCard()
+        }
+      }).catch(err => {
+        console.log(err.status, err.message)
+      })
+    },
+    // 人脉集市 信息广场切换
     changTab (index) {
       if (index === 1) {
         this.tab = index
@@ -476,8 +462,10 @@ export default {
       } else {
         this.tab = index
         this.status = index
+        this.tradeInfor()
       }
     },
+    // 人脉集市 切换名片
     changTabs (index) {
       if (index === 1) {
         this.cardRen = '热门名片'
@@ -489,6 +477,7 @@ export default {
         this.tabs = 1
       }
     },
+    // 信息广场 切换信息
     changInfo (index) {
       if (index === 1) {
         this.infoTitle = '附近消息'
@@ -499,6 +488,45 @@ export default {
         this.infoTop = '附近消息'
         this.info = 1
       }
+    },
+    // 点击跳转进入名片页
+    goToCard (id) {
+      wx.navigateTo({
+        url: `../OthersCard/main?id=` + id
+      })
+    },
+    getInto (e) {
+      wx.navigateTo({
+        url: `../message/main`
+      })
+    },
+    routerTo (url) {
+      wx.navigateTo({
+        url
+      })
+    },
+    // 信息广场 点赞和取消点赞
+    thumbsUp (id, status) {
+      // console.log(id, status)
+      this.$fly.request({
+        method: 'post', // post/get 请求方式
+        url: 'server/dynamic/praise',
+        body: {
+          'id': id, 'status': status
+        }
+      }).then(res => {
+        if (status === 0) {
+          // console.log('564', res) 点赞
+          this.Message[id - 1].isLike = 0
+          this.tradeInfor()
+        } else if (status === 1) {
+          // console.log('768', res) 取消点赞
+          this.Message[id - 1].isLike = 1
+          this.tradeInfor()
+        }
+      }).catch(err => {
+        console.log(err.status, err.message)
+      })
     }
   }
 }

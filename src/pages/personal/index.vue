@@ -8,7 +8,7 @@
       :btnText="btnText">
     </vue-tab-bar>
       <div class="top">
-        <div class="top-main">
+        <div class="top-main" @click="goIndex">
           <span class="headImg">
             <img src="../../../static/images/gongzhonghao.jpg"/>
             <i><s>企</s></i>
@@ -32,10 +32,13 @@
       <div class="choose">
         <div class="choose-main">
           <div class="choose-Map" v-for="(item,index) in choose" :key="index">
-            <router-link>
+            <div @click="goInto(item.url)">
               <span class="icon"><img v-if="item.src" :src="item.src"/></span>
               <span class="title">{{ item.title }}</span>
-            </router-link>
+              <span class="right">
+                <i class="iconfont iconyouce"></i>
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -51,7 +54,7 @@
 
     data () {
       return {
-        selectNavIndex: 2,
+        selectNavIndex: 3,
         needButton: true,
         handButton: true,
         btnText: '个人中心',
@@ -71,16 +74,24 @@
         }],
         choose: [{
           src: '../../static/images/compny.png',
-          title: '企业认证'
+          title: '企业认证',
+          url: '../attestation/main'
         }, {
           src: '../../static/images/jieshao.png',
-          title: '公司介绍'
+          title: '公司介绍',
+          url: '../introduce/main'
         }, {
           src: '../../static/images/chanpin.png',
-          title: '产品管理'
+          title: '产品管理',
+          url: '../product/main'
+        }, {
+          src: '../../static/images/release.png',
+          title: '我的发布',
+          url: '../release/main'
         }, {
           src: '../../static/images/message.png',
-          title: '消息中心'
+          title: '消息中心',
+          url: '../message/main'
         }, {
           src: '../../static/images/Member.png',
           title: '会员中心'
@@ -92,6 +103,18 @@
     },
     onShow () {
       wx.hideTabBar()
+    },
+    methods: {
+      goInto (url) {
+        wx.navigateTo({
+          url
+        })
+      },
+      goIndex () {
+        wx.navigateTo({
+          url: '../index/main'
+        })
+      }
     }
   }
 </script>
@@ -222,5 +245,10 @@
   width: ~'50rpx';
   height: ~'50rpx';
 }
-
+.right{
+  float: right;
+}
+.iconyouce{
+  color: #cccccc;
+}
 </style>

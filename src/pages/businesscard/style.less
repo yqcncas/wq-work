@@ -1,8 +1,30 @@
 .business{
   width: 100%;
   height: 100%;
+  padding-bottom: ~'200rpx';
   .business-main{
     margin-top: ~"40rpx";
+    .found{
+      width: ~'100rpx';
+      height: ~'100rpx';
+      background: #9c9c9c;
+      opacity: 0.6;
+      color: #ffffff;
+      border-radius: 50%;
+      font-size: ~'24rpx';
+      text-align: center;
+      position: fixed;
+      right: 0;
+      bottom: ~'200rpx';
+      span{
+        display: inline-block;
+        width: ~'50rpx';
+        height: ~'50rpx';
+        padding: 0;
+        margin-top: ~'16rpx';
+
+      }
+    }
     .cards{
       width: ~'656rpx';
       height: ~'706rpx';
@@ -156,7 +178,7 @@
 }
 .block-4 {
   height: ~'60rpx';
-  width: ~'500rpx';
+  width: ~'100%';
   margin-top: ~'0rpx';
   display: flex;
   flex-direction: row;
@@ -184,7 +206,7 @@
       margin-left: ~'10rpx';
     }
     .logo-main{
-      width: ~'520rpx';
+      max-width: ~'100%';
       overflow: hidden;
       white-space: nowrap;
       .logo {
@@ -234,7 +256,7 @@
       white-space: nowrap;
     }
   }
-  }
+}
 
 // 名片码
 .card-ma {
@@ -285,7 +307,6 @@
 // 个人简介
 .personal{
   width: ~'656rpx';
-  height: ~'480rpx';
   display: block;
   margin: ~'50rpx' auto;
   .personal-top{
@@ -313,7 +334,6 @@
     border-radius: ~'10rpx';
     .personal-maimT{
       padding: ~'40rpx';
-      height: ~'340rpx';
       .personalVoice{
         width: 100%;
         height: ~'100rpx';
@@ -331,7 +351,6 @@
       }
       .personal-text{
         width: 100%;
-        height: ~'200rpx';
         .personal-wel{
           font-size: ~'24rpx';
           font-weight: 600;
@@ -460,7 +479,6 @@
 // 公司产品
 .product{
   width: ~'656rpx';
-  height: ~'480rpx';
   display: block;
   margin: ~'50rpx' auto;
   .product-top{
@@ -500,13 +518,12 @@
     .product-details{
       display: inline-block;
       width: ~'300rpx';
-      height: ~'350rpx';
       background: #ffffff;
       border-radius: ~'10rpx';
       margin-bottom: ~'20rpx';
       .product-details-img{
         width: 100%;
-        height: ~'222rpx';
+        height: ~'300rpx';
         background: #CCCCCC;
         border-top-left-radius: ~'10rpx';
         border-top-right-radius: ~'10rpx';
@@ -524,8 +541,9 @@
       }
       .product-details-click{
         font-size: ~'26rpx';
-        color: #9d9d9d;
+        color: #d82a10;
         margin: 0 ~'20rpx';
+        font-weight: 600;
       }
     }
     .product-details:nth-child(even){

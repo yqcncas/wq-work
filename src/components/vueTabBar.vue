@@ -33,6 +33,12 @@
       return {
         navList: [
           {
+            pagePath: '../businesscard/main',
+            iconPath: '/static/images/my.png',
+            selectedIconPath: '/static/images/my-se.png',
+            text: '我的名片'
+          },
+          {
             pagePath: '../logs/main',
             iconPath: '/static/images/personcard.png',
             selectedIconPath: '/static/images/personcard-se.png',
