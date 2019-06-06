@@ -12,9 +12,9 @@
           <div class="time">
             <a>{{ item.createDate.date }}</a>{{ item.createDate.months + 1}}月
           </div>
-          <div class="middle" v-if="item.imgUrlList !== null">
+          <div class="middle" v-if="item.imgUrlList.length < 0">
             <span class="Img">
-              <img :src="item.imgUrlList">
+              <img :src="item.imgUrlList[0]">
             </span>
             <span class="title">
              {{ item.title }}
@@ -121,14 +121,6 @@ export default {
         newList.map(item => {
           let temp = this.moment(item.createDate).toObject()
           item.createDate = temp
-        })
-        newList.map(item => {
-          let imgUrlA = item.imgUrlList
-          if (imgUrlA.indexOf(',') !== -1) {
-            item.imgUrlList = imgUrlA.split('')
-          } else {
-            item.imgUrlListA = imgUrlA.split(',')
-          }
         })
       }).catch(err => {
         console.log(err)

@@ -1,6 +1,6 @@
 <template>
     <div class="message">
-      <div class="cardHold-ftMain">
+      <div class="cardHold-ftMain" v-if="commitInfo[0] !== null">
         <div class="cardHold-ftMain-ct" v-for="(item,index) in commitInfo" :key="index" @click="routeTo(item.userId)">
           <div class="center" @touchstart="touchStart($event)" @touchend="touchEnd($event,index)" :data-type="item.type" >
             <div class="cardHold-ftMain-ct-img" @click="recover(index)">
@@ -16,6 +16,9 @@
             </div>
           </div>
         </div>
+      </div>
+      <div v-else class="main">
+        暂无任何消息通知
       </div>
     </div>
 </template>
@@ -34,15 +37,7 @@
         indexShow: false,
         scrollTop: 0,
         indexEnglish: '',
-        commitInfo: [{
-          top: 'A',
-          icon: '企',
-          name: '李松阳',
-          company: '浙江万仟科技有限公司浙江万仟科技有限公司浙江万仟科技有限公司',
-          status: '已认证',
-          grade: 'V1',
-          type: 0
-        }]
+        commitInfo: []
       }
     },
     onShow () {
@@ -59,6 +54,7 @@
             'pageSize': 10
           }
         }).then(res => {
+          console.log('res', res.data.list)
           this.commitInfo = res.data.list
           this.Message = res.data.list
           // 时间戳转换成特定日期格式

@@ -16,7 +16,7 @@
         <uploadImgA ref="imgUrlList" :srcs="imgUrlList" width="207rpx" height="207rpx" max="9" @choosed="choosed" @delete=""></uploadImgA>
       </div>
       <div class="upload" v-if="videoId == 1">
-        <uploadVideo ref="video" :srcs="video" width="207rpx" height="207rpx"  max="1" @choosedvideo="choosedvideo" @delete=""></uploadVideo>
+        <uploadVideo ref="video" :srcs="video" width="207rpx" height="207rpx"  max="1" @choosedvideo="choosedvideo"></uploadVideo>
       </div>
       <div class="address" @click="chooseLocation()">
         <span class="icont">
@@ -42,6 +42,9 @@ export default {
       videoId: 0,
       photoId: 0,
       location: '定位',
+      address: '',
+      longitude: '', // 精度
+      latitude: '', // 维度
       title: '',
       imgUrlList: '',
       video: '',
@@ -71,22 +74,24 @@ export default {
         console.log(err)
       })
     },
+    // 上传视频
+    choosedvideo (val) {
+      console.log('vieo', val.all)
+      // if (val.all) {
+      //   this.video = val.all
+      //   console.log('vieo', val.all)
+      // }
+    },
     choosed (val) {
       if (val.all) {
         this.imgUrlList = val.all
-      }
-    },
-    // 上传视频
-    choosedvideo (val) {
-      if (val.all) {
-        this.video = val.all
-        console.log('val', val.all)
       }
     },
     txtInput (e) {
     },
     chooseLocation () {
       var that = this
+      console.log('1111')
       wx.chooseLocation({
         success: function (res) {
           console.log(res)
@@ -100,6 +105,11 @@ export default {
       console.log(id)
       const salesmanId = wx.getStorageSync('salesmanId')
       const businessId = wx.getStorageSync('businessId')
+      if (this.location === '定位') {
+        this.address = ''
+      } else {
+        this.address = this.location
+      }
       this.$fly.request({
         method: 'post',
         url: 'server/dynamic/update',
@@ -110,7 +120,9 @@ export default {
           'title': this.title,
           'imgUrlList': this.imgUrlList,
           'video': this.video,
-          'address': this.location
+          'address': this.address,
+          'longitude': this.longitude,
+          'latitude': this.latitude
         }
       }).then(res => {
         if (res.code === 200) {
@@ -134,6 +146,11 @@ export default {
     save () {
       const salesmanId = wx.getStorageSync('salesmanId')
       const businessId = wx.getStorageSync('businessId')
+      if (this.location === '定位') {
+        this.address = ''
+      } else {
+        this.address = this.location
+      }
       this.$fly.request({
         method: 'post',
         url: 'server/dynamic/insert',
@@ -143,7 +160,9 @@ export default {
           'title': this.title,
           'imgUrlList': this.imgUrlList,
           'video': this.video,
-          'address': this.location
+          'address': this.address,
+          'longitude': this.longitude,
+          'latitude': this.latitude
         }
       }).then(res => {
         if (res.code === 200) {
