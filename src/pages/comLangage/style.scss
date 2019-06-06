@@ -1,0 +1,102 @@
+%flexRow {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  align-items: center;
+}
+
+.common-language {
+  font-size: 28rpx;
+  color: #4a4a4a;
+  height: 100%;
+  width: 100%;
+
+  .text-box {
+    border-top: 2rpx solid #eee;
+    padding-bottom: 100rpx;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .item {
+    background-color: #fff;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+  }
+
+  .inner {
+    position: absolute;
+    top: 0;
+  }
+
+  .txt {
+    box-sizing: border-box;
+    width: 100%;
+    border-bottom: 2rpx solid #eee;
+    padding: 40rpx;
+    z-index: 5;
+    background-color: #fff;
+  }
+
+  .white {
+    color: #fff;
+  }
+
+  .trans {
+    transition: all 0.3s ease-in-out;
+    left: 0;
+  }
+
+  .box-right {
+    height: 100%;
+    width: 260rpx;
+    text-align: center;
+    z-index: 4;
+    right: 0;
+    color: #fff;
+    display: flex;
+
+    .btn {
+      flex: 1;
+      height: 100%;
+      @extend %flexRow;
+      justify-content: center;
+    }
+
+    .del {
+      background-color: #e64340;
+    }
+
+    .edit {
+      background: #1e90ff;
+    }
+  }
+
+  //   底部按钮
+  .bottom-btn {
+    width: 100%;
+    height: 90rpx;
+    position: fixed;
+    bottom: 0;
+    background-color: #fff;
+    color: #2a94ec;
+    line-height: 90rpx;
+    font-size: 36rpx;
+    z-index: 1000;
+    box-shadow: 0 0 10rpx 0 rgba(188, 188, 188, 0.35);
+
+    p {
+      display: inline-block;
+      height: 90rpx;
+      line-height: 90rpx;
+      text-align: center;
+      width: 100%;
+    }
+
+    .add-new {
+      background-color: #2a94ec;
+      color: #fff;
+    }
+  }
+}

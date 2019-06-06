@@ -206,6 +206,7 @@ export default {
   },
   onShow () {
     wx.hideTabBar()
+    this.getInfo()
   },
   onLoad (options) {
     var that = this
@@ -220,6 +221,21 @@ export default {
     console.log(this.toView)
   },
   methods: {
+    // 获取自己所关注卡片 名片夹
+    getInfo () {
+      const userId = wx.getStorageSync('userId') // 获取本地userId
+      this.$fly.request({
+        method: 'get', // post/get 请求方式
+        url: 'server/platformUserSalesman/getAllSalesmanByUserId',
+        body: {
+          'userId': userId
+        }
+      }).then(res => {
+        console.log('res', res)
+      }).catch(err => {
+        console.log(err.status, err.message)
+      })
+    },
     touchStart (e) {
       // 获取移动距离，可以通过打印出e，然后分析e的值得出
       this.startX = e.mp.changedTouches[0].clientX

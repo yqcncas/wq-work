@@ -161,7 +161,7 @@
                        <i @click="previewImg" :data-index='index_' :data-id="item.id"><img :src="itemA" lazy-load /> </i>
                     </a>
                   </span>
-                  <span class="headVideo"  v-if="item.video !== ''">
+                  <span class="headVideo"  v-if="item.video !== '' && item.video !== null">
                      <video
                        id="myVideo"
                        :src="item.video"
@@ -301,6 +301,7 @@ export default {
   onShow () {
     this.doLogin()
     wx.hideTabBar()
+    this.getSalesmanId()
   },
   onLoad () {
     this.trade()
@@ -308,6 +309,22 @@ export default {
     this.getCard()
   },
   methods: {
+    // 查询salesmanId
+    getSalesmanId () {
+      const userId = wx.getStorageSync('userId') // 获取本地userId
+      this.$fly.request({
+        method: 'get',
+        url: 'server/platformSalesman/selectSelfInfo',
+        body: {
+          'userId': userId
+        }
+      }).then(res => {
+        const salesmanId = res.data.id
+        wx.setStorageSync('salesmanId', salesmanId)
+      }).catch(err => {
+        console.log(err)
+      })
+    },
     // 预览图片
     previewImg (e) {
       console.log(e)
@@ -331,7 +348,7 @@ export default {
               method: 'post',
               data: {
                 code: res.code,
-                id: 1
+                id: 109
               },
               success: function (e) {
                 console.log('1', e)

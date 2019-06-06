@@ -8,7 +8,13 @@
         :handButton="handButton"
         :btnText="btnText">
       </vue-tab-bar>
-      <div class="business-main" >
+      <div  class="center"  v-if="postForm === ''">
+        <div>
+          <p>您还没有名片</p>
+          <p @click="goToCard()">点击立即去创建</p>
+        </div>
+      </div>
+      <div class="business-main" v-else>
       <el-form ref="postForm" :model="postForm" >
         <div class="cards">
           <div class="card-top">
@@ -229,6 +235,11 @@
           url
         })
       },
+      goToCard () {
+        wx.navigateTo({
+          url: '../index/main'
+        })
+      },
       // 页面加载信息
       getInfo () {
         const userId = wx.getStorageSync('userId') // 获取本地userId
@@ -240,18 +251,20 @@
           }
         }).then(res => {
           console.log('res', res)
-          this.postForm = res.data
-          this.voiceUrl = res.data.voice
-          const bgM = wx.createInnerAudioContext()// 初始化createInnerAudioContext接口
-          // 设置播放地址
-          bgM.src = this.voiceUrl
-          bgM.onCanplay(() => {
-            console.log(bgM.duration)// 0，这个方法需要执行一下，所以不能删
-          })
-          setTimeout(() => {
-            this.num = Math.round(bgM.duration)
-            // console.log(this.num)
-          }, 1000)
+          if (res.data) {
+            this.postForm = res.data
+            this.voiceUrl = res.data.voice
+            const bgM = wx.createInnerAudioContext()// 初始化createInnerAudioContext接口
+            // 设置播放地址
+            bgM.src = this.voiceUrl
+            bgM.onCanplay(() => {
+              console.log(bgM.duration)// 0，这个方法需要执行一下，所以不能删
+            })
+            setTimeout(() => {
+              this.num = Math.round(bgM.duration)
+              // console.log(this.num)
+            }, 1000)
+          }
         }).catch(err => {
           console.log(err.status, err.message)
         })

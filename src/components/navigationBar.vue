@@ -14,7 +14,7 @@
                       <cover-image class="back-image" src="../../static/images/gongzhonghao.jpg"></cover-image>
                     </cover-view>
                     <cover-view class="opt opt-home">
-                      <cover-view style="font-size: 20rpx">消息中心</cover-view><cover-view style="width: 22rpx;height: 22rpx;background:red;border-radius: 50rpx;color: #fff;font-size: 18rpx;padding: 4rpx;" ><cover-view style="text-align: center">10</cover-view></cover-view>
+                      <cover-view style="font-size: 20rpx">消息中心</cover-view><cover-view v-if="num !== 0" style="width: 22rpx;height: 22rpx;background:red;border-radius: 50rpx;color: #fff;font-size: 18rpx;padding: 4rpx;" ><cover-view style="text-align: center">{{num}}</cover-view></cover-view>
                     </cover-view>
                 </cover-view>
                 <!-- 标题 -->
@@ -59,7 +59,8 @@
         platform: '',
         model: '',
         brand: '',
-        system: ''
+        system: '',
+        num: 0
       }
     },
     beforeMount () {
@@ -87,7 +88,26 @@
     mounted () {
       console.log(`this.backVisible:`, this.backVisible)
     },
+    onLoad () {
+      this.getMsgNum()
+    },
     methods: {
+      // 获取未读消息数量
+      getMsgNum () {
+        const salesmanId = wx.getStorageSync('salesmanId')
+        this.$fly.request({
+          method: 'get',
+          url: 'server/msg/selectUnReadCountPlatform',
+          body: {
+            'salesmanId': salesmanId
+          }
+        }).then(res => {
+          console.log('656', res)
+          this.num = res.data
+        }).catch(err => {
+          console.log(err)
+        })
+      },
       backClick () {
       },
       homeClick () {

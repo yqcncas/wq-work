@@ -64,10 +64,6 @@ const host = 'http://api.wq1516.com:8989'
 // 添加请求拦截器
 fly.interceptors.request.use((request) => {
   const token = wx.getStorageSync('token') // 获取本地token
-  wx.showLoading({
-    title: '加载中',
-    mask: true
-  })
   console.log(request)
   // request.headers["X-Tag"] = "flyio";
   // request.headers['content-type']= 'application/json';

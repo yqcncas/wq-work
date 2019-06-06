@@ -24,6 +24,10 @@
     "pages/GroupCard/main",
     "pages/release/main",
     "pages/resEdit/main",
+    "pages/chooseTrade/main",
+    "pages/msgcenter/main",
+    "pages/msgList/main",
+    "pages/comLangage/main",
     "pages/OthersCard/main"
   ],
   "window": {
@@ -62,7 +66,13 @@
       "iconPath": "static/images/person.png",
       "selectedIconPath": "/static/images/person-se.png"
       }],
-    "items": [{
+    "items": [
+      {
+        "text": "我的名片",
+        "pagePath": "pages/businesscard/main",
+        "iconPath": "static/images/my.png",
+        "selectedIconPath": "static/images/my-se.png"
+      },{
       "text": "名片夹",
       "pagePath": "pages/logs/main",
       "iconPath": "static/images/personcard.png",

@@ -48,8 +48,8 @@
               <span>，赶快主动沟通吧</span>
             </div>
             <p class="right-top">TA的详情></p>
-            <div class="icon-wrap" @click.stop="routeTo(`../msgcenter/index?id=${item.userId}`)">
-              <i class="iconfont icon-liaotian"></i>
+            <div class="icon-wrap" @click.stop="routeTo(`../msgcenter/main?id=${item.userId}`)">
+              <i class="iconfont iconliaotian"></i>
             </div>
           </div>
         </div>
@@ -71,7 +71,7 @@
         <div class="bottom-list">
           <div v-for="(m,n) in behaviorArrTwo" class="list-child flexRow" :key="n">
             <div class="flexRow">
-              <i v-if="m.txt==='浏览名片'" class="iconfont box-icon" :class="m.icon" :style="m.color"></i>
+              <s v-if="m.txt==='浏览名片'" class="iconfont box-icon" :class="m.icon" :style="m.color"></s>
               <i v-else class="iconfont common-style" :class="m.icon" :style="m.color"></i>
               <span>{{m.txt}}</span>
             </div>
@@ -100,7 +100,7 @@
                   <p>{{m.dataTime}}最后一次{{m.info}}</p>
                 </div>
               </div>
-              <i class="iconfont icon-xiajiantou" :class="{'open':m.visible}"></i>
+              <i class="iconfont iconxiajiantou" :class="{'open':m.visible}"></i>
             </div>
             <div class="box-double" v-show="m.visible">
               <div class="flexRow ma-top" v-for="(item,i) in m.OperationRecordDetail" :key="i">
@@ -126,7 +126,7 @@
         nextPage: 1,
         pageSize: 10,
         self: false,
-        active: 2,
+        active: 0,
         timeActive: 1,
         salesmanId: null,
         behaviorArr: [],
@@ -145,11 +145,12 @@
         // wx.showLoading({
         //   mask: true
         // })
-        let userId = wx.getStorageSync('userId')
+        const userId = wx.getStorageSync('userId')
         const { data: { list, lastPage, pageNum, nextPage } } = await personApi.selectOperationByUserId({ userId, pageNum: this.pageNum, pageSize: this.pageSize })
         wx.hideLoading()
         let today = this.moment().format('YYYY/MM/DD')
         let yesterday = this.moment(new Date()).add(-1, 'days').format('YYYY/MM/DD')
+        console.log('11', list)
         list.map(item => {
           item.nickName = (item.nickName ? item.nickName : '无')
           let temp = this.moment(item.browseDate)
@@ -225,19 +226,19 @@
             temp.push({ txt: '复制微信', count: item.count })
           }
           if (item.recordType === 19) {
-            tempTwo.unshift({ txt: '导航地址', count: item.count, icon: 'icon-dizhi1', color: 'color:#57A6FF' })
+            tempTwo.unshift({ txt: '导航地址', count: item.count, icon: 'icondizhi1', color: 'color:#57A6FF' })
           }
           if (item.recordType === 20) {
-            tempTwo.unshift({ txt: '拨打电话', count: item.count, icon: 'icon-dianhua7', color: 'color:#0DC423' })
+            tempTwo.unshift({ txt: '拨打电话', count: item.count, icon: 'icondianhua7', color: 'color:#0DC423' })
           }
           if (item.recordType === 21) {
-            tempTwo.push({ txt: '分享名片', count: item.count, icon: 'icon-fenxiang2', color: 'color:#F9C70B' })
+            tempTwo.push({ txt: '分享名片', count: item.count, icon: 'iconfenxiang2', color: 'color:#F9C70B' })
           }
           if (item.recordType === 1) {
-            tempTwo.push({ txt: '浏览名片', count: item.count, icon: 'icon-xingzhuang', color: 'background-color:#9D7FFC' })
+            tempTwo.push({ txt: '浏览名片', count: item.count, icon: 'iconxingzhuang', color: 'background-color:#9D7FFC' })
           }
           if (item.recordType === 24) {
-            tempTwo.push({ txt: '点赞名片', count: item.count, icon: 'icon-shoucang3', color: 'color:#FF5858' })
+            tempTwo.push({ txt: '点赞名片', count: item.count, icon: 'iconshoucang3', color: 'color:#FF5858' })
           }
         })
         this.behaviorArr = temp
@@ -285,14 +286,14 @@
     },
     onLoad (options) {
       this.pageNum = 1
-      this.salesmanId = wx.getStorageSync('salesManId')
+      this.salesmanId = wx.getStorageSync('salesmanId')
       if (options.self === '1') {
         this.self = true
         this.searchOp()
         //   足迹
       } else {
         this.self = false
-        this.active = 0
+        this.active = 2
         this.timeActive = 0
         this.radarTime()
       }
@@ -337,6 +338,7 @@
       this.pageNum = 1
       if (this.self) {
         this.searchOp()
+        this.getSearchOp()
         //   足迹
       } else {
         if (this.active === 0) {

@@ -91,7 +91,7 @@
                         <span>{{ name === '' ? nick_Name:nickName }}</span>
                       </div>
                       <div class="vivid-job">
-                        <span>{{ job }}</span>
+                        <span v-if="job">{{ job }}</span>
                       </div>
                       <div class="vivid-company">{{ salesCompanyName }}</div>
                       <div class="vivid-footer">
@@ -163,7 +163,7 @@
                   <video id="myVideo" v-if="videoFlag" :src="video" @play="playA()" @ended=" end()" objectFit="fill" class="cover-hw"></video>
                   <div v-else class="cover-view" >
                     <div v-if="video!== ''" @click="videoPlay">
-                      <cover-view class="delete-img iconfont iconshanchu-copy" @click="deleteVideo"></cover-view>
+                      <i class="delete-img iconfont iconshanchu-copy" @click="deleteVideo"></i>
                       <img class="FMimg" :src="videoImg" mode="scaleToFill" />
                       <div class="model-btn">
                         <div class="play-icon">
@@ -208,7 +208,7 @@ export default {
       salesAddress: '',
       job: '',
       phone: '',
-      imgUrl: '',
+      imgUrl: 'https://oss.wq1516.com/salesInfo/201906041349011559627341603.png',
       fixedPhone: '',
       email: '',
       userId: '',
@@ -222,6 +222,7 @@ export default {
       animal: '',
       region: [],
       voiceUrl: '',
+      pan: 0,
       video: 'http://tmp/wx3f1e71e9ef9aaabf.o6zAJs2WsoIGM1QCJjQV1ccYszRs.SPKIPcvU10gP5106da2657c3eceedd1adbebacde92e3.mp4',
       voice: '',
       voiceTxt: '录音',
@@ -435,8 +436,8 @@ export default {
     }, // 删除视频
     deleteVideo () {
       // 更新一下个人信息接口，图片传‘’
-      this.video = ''
       this.videoFlag = false
+      this.video = ''
       this.getSalesmanUpdate()
     },
     // 页面加载获取信息
@@ -450,83 +451,153 @@ export default {
         }
       }).then(res => {
         console.log('res', res.data)
-        this.postForm = res.data
-        this.voice = res.data.voice
-        this.userId = userId
-        this.Yid = res.data.id
-        this.richImg = res.data.richText
-        this.video = res.data.video !== '' ? res.data.video : ''
-        this.richTextList = res.data.richText !== '' ? res.data.richText.split(',') : []
-        this.name = (res.data.name === '' ? res.data.nick_Name : res.data.nickName)
-        this.weChat = res.data.weChat
-        this.job = res.data.job
-        this.phone = res.data.phone
-        this.imgUrl = res.data.imgUrl
-        this.fixedPhone = res.data.fixedPhone
-        this.email = res.data.email
-        this.salesCompanyName = res.data.salesCompanyName
-        this.info = res.data.info
-        this.videoImg = this.video + '?x-oss-process=video/snapshot,t_0,f_jpg,w_750,m_fast'
-        const lab = typeof res.data.salesAddress
-        if (lab === 'string') {
-          this.region = JSON.parse(res.data.salesAddress)
-          this.address = this.region
+        if (res.data !== null) {
+          this.postForm = res.data
+          this.voice = res.data.voice
+          this.userId = userId
+          this.pan = 1
+          this.Yid = res.data.id
+          this.richImg = res.data.richText
+          this.video = res.data.video !== '' ? res.data.video : ''
+          this.richTextList = res.data.richText !== '' ? res.data.richText.split(',') : []
+          this.name = (res.data.name === '' ? res.data.nick_Name : res.data.nickName)
+          this.weChat = res.data.weChat
+          this.job = res.data.job
+          this.phone = res.data.phone
+          this.imgUrl = res.data.imgUrl
+          this.fixedPhone = res.data.fixedPhone
+          this.email = res.data.email
+          this.salesCompanyName = res.data.salesCompanyName
+          this.info = res.data.info
+          this.videoImg = this.video + '?x-oss-process=video/snapshot,t_0,f_jpg,w_750,m_fast'
+          const lab = typeof res.data.salesAddress
+          if (lab === 'string') {
+            this.region = JSON.parse(res.data.salesAddress)
+            this.address = this.region
+          } else {
+            this.region = JSON.parse(res.data.salesAddress)
+            this.address = this.region.join('')
+          }
+          if (this.voice !== '') {
+            this.voiceTxt = '重录'
+            const bg = wx.createInnerAudioContext()
+            bg.src = this.voice
+            console.log('33', this.voice)
+            bg.onCanplay(() => {
+              console.log(bg.duration)
+            })
+            setTimeout(() => {
+              console.log(bg.duration)
+              this.num = Math.round(bg.duration)
+              this.voiceTime = this.formatSeconds(this.num)
+            }, 1000)
+          }
         } else {
-          this.region = JSON.parse(res.data.salesAddress)
-          this.address = this.region.join('')
-        }
-        if (this.voice !== '') {
-          this.voiceTxt = '重录'
-          const bg = wx.createInnerAudioContext()
-          bg.src = this.voice
-          bg.onCanplay(() => {
-            console.log(bg.duration)
-          })
-          setTimeout(() => {
-            console.log(bg.duration)
-            this.num = Math.round(bg.duration)
-            this.voiceTime = this.formatSeconds(this.num)
-          }, 1000)
+          this.pan = 0
         }
       }).catch(err => {
         console.log(err.status, err.message)
       })
     },
+    judgeNull (str, name) {
+      if (str === '' || str.length === 0) {
+        wx.showToast({
+          title: name + '不能为空',
+          icon: 'none',
+          duration: 2000
+        })
+        return true
+      }
+    },
     // 更新名片信息接口
     getSalesmanUpdate () {
-      const token = wx.getStorageSync('token')
-      wx.request({
-        method: 'post', // post/get 请求方式
-        url: UPLOAD_API + '/server/platformSalesman/updateBaseInfo',
-        data: {
-          imgUrl: this.imgUrl,
-          video: this.video,
-          voice: this.voice,
-          id: this.Yid, // 152
-          name: this.postForm.name,
-          addDetailed: this.addDetailed,
-          address: JSON.stringify(this.region),
-          companyName: this.salesCompanyName,
-          richText: this.richImg,
-          phone: this.phone,
-          fixedPhone: this.fixedPhone,
-          email: this.email,
-          weChat: this.weChat,
-          job: this.job,
-          info: this.info
-        },
-        header: {
-          'token': token
-        },
-        success: function (res) {
-        },
-        fail: function (res) {
-          console.log(res)
-        },
-        complete: function (res) {
-          console.log(res)
-        }
-      })
+      if (this.pan === 0) {
+        const token = wx.getStorageSync('token')
+        const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
+        const userId = wx.getStorageSync('userId') // 获取本地bussiness
+        wx.request({
+          method: 'post', // post/get 请求方式
+          url: UPLOAD_API + '/server/platformSalesman/add',
+          data: {
+            businessId: businessId,
+            userId: userId,
+            imgUrl: this.imgUrl,
+            video: this.video,
+            voice: this.voice,
+            id: this.Yid, // 152
+            name: this.name,
+            addDetailed: this.addDetailed,
+            address: JSON.stringify(this.region),
+            companyName: this.salesCompanyName,
+            richText: this.richImg,
+            phone: this.phone,
+            fixedPhone: this.fixedPhone,
+            email: this.email,
+            weChat: this.weChat,
+            job: this.job,
+            info: this.info
+          },
+          header: {
+            'token': token
+          },
+          success: function (res) {
+            if (res.data.code === 200) {
+              wx.showToast({
+                title: '保存成功',
+                icon: 'none',
+                duration: 2000
+              })
+            }
+          },
+          fail: function (res) {
+            console.log(res)
+          },
+          complete: function (res) {
+            console.log(res)
+          }
+        })
+      } else {
+        const token = wx.getStorageSync('token')
+        wx.request({
+          method: 'post', // post/get 请求方式
+          url: UPLOAD_API + '/server/platformSalesman/updateBaseInfo',
+          data: {
+            imgUrl: this.imgUrl,
+            video: this.video,
+            voice: this.voice,
+            id: this.Yid, // 152
+            name: this.name,
+            addDetailed: this.addDetailed,
+            address: JSON.stringify(this.region),
+            companyName: this.salesCompanyName,
+            richText: this.richImg,
+            phone: this.phone,
+            fixedPhone: this.fixedPhone,
+            email: this.email,
+            weChat: this.weChat,
+            job: this.job,
+            info: this.info
+          },
+          header: {
+            'token': token
+          },
+          success: function (res) {
+            if (res.data.code === 200) {
+              wx.showToast({
+                title: '更新成功',
+                icon: 'none',
+                duration: 2000
+              })
+            }
+          },
+          fail: function (res) {
+            console.log(res)
+          },
+          complete: function (res) {
+            console.log(res)
+          }
+        })
+      }
     },
     // 获取当前定位
     chooseLocation () {
@@ -626,8 +697,10 @@ export default {
           methods: 'POST',
           success: (res) => {
             console.log(JSON.parse(res.data).data[0])
+            this.voice = (JSON.parse(res.data).data[0])
             this.$nextTick(() => {
               this.voice = JSON.parse(res.data).data[0]
+              this.getSalesmanUpdate()
             })
             const bgM = wx.createInnerAudioContext()// 初始化createInnerAudioContext接口
             // 设置播放地址

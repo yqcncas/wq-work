@@ -1,35 +1,100 @@
 <template>
   <div class="j-pic-upload">
-    <div class="j-upload-btn" @click="uploadImg()" :style="{'width':width || '120rpx','height':height || '120rpx'}">
+    <img @click="previewImg(index)" v-for="(src,index) in urls" :key="src" :src="src" :style="{'width':width || '200rpx','height':height || '200rpx'}" class="img" >
+    <div v-if="urls.length < 9" class="j-upload-btn" @click="uploadImg()" :style="{'width':width || '200rpx','height':height || '200rpx'}">
       <span class="j-upload-add iconaddgrey iconfont"></span>
     </div>
-    <img @click="previewImg(index)" v-for="(src,index) in urls" :key="src" :src="src" :style="{'width':width || '120rpx','height':height || '120rpx'}" class="img" >
   </div>
 </template>
 
 <script>
+  import { UPLOAD_FILE } from '@/api/uploadFile'
   export default {
     props: ['width', 'height', 'max', 'srcs'],
     data () {
       return {
-        urls: []
+        urls: [],
+        urlsA: '',
+        imgUrl: null,
+        richTextList: []
       }
     },
-    mounted () {
-      this.urls = this.srcs || []
+    watch: {
+      srcs (newValue, oldValue) {
+        // let imgUrlA = newValue
+        this.urls = []
+        newValue.map((item) => {
+          this.urls.push(item)
+        })
+        console.log('new', this.urls)
+      }
     },
     methods: {
       uploadImg () {
         let that = this
         wx.chooseImage({
-          count: that.max || 3,
+          count: that.max || 9,
           sizeType: ['original', 'compressed'],
           sourceType: ['album', 'camera'],
           success: function (res) {
-            res.tempFilePaths.forEach(v => {
-              that.urls.push(v)
-            })
-            that.$emit('choosed', { all: that.urls, currentUpload: res.tempFilePaths })
+            // res.tempFilePaths.forEach(v => {
+            //   that.urls.push(v)
+            // })
+            that.imgUrl = null
+            let successUp = 0 // 成功
+            let failUp = 0 // 失败
+            let length = res.tempFilePaths.length // 总数
+            let count = 0 // 第几张
+            that.uploadOneByOne(res.tempFilePaths, successUp, failUp, count, length)
+          }
+        })
+      },
+      // 上传到oss
+      uploadOneByOne (imgPaths, successUp, failUp, count, length) {
+        const token = wx.getStorageSync('token')
+        let that = this
+        wx.showLoading({
+          title: '正在上传第' + count + '张'
+        })
+        wx.uploadFile({
+          url: UPLOAD_FILE + '?filedir=dynamic',
+          filePath: imgPaths[count],
+          name: 'file',
+          header: {
+            'Content-Type': 'image/jpeg',
+            token: token
+          },
+          methods: 'POST',
+          success: (res) => {
+            console.log('成功', res)
+            successUp++ // 成功+1
+            // 上传成功之后再把照片的图片列表更新到个人信息接口
+            that.richTextList.push(JSON.parse(res.data).data[0])
+            that.urlsA = that.richTextList.join(',')
+            that.urls = that.urlsA.split(',')
+            console.log(that.urls)
+            that.$emit('choosed', { all: that.urlsA, allS: that.urlsA, currentUpload: res.tempFilePaths })
+          },
+          fail: (res) => {
+            failUp++ // 失败+1
+            that.$emit('choosed', { all: that.urlsA, allS: that.urlsA, currentUpload: res.tempFilePaths })
+          },
+          complete: (res) => {
+            count++ // 下一张
+            if (count === length) {
+              // 上传完毕，作一下提示
+              console.log('上传成功' + successUp + ',' + '失败' + failUp)
+              wx.showToast({
+                title: '上传成功' + successUp,
+                icon: 'none',
+                duration: 2000
+              })
+            } else {
+              // 递归调用，上传下一张
+              this.uploadOneByOne(imgPaths, successUp, failUp, count, length)
+              console.log('正在上传第' + count + '张')
+            }
+            that.$emit('choosed', { all: that.urlsA, allS: that.urlsA, currentUpload: res.tempFilePaths })
           }
         })
       },
@@ -56,19 +121,18 @@
 
 <style lang="less" scoped>
   .j-pic-upload{
-    padding: ~'10rpx'  ~'10rpx'  ~'10rpx' 0;
+    padding: ~'10rpx';
     display: flex;
     flex-direction: row;
     align-items: center;
     flex-wrap: wrap;
   }
   .j-upload-btn{
-    border: 1px solid #ddd;
+    /*border: 1px solid #ddd;*/
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    margin-right: ~'20rpx';
     background: #D8D8D8;
   }
   .j-upload-add{
@@ -76,7 +140,10 @@
     color:#C9C9C9;
   }
   .img{
-    margin:~'10rpx' ~'20rpx' ~'10rpx' 0;
+    margin:~'10rpx' ~'17rpx' ~'10rpx' 0;
+  }
+  .img:nth-child(3n){
+    margin: 0;
   }
   .iconaddgrey{
     color: #ffffff;

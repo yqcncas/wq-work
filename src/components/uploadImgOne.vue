@@ -3,7 +3,7 @@
     <div class="j-upload-btn" @click="uploadImg()" :style="{'width':width || '120rpx','height':height || '120rpx'}">
       <span class="j-upload-add iconaddgrey iconfont"></span>
     </div>
-    <img @click="previewImg(index)" v-for="(src,index) in urls" :key="src" :src="src.imgUrl" :style="{'width':width || '120rpx','height':height || '120rpx'}" class="img" >
+    <img @click="previewImg(index)" :src="urls" :style="{'width':width || '120rpx','height':height || '120rpx'}" class="img"  alt="">
   </div>
 </template>
 
@@ -25,8 +25,8 @@
         default: {}
       },
       srcs: {
-        type: Array,
-        default: []
+        type: String,
+        default: ''
       },
       value: {
         type: Object,
@@ -35,16 +35,17 @@
     },
     data () {
       return {
-        urls: []
+        urls: ''
       }
     },
     watch: {
       srcs (newValue, oldValue) {
-        this.urls = []
-        if (newValue.length <= 3) {
-          newValue.map((item) => {
-            this.urls.push({ imgUrl: item.imgUrl })
-          })
+        this.urls = ''
+        if (newValue) {
+          this.urls = newValue
+          // newValue.map((item) => {
+          //   this.urls.push({ imgUrl: item.imgUrl })
+          // })
         }
       }
     },
@@ -53,17 +54,18 @@
     methods: {
       uploadImg () {
         let that = this
-        if (this.urls.length < 3) {
+        if (this.urls.length < 1) {
           wx.chooseImage({
-            count: that.max || 3,
+            count: that.max || 1,
             sizeType: ['original', 'compressed'],
             sourceType: ['album', 'camera'],
             success: function (res) {
-              // this.imgUrl = res.tempFilePaths[0]
-              /** 上传完成后把文件上传到服务器 */
+              // res.tempFilePaths.forEach(v => {
+              //   that.urls.push({ imgUrl: v })
+              // })
               const token = wx.getStorageSync('token')
               wx.uploadFile({
-                url: UPLOAD_FILE + '?filedir=companyProduce',
+                url: UPLOAD_FILE + '?filedir=companyInfo',
                 filePath: res.tempFilePaths[0],
                 name: 'file',
                 header: {
@@ -73,15 +75,18 @@
                 methods: 'POST',
                 success: (res) => {
                   // 上传成功之后再把图片的地址更新到个人信息接口
-                  that.urls.push({imgUrl: JSON.parse(res.data).data[0]})
-                  that.$emit('choosed', { all: that.urls })
+                  // that.urls.push({imgUrl: JSON.parse(res.data).data[0]})
+                  // that.$emit('choosed', { all: that.urls })
+                  that.urls = JSON.parse(res.data).data[0]
+                  console.log('aaa', that.urls)
+                  that.$emit('choosed', { all: that.urls, currentUpload: res.tempFilePaths })
                 }
               })
             }
           })
         } else {
           wx.showToast({
-            title: '只能上传三张图片',
+            title: '只能上传一张图片',
             icon: 'none',
             duration: 2000
           })
@@ -92,15 +97,15 @@
         wx.showActionSheet({
           itemList: ['预览', '删除'],
           success: function (res) {
-            console.log('res', that.urls[index].imgUrl)
-            const urlA = that.urls[index].imgUrl.split('')
+            console.log('55', res)
+            const urlA = that.urls.split('')
             if (res.tapIndex === 0) {
               wx.previewImage({
-                current: '',
+                current: urlA[index],
                 urls: urlA
               })
             } else {
-              that.urls.splice(index, 1)
+              that.urls = ''
               that.$emit('choosed', { all: that.urls, currentUpload: res.tempFilePaths })
             }
           }

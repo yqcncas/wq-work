@@ -8,26 +8,42 @@
       :btnText="btnText">
     </vue-tab-bar>
       <div class="top">
-        <div class="top-main" @click="goIndex">
+        <el-form ref="postForm" :model="postForm">
+          <div class="top-main" @click="goIndex">
           <span class="headImg">
-            <img src="../../../static/images/gongzhonghao.jpg"/>
+            <img :src="postForm.imgUrl"/>
             <i><s>企</s></i>
           </span>
-          <p class="">
-            <span class="name">李松阳</span>
-            <span class="job">技术总监</span>
-            <span class="comyname">浙江万千科技有限公司</span>
-            <span class="edit">
+            <p class="">
+              <span class="name">{{ postForm.name }}</span>
+              <span class="job">{{ postForm.job }}</span>
+              <span class="comyname">{{ postForm.salesCompanyName}}</span>
+              <span class="edit">
               编辑<img src="../../../static/images/right.png"/>
             </span>
-          </p>
-        </div>
+            </p>
+          </div>
+        </el-form>
       </div>
     <div class="look">
-      <div class="look-main" v-for="(item,index) in nav" :key="index">
-        <p class="num">{{ item.num }}</p>
-        <p class="title">{{ item.title }}</p>
-      </div>
+      <el-form ref="resForm" :model="resForm">
+        <div class="look-main">
+          <p class="num">{{resForm.lookMeNum}}</p>
+          <p class="title">看过我</p>
+        </div>
+        <div class="look-main">
+          <p class="num">{{resForm.collectMeNum}}</p>
+          <p class="title">收藏我</p>
+        </div>
+        <div class="look-main">
+          <p class="num">{{resForm.praiseMeNum}}</p>
+          <p class="title">赞过我</p>
+        </div>
+        <div class="look-main">
+          <p class="num">{{resForm.iLookNum}}</p>
+          <p class="title">我看过</p>
+        </div>
+      </el-form>
     </div>
       <div class="choose">
         <div class="choose-main">
@@ -54,24 +70,23 @@
 
     data () {
       return {
+        postForm: {
+          imgUrl: 'https://oss.wq1516.com/salesInfo/201906041349011559627341603.png',
+          name: '无姓名',
+          job: '无工作',
+          salesCompanyName: '无公司名字'
+        },
+        resForm: {
+          lookMeNum: 0,
+          collectMeNum: 0,
+          praiseMeNum: 0,
+          iLookNum: 0
+        },
         selectNavIndex: 3,
         needButton: true,
         handButton: true,
         btnText: '个人中心',
         indicatorDots: true,
-        nav: [{
-          num: 1,
-          title: '看过我'
-        }, {
-          num: 1,
-          title: '收藏我'
-        }, {
-          num: 99,
-          title: '赞过我'
-        }, {
-          num: 99,
-          title: '我看过'
-        }],
         choose: [{
           src: '../../static/images/compny.png',
           title: '企业认证',
@@ -94,7 +109,8 @@
           url: '../message/main'
         }, {
           src: '../../static/images/Member.png',
-          title: '会员中心'
+          title: '会员中心',
+          url: ''
         }]
       }
     },
@@ -103,12 +119,57 @@
     },
     onShow () {
       wx.hideTabBar()
+      this.getInfo()
+      this.getRecord()
     },
     methods: {
-      goInto (url) {
-        wx.navigateTo({
-          url
+      // 页面加载信息
+      getInfo () {
+        const userId = wx.getStorageSync('userId') // 获取本地userId
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: 'server/platformSalesman/selectSelfInfo',
+          body: {
+            'userId': userId
+          }
+        }).then(res => {
+          if (res.data) {
+            this.postForm = res.data
+          } else {
+            this.choose.map((item) => {
+              item.url = '../businesscard/main'
+              console.log(item)
+            })
+          }
+        }).catch(err => {
+          console.log(err.status, err.message)
         })
+      },
+      getRecord () {
+        const userId = wx.getStorageSync('userId') // 获取本地userId
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: 'server/platformOperationRecord/selectOperationForUser',
+          body: {
+            'userId': userId
+          }
+        }).then(res => {
+          console.log('res', res)
+          this.resForm = res.data
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      },
+      goInto (url) {
+        if (url === '../businesscard/main') {
+          wx.switchTab({
+            url
+          })
+        } else {
+          wx.navigateTo({
+            url
+          })
+        }
       },
       goIndex () {
         wx.navigateTo({

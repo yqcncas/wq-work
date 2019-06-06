@@ -7,14 +7,16 @@
         </div>
       </div>
       <div class="content">
-        <div class="title" v-if="products">共1款产品</div>
-        <div class="product"  v-if="products">
-          <div class="manage" v-for="(item, index) in products" :key="index">
+          <div class="title"  v-if="prolength!== 0">共{{prolength}}款产品</div>
+          <div class="product" v-if="prolength!==0" >
+            <div class="manage" v-for="(item, index) in products" :key="index">
+            <div @click="modify(item.id)">
             <span class="img">
-              <img :src="item.src">
+              <img :src="item.goodsImgUrlList[id].imgUrl">
             </span>
-            <p class="text">{{ item.product }}</p>
-            <p class="introduce">{{ item.introduce }}</p>
+              <p class="text">{{ item.name }}</p>
+              <p class="introduce">{{ item.info }}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -25,32 +27,46 @@
     name: 'index',
     data () {
       return {
-        Groups: [{
-          src: '../../static/images/tiangou.jpg',
-          name: '今天你吃了吗',
-          number: '3',
-          attribute: '公司通讯录',
-          center: '大家好这是我们的日常聊天互骚群，欢迎各位加入'
-        }, {
-          src: '../../static/images/tiangou.jpg',
-          name: '今天你吃了吗',
-          number: '3',
-          attribute: '公司通讯录',
-          center: '大家好这是我们的日常聊天互骚群，欢迎各位加入'
-        }],
-        products: [
-          {
-            src: '../../static/images/tiangou.jpg',
-            product: '系统产品',
-            introduce: '产品介绍'
-          }
-        ]
+        id: 0,
+        prolength: '',
+        products: []
       }
     },
+    onShow () {
+      this.getInfo()
+    },
     methods: {
+      // 添加产品跳转
       getInto (e) {
         wx.navigateTo({
-          url: `../addProduct/main`
+          url: `../addProduct/main?add=1`
+        })
+      },
+      // 编辑产品跳转
+      modify (id) {
+        wx.navigateTo({
+          url: `../addProduct/main?id=` + id + '&edit=1'
+        })
+      },
+      // 加载产品列表
+      getInfo (e) {
+        const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
+        const userId = wx.getStorageSync('userId') // 获取本地userId
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: 'server/platformGoods/getAllGoodsByUserId',
+          body: {
+            'businessId': businessId,
+            'userId': userId
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            this.products = res.data.list
+            this.prolength = res.data.list.length
+          }
+          console.log(res)
+        }).catch(err => {
+          console.log(err.status, err.message)
         })
       }
     }
