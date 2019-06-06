@@ -12,7 +12,7 @@
           <div class="time">
             <a>{{ item.createDate.date }}</a>{{ item.createDate.months + 1}}月
           </div>
-          <div class="middle" v-if="item.imgUrlList.length < 0">
+          <div class="middle" v-if="item.imgUrlList !== null">
             <span class="Img">
               <img :src="item.imgUrlList[0]">
             </span>
@@ -22,11 +22,11 @@
           </div>
           <div class="middleVideo" v-else-if="item.video !== null">
             <span class="video">
-              <video
+              <img
                 id="myVideo"
-                :src="item.video"
+                :src="item.video +  '?x-oss-process=video/snapshot,t_0,f_jpg,w_750,m_fast'"
                 controls
-              ></video>
+              >
             </span>
             <span class="title">
              {{ item.title }}
@@ -95,7 +95,7 @@ export default {
         wx.navigateTo({
           url: `../resEdit/main?id=` + id + '&video=1' + '&status=' + this.status
         })
-      } else if (photo !== null && video !== '') {
+      } else if (photo !== null && photo !== '') {
         wx.navigateTo({
           url: `../resEdit/main?id=` + id + '&photo=1' + '&status=' + this.status
         })
