@@ -14,21 +14,14 @@
     data () {
       return {
         urls: [],
-        urlsA: '',
+        urlsA: [],
         imgUrl: null,
         richTextList: []
       }
     },
     watch: {
       srcs (newValue, oldValue) {
-        // let imgUrlA = newValue
-        console.log('new', newValue)
-        if (newValue) {
-          this.urls = []
-          newValue.map((item) => {
-            this.urls.push(item)
-          })
-        }
+        this.urls = newValue || []
       }
     },
     methods: {
@@ -68,18 +61,15 @@
           },
           methods: 'POST',
           success: (res) => {
-            console.log('成功', res)
+            console.log('成功', JSON.parse(res.data).data[0])
             successUp++ // 成功+1
             // 上传成功之后再把照片的图片列表更新到个人信息接口
-            that.richTextList.push(JSON.parse(res.data).data[0])
-            that.urlsA = that.richTextList.join(',')
-            that.urls = that.richTextList
-            console.log(that.urls)
-            that.$emit('choosed', { all: that.urlsA, allS: that.urlsA, currentUpload: res.tempFilePaths })
+            that.urlsA.push(JSON.parse(res.data).data[0])
+            that.urls = that.urlsA
+            that.$emit('choosed', { all: that.urls })
           },
           fail: (res) => {
             failUp++ // 失败+1
-            that.$emit('choosed', { all: that.urlsA, allS: that.urlsA, currentUpload: res.tempFilePaths })
           },
           complete: (res) => {
             count++ // 下一张
@@ -96,7 +86,6 @@
               this.uploadOneByOne(imgPaths, successUp, failUp, count, length)
               console.log('正在上传第' + count + '张')
             }
-            that.$emit('choosed', { all: that.urlsA, allS: that.urlsA, currentUpload: res.tempFilePaths })
           }
         })
       },
@@ -112,7 +101,7 @@
               })
             } else {
               that.urls.splice(index, 1)
-              that.$emit('delete', that.urls)
+              that.$emit('choosed', that.urls)
             }
           }
         })

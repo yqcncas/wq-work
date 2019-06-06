@@ -1,6 +1,6 @@
 <template>
   <div class="j-pic-upload">
-    <div class="up-video" v-if="video.length > 1">
+    <div class="up-video" v-if="video !== '' ">
       <video id="myVideo" v-if="videoFlag" :src="video" @play="playA()" @ended=" end()" objectFit="fill" class="cover-hw"></video>
       <div v-else class="cover-view" >
         <div v-if="video!== ''" @click="videoPlay">
@@ -32,8 +32,14 @@
     },
     watch: {
       srcs (newValue, oldValue) {
-        this.urls = []
-        console.log('new', newValue)
+        if (newValue) {
+          this.urls = newValue
+          this.video = this.urls
+          this.videoImg = this.video + '?x-oss-process=video/snapshot,t_0,f_jpg,w_750,m_fast'
+          console.log('aa', this.video)
+        } else {
+          this.video = ''
+        }
       }
     },
     methods: {
@@ -65,8 +71,8 @@
               success: (res) => {
                 let that = this
                 that.video = JSON.parse(res.data).data[0]
-                that.videoImg = this.video + '?x-oss-process=video/snapshot,t_0,f_jpg,w_750,m_fast'
-                that.$emit('choosedVideo', { all: that.video, allS: that.videoImg, currentUpload: res.tempFilePaths })
+                // that.videoImg = this.video + '?x-oss-process=video/snapshot,t_0,f_jpg,w_750,m_fast'
+                that.$emit('choosedvideo', { all: that.video })
               },
               fail: (res) => {
               }

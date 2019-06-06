@@ -68,7 +68,9 @@ export default {
         console.log('aaa', res)
         this.imgUrlList = res.data.imgUrlList
         this.title = res.data.title
-        this.location = JSON.parse(res.data.address)
+        if (res.data.address) {
+          this.location = res.data.address
+        }
         this.video = res.data.video
       }).catch(err => {
         console.log(err)
@@ -76,13 +78,13 @@ export default {
     },
     // 上传视频
     choosedvideo (val) {
-      console.log('vieo', val.all)
-      // if (val.all) {
-      //   this.video = val.all
-      //   console.log('vieo', val.all)
-      // }
+      console.log('video', val)
+      if (val.all) {
+        this.video = val.all
+      }
     },
     choosed (val) {
+      // console.log('img', val)
       if (val.all) {
         this.imgUrlList = val.all
       }
@@ -91,7 +93,6 @@ export default {
     },
     chooseLocation () {
       var that = this
-      console.log('1111')
       wx.chooseLocation({
         success: function (res) {
           console.log(res)
@@ -102,7 +103,7 @@ export default {
     },
     // 更新动态
     update (id) {
-      console.log(id)
+      // console.log(id)
       const salesmanId = wx.getStorageSync('salesmanId')
       const businessId = wx.getStorageSync('businessId')
       if (this.location === '定位') {
@@ -118,7 +119,7 @@ export default {
           'salesmanId': salesmanId,
           'businessId': businessId,
           'title': this.title,
-          'imgUrlList': this.imgUrlList,
+          'imgUrlListOut': this.imgUrlList,
           'video': this.video,
           'address': this.address,
           'longitude': this.longitude,
@@ -158,7 +159,7 @@ export default {
           'salesmanId': salesmanId,
           'businessId': businessId,
           'title': this.title,
-          'imgUrlList': this.imgUrlList,
+          'imgUrlListOut': this.imgUrlList,
           'video': this.video,
           'address': this.address,
           'longitude': this.longitude,
@@ -186,6 +187,8 @@ export default {
       if (option.id) {
         this.getEditMain(option.id)
         this.opId = option.id
+      } else {
+        this.opId = ''
       }
       this.status = option.status
       if (option.photo) {
