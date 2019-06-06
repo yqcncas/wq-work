@@ -23,7 +23,7 @@
               <div class="cards-main">
                 <p class="cards-img"><img :src="postForm.imgUrl" /></p>
                 <p class="cards-name">
-                  <span>{{ postForm.name === '' ?  postForm.nick_Name:postForm.nickName }}</span>
+                  <span>{{ postForm.name}}</span>
                 </p>
                 <p class="cards-job">
                   <span>{{ postForm.job }}</span>
@@ -125,7 +125,7 @@
                 </div>
                 <div class="personal-text">
                   <div class="personal-wel">
-                    <span>您好！我是{{ postForm.salesCompanyName }}的{{ postForm.name === '' ?  postForm.nick_Name:postForm.nickName }}</span>
+                    <span>您好！我是{{ postForm.salesCompanyName }}的{{ postForm.name }}</span>
                   </div>
                   <div class="personal-teach">
                         <span v-html="postForm.info">

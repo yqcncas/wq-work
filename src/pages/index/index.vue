@@ -162,7 +162,7 @@
                 <div class="up-video">
                   <video id="myVideo" v-if="videoFlag" :src="video" @play="playA()" @ended=" end()" objectFit="fill" class="cover-hw"></video>
                   <div v-else class="cover-view" >
-                    <div v-if="video!== ''" @click="videoPlay">
+                    <div v-if="video!== '' && video!== null" @click="videoPlay">
                       <i class="delete-img iconfont iconshanchu-copy" @click="deleteVideo"></i>
                       <img class="FMimg" :src="videoImg" mode="scaleToFill" />
                       <div class="model-btn">
@@ -460,7 +460,7 @@ export default {
           this.richImg = res.data.richText
           this.video = res.data.video !== '' ? res.data.video : ''
           this.richTextList = res.data.richText !== '' ? res.data.richText.split(',') : []
-          this.name = (res.data.name === '' ? res.data.nick_Name : res.data.nickName)
+          this.name = res.data.name
           this.weChat = res.data.weChat
           this.job = res.data.job
           this.phone = res.data.phone

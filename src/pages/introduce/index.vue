@@ -181,11 +181,8 @@
               duration: 2000
             })
             setTimeout(function () {
-              console.log('111')
-              wx.navigateTo({
-                url: '../personal/main'
-              })
-            }, 2000)
+              wx.navigateBack(-1)
+            }, 3000)
           }
           console.log(res)
         }).catch(err => {
@@ -213,9 +210,8 @@
               duration: 2000
             })
             setTimeout(function () {
-              console.log('111')
-              this.goTo()
-            }, 2000)
+              wx.navigateBack(-1)
+            }, 3000)
           }
         }).catch(err => {
           console.log(err)

@@ -71,7 +71,7 @@
     data () {
       return {
         postForm: {
-          imgUrl: 'https://oss.wq1516.com/salesInfo/201906041349011559627341603.png',
+          imgUrl: 'https://oss.wq1516.com/default-avatar.png',
           name: '无姓名',
           job: '无工作',
           salesCompanyName: '无公司名字'

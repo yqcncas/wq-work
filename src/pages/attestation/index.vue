@@ -34,7 +34,7 @@ export default {
       idCard: '',
       job: '',
       disabled: false,
-      status: 0
+      status: ''
     }
   },
   onShow () {
@@ -115,9 +115,9 @@ export default {
             icon: 'none',
             duration: 2000
           })
-          setTimeout((
+          setTimeout(function () {
             wx.navigateBack(-1)
-          ), 3000)
+          }, 3000)
         }
       }).catch(err => {
         console.log(err)
@@ -155,9 +155,10 @@ export default {
             icon: 'none',
             duration: 2000
           })
-          setTimeout((
+          setTimeout(function () {
+            console.log('111')
             wx.navigateBack(-1)
-          ), 3000)
+          }, 3000)
         }
       }).catch(err => {
         console.log(err)

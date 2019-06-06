@@ -91,7 +91,7 @@
                 <div class="card-main">
                   <div class="qiye">
                     <span class="img"><s>企</s></span>
-                    <b>{{ item.name === '' ?  item.nick_Name:item.nickName }}</b>
+                    <b>{{ item.name }}</b>
                     <span class="job">{{ item.job }}</span>
                     <span v-if="item.isCertification === 0" class="status">已认证</span>
                     <span v-else class="status">无状态</span>
@@ -151,7 +151,7 @@
                 <div class="infoTop">
                   <span class="headName">{{item.name}}</span>
                   <span class="headMap">
-                    <s class="headMaps">{{ item.address }}</s>·<s>&nbsp; {{ item.browseCount }}次浏览</s>
+                    <s class="headMaps" v-if="item.address ">{{ item.address }} ·</s><s>&nbsp; {{ item.browseCount }}次浏览</s>
                   </span>
                   <span class="headTitle">
                   {{ item.title }}
@@ -414,6 +414,9 @@ export default {
         let yesterday = this.moment(new Date()).add(-1, 'days').format('YYYY/MM/DD')
         const newList = res.data.list
         newList.map(item => {
+          if (item.address === null) {
+            item.address = ''
+          }
           let temp = this.moment(item.createDate)
           let tempData = this.moment(item.createDate).format('YYYY/MM/DD')
           if (tempData === today) {

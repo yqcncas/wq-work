@@ -124,7 +124,7 @@
     }
     .item-text {
       color: #666;
-      font-size: ~'28rpx';
+      font-size: ~'20rpx';
       transition: .24s linear;
     }
     .item-text-active {
@@ -132,8 +132,8 @@
     }
 
     .item-images {
-      width: ~'48rpx';
-      height: ~'48rpx';
+      width: ~'55rpx';
+      height: ~'55rpx';
       margin: 0 auto;
       text-align: center;
       transition: .24s linear;
