@@ -22,11 +22,13 @@
     watch: {
       srcs (newValue, oldValue) {
         // let imgUrlA = newValue
-        this.urls = []
-        newValue.map((item) => {
-          this.urls.push(item)
-        })
-        console.log('new', this.urls)
+        console.log('new', newValue)
+        if (newValue) {
+          this.urls = []
+          newValue.map((item) => {
+            this.urls.push(item)
+          })
+        }
       }
     },
     methods: {
@@ -71,7 +73,7 @@
             // 上传成功之后再把照片的图片列表更新到个人信息接口
             that.richTextList.push(JSON.parse(res.data).data[0])
             that.urlsA = that.richTextList.join(',')
-            that.urls = that.urlsA.split(',')
+            that.urls = that.richTextList
             console.log(that.urls)
             that.$emit('choosed', { all: that.urlsA, allS: that.urlsA, currentUpload: res.tempFilePaths })
           },
