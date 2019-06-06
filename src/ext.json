@@ -1,0 +1,11 @@
+{
+  "extEnable": true,
+  "extAppid": "wx2207f08803917070",
+  "directCommit": false,
+  "ext": {
+    "shopId": 109,
+    "baseUrl": "https://api.wq1516.com/server",
+    "ossUrl": "https://oss.wq1516.com/",
+    "wssUrl": "wss://api.wq1516.com/websocket/"
+  }
+}
