@@ -36,7 +36,6 @@
           this.urls = newValue
           this.video = this.urls
           this.videoImg = this.video + '?x-oss-process=video/snapshot,t_0,f_jpg,w_750,m_fast'
-          console.log('aa', this.video)
         } else {
           this.video = ''
         }

@@ -75,7 +75,7 @@
           imgUrl: 'https://oss.wq1516.com/default-avatar.png',
           name: '无姓名',
           job: '无工作',
-          salesCompanyName: '无公司名字'
+          salesCompanyName: '无公司名称'
         },
         resForm: {
           lookMeNum: 0,

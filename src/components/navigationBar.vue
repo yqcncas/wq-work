@@ -11,7 +11,7 @@
                 <!-- home及后退键 -->
                 <cover-view class="bar-options" @click="backClick()">
                     <cover-view class="opt opt-back">
-                      <cover-image class="back-image" src="../../static/images/gongzhonghao.jpg"></cover-image>
+                      <cover-image class="back-image" src="https://oss.wq1516.com/default-avatar.png"></cover-image>
                     </cover-view>
                     <cover-view class="opt opt-home">
                       <cover-view style="font-size: 20rpx">消息中心</cover-view><cover-view v-if="num !== 0" style="width: 22rpx;height: 22rpx;background:red;border-radius: 50rpx;color: #fff;font-size: 18rpx;padding: 4rpx;" ><cover-view style="text-align: center">{{num}}</cover-view></cover-view>

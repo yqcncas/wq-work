@@ -12,7 +12,7 @@
           <div class="time">
             <a>{{ item.createDate.date }}</a>{{ item.createDate.months + 1}}月
           </div>
-          <div class="middle" v-if="item.imgUrlList !== null">
+          <div class="middle" v-if="item.imgUrlList !== null && item.imgUrlList[0] !== ''">
             <span class="Img">
               <img :src="item.imgUrlList[0]">
             </span>
@@ -57,7 +57,7 @@ export default {
         createMonth: '6月',
         browseCount: 10,
         imgUrlList: '',
-        video: '',
+        video: 'https://oss.wq1516.com/salesVideo/201906111445321560235532181.mp4',
         title: '   益赞名片功能更新 | 龙虎榜模块V升级服务在升级！'
       }
       ]

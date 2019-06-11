@@ -44,13 +44,19 @@
         <div class="cardHold-top-I">
           <div class="cardHold-top-me">
               <div class="cardHold-top-main">
-                <span class="cardHold-top-main-img">
-                  <img src="../../../static/images/tiangou.jpg">
+                <span class="cardHold-top-main-img" v-if="imgUrl !== '' ">
+                  <img :src="imgUrl">
+                </span>
+                <span class="cardHold-top-main-img" v-else>
+                  <img src="https://oss.wq1516.com/default-avatar.png">
                 </span>
                 <div class="cardHold-top-main-right">
-                  <span class="cardHold-top-main-name">{{ name }}</span>
-                  <span class="cardHold-top-main-job">{{ job }}</span>
-                  <p class="cardHold-top-main-company">{{ company }}</p>
+                  <span class="cardHold-top-main-name" v-if="name !== ''">{{ name }}</span>
+                  <span class="cardHold-top-main-name" v-else>无姓名</span>
+                  <span class="cardHold-top-main-job" v-if="job !== ''">{{ job }}</span>
+                  <span class="cardHold-top-main-job" v-else>无工作</span>
+                  <p class="cardHold-top-main-company" v-if="company !== ''">{{ company }}</p>
+                  <p class="cardHold-top-main-company" v-else>无公司名称</p>
                   <p class="cardHold-top-main-footer">
                     <submit class="cardHold-top-main-footer-share"  @click="showType">
                       <span><i class="iconfont iconfenxiang"></i>分享名片</span>
@@ -194,15 +200,7 @@ export default {
       startX: 0,
       letter: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
       arrId: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],
-      commitInfo: [{
-        top: 'A',
-        icon: '企',
-        name: '李松阳',
-        salesCompanyName: '浙江万仟科技有限公司',
-        status: '已认证',
-        grade: 'V1',
-        type: 0
-      }]
+      commitInfo: []
     }
   },
   onShow () {
@@ -228,6 +226,13 @@ export default {
     imgLoad (e) {
       this.imgWidth = e.target.width
       this.imgHeight = e.target.height
+    },
+    onShareAppMessage () {
+      this.insertOpera('分享了名片', 21)
+      return {
+        title: `您好！我是${this.companyName}的${this.name},这是我的名片`,
+        path: 'pages/OthersCard/main?id=' + this.salesManId + '&fromWay=1&userId=' + this.id
+      }
     },
     // 分享名片弹窗
     showType () {

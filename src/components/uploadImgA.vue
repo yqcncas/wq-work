@@ -21,7 +21,12 @@
     },
     watch: {
       srcs (newValue, oldValue) {
-        this.urls = newValue || []
+        console.log('newValue', newValue)
+        if (newValue.length > 0) {
+          this.urls = newValue
+        } else {
+          this.urls = newValue || []
+        }
       }
     },
     methods: {
@@ -64,8 +69,8 @@
             console.log('成功', JSON.parse(res.data).data[0])
             successUp++ // 成功+1
             // 上传成功之后再把照片的图片列表更新到个人信息接口
-            that.urlsA.push(JSON.parse(res.data).data[0])
-            that.urls = that.urlsA
+            that.urls.push(JSON.parse(res.data).data[0])
+            // that.urls = that.urlsA
             that.$emit('choosed', { all: that.urls })
           },
           fail: (res) => {
