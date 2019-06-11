@@ -250,7 +250,7 @@
         const businessId = wx.getStorageSync('businessId') // 获取本地userId
         this.$fly.request({
           method: 'get', // post/get 请求方式
-          url: 'server/business/findById',
+          url: '/business/findById',
           body: {
             'businessId': businessId
           }
@@ -295,7 +295,7 @@
         const businessId = wx.getStorageSync('businessId') // 获取本地userId
         this.$fly.request({
           method: 'post', // post/get 请求方式
-          url: 'server/platformSalesman/getWxACodeUnlimit',
+          url: '/platformSalesman/getWxACodeUnlimit',
           body: {
             'businessId': businessId,
             'salesmanId': this.CardId
@@ -328,7 +328,7 @@
         const userId = wx.getStorageSync('userId') // 获取本地userId
         this.$fly.request({
           method: 'get', // post/get 请求方式
-          url: 'server/platformSalesman/selectInfoBySalesManId',
+          url: '/platformSalesman/selectInfoBySalesManId',
           body: {
             'salesmanId': this.CardId, 'userId': userId
           }
@@ -360,7 +360,7 @@
         const userId = wx.getStorageSync('userId') // 获取本地userId
         this.$fly.request({
           method: 'post', // post/get 请求方式
-          url: 'server/platformUserSalesman/insert',
+          url: '/platformUserSalesman/insert',
           body: {
             'salesmanId': id,
             'userId': userId,
@@ -382,7 +382,7 @@
         const userId = wx.getStorageSync('userId') // 获取本地userId
         this.$fly.request({
           method: 'post', // post/get 请求方式
-          url: 'server/platformUserSalesman/deleteBySalesmanId',
+          url: '/platformUserSalesman/deleteBySalesmanId',
           body: {
             'salesmanId': id,
             'userId': userId

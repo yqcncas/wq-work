@@ -131,7 +131,7 @@ export default {
       if (this.type === 'sale') {
         this.$fly.request({
           method: 'get',
-          url: 'server/msg/selectMsgForSales',
+          url: '/msg/selectMsgForSales',
           body: {
             'userId': this.userId,
             'pageNum': this.pageNum,
@@ -186,7 +186,7 @@ export default {
       } else {
         this.$fly.request({
           method: 'get',
-          url: 'server/msg/selectMsgForSales',
+          url: '/msg/selectMsgForSales',
           body: {
             'pageNum': this.pageNum,
             'pageSize': this.pageSize
@@ -251,7 +251,7 @@ export default {
       this.sendLoad = true
       this.$fly.request({
         method: 'post',
-        url: 'server/msg/insertMsg',
+        url: '/msg/insertMsg',
         body: {
           'cmd': 'chat',
           'fromUserId': this.selfId,
@@ -290,7 +290,7 @@ export default {
       // await apiproducts.getFormid(e.target.formId)
       this.$fly.request({
         method: 'post',
-        url: 'server/formid/saveformid',
+        url: '/formid/saveformid',
         body: {
           'formId': e.target.formId
         }

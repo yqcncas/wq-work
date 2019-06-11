@@ -43,7 +43,7 @@
       getTrade () {
         this.$fly.request({
           method: 'get', // post/get 请求方式
-          url: 'server/trade/selectAll',
+          url: '/trade/selectAll',
           body: {
           }
         }).then(res => {

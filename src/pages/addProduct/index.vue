@@ -78,7 +78,7 @@
       editInfo (id) {
         this.$fly.request({
           method: 'get', // post/get 请求方式
-          url: 'server/platformGoods/findOneForUser',
+          url: '/platformGoods/findOneForUser',
           body: {
             'id': id
           }
@@ -128,7 +128,7 @@
           } else {
             this.$fly.request({
               method: 'post', // post/get 请求方式
-              url: 'server/platformGoods/add',
+              url: '/platformGoods/add',
               body: {
                 'token': token,
                 'type': 0,
@@ -168,7 +168,7 @@
           const token = wx.getStorageSync('token') // 获取本地bussiness
           this.$fly.request({
             method: 'post', // post/get 请求方式
-            url: 'server/platformGoods/update',
+            url: '/platformGoods/update',
             body: {
               'token': token,
               'type': 0,

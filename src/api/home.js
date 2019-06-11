@@ -27,7 +27,7 @@ const home = {
     baseURL: baseUrlApi
   }),
   // 用户登录
-  doLogin: (obj) => request.post('/server/platformUser/login', {
+  doLogin: (obj) => request.post('/platformUser/login', {
     code: obj.code,
     // id: obj.id,
     id: 1,

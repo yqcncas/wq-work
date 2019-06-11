@@ -110,7 +110,7 @@ export default {
       const salesmanId = wx.getStorageSync('salesmanId')
       this.$fly.request({
         method: 'get',
-        url: 'server/dynamic/selectBySalesmanId',
+        url: '/dynamic/selectBySalesmanId',
         body: {
           'salesmanId': salesmanId
         }

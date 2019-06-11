@@ -97,7 +97,7 @@
         const salesmanId = wx.getStorageSync('salesmanId')
         this.$fly.request({
           method: 'get',
-          url: 'server/msg/selectUnReadCountPlatform',
+          url: '/msg/selectUnReadCountPlatform',
           body: {
             'salesmanId': salesmanId
           }

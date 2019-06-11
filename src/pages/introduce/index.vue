@@ -93,7 +93,7 @@
         const userId = wx.getStorageSync('userId') // 获取本地userId
         this.$fly.request({
           method: 'get',
-          url: 'server/platformSalesman/selectSelfInfo',
+          url: '/platformSalesman/selectSelfInfo',
           body: {
             'userId': userId
           }
@@ -110,7 +110,7 @@
         const salesmanId = wx.getStorageSync('salesmanId') // 获取本地userId
         this.$fly.request({
           method: 'get',
-          url: 'server/companyInfo/selectOne',
+          url: '/companyInfo/selectOne',
           body: {
             'salesmanId': salesmanId
           }
@@ -137,7 +137,7 @@
       lookUp (id) {
         this.$fly.request({
           method: 'get',
-          url: 'server/trade/selectAllByTradeId',
+          url: '/trade/selectAllByTradeId',
           body: {
             'tradeId': this.TradeId
           }
@@ -164,7 +164,7 @@
         const salesmanId = wx.getStorageSync('salesmanId')
         this.$fly.request({
           method: 'post',
-          url: 'server/companyInfo/update',
+          url: '/companyInfo/update',
           body: {
             'id': this.id,
             'info': this.info,
@@ -194,7 +194,7 @@
         const salesmanId = wx.getStorageSync('salesmanId')
         this.$fly.request({
           method: 'post',
-          url: 'server/companyInfo/insert',
+          url: '/companyInfo/insert',
           body: {
             'info': this.info,
             'salesmanId': salesmanId,

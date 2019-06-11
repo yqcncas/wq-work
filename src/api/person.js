@@ -29,7 +29,7 @@ const person = {
   }, {
     baseURL: baseUrlApi
   }),
-  doLogin: (code) => request.post('server/platformUser/login', {
+  doLogin: (code) => request.post('/platformUser/login', {
     code: code
   }, {
     baseURL: baseUrlApi
@@ -235,14 +235,14 @@ const person = {
   getPhone: ({
     encryptedData,
     iv
-  }) => request.post('server/wxBizDataCrypt/getInfoForPlatform', {
+  }) => request.post('/wxBizDataCrypt/getInfoForPlatform', {
     encryptedData: encryptedData,
     iv: iv
   }, {
     baseURL: baseUrlApi
   }),
   // 更新手机号
-  updatePhone: (phoneNum) => request.post('server/user/updatePhone', {
+  updatePhone: (phoneNum) => request.post('/user/updatePhone', {
     phone: phoneNum
   }, {
     baseURL: baseUrlApi
@@ -285,7 +285,7 @@ const person = {
   // 手机页面，更新手机号码
   savePhone: ({
     phone
-  }) => request.post('server/user/updatePhone', {
+  }) => request.post('/user/updatePhone', {
     phone: phone
   }, {
     baseURL: baseUrlApi
@@ -296,7 +296,7 @@ const person = {
     salesmanId,
     isPraise,
     businessId
-  }) => request.post('server/salesmanRecord/update', {
+  }) => request.post('/salesmanRecord/update', {
     'userId': id,
     'salesmanId': salesmanId,
     'isPraise': isPraise,
@@ -313,7 +313,7 @@ const person = {
     recordType,
     salesmanId,
     userId
-  }) => request.post('server/operationRecord/insert', {
+  }) => request.post('/operationRecord/insert', {
     businessId,
     goodsId,
     info,
@@ -329,7 +329,7 @@ const person = {
     salesmanId,
     pageSize = 0,
     pageNum = 0
-  }) => request.get('server/operationRecord/selectAllOperation', {
+  }) => request.get('/operationRecord/selectAllOperation', {
     salesmanId,
     pageSize,
     pageNum
@@ -342,7 +342,7 @@ const person = {
     salesmanId,
     pageSize = 0,
     pageNum = 0
-  }) => request.get('server/operationRecord/getInteractionByTimeType', {
+  }) => request.get('/operationRecord/getInteractionByTimeType', {
     timeType,
     salesmanId,
     pageSize,
@@ -354,7 +354,7 @@ const person = {
   BehaviorOpSearch: ({
     timeType,
     salesmanId
-  }) => request.get('server/operationRecord/selectCountByTimeType', {
+  }) => request.get('/operationRecord/selectCountByTimeType', {
     timeType,
     salesmanId
   }, {
@@ -365,7 +365,7 @@ const person = {
     userId,
     pageSize = 0,
     pageNum = 0
-  }) => request.get('server/operationRecord/selectOperationByUserId', {
+  }) => request.get('/operationRecord/selectOperationByUserId', {
     userId,
     pageSize,
     pageNum
@@ -376,7 +376,7 @@ const person = {
   salesManTag: ({
     salesManId,
     salesManTagId
-  }) => request.get('server/salesManTagPraise/selectBySalesManId', {
+  }) => request.get('/salesManTagPraise/selectBySalesManId', {
     'salesManId': salesManId,
     'salesManTagId': salesManTagId
   }, {
@@ -386,7 +386,7 @@ const person = {
   salesManTagPraise: ({
     salesManId,
     salesManTagId
-  }) => request.post('server/salesManTagPraise/insert', {
+  }) => request.post('/salesManTagPraise/insert', {
     'salesManId': salesManId,
     'salesManTagId': salesManTagId
   }, {
@@ -396,7 +396,7 @@ const person = {
   salesManPraiseInsert: ({
     salesmanId,
     userId
-  }) => request.post('server/salesmanPraise/insert', {
+  }) => request.post('/salesmanPraise/insert', {
     salesmanId,
     userId
   }, {
@@ -463,7 +463,7 @@ const person = {
   // 查询当前用户的自定义常用语
   customMsgList: ({
     userId
-  }) => request.get('server/customMsg/selectAll', {
+  }) => request.get('/customMsg/selectAll', {
     userId
   }, {
     baseURL: baseUrlApi
@@ -472,7 +472,7 @@ const person = {
   addCustomMsg: ({
     userId,
     message
-  }) => request.post('server/customMsg/insert', {
+  }) => request.post('/customMsg/insert', {
     userId,
     message
   }, {
@@ -481,7 +481,7 @@ const person = {
   // 删除常用语
   deleteCustomMsg: ({
     id
-  }) => request.post('server/customMsg/delete', {
+  }) => request.post('/customMsg/delete', {
     id
   }, {
     baseURL: baseUrlApi
@@ -490,7 +490,7 @@ const person = {
   updateCustomMsg: ({
     id,
     message
-  }) => request.post('server/customMsg/update', {
+  }) => request.post('/customMsg/update', {
     id,
     message
   }, {
@@ -501,7 +501,7 @@ const person = {
   bossRadarSelectCount: ({
     businessId,
     type
-  }) => request.get('server/data/selectCount', {
+  }) => request.get('/data/selectCount', {
     businessId,
     type
   }, {

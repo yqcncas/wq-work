@@ -59,7 +59,7 @@ export default {
       const userId = wx.getStorageSync('userId')
       this.$fly.request({
         method: 'get',
-        url: 'server/dynamic/selectOne',
+        url: '/dynamic/selectOne',
         body: {
           'id': id,
           'userId': userId
@@ -113,7 +113,7 @@ export default {
       }
       this.$fly.request({
         method: 'post',
-        url: 'server/dynamic/update',
+        url: '/dynamic/update',
         body: {
           'id': id,
           'salesmanId': salesmanId,
@@ -154,7 +154,7 @@ export default {
       }
       this.$fly.request({
         method: 'post',
-        url: 'server/dynamic/insert',
+        url: '/dynamic/insert',
         body: {
           'salesmanId': salesmanId,
           'businessId': businessId,

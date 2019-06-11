@@ -318,7 +318,7 @@ export default {
       const userId = wx.getStorageSync('userId') // 获取本地userId
       this.$fly.request({
         method: 'get',
-        url: 'server/platformSalesman/selectSelfInfo',
+        url: '/platformSalesman/selectSelfInfo',
         body: {
           'userId': userId
         }
@@ -373,7 +373,7 @@ export default {
     trade () {
       this.$fly.request({
         method: 'get', // post/get 请求方式
-        url: 'server/trade/selectAll',
+        url: '/trade/selectAll',
         body: {
           'pageNum': 1, 'pageSize': 10
         }
@@ -387,7 +387,7 @@ export default {
     tradeA () {
       this.$fly.request({
         method: 'get', // post/get 请求方式
-        url: 'server/trade/selectAll',
+        url: '/trade/selectAll',
         body: {
           'pageNum': 2, 'pageSize': 10
         }
@@ -403,7 +403,7 @@ export default {
       const userId = wx.getStorageSync('userId') // 获取本地userId
       this.$fly.request({
         method: 'get', // post/get 请求方式
-        url: 'server/dynamic/selectAll',
+        url: '/dynamic/selectAll',
         body: {
           'pageNum': 0,
           'pageSize': 0,
@@ -443,7 +443,7 @@ export default {
       const userId = wx.getStorageSync('userId') // 获取本地userId
       this.$fly.request({
         method: 'get', // post/get 请求方式
-        url: 'server/platformSalesman/getByCode',
+        url: '/platformSalesman/getByCode',
         body: {
           'pageNum': 1,
           'pageSize': 10,
@@ -463,7 +463,7 @@ export default {
       const userId = wx.getStorageSync('userId') // 获取本地userId
       this.$fly.request({
         method: 'post', // post/get 请求方式
-        url: 'server/platformUserSalesman/insert',
+        url: '/platformUserSalesman/insert',
         body: {
           'salesmanId': id,
           'userId': userId,
@@ -534,7 +534,7 @@ export default {
       // console.log(id, status)
       this.$fly.request({
         method: 'post', // post/get 请求方式
-        url: 'server/dynamic/praise',
+        url: '/dynamic/praise',
         body: {
           'id': id, 'status': status
         }

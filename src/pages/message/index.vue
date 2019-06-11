@@ -48,7 +48,7 @@
       getInfo (e) {
         this.$fly.request({
           method: 'get',
-          url: 'server/msg/selectCountList',
+          url: '/msg/selectCountList',
           body: {
             'pageNum': 0,
             'pageSize': 10

@@ -33,7 +33,7 @@ export default {
       }
       this.$fly.request({
         method: 'post', // post/get 请求方式
-        url: 'server/platformSalesman/updateBaseInfo',
+        url: '/platformSalesman/updateBaseInfo',
         body: {
           id: this.obj.id, // 152
           info: this.info

@@ -257,7 +257,7 @@ export default {
       const userId = wx.getStorageSync('userId') // 获取本地userId
       this.$fly.request({
         method: 'get', // post/get 请求方式
-        url: 'server/platformSalesman/selectSelfInfo',
+        url: '/platformSalesman/selectSelfInfo',
         body: {
           'userId': userId
         }
@@ -276,7 +276,7 @@ export default {
       const businessId = wx.getStorageSync('businessId') // 获取本地userId
       this.$fly.request({
         method: 'get', // post/get 请求方式
-        url: 'server/business/findById',
+        url: '/business/findById',
         body: {
           'businessId': businessId
         }
@@ -291,7 +291,7 @@ export default {
       const userId = wx.getStorageSync('userId') // 获取本地userId
       this.$fly.request({
         method: 'get', // post/get 请求方式
-        url: 'server/platformUserSalesman/getAllSalesmanByUserId',
+        url: '/platformUserSalesman/getAllSalesmanByUserId',
         body: {
           'userId': userId
         }
