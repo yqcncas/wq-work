@@ -193,7 +193,7 @@ const recorderManager = wx.getRecorderManager()
 export default {
   data () {
     return {
-      tab: 3,
+      tab: 1,
       info: '',
       infoA: '还没有简介吧？快去填写，让更多人认识你，了解你',
       num: 0,
@@ -236,7 +236,6 @@ export default {
   },
   onShow () {
     this.getInfo()
-    this.tab = 3
   },
   onLoad () {
   },

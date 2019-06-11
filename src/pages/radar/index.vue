@@ -128,7 +128,7 @@
         self: false,
         active: 0,
         timeActive: 1,
-        salesmanId: null,
+        salesmanId: '',
         behaviorArr: [],
         behaviorArrTwo: []
       }
@@ -282,23 +282,41 @@
         } else {
           this.$set(item, 'visible', true)
         }
+      },
+      // 查询salesmanId
+      getSalesmanId () {
+        const userId = wx.getStorageSync('userId') // 获取本地userId
+        this.$fly.request({
+          method: 'get',
+          url: '/platformSalesman/selectSelfInfo',
+          body: {
+            'userId': userId
+          }
+        }).then(res => {
+          this.salesmanId = res.data.id
+          wx.setStorageSync('salesmanId', this.salesmanId)
+        }).catch(err => {
+          console.log(err)
+        })
       }
     },
     onLoad (options) {
       this.pageNum = 1
       this.salesmanId = wx.getStorageSync('salesmanId')
+      console.log('this.salesmanId', this.salesmanId)
       if (options.self === '1') {
         this.self = true
         this.searchOp()
         //   足迹
       } else {
         this.self = false
-        this.active = 2
+        this.active = 0
         this.timeActive = 0
         this.radarTime()
       }
     },
     onShow () {
+      this.getSalesmanId()
     },
     onReady () {
       let title = ''

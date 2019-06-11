@@ -460,7 +460,7 @@
         const userId = wx.getStorageSync('userId') // 获取本地userId
         this.$fly.request({
           method: 'post', // post/get 请求方式
-          url: 'server/platformUserSalesman/insert',
+          url: '/platformUserSalesman/insert',
           body: {
             'salesmanId': id,
             'userId': userId,
