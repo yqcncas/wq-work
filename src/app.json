@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/loading/main",
     "pages/navigation/main",
     "pages/index/main",
     "pages/logs/main",
@@ -16,6 +17,7 @@
     "pages/CustomType/main",
     "pages/Introduction/main",
     "pages/businesscard/showQrcode/main",
+    "pages/OthersCard/showQrcode/main",
     "pages/logs/showQrcode/main",
     "pages/message/main",
     "pages/introduce/main",
@@ -28,7 +30,8 @@
     "pages/msgcenter/main",
     "pages/msgList/main",
     "pages/comLangage/main",
-    "pages/OthersCard/main"
+    "pages/OthersCard/main",
+    "pages/cardPoster/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

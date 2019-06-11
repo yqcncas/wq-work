@@ -29,7 +29,7 @@ const person = {
   }, {
     baseURL: baseUrlApi
   }),
-  doLogin: (code) => request.post('/user/login', {
+  doLogin: (code) => request.post('server/platformUser/login', {
     code: code
   }, {
     baseURL: baseUrlApi
@@ -235,14 +235,14 @@ const person = {
   getPhone: ({
     encryptedData,
     iv
-  }) => request.post('/wxBizDataCrypt/getInfo', {
+  }) => request.post('server/wxBizDataCrypt/getInfoForPlatform', {
     encryptedData: encryptedData,
     iv: iv
   }, {
     baseURL: baseUrlApi
   }),
   // 更新手机号
-  updatePhone: (phoneNum) => request.post('/user/updatePhone', {
+  updatePhone: (phoneNum) => request.post('server/user/updatePhone', {
     phone: phoneNum
   }, {
     baseURL: baseUrlApi
@@ -285,7 +285,7 @@ const person = {
   // 手机页面，更新手机号码
   savePhone: ({
     phone
-  }) => request.post('/user/updatePhone', {
+  }) => request.post('server/user/updatePhone', {
     phone: phone
   }, {
     baseURL: baseUrlApi
@@ -296,7 +296,7 @@ const person = {
     salesmanId,
     isPraise,
     businessId
-  }) => request.post('/salesmanRecord/update', {
+  }) => request.post('server/salesmanRecord/update', {
     'userId': id,
     'salesmanId': salesmanId,
     'isPraise': isPraise,

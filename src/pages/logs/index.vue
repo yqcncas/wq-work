@@ -7,6 +7,24 @@
       :handButton="handButton"
       :btnText="btnText">
     </vue-tab-bar>
+    <!--分享的bar-->
+    <div class="attr-pop" :class="[showpop ? 'fadeup' : 'fadedown']">
+      <div class="top">
+        <div class="left">
+          <button class="wxhy-btn" open-type="share">
+            <span class="wx-fri iconfont iconweixin1"></span>
+            <span class="font-26">微信好友</span>
+          </button>
+        </div>
+        <div class="right" @click='posterRouer'>
+          <div class="wxhy-btn">
+            <span class="wx-qr iconfont iconcardcode"></span>
+            <span class="font-26">名片码</span>
+          </div>
+        </div>
+      </div>
+      <div @click="showType" class="cancel-btn">取消</div>
+    </div>
     <div class="cardHold">
       <!--顶部-->
       <scroll-view class="scroll" scroll-y  :scroll-into-view="toView"  :style="'height:' + windowHeight + 'px'" :scroll-top="scrollTop"  >
@@ -30,14 +48,14 @@
                   <img src="../../../static/images/tiangou.jpg">
                 </span>
                 <div class="cardHold-top-main-right">
-                  <span class="cardHold-top-main-name">李东阳</span>
-                  <span class="cardHold-top-main-job">技术总监</span>
-                  <p class="cardHold-top-main-company">浙江万仟科技有限公司</p>
+                  <span class="cardHold-top-main-name">{{ name }}</span>
+                  <span class="cardHold-top-main-job">{{ job }}</span>
+                  <p class="cardHold-top-main-company">{{ company }}</p>
                   <p class="cardHold-top-main-footer">
-                    <submit class="cardHold-top-main-footer-share">
+                    <submit class="cardHold-top-main-footer-share"  @click="showType">
                       <span><i class="iconfont iconfenxiang"></i>分享名片</span>
                     </submit>
-                     <submit class="cardHold-top-main-footer-look" @click="routerTo(`./showQrcode/index?companyName=${companyName}&logo=${logo}&qrcode=${qrCodeUrl}&name=${name}&job=${job}&imgUrl=${imgUrl}`)">
+                     <submit class="cardHold-top-main-footer-look" @click="routerTo(`./showQrcode/main?companyName=${company}&logo=${logo}&qrcode=${qrCodeUrl}&name=${name}&job=${job}&imgUrl=${imgUrl}`)">
                        <i class="iconfont iconiconfontsaomiaoerweima-copy"></i>
                        <span>名片码</span>
                     </submit>
@@ -81,39 +99,39 @@
               </div>
               <div class="cardHold-ftMain">
                 <div class="cardHold-ftMain-ct" v-for="(item,index) in commitInfo" :key="index">
-                  <div class="center" @touchstart="touchStart($event)" @touchend="touchEnd($event,index)" :data-type="item.type" >
+                  <div class="center" @touchstart="touchStart($event)" @touchend="touchEnd($event,index)" :data-type="item.type"  @click="goToCard(item.salesmanId)" >
                     <div class="cardHold-ftMain-ct-img" @click="recover(index)">
                       <img src="../../../static/images/tiangou.jpg"/>
                     </div>
-                    <div v-if="item.grade === 'V1' " class="cardHold-ftMain-rt" @click="recover(index)">
-                      <span class="icon">{{ item.icon }}</span>
+                    <div v-if="item.grade === 'V1' && item.grade === null " class="cardHold-ftMain-rt">
+                      <span class="icon">企</span>
                       <span class="name">{{ item.name }}</span>
                       <span class="job">{{ item.job }}</span>
                       <span class="status">{{ item.status }}</span>
                       <span class="grade">{{ item.grade }}</span>
-                      <p class="company">{{ item.company }}</p>
+                      <p class="company">{{ item.salesCompanyName }}</p>
                       <div class="phone">
                         <img src="../../../static/images/call.png"/>
                       </div>
                     </div>
                     <div v-else-if="item.grade === 'V2' " class="cardHold-ftMain-rt2 " @click="recover(index)">
-                      <span class="icon">{{ item.icon }}</span>
+                      <span class="icon">企</span>
                       <span class="name">{{ item.name }}</span>
                       <span class="job">{{ item.job }}</span>
                       <span class="status">{{ item.status }}</span>
                       <span class="grade">{{ item.grade }}</span>
-                      <p class="company">{{ item.company }}</p>
+                      <p class="company">{{ item.salesCompanyName }}</p>
                       <div class="phone">
                         <img src="../../../static/images/call.png"/>
                       </div>
                     </div>
                     <div v-else class="cardHold-ftMain-rt3" @click="recover(index)">
-                      <span class="icon">{{ item.icon }}</span>
+                      <span class="icon">企</span>
                       <span class="name">{{ item.name }}</span>
                       <span class="job">{{ item.job }}</span>
                       <span class="status">{{ item.status }}</span>
                       <span class="grade">{{ item.grade }}</span>
-                      <p class="company">{{ item.company }}</p>
+                      <p class="company">{{ item.salesCompanyName }}</p>
                       <div class="phone">
                         <img src="../../../static/images/call.png"/>
                       </div>
@@ -150,12 +168,19 @@ export default {
   data () {
     return {
       userInfo: {},
+      company: '',
+      job: '',
+      name: '',
+      imgUrl: '',
       selectNavIndex: 1,
       needButton: true,
       handButton: true,
       indexShow: false,
       indexId: '',
+      showpop: false,
       indexy: '',
+      qrCodeUrl: '',
+      postForm: '',
       y: 0,
       toView: '',
       scrollTop: 0,
@@ -173,31 +198,7 @@ export default {
         top: 'A',
         icon: '企',
         name: '李松阳',
-        company: '浙江万仟科技有限公司',
-        status: '已认证',
-        grade: 'V1',
-        type: 0
-      }, {
-        top: 'B',
-        icon: '企',
-        name: '李松阳',
-        company: '浙江万仟科技有限公司',
-        status: '已认证',
-        grade: 'V2',
-        type: 0
-      }, {
-        top: 'Z',
-        icon: '企',
-        name: '李松阳',
-        company: '浙江万仟科技有限公司',
-        status: '已认证',
-        grade: 'V3',
-        type: 0
-      }, {
-        top: 'X',
-        icon: '企',
-        name: '李松阳',
-        company: '浙江万仟科技有限公司',
+        salesCompanyName: '浙江万仟科技有限公司',
         status: '已认证',
         grade: 'V1',
         type: 0
@@ -205,7 +206,10 @@ export default {
     }
   },
   onShow () {
+    this.getLogo()
+    this.getMy()
     wx.hideTabBar()
+    this.showpop = false
     this.getInfo()
   },
   onLoad (options) {
@@ -221,6 +225,68 @@ export default {
     console.log(this.toView)
   },
   methods: {
+    imgLoad (e) {
+      this.imgWidth = e.target.width
+      this.imgHeight = e.target.height
+    },
+    // 分享名片弹窗
+    showType () {
+      this.showpop = !this.showpop
+    },
+    //   跳转到海报带参
+    posterRouer () {
+      let params = {
+        imgUrl: this.postForm.imgUrl + '?x-oss-process=style/w750',
+        imgHeight: 610,
+        imgWidth: 610,
+        name: this.postForm.name,
+        job: this.postForm.job,
+        tagList: this.tagPraiseMapList,
+        logo: this.postForm.logo,
+        fixedPhone: this.postForm.fixedPhone,
+        weChat: this.postForm.weChat,
+        address: this.postForm.salesAddress,
+        email: this.postForm.email,
+        qrCodeUrl: this.qrCodeUrl
+      }
+      let temp = encodeURIComponent(JSON.stringify(params))
+      this.routerTo('../cardPoster/main?val=' + temp)
+    },
+    // 获取个人信息
+    getMy () {
+      const userId = wx.getStorageSync('userId') // 获取本地userId
+      this.$fly.request({
+        method: 'get', // post/get 请求方式
+        url: 'server/platformSalesman/selectSelfInfo',
+        body: {
+          'userId': userId
+        }
+      }).then(res => {
+        this.postForm = res.data
+        this.name = res.data.name
+        this.job = res.data.job
+        this.company = res.data.salesCompanyName
+        this.imgUrl = res.data.imgUrl
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    // 获取logo
+    getLogo () {
+      const businessId = wx.getStorageSync('businessId') // 获取本地userId
+      this.$fly.request({
+        method: 'get', // post/get 请求方式
+        url: 'server/business/findById',
+        body: {
+          'businessId': businessId
+        }
+      }).then(res => {
+        console.log('太阳', res)
+        this.logo = res.data.logo
+      }).catch(err => {
+        console.log(err)
+      })
+    },
     // 获取自己所关注卡片 名片夹
     getInfo () {
       const userId = wx.getStorageSync('userId') // 获取本地userId
@@ -232,6 +298,7 @@ export default {
         }
       }).then(res => {
         console.log('res', res)
+        this.commitInfo = res.data
       }).catch(err => {
         console.log(err.status, err.message)
       })
@@ -253,6 +320,12 @@ export default {
           this.commitInfo[i].type = 0
         }
       }
+    },
+    // 点击跳转进入名片页
+    goToCard (id) {
+      wx.navigateTo({
+        url: `../OthersCard/main?id=` + id
+      })
     },
     recover (index) {
       this.commitInfo[index].type = 0

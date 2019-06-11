@@ -1,7 +1,7 @@
 <template>
   <section class="tabBar-wrap">
     <article class="tabBar-box">
-      <ul class="tabBar-nav" v-if="navList.length > 0">
+      <ul class="tabBar-nav">
         <li class="item" v-for="(item, index) in navList"
             @click="selectNavItem(index,item.pagePath)"
             :key="index">
