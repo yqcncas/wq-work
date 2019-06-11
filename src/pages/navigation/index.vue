@@ -170,7 +170,7 @@
                   </span>
                   <span class="headFotter">
                     <span class="headTime">{{ item.createDate }}</span>
-                    <span v-if="item.isLike === 0" class="headZan" @click="thumbsUp(item.id,0)"><img src="../../../static/images/zan.png"/> </span>
+                    <span v-if="item.isLike == 0" class="headZan" @click="thumbsUp(item.id,0)"><img src="../../../static/images/zan.png"/> </span>
                     <span v-else class="headZan" @click="thumbsUp(item.id,1)"><img src="../../../static/images/zan-se.png"/> </span>
                   </span>
                 </div>
@@ -236,7 +236,9 @@ export default {
       circular: true,
       interval: 3000,
       duration: 500,
-      Message: [],
+      Message: [{
+        isLike: 0
+      }],
       Types: [],
       Types1: [],
       Types2: [ {
@@ -307,10 +309,10 @@ export default {
     this.getSalesmanId()
   },
   onLoad () {
-    wx.hideTabBar()
     this.trade()
     this.tradeA()
     this.getCard()
+    this.tradeInfor()
   },
   methods: {
     // 查询salesmanId
@@ -540,13 +542,13 @@ export default {
         }
       }).then(res => {
         if (status === 0) {
-          // console.log('564', res) 点赞
-          this.Message[id - 1].isLike = 0
+          console.log('564', res) // 点赞
           this.tradeInfor()
+          // this.Message[id - 1].isLike = 0
         } else if (status === 1) {
-          // console.log('768', res) 取消点赞
-          this.Message[id - 1].isLike = 1
+          console.log('768', res) // 取消点赞
           this.tradeInfor()
+          // this.Message[id - 1].isLike = 1
         }
       }).catch(err => {
         console.log(err.status, err.message)
