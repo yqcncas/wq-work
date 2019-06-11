@@ -7,6 +7,7 @@
       :handButton="handButton"
       :btnText="btnText">
     </vue-tab-bar>
+    <!--<button class='pop_btn' plain="false" open-type='getPhoneNumber' bindgetphonenumber="getPhoneNumber">获取用户手机号</button>-->
       <div class="top">
         <el-form ref="postForm" :model="postForm">
           <div class="top-main" @click="goIndex">
@@ -121,8 +122,55 @@
       wx.hideTabBar()
       this.getInfo()
       this.getRecord()
+      this.getPhoneNumber()
     },
     methods: {
+      getPhoneNumber: function (e) { // 点击获取手机号码按钮
+        var that = this
+        wx.checkSession({
+          success: function () {
+            console.log(e)
+            console.log(e.detail.iv)
+            console.log(e.detail.encryptedData)
+            var ency = e.detail.encryptedData
+            var iv = e.detail.iv
+            var sessionk = that.data.sessionKey
+            if (e.detail.errMsg === 'getPhoneNumber:fail user deny') {
+              that.setData({
+                modalstatus: true
+              })
+            } else { // 同意授权
+              wx.request({
+                method: 'GET',
+                url: 'https://xxx/wx/deciphering.do',
+                data: {
+                  encrypdata: ency,
+                  ivdata: iv,
+                  sessionkey: sessionk
+                },
+
+                header: {
+                  'content-type': 'application/json' // 默认值
+                },
+                success: (res) => {
+                  console.log('解密成功~~~~~~~将解密的号码保存到本地~~~~~~~~')
+                  console.log(res)
+                  var phone = res.data.phoneNumber
+                  console.log(phone)
+                },
+                fail: function (res) {
+                  console.log('解密失败~~~~~~~~~~~~~')
+                  console.log(res)
+                }
+              })
+            }
+          },
+          fail: function () {
+            console.log('session_key 已经失效，需要重新执行登录流程')
+            // that.wxlogin() // 重新登录
+          }
+        })
+      },
       // 页面加载信息
       getInfo () {
         const userId = wx.getStorageSync('userId') // 获取本地userId

@@ -1,5 +1,8 @@
 <template class="page">
   <div class="ma-trans-page">
+    <div class="Top"  @click="back()">
+      <i class="iconfont iconE leftA"></i>
+    </div>
     <div class="box-trans" :class="bigTrans">
       <div class="top-wrap">
         <p class="name">{{params.name}}</p>
@@ -32,7 +35,14 @@ export default {
       smallTrans: ''
     }
   },
-  methods: {},
+  methods: {
+    // 返回上一页
+    back () {
+      console.log('5545')
+      wx.navigateBack(-1)
+      // innerAudioContext.pause()
+    }
+  },
   onLoad (options) {
     this.bigTrans = ''
     this.smallTrans = ''
@@ -52,6 +62,17 @@ export default {
   color: #fff;
   font-size: ~'28rpx';
   text-align: center;
+  position: relative;
+  .Top{
+    position: absolute;
+    left: ~'20rpx';
+    top: ~'62rpx';
+    z-index: 99999;
+    .iconE{
+    color: #ffffff;
+    font-size: ~'40rpx';
+    }
+  }
   .box-trans {
     width: 100%;
     height: 100%;

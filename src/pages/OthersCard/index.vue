@@ -1,6 +1,24 @@
 <template>
   <!-- 名片 -->
     <div class="business">
+      <!--分享的bar-->
+      <div class="attr-pop" :class="[showpop ? 'fadeup' : 'fadedown']">
+        <div class="top">
+          <div class="left">
+            <button class="wxhy-btn" open-type="share">
+              <span class="wx-fri iconfont iconweixin1"></span>
+              <span class="font-26">微信好友</span>
+            </button>
+          </div>
+          <div class="right" @click='posterRouer'>
+            <div class="wxhy-btn">
+              <span class="wx-qr iconfont iconcardcode"></span>
+              <span class="font-26">名片码</span>
+            </div>
+          </div>
+        </div>
+        <div @click="showType" class="cancel-btn">取消</div>
+      </div>
       <div class="business-main" >
         <el-form ref="postForm" :model="postForm" >
           <div class="cards">
@@ -22,7 +40,7 @@
                 </div>
               </div>
               <div class="card-footer">
-                <submit class="share">分享名片</submit>
+                <submit class="share"  @click="showType">分享名片</submit>
                 <submit class="save">保存名片</submit>
               </div>
           </div>
@@ -77,7 +95,7 @@
               </div>
             </div>
             <!-- 名片码 -->
-            <div class="card-ma" @click="routerTo(`./showQrcode/index?companyName=${companyName}&logo=${logo}&qrcode=${qrCodeUrl}&name=${name}&job=${job}&imgUrl=${imgUrl}`)">
+            <div class="card-ma" @click="routerTo(`./showQrcode/main?companyName=${postForm.salesCompanyName}&logo=${logo}&qrcode=${qrCodeUrl}&name=${postForm.name}&job=${postForm.job}&imgUrl=${postForm.imgUrl}`)">
               <p class="ma-txt">名片码</p>
               <div class="radius-img">
                 <img :src="postForm.url" mode="aspectFill">
@@ -124,7 +142,7 @@
             </div>
 
             <!--公司介绍-->
-            <div class="company">
+            <div class="company" v-if="postForm.companyInfo">
               <div class="company-top">
                 <span class="company-icont">
                   <img src="../../../static/images/lou.png">
@@ -133,16 +151,16 @@
               </div>
               <div class="company-main">
                   <div class="company-bg">
-                    <img src="../../../static/images/back.png"/>
+                    <img :src="postForm.companyImgUrl"/>
                   </div>
                   <div class="company-title">
-                    <span> 啊来获得绿卡监控力度加快垃圾的卡就开了啦可就大了卡就考虑啊来获得绿卡监控力度加快垃圾的卡就开了啦可就大了卡就考虑的金克拉金克拉的进阿里就大家快来的的金克拉金克拉的进阿里就大家快来的金克拉金克拉金克拉柯急啊啊来获得绿卡监控力度加快垃圾的卡就开a a a</span>
+                    <span>{{ postForm.companyInfo }}</span>
                   </div>
               </div>
             </div>
 
             <!--公司产品-->
-            <div class="product">
+            <div class="product" v-if="postForm.goodsList !== ''">
               <div class="product-top">
                 <span class="product-icont">
                 <img src="../../../static/images/morebox.png">
@@ -153,21 +171,21 @@
                 </span>
               </div>
               <div class="product-main">
-                <div class="product-details" v-for="(item,index) in details" :key="index">
+                <div class="product-details" v-for="(item,index) in postForm.goodsList" :key="index">
                     <div class="product-details-img">
-                      <img :src="item.img"/>
+                      <img :src="item.goodsImgUrlList[0].imgUrl"/>
                     </div>
                     <div class="product-details-title">
-                      {{ item.title }}
+                      {{ item.info }}
                     </div>
                     <div class="product-details-click">
-                      ￥  {{ item.mores }}
+                      ￥  {{ item.price }}
                     </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="found">
+          <div class="found" @click="goInto()">
             <span>我要<br />创建</span>
           </div>
         </el-form>
@@ -184,13 +202,21 @@
     data () {
       return {
         CardId: '',
-        postForm: '',
+        postForm: [],
         voiceUrl: '',
         currentAudio: '',
+        imgWidth: null,
+        imgHeight: null,
+        name: '',
+        job: '',
+        phone: '',
+        logo: '',
+        apply: '',
+        imgUrl: '',
+        showpop: false,
         changeVoiceFlag: false,
         fixedPhone: '15988993797',
         weChat: 'Williamchen',
-        phone: '15988993797',
         qrCodeUrl: 'https://oss.wq1516.com/default.png',
         address: '浙江温岭',
         email: '351574718@qq.com',
@@ -202,26 +228,96 @@
           img: '../../static/images/tiangou.jpg',
           title: '系统产品',
           mores: '122'
-        }, {
-          img: '../../static/images/tiangou.jpg',
-          title: '系统产品',
-          mores: '222'
-        }, {
-          img: '../../static/images/tiangou.jpg',
-          title: '系统产品',
-          mores: '333'
-        }, {
-          img: '../../static/images/tiangou.jpg',
-          title: '系统产品',
-          mores: '444'
         }]
       }
     },
     onLoad: function (options) {
       this.CardId = options.id
+    },
+    onShow () {
       this.getInfo()
+      this.showpop = false
+      this.getSun()
+      this.getLogo()
     },
     methods: {
+      imgLoad (e) {
+        this.imgWidth = e.target.width
+        this.imgHeight = e.target.height
+      },
+      // 获取logo
+      getLogo () {
+        const businessId = wx.getStorageSync('businessId') // 获取本地userId
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: 'server/business/findById',
+          body: {
+            'businessId': businessId
+          }
+        }).then(res => {
+          this.logo = res.data.logo
+        }).catch(err => {
+          console.log(err)
+        })
+      },
+      //   跳转到海报带参
+      posterRouer () {
+        let params = {
+          imgUrl: this.postForm.imgUrl + '?x-oss-process=style/w750',
+          imgHeight: 610,
+          imgWidth: 610,
+          name: this.postForm.name,
+          job: this.postForm.job,
+          tagList: this.tagPraiseMapList,
+          logo: this.postForm.logo,
+          fixedPhone: this.postForm.fixedPhone,
+          weChat: this.postForm.weChat,
+          address: this.postForm.salesAddress,
+          email: this.postForm.email,
+          qrCodeUrl: this.qrCodeUrl
+        }
+        let temp = encodeURIComponent(JSON.stringify(params))
+        this.routerTo('../cardPoster/main?val=' + temp)
+      },
+      onShareAppMessage () {
+        this.insertOpera('分享了名片', 21)
+        return {
+          title: `您好！我是${this.companyName}的${this.name},这是我的名片`,
+          path: 'pages/loading/index?id=' + this.salesManId + '&fromWay=1&userId=' + this.id,
+          apply: ''
+        }
+      },
+      close () {
+        this.modalflag = false
+      },
+      // 获取太阳吗
+      getSun () {
+        const businessId = wx.getStorageSync('businessId') // 获取本地userId
+        this.$fly.request({
+          method: 'post', // post/get 请求方式
+          url: 'server/platformSalesman/getWxACodeUnlimit',
+          body: {
+            'businessId': businessId,
+            'salesmanId': this.CardId
+          }
+        }).then(res => {
+          console.log('a', res)
+          this.qrCodeUrl = res.data
+          console.log()
+        }).catch(err => {
+          console.log(err)
+        })
+      },
+      // 分享名片弹窗
+      showType () {
+        this.showpop = !this.showpop
+      },
+      goInto () {
+        console.log('11')
+        wx.navigateTo({
+          url: '../index/main'
+        })
+      },
       routerTo (url) {
         wx.navigateTo({
           url
@@ -237,8 +333,12 @@
             'salesmanId': this.CardId, 'userId': userId
           }
         }).then(res => {
-          console.log('res', res)
+          console.log('res', res.data)
           this.postForm = res.data
+          this.name = res.data.name
+          this.job = res.data.job
+          this.phone = res.data.phone
+          this.imgUrl = res.data.imgUrl
           this.voiceUrl = res.data.voice
           const bgM = wx.createInnerAudioContext()// 初始化createInnerAudioContext接口
           // 设置播放地址

@@ -23,6 +23,7 @@ export default {
   },
   onLoad (options) {
     this.goodsId = null
+    console.log('411', options)
     if (options.fromWay) {
       this.fromWay = options.fromWay
     }
@@ -72,6 +73,8 @@ export default {
     onMessage (res) {
       this.eatinCart(res)
     },
+    onShow () {
+    },
     // 处理返回数据
     eatinCart (res) {
       const { data: { token, isSalesman, id, businessId } } = res
@@ -83,31 +86,34 @@ export default {
       const updateManager = wx.getUpdateManager()
       updateManager.onCheckForUpdate((res) => {
         if (!res.hasUpdate) {
-          if (this.goodsId) {
-            wx.reLaunch({
-              url: '../home/index?id=' + this.goodsId
-            })
-          } else if (this.param === 'userMsg') {
-            wx.reLaunch({
-              url: '../home/index?param=' + this.param
-            })
-          } else if (this.param === 'home') {
-            wx.reLaunch({
-              url: '../home/index'
-            })
-          } else if (this.param === 'news') {
-            wx.reLaunch({
-              url: '../news/index?newsId=' + this.newsId
-            })
-          } else if (this.param === 'product') {
-            wx.reLaunch({
-              url: '../product/index'
-            })
-          } else {
-            wx.switchTab({
-              url: `/pages/qrcode/index`
-            })
-          }
+          wx.switchTab({
+            url: '../businesscard/main?id=' + this.goodsId
+          })
+          // if (this.goodsId) {
+          //   wx.reLaunch({
+          //     url: '../home/index?id=' + this.goodsId
+          //   })
+          // } else if (this.param === 'userMsg') {
+          //   wx.reLaunch({
+          //     url: '../home/index?param=' + this.param
+          //   })
+          // } else if (this.param === 'home') {
+          //   wx.reLaunch({
+          //     url: '../home/index'
+          //   })
+          // } else if (this.param === 'news') {
+          //   wx.reLaunch({
+          //     url: '../news/index?newsId=' + this.newsId
+          //   })
+          // } else if (this.param === 'product') {
+          //   wx.reLaunch({
+          //     url: '../product/index'
+          //   })
+          // } else {
+          //   wx.switchTab({
+          //     url: `/pages/qrcode/index`
+          //   })
+          // }
         }
       })
     },
@@ -131,7 +137,7 @@ export default {
   }
 }
 </script>
-<style lang='scss' scoped>
+<style lang='less' scoped>
 .load-page {
   width: 100%;
   height: 100%;
@@ -144,17 +150,17 @@ export default {
   left: 50%;
 }
 .outer-load {
-  border: 10rpx solid #2b93ec;
+  border: ~'10rpx' solid #2b93ec;
   opacity: 0.9;
-  width: 200rpx;
-  height: 200rpx;
+  width: ~'200rpx';
+  height: ~'200rpx';
   border-top-color: transparent;
   border-bottom-color: transparent;
   border-radius: 50%;
   animation: spin-right 0.8s linear infinite normal;
   animation-delay: 0s;
-  margin-left: -110rpx;
-  margin-top: -200rpx;
+  margin-left: ~'-110rpx';
+  margin-top: ~'-200rpx';
 }
 @keyframes spin-right {
   0% {
@@ -174,11 +180,11 @@ export default {
 }
 .inner-load {
   display: block;
-  width: 100rpx;
-  height: 100rpx;
+  width: ~'100rpx';
+  height: ~'100rpx';
   opacity: 0.9;
-  margin-left: -50rpx;
-  margin-top: -145rpx;
+  margin-left: ~'-50rpx';
+  margin-top: ~'-145rpx';
 }
 @keyframes spin-left {
   0% {

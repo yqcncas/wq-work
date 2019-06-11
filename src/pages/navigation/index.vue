@@ -214,6 +214,9 @@ export default {
   data () {
     return {
       data: '',
+      imgUrl: '',
+      name: '',
+      job: '',
       tab: 1,
       tabs: 1,
       info: 1,
@@ -299,11 +302,12 @@ export default {
     }
   },
   onShow () {
-    this.doLogin()
+    // this.doLogin()
     wx.hideTabBar()
     this.getSalesmanId()
   },
   onLoad () {
+    wx.hideTabBar()
     this.trade()
     this.tradeA()
     this.getCard()
@@ -337,34 +341,34 @@ export default {
         urls: [tempFilePaths.toString()]
       })
     },
-    // 调用登录接口
-    doLogin () {
-      wx.login({
-        success: function (res) {
-          if (res.code) {
-            // 发起网络请求
-            wx.request({
-              url: `http://api.wq1516.com:8989/server/platformUser/login`,
-              method: 'post',
-              data: {
-                code: res.code,
-                id: 109
-              },
-              success: function (e) {
-                console.log('1', e)
-                wx.setStorageSync('token', e.data.data.token)
-                wx.setStorageSync('businessId', e.data.data.businessId)
-                wx.setStorageSync('userId', e.data.data.id)
-                const token = wx.getStorageSync('token') // 获取本地token
-                console.log('10', token)
-              }
-            })
-          } else {
-            console.log('获取用户登录态失败！' + res.errMsg)
-          }
-        }
-      })
-    },
+    // // 调用登录接口
+    // doLogin () {
+    //   wx.login({
+    //     success: function (res) {
+    //       if (res.code) {
+    //         // 发起网络请求
+    //         wx.request({
+    //           url: `http://api.wq1516.com:8989/server/platformUser/login`,
+    //           method: 'post',
+    //           data: {
+    //             code: res.code,
+    //             id: 1
+    //           },
+    //           success: function (e) {
+    //             console.log('1', e)
+    //             wx.setStorageSync('token', e.data.data.token)
+    //             wx.setStorageSync('businessId', e.data.data.businessId)
+    //             wx.setStorageSync('userId', e.data.data.id)
+    //             const token = wx.getStorageSync('token') // 获取本地token
+    //             console.log('10', token)
+    //           }
+    //         })
+    //       } else {
+    //         console.log('获取用户登录态失败！' + res.errMsg)
+    //       }
+    //     }
+    //   })
+    // },
     // 人脉集市
     trade () {
       this.$fly.request({

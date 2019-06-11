@@ -236,6 +236,7 @@ export default {
   },
   onShow () {
     this.getInfo()
+    this.tab = 3
   },
   onLoad () {
   },

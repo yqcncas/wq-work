@@ -1,6 +1,6 @@
 <template>
   <!-- 名片 -->
-    <div class="business">
+    <div  class="center"  v-if="postForm === ''">
       <vue-tab-bar
         @fetch-index="clickIndexNav"
         :selectNavIndex=selectNavIndex
@@ -8,13 +8,93 @@
         :handButton="handButton"
         :btnText="btnText">
       </vue-tab-bar>
-      <div  class="center"  v-if="postForm === ''">
-        <div>
-          <p>您还没有名片</p>
-          <p @click="goToCard()">点击立即去创建</p>
+      <div>
+        <p>目前您还没有名片</p>
+        <p>点击下方按钮去创建吧</p>
+        <p @click="goToCard()" class="addImg">
+          <img src="../../../static/images/addCard.png">
+        </p>
+      </div>
+    </div>
+    <div class="business" v-else @load="imgLoad">
+      <vue-tab-bar
+        @fetch-index="clickIndexNav"
+        :selectNavIndex=selectNavIndex
+        :needButton="needButton"
+        :handButton="handButton"
+        :btnText="btnText">
+      </vue-tab-bar>
+      <!--弹出的海报图片-->
+      <div v-if="modalflag" class="modalflag" catchtouchmove="true">
+        <canvas canvas-id="myCanvas" class="canvas" />
+        <div @click="close()" class="cancel-name">取消</div>
+      </div>
+      <!--分享的bar-->
+      <div class="attr-pop" :class="[showpop ? 'fadeup' : 'fadedown']">
+        <div class="top">
+          <div class="left">
+            <button class="wxhy-btn" open-type="share">
+              <span class="wx-fri iconfont iconweixin1"></span>
+              <span class="font-26">微信好友</span>
+            </button>
+          </div>
+          <div class="right" @click='posterRouer'>
+            <div class="wxhy-btn">
+              <span class="wx-qr iconfont iconcardcode"></span>
+              <span class="font-26">名片码</span>
+            </div>
+          </div>
+        </div>
+        <div @click="showType" class="cancel-btn">取消</div>
+      </div>
+      <!-- 登录 -->
+      <div class="modal" v-if="modalFlag" catchtouchmove="true">
+        <div class="dialog">
+          <div class="avatar row-item">
+            <div class="vbj">
+              <span></span>
+              <div class="img-wrp">
+                <image mode="widthFix" :src="imgUrl + '?x-oss-process=style/w100'" />
+              </div>
+              <div class="Grade">
+                <i v-if="Grade === v1">
+                    <img src="../../../static/images/v1.png">
+                </i>
+                <i v-else-if="Grade === v2">
+                    <img src="../../../static/images/v2.png">
+                </i>
+                <i v-else>
+                    <img src="../../../static/images/v3.png">
+                </i>
+              </div>
+            </div>
+          </div>
+          <!--<p class="dialog-info">-->
+          <!--<span>你好！ 初次见面，先登录一下吧</span>-->
+          <!--</p>-->
+          <div class="img-show">
+            <!--<image :src="imgUrl + '?x-oss-process=style/w750'" mode="widthFix" class="img">-->
+            <!--</image>-->
+            <div class="intro">
+              <div class="first-row">
+                <span>{{ name }}</span>
+                <span>{{ job }}</span>
+              </div>
+              <div class="call-num">{{phone}}</div>
+            </div>
+          </div>
+          <form name='pushMsgFm' report-submit='true' @submit='getFormID' class="pushHight">
+            <div class='aa'>
+              <button form-type="submit" class="author-button" lang="zh_CN" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">
+                <!--<span class="iconfont icon-weixin1"></span>-->
+                <span  @getuserinfo="bindGetUserInfo">收下名片</span>
+              </button>
+              <button form-type="submit" class="look-just" lang="zh_CN" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">看看再说</button>
+            </div>
+          </form>
         </div>
       </div>
-      <div class="business-main" v-else>
+      <div class="business-main">
       <el-form ref="postForm" :model="postForm" >
         <div class="cards">
           <div class="card-top">
@@ -35,7 +115,7 @@
             </div>
           </div>
           <div class="card-footer">
-            <submit class="share">分享名片</submit>
+            <submit class="share"  @click="showType">分享名片</submit>
             <submit class="save">保存名片</submit>
           </div>
         </div>
@@ -77,8 +157,8 @@
               <div v-if="postForm.headImgList.list == ''" class="word">…</div>
             </div>
             <div class="zan">
-              <img  @click="cancelCollect(postForm.id)" v-if="postForm.isCollect == 1" src="../../../static/images/love-se.png" class="icon-8" />
-              <img @click="getCollect(postForm.id)" v-else src="../../../static/images/love.png" class="icon-8" />
+              <img v-if="postForm.isCollect == 1" src="../../../static/images/love-se.png" class="icon-8" />
+              <img v-else src="../../../static/images/love.png" class="icon-8" />
               <!--<span class="iconfont icon-dianzan" :class="salesmanRecord&&salesmanRecord.isPraise==1? 'up':'down'" @click="clickThumb"></span>-->
             </div>
           </div>
@@ -90,10 +170,10 @@
             </div>
           </div>
           <!-- 名片码 -->
-          <div class="card-ma" @click="routerTo(`./showQrcode/index?companyName=${companyName}&logo=${logo}&qrcode=${qrCodeUrl}&name=${name}&job=${job}&imgUrl=${imgUrl}`)">
+          <div class="card-ma" @click="routerTo(`./showQrcode/main?companyName=${postForm.salesCompanyName}&logo=${logo}&qrcode=${qrCodeUrl}&name=${postForm.name}&job=${postForm.job}&imgUrl=${postForm.imgUrl}`)">
             <p class="ma-txt">名片码</p>
             <div class="radius-img">
-              <img :src="postForm.url" mode="aspectFill">
+              <img :src="qrCodeUrl" mode="aspectFill">
             </div>
           </div>
           <!-- 个人简介 -->
@@ -137,7 +217,7 @@
           </div>
 
           <!--公司介绍-->
-          <div class="company">
+          <div class="company" v-if="postForm.companyInfo">
             <div class="company-top">
                 <span class="company-icont">
                   <img src="../../../static/images/lou.png">
@@ -146,16 +226,16 @@
             </div>
             <div class="company-main">
               <div class="company-bg">
-                <img src="../../../static/images/back.png"/>
+                <img :src="postForm.companyImgUrl"/>
               </div>
               <div class="company-title">
-                <span> 啊来获得绿卡监控力度加快垃圾的卡就开了啦可就大了卡就考虑啊来获得绿卡监控力度加快垃圾的卡就开了啦可就大了卡就考虑的金克拉金克拉的进阿里就大家快来的的金克拉金克拉的进阿里就大家快来的金克拉金克拉金克拉柯急啊啊来获得绿卡监控力度加快垃圾的卡就开a a a</span>
+                <span>{{ postForm.companyInfo }}</span>
               </div>
             </div>
           </div>
 
           <!--公司产品-->
-          <div class="product">
+          <div class="product" v-if="postForm.goodsList !== ''">
             <div class="product-top">
                 <span class="product-icont">
                 <img src="../../../static/images/morebox.png">
@@ -166,15 +246,15 @@
                 </span>
             </div>
             <div class="product-main">
-              <div class="product-details" v-for="(item,index) in details" :key="index">
+              <div class="product-details" v-for="(item,index) in postForm.goodsList" :key="index">
                 <div class="product-details-img">
-                  <img :src="item.img"/>
+                  <img :src="item.goodsImgUrlList[0].imgUrl"/>
                 </div>
                 <div class="product-details-title">
-                  {{ item.title }}
+                  {{ item.info }}
                 </div>
                 <div class="product-details-click">
-                  ￥  {{ item.mores }}
+                  ￥  {{ item.price }}
                 </div>
               </div>
             </div>
@@ -187,6 +267,8 @@
 
 <script>
   import vueTabBar from '../../components/vueTabBar'
+  // import home from '@/api/home'
+  import personApi from '@/api/person'
   const backgroundAudioManager = wx.createInnerAudioContext() // 播放音频
   export default {
     name: 'index',
@@ -195,15 +277,30 @@
     },
     data () {
       return {
+        personApi: personApi,
+        imgWidth: null,
+        imgHeight: null,
+        name: '',
+        job: '',
+        phone: '',
+        logo: '',
+        modalflag: false,
+        modalFlag: false,
+        showpop: false,
         selectNavIndex: 0,
+        clickIndexNav: 0,
         needButton: true,
         handButton: true,
         changeVoiceFlag: false,
+        qrCodeUrl: 'https://oss.wq1516.com/default.png',
+        tagPraiseMapList: [],
         btnText: '我的名片',
         indicatorDots: true,
         autoplay: false,
         circular: true,
         num: 10,
+        apply: '',
+        imgUrl: '',
         postForm: '',
         headImgList: [],
         details: [{
@@ -227,9 +324,118 @@
     },
     onLoad: function (options) {
       this.CardId = options.id
+      wx.hideTabBar()
+    },
+    onShow () {
       this.getInfo()
+      this.showpop = false
+      this.selectNavIndex = 0
+      this.getSun()
+      this.getLogo()
     },
     methods: {
+      imgLoad (e) {
+        this.imgWidth = e.target.width
+        this.imgHeight = e.target.height
+      },
+      // 获取logo
+      getLogo () {
+        const businessId = wx.getStorageSync('businessId') // 获取本地userId
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: 'server/business/findById',
+          body: {
+            'businessId': businessId
+          }
+        }).then(res => {
+          this.logo = res.data.logo
+        }).catch(err => {
+          console.log(err)
+        })
+      },
+      //   跳转到海报带参
+      posterRouer () {
+        let params = {
+          imgUrl: this.postForm.imgUrl + '?x-oss-process=style/w750',
+          imgHeight: 610,
+          imgWidth: 610,
+          name: this.postForm.name,
+          job: this.postForm.job,
+          tagList: this.tagPraiseMapList,
+          logo: this.postForm.logo,
+          fixedPhone: this.postForm.fixedPhone,
+          weChat: this.postForm.weChat,
+          address: this.postForm.salesAddress,
+          email: this.postForm.email,
+          qrCodeUrl: this.qrCodeUrl
+        }
+        let temp = encodeURIComponent(JSON.stringify(params))
+        this.routerTo('../cardPoster/main?val=' + temp)
+      },
+      onShareAppMessage () {
+        this.insertOpera('分享了名片', 21)
+        return {
+          title: `您好！我是${this.companyName}的${this.name},这是我的名片`,
+          path: 'pages/loading/index?id=' + this.salesManId + '&fromWay=1&userId=' + this.id
+        }
+      },
+      // 获取太阳吗
+      getSun () {
+        const businessId = wx.getStorageSync('businessId') // 获取本地userId
+        const salesmanId = wx.getStorageSync('salesmanId') // 获取本地userId
+        this.$fly.request({
+          method: 'post', // post/get 请求方式
+          url: 'server/platformSalesman/getWxACodeUnlimit',
+          body: {
+            'businessId': businessId,
+            'salesmanId': salesmanId
+          }
+        }).then(res => {
+          this.qrCodeUrl = res.data
+        }).catch(err => {
+          console.log(err)
+        })
+      },
+      // 分享名片弹窗
+      showType () {
+        this.showpop = !this.showpop
+      },
+      // 插入雷达
+      // async insertOpera (info, recordType) {
+      //   await personApi.OperationInsert({ businessId: this.businessId, info, recordType, salesmanId: this.salesManId, userId: this.id })
+      // },
+      // 授权
+      async bindGetUserInfo (e) {
+        // 解密
+        const userInfo = e.target.userInfo
+        wx.setStorageSync('userNameS', userInfo.nickName)
+        wx.getUserInfo({
+          success: async (res) => {
+            console.log(res)
+            this.encryptedData = res.encryptedData
+            this.iv = res.iv
+            const { data } = await personApi.getPhone({
+              iv: this.iv,
+              encryptedData: this.encryptedData
+            })
+            this.unionId = JSON.parse(data).unionId
+            userInfo.unionId = this.unionId
+            // await home.updateUser(userInfo)
+            // await personApi.updateRemarksNew({ remarks: userInfo.nickName, userId: this.id })
+          }
+        })
+        wx.setStorageSync('avatarUrl', e.target.userInfo.avatarUrl)
+        this.$nextTick(() => {
+          this.modalFlag = false
+        })
+        this.insertOpera('授权了信息', 9)
+        if (this.phoneAuthorStatus === 1) {
+          this.phoneModal = true
+        }
+      },
+      close () {
+        this.modalflag = false
+      },
       routerTo (url) {
         wx.navigateTo({
           url
@@ -250,9 +456,15 @@
             'userId': userId
           }
         }).then(res => {
-          console.log('res', res)
           if (res.data) {
+            if (res.data.nickName === '') {
+              this.modalFlag = true
+            }
             this.postForm = res.data
+            this.name = res.data.name
+            this.job = res.data.job
+            this.phone = res.data.phone
+            this.imgUrl = res.data.imgUrl
             this.voiceUrl = res.data.voice
             const bgM = wx.createInnerAudioContext()// 初始化createInnerAudioContext接口
             // 设置播放地址
@@ -269,51 +481,51 @@
           console.log(err.status, err.message)
         })
       },
-      // 添加收藏
-      getCollect (id) {
-        const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
-        const userId = wx.getStorageSync('userId') // 获取本地userId
-        this.$fly.request({
-          method: 'post', // post/get 请求方式
-          url: 'server/platformUserSalesman/insert',
-          body: {
-            'salesmanId': id,
-            'userId': userId,
-            'businessId': businessId
-          }
-        }).then(res => {
-          if (res.code === 200) {
-            const that = this
-            that.postForm.isCollect = 1
-            that.postForm.collectCount++
-            that.getInfo()
-          }
-        }).catch(err => {
-          console.log(err.status, err.message)
-        })
-      },
-      // 取消收藏
-      cancelCollect (id) {
-        const userId = wx.getStorageSync('userId') // 获取本地userId
-        this.$fly.request({
-          method: 'post', // post/get 请求方式
-          url: 'server/platformUserSalesman/deleteBySalesmanId',
-          body: {
-            'salesmanId': id,
-            'userId': userId
-          }
-        }).then(res => {
-          console.log('取消', res)
-          if (res.code === 200) {
-            const that = this
-            that.postForm.isCollect = 0
-            that.postForm.collectCount--
-            that.getInfo()
-          }
-        }).catch(err => {
-          console.log(err.status, err.message)
-        })
-      },
+      // // 添加收藏
+      // getCollect (id) {
+      //   const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
+      //   const userId = wx.getStorageSync('userId') // 获取本地userId
+      //   this.$fly.request({
+      //     method: 'post', // post/get 请求方式
+      //     url: 'server/platformUserSalesman/insert',
+      //     body: {
+      //       'salesmanId': id,
+      //       'userId': userId,
+      //       'businessId': businessId
+      //     }
+      //   }).then(res => {
+      //     if (res.code === 200) {
+      //       const that = this
+      //       that.postForm.isCollect = 1
+      //       that.postForm.collectCount++
+      //       that.getInfo()
+      //     }
+      //   }).catch(err => {
+      //     console.log(err.status, err.message)
+      //   })
+      // },
+      // // 取消收藏
+      // cancelCollect (id) {
+      //   const userId = wx.getStorageSync('userId') // 获取本地userId
+      //   this.$fly.request({
+      //     method: 'post', // post/get 请求方式
+      //     url: 'server/platformUserSalesman/deleteBySalesmanId',
+      //     body: {
+      //       'salesmanId': id,
+      //       'userId': userId
+      //     }
+      //   }).then(res => {
+      //     console.log('取消', res)
+      //     if (res.code === 200) {
+      //       const that = this
+      //       that.postForm.isCollect = 0
+      //       that.postForm.collectCount--
+      //       that.getInfo()
+      //     }
+      //   }).catch(err => {
+      //     console.log(err.status, err.message)
+      //   })
+      // },
       // 播放音频
       changeVoice () {
         this.changeVoiceFlag = !this.changeVoiceFlag
