@@ -101,7 +101,7 @@
                 <div class="cardHold-ftMain-ct" v-for="(item,index) in commitInfo" :key="index">
                   <div class="center" @touchstart="touchStart($event)" @touchend="touchEnd($event,index)" :data-type="item.type"  @click="goToCard(item.salesmanId)" >
                     <div class="cardHold-ftMain-ct-img" @click="recover(index)">
-                      <img src="../../../static/images/tiangou.jpg"/>
+                      <img :src="item.imgUrl"/>
                     </div>
                     <div v-if="item.grade === 'V1' && item.grade === null " class="cardHold-ftMain-rt">
                       <span class="icon">企</span>
@@ -281,7 +281,6 @@ export default {
           'businessId': businessId
         }
       }).then(res => {
-        console.log('太阳', res)
         this.logo = res.data.logo
       }).catch(err => {
         console.log(err)
