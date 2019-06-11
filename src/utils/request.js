@@ -57,14 +57,14 @@
 // )
 //
 // export default request
-
+import Shop from '../../config/shop'
 import Fly from 'flyio/dist/npm/wx'
 const fly = new Fly()
-const host = 'http://api.wq1516.com:8989'
+const host = Shop.BASE_URL
 // 添加请求拦截器
 fly.interceptors.request.use((request) => {
   const token = wx.getStorageSync('token') // 获取本地token
-  console.log(request)
+  // console.log(request)
   // request.headers["X-Tag"] = "flyio";
   // request.headers['content-type']= 'application/json';
   request.headers = {

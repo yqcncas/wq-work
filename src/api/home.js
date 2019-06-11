@@ -1,6 +1,7 @@
 import request from '../utils/request'
 import Shop from '../../config/shop'
 const baseUrlApi = Shop.BASE_URL
+
 // const baseUrlApi = 'http://192.168.1.135:8989'
 // const baseUrlDyn = 'https://dyn.ithome.com'
 // const baseUrlQuan = 'https://apiquan.ithome.com'
@@ -29,8 +30,8 @@ const home = {
   // 用户登录
   doLogin: (obj) => request.post('/platformUser/login', {
     code: obj.code,
-    // id: obj.id,
-    id: 1,
+    id: obj.id,
+    // id: 1,
     loginWay: 'new',
     userId: obj.userId,
     fromWay: obj.fromWay,
