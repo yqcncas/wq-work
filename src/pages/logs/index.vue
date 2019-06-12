@@ -222,7 +222,7 @@ export default {
     this.getInfo()
   },
   onLoad (options) {
-    if (options) {
+    if (options.id !== undefined) {
       this.goToFen('../OthersCard/main?id=' + options.id + '&fromWay=1&userId=' + options.userId)
     }
     var that = this
@@ -241,7 +241,7 @@ export default {
     }
   },
   watch () {
-    console.log(this.toView)
+    // console.log(this.toView)
   },
   methods: {
     goToFen (url) {
@@ -392,7 +392,6 @@ export default {
       this.indexy = e.touches[0].pageY
       this.indexShow = true
       this.indexEnglish = e.target.id
-      console.log('in', this.indexEnglish)
     },
     touchendL (e) {
       this.indexShow = false
@@ -400,7 +399,6 @@ export default {
     touchmoveL (e) {
       this.y = this.getArrIndex(e.target.id)
       var indexY = e.touches[0].pageY
-      console.log('c', this.getArrEnglish(Math.round((indexY - this.indexy) / 15), this.y))
       if (this.getArrEnglish(Math.round((indexY - this.indexy) / 15), this.y)) {
         this.toView = this.getArrEnglish(Math.round((indexY - this.indexy) / 15), this.y).toUpperCase().toString()
         this.indexEnglish = this.getArrEnglish(Math.round((indexY - this.indexy) / 15), this.y)
@@ -408,9 +406,7 @@ export default {
       }
     },
     getArrIndex (english) {
-      console.log('e', english)
       for (var x = 0; x < this.letter.length; x++) {
-        console.log('a', this.letter[x])
         if (english === this.letter[x]) {
           return x
         }
@@ -420,7 +416,6 @@ export default {
     getArrEnglish (num, index) {
       var english = this.letter[index + num]
       if (!(num + index < 1 > 26)) {
-        console.log('a', num, english)
         return english
       } else {
         return 'AAA'
