@@ -139,7 +139,6 @@
           } else {
             this.choose.map((item) => {
               item.url = '../businesscard/main'
-              console.log(item)
             })
           }
         }).catch(err => {
@@ -155,7 +154,6 @@
             'userId': userId
           }
         }).then(res => {
-          console.log('res', res)
           this.resForm = res.data
         }).catch(err => {
           console.log(err.status, err.message)

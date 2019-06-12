@@ -23,7 +23,6 @@ export default {
   },
   onLoad (options) {
     this.goodsId = null
-    console.log('411', options)
     if (options.fromWay) {
       this.fromWay = options.fromWay
     }
@@ -66,6 +65,7 @@ export default {
           let shopId = getExt().shopId
           let data = { code: res.code, id: shopId, userId: this.userId, fromWay: this.fromWay, salesmanId, param }
           const result = await homeApi.doLogin(data)
+          console.log('res', result)
           this.eatinCart(result)
         }
       })
@@ -86,34 +86,35 @@ export default {
       const updateManager = wx.getUpdateManager()
       updateManager.onCheckForUpdate((res) => {
         if (!res.hasUpdate) {
-          wx.switchTab({
-            url: '../businesscard/main?id=' + this.goodsId
-          })
-          // if (this.goodsId) {
-          //   wx.reLaunch({
-          //     url: '../home/index?id=' + this.goodsId
-          //   })
-          // } else if (this.param === 'userMsg') {
-          //   wx.reLaunch({
-          //     url: '../home/index?param=' + this.param
-          //   })
-          // } else if (this.param === 'home') {
-          //   wx.reLaunch({
-          //     url: '../home/index'
-          //   })
-          // } else if (this.param === 'news') {
-          //   wx.reLaunch({
-          //     url: '../news/index?newsId=' + this.newsId
-          //   })
-          // } else if (this.param === 'product') {
-          //   wx.reLaunch({
-          //     url: '../product/index'
-          //   })
-          // } else {
-          //   wx.switchTab({
-          //     url: `/pages/qrcode/index`
-          //   })
-          // }
+          console.log('a a a ', this.param)
+          // wx.switchTab({
+          //   url: '../businesscard/main?id=' + this.goodsId
+          // })
+          if (this.goodsId) {
+            wx.reLaunch({
+              url: '../OthersCards/main?id=' + this.goodsId
+            })
+          } else if (this.param === 'userMsg') {
+            wx.reLaunch({
+              url: '../OthersCards/main?param=' + this.param
+            })
+          } else if (this.param === 'home') {
+            wx.reLaunch({
+              url: '../OthersCards/main?'
+            })
+          } else if (this.param === 'news') {
+            wx.reLaunch({
+              url: '../OthersCards/main?newsId=' + this.newsId
+            })
+          } else if (this.param === 'product') {
+            wx.reLaunch({
+              url: '../OthersCards/main'
+            })
+          } else {
+            wx.switchTab({
+              url: '../businesscard/main'
+            })
+          }
         }
       })
     },
