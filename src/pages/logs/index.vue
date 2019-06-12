@@ -98,14 +98,14 @@
       </div>
       <!--底部查找-->
         <div class="padds">
-          <div class="cardHold-ft" v-for="(items,indexs) in letter" :key="items">
+          <div class="cardHold-ft" v-for="(items,indexs) in commitInfo" :key="indexs">
             <div class="cardHold-ftM" >
-              <div class="cardHold-ftName" :id = 'items'>
-                <p>{{items}}</p>
+              <div class="cardHold-ftName" :id = 'indexs' v-if="items.length !== 0">
+                <p>{{indexs}}</p>
               </div>
               <div class="cardHold-ftMain">
-                <div class="cardHold-ftMain-ct" v-for="(item,index) in commitInfo" :key="index">
-                  <div class="center" @touchstart="touchStart($event)" @touchend="touchEnd($event,index)" :data-type="item.type"  @click="goToCard(item.salesmanId)" >
+                <div class="cardHold-ftMain-ct" v-for="(item,index) in items" :key="index">
+                  <div class="center" @touchstart="touchStart($event)" @touchend="touchEnd($event,index)" :data-type="item"  @click="goToCard(item.salesmanId)" >
                     <div class="cardHold-ftMain-ct-img" @click="recover(index)">
                       <img :src="item.imgUrl"/>
                     </div>
@@ -155,7 +155,7 @@
     </div>
     <!--右侧检索字母-->
     <div class="index-english">
-      <div v-for="(itemA,index) in letter"  :key="index"  @touchstart="touchstartL($event)" :id="itemA" @touchmove="touchmoveL" @touchend="touchendL">{{ itemA }}</div>
+      <div v-for="(itemA,index) in commitInfo"  :key="index"  @touchstart="touchstartL($event)" :id="index" @touchmove="touchmoveL" @touchend="touchendL">{{ index }}</div>
     </div>
     <!--检索显示字母-->
     <div v-if="indexShow" class="index-name" >{{indexEnglish}}</div>
@@ -199,8 +199,9 @@ export default {
       searchLetter: [],
       startX: 0,
       letter: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
+      letterA: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
       arrId: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],
-      commitInfo: []
+      commitInfo: ''
     }
   },
   onShow () {
@@ -231,7 +232,7 @@ export default {
       this.insertOpera('分享了名片', 21)
       return {
         title: `您好！我是${this.companyName}的${this.name},这是我的名片`,
-        path: 'pages/OthersCard/main?id=' + this.salesManId + '&fromWay=1&userId=' + this.id
+        path: '/pages/OthersCard/main?id=' + this.salesManId + '&fromWay=1&userId=' + this.id
       }
     },
     // 分享名片弹窗
@@ -345,6 +346,7 @@ export default {
       this.indexy = e.touches[0].pageY
       this.indexShow = true
       this.indexEnglish = e.target.id
+      console.log('in', this.indexEnglish)
     },
     touchendL (e) {
       this.indexShow = false
@@ -352,6 +354,7 @@ export default {
     touchmoveL (e) {
       this.y = this.getArrIndex(e.target.id)
       var indexY = e.touches[0].pageY
+      console.log('c', this.getArrEnglish(Math.round((indexY - this.indexy) / 15), this.y))
       if (this.getArrEnglish(Math.round((indexY - this.indexy) / 15), this.y)) {
         this.toView = this.getArrEnglish(Math.round((indexY - this.indexy) / 15), this.y).toUpperCase().toString()
         this.indexEnglish = this.getArrEnglish(Math.round((indexY - this.indexy) / 15), this.y)
@@ -359,8 +362,9 @@ export default {
       }
     },
     getArrIndex (english) {
+      console.log('e', english)
       for (var x = 0; x < this.letter.length; x++) {
-        // console.log('a', this.letter[x])
+        console.log('a', this.letter[x])
         if (english === this.letter[x]) {
           return x
         }
@@ -370,6 +374,7 @@ export default {
     getArrEnglish (num, index) {
       var english = this.letter[index + num]
       if (!(num + index < 1 > 26)) {
+        console.log('a', num, english)
         return english
       } else {
         return 'AAA'

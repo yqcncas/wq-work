@@ -160,7 +160,7 @@
             </div>
 
             <!--公司产品-->
-            <div class="product" v-if="postForm.goodsList !== ''">
+            <div class="product" v-if="postForm.goodsList.length !== 0">
               <div class="product-top">
                 <span class="product-icont">
                 <img src="../../../static/images/morebox.png">
@@ -283,7 +283,7 @@
         this.insertOpera('分享了名片', 21)
         return {
           title: `您好！我是${this.companyName}的${this.name},这是我的名片`,
-          path: 'pages/OthersCard/main?id=' + this.salesManId + '&fromWay=1&userId=' + this.id
+          path: '/pages/OthersCard/main?id=' + this.salesManId + '&fromWay=1&userId=' + this.id
         }
       },
       close () {

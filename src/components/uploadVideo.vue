@@ -1,7 +1,7 @@
 <template>
   <div class="j-pic-upload">
     <div class="up-video" v-if="video !== '' ">
-      <video id="myVideo" v-if="videoFlag" :src="video" @play="playA()" @ended=" end()" objectFit="fill" class="cover-hw"></video>
+      <video id="myVideo" v-if="videoFlag" :src="video" @ended=" end()" objectFit="fill" class="cover-hw"></video>
       <div v-else class="cover-view" >
         <div v-if="video!== ''" @click="videoPlay">
           <i class="delete-img iconfont iconshanchu-copy" @click="deleteVideo"></i>
@@ -43,7 +43,6 @@
     },
     methods: {
       playA () {
-        // this.videoFlag = true
       },
       // 播放结束
       end () {
@@ -69,6 +68,9 @@
               methods: 'POST',
               success: (res) => {
                 let that = this
+                this.videoFlag = false
+                const videoContext = wx.createVideoContext('myVideo')
+                videoContext.seek()
                 that.video = JSON.parse(res.data).data[0]
                 // that.videoImg = this.video + '?x-oss-process=video/snapshot,t_0,f_jpg,w_750,m_fast'
                 that.$emit('choosedvideo', { all: that.video })
