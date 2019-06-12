@@ -46,7 +46,7 @@
                 </div>
                 <div>
                   <label>手机</label>
-                  <input v-model="phone" placeholder="请输入手机"/>
+                  <input v-model="phone" placeholder="请输入手机" type="number"/>
                 </div>
                 <div>
                   <label>固话</label>
@@ -208,7 +208,7 @@ export default {
       salesAddress: '',
       job: '',
       phone: '',
-      imgUrl: '',
+      imgUrl: 'https://oss.wq1516.com/default-avatar.png',
       fixedPhone: '',
       email: '',
       userId: '',
@@ -512,6 +512,47 @@ export default {
     },
     // 更新名片信息接口
     getSalesmanUpdate () {
+      if (this.judgeNull(this.name, '姓名')) return
+      if (this.judgeNull(this.salesCompanyName, '公司')) return
+      if (this.judgeNull(this.job, '职位')) return
+      if (this.judgeNull(this.phone, '手机')) return
+      if (this.judgeNull(this.fixedPhone, '固话')) return
+      if (this.judgeNull(this.email, '邮箱')) return
+      if (this.judgeNull(this.weChat, '微信')) return
+      if (this.judgeNull(this.region, '区域')) return
+      if (this.phone.length !== 0) {
+        var reg = /^1(3|4|5|7|8)\d{9}$/
+        if (!reg.test(this.phone)) {
+          wx.showToast({
+            title: '请输入有效的手机号',
+            icon: 'none',
+            duration: 2000
+          })
+          return false
+        }
+      }
+      if (this.fixedPhone) {
+        var regF = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/
+        if (!regF.test(this.fixedPhone)) {
+          wx.showToast({
+            title: '请输入有效的固话，格式为0000-00000000',
+            icon: 'none',
+            duration: 2000
+          })
+          return false
+        }
+      }
+      if (this.email) {
+        var regE = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+        if (!regE.test(this.email)) {
+          wx.showToast({
+            title: '请输入有效的邮箱',
+            icon: 'none',
+            duration: 2000
+          })
+          return false
+        }
+      }
       if (this.pan === 0) {
         const token = wx.getStorageSync('token')
         const businessId = wx.getStorageSync('businessId') // 获取本地bussiness

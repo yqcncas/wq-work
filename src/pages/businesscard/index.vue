@@ -325,7 +325,6 @@
       }
     },
     onLoad: function (options) {
-      console.log('op', options)
       this.CardId = options.id
       wx.hideTabBar()
     },
@@ -338,7 +337,6 @@
     },
     onShareAppMessage () {
       // this.insertOpera('分享了名片', 21)
-      console.log(this.id)
       return {
         title: `您好！我是${this.companyName}的${this.name},这是我的名片`,
         path: 'pages/logs/main?id=' + this.salesManId + '&fromWay=1&userId=' + this.id

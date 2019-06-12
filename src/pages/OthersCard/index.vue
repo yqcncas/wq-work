@@ -234,7 +234,6 @@
       }
     },
     onLoad: function (options) {
-      console.log('op', options)
       this.CardId = options.id
     },
     onShow () {
