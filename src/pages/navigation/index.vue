@@ -151,7 +151,7 @@
                 <div class="infoTop">
                   <span class="headName">{{item.name}}</span>
                   <span class="headMap">
-                    <s class="headMaps" v-if="item.address ">{{ item.address }} ·</s><s>&nbsp; {{ item.browseCount }}次浏览</s>
+                    <s class="headMaps" v-if="item.address ">{{ item.address }}&nbsp;</s><s v-if="item.address ">·</s><s>&nbsp;{{ item.browseCount }}次浏览</s>
                   </span>
                   <span class="headTitle">
                   {{ item.title }}
@@ -307,11 +307,11 @@
       // this.doLogin()
       wx.hideTabBar()
       this.getSalesmanId()
+      this.getCard()
     },
     onLoad () {
       this.trade()
       this.tradeA()
-      this.getCard()
       this.tradeInfor()
     },
     methods: {

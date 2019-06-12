@@ -208,7 +208,7 @@ export default {
       salesAddress: '',
       job: '',
       phone: '',
-      imgUrl: 'https://oss.wq1516.com/salesInfo/201906041349011559627341603.png',
+      imgUrl: '',
       fixedPhone: '',
       email: '',
       userId: '',
@@ -223,7 +223,7 @@ export default {
       region: [],
       voiceUrl: '',
       pan: 0,
-      video: 'http://tmp/wx3f1e71e9ef9aaabf.o6zAJs2WsoIGM1QCJjQV1ccYszRs.SPKIPcvU10gP5106da2657c3eceedd1adbebacde92e3.mp4',
+      video: '',
       voice: '',
       voiceTxt: '录音',
       salesManId: null,
@@ -236,6 +236,7 @@ export default {
   },
   onShow () {
     this.getInfo()
+    this.videoFlag = false
   },
   onLoad () {
   },
