@@ -86,18 +86,20 @@
           </div>
           <div class="conts">
             <div class="conts-main" v-if="tabs===1">
-              <div class="card" v-for="(item,index) in cards" :key="index" @click="goToCard(item.id)">
-                <span><img :src="item.imgUrl"></span>
-                <div class="card-main">
-                  <div class="qiye">
-                    <span class="img"><s>企</s></span>
-                    <b>{{ item.name }}</b>
-                    <span class="job">{{ item.job }}</span>
-                    <span v-if="item.isCertification === 0" class="status">已认证</span>
-                    <span v-else class="status">无状态</span>
+              <div class="card" v-for="(item,index) in cards" :key="index">
+                <div @click="goToCard(item.id)">
+                  <span><img :src="item.imgUrl"></span>
+                  <div class="card-main">
+                    <div class="qiye">
+                      <span class="img"><s>企</s></span>
+                      <b>{{ item.name }}</b>
+                      <span class="job">{{ item.job }}</span>
+                      <span v-if="item.isCertification === 0" class="status">已认证</span>
+                      <span v-else class="status">无状态</span>
+                    </div>
+                    <p class="comyname" v-if="item.salesCompanyName === null">无公司</p>
+                    <p class="comyname" v-else>{{ item.salesCompanyName}}</p>
                   </div>
-                  <p class="comyname" v-if="item.salesCompanyName === null">无公司</p>
-                  <p class="comyname" v-else>{{ item.salesCompanyName}}</p>
                 </div>
                 <div class="card-right">
                   <p class="eye"><img src="../../../static/images/eye.png"/><span>{{ item.browseCount }}</span> </p>

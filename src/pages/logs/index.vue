@@ -105,44 +105,52 @@
               </div>
               <div class="cardHold-ftMain">
                 <div class="cardHold-ftMain-ct" v-for="(item,index) in items" :key="index">
-                  <div class="center" @touchstart="touchStart($event)" @touchend="touchEnd($event,index)" :data-type="item"  @click="goToCard(item.salesmanId)" >
-                    <div class="cardHold-ftMain-ct-img" @click="recover(index)">
+                  <div class="center" @touchstart="touchStart($event)" @touchend="touchEnd($event,index,items)" :data-type="item.type"  >
+                    <div>
+                    <div class="cardHold-ftMain-ct-img" @click="goToCard(item.salesmanId)" >
                       <img :src="item.imgUrl"/>
                     </div>
-                    <div v-if="item.grade === 'V1' && item.grade === null " class="cardHold-ftMain-rt">
+                    <div v-if="item.grade === 'V1' && item.grade === null "  class="cardHold-ftMain-rt" @click="recover(index,items)">
+                      <div @click="goToCard(item.salesmanId)">
+                        <span class="icon">企</span>
+                        <span class="name">{{ item.name }}</span>
+                        <span class="job">{{ item.job }}</span>
+                        <span class="status">{{ item.status }}</span>
+                        <span class="grade">{{ item.grade }}</span>
+                        <p class="company">{{ item.salesCompanyName }}</p>
+                      </div>
+                        <div class="phone">
+                          <img src="../../../static/images/call.png"/>
+                        </div>
+                    </div>
+                    <div v-else-if="item.grade === 'V2' " class="cardHold-ftMain-rt2 " @click="recover(index,items)">
+                      <div @click="goToCard(item.salesmanId)">
                       <span class="icon">企</span>
                       <span class="name">{{ item.name }}</span>
                       <span class="job">{{ item.job }}</span>
                       <span class="status">{{ item.status }}</span>
                       <span class="grade">{{ item.grade }}</span>
                       <p class="company">{{ item.salesCompanyName }}</p>
+                      </div>
                       <div class="phone">
                         <img src="../../../static/images/call.png"/>
                       </div>
                     </div>
-                    <div v-else-if="item.grade === 'V2' " class="cardHold-ftMain-rt2 " @click="recover(index)">
+                    <div v-else class="cardHold-ftMain-rt3" @click="recover(index,items)">
+                      <div @click="goToCard(item.salesmanId)">
                       <span class="icon">企</span>
                       <span class="name">{{ item.name }}</span>
                       <span class="job">{{ item.job }}</span>
                       <span class="status">{{ item.status }}</span>
                       <span class="grade">{{ item.grade }}</span>
                       <p class="company">{{ item.salesCompanyName }}</p>
+                    </div>
                       <div class="phone">
                         <img src="../../../static/images/call.png"/>
                       </div>
                     </div>
-                    <div v-else class="cardHold-ftMain-rt3" @click="recover(index)">
-                      <span class="icon">企</span>
-                      <span class="name">{{ item.name }}</span>
-                      <span class="job">{{ item.job }}</span>
-                      <span class="status">{{ item.status }}</span>
-                      <span class="grade">{{ item.grade }}</span>
-                      <p class="company">{{ item.salesCompanyName }}</p>
-                      <div class="phone">
-                        <img src="../../../static/images/call.png"/>
-                      </div>
                     </div>
-                    <div class="delete" @click="delect(index)">
+                    <div class="delete" @click="delect(index,items,item.salesmanId)">
                       删除
                     </div>
                   </div>
@@ -175,6 +183,8 @@ export default {
     return {
       userInfo: {},
       company: '',
+      companyName: '',
+      id: '',
       job: '',
       name: '',
       imgUrl: '',
@@ -212,6 +222,9 @@ export default {
     this.getInfo()
   },
   onLoad (options) {
+    if (options) {
+      this.goToFen('../OthersCard/main?id=' + options.id + '&fromWay=1&userId=' + options.userId)
+    }
     var that = this
     wx.getSystemInfo({
       success: function (res) {
@@ -220,20 +233,25 @@ export default {
       }
     })
   },
+  onShareAppMessage () {
+    // this.insertOpera('分享了名片', 21)
+    return {
+      title: `您好！我是${this.companyName}的${this.name},这是我的名片`,
+      path: 'pages/logs/main?id=' + this.salesManId + '&fromWay=1&userId=' + this.id
+    }
+  },
   watch () {
     console.log(this.toView)
   },
   methods: {
+    goToFen (url) {
+      wx.navigateTo({
+        url: url
+      })
+    },
     imgLoad (e) {
       this.imgWidth = e.target.width
       this.imgHeight = e.target.height
-    },
-    onShareAppMessage () {
-      this.insertOpera('分享了名片', 21)
-      return {
-        title: `您好！我是${this.companyName}的${this.name},这是我的名片`,
-        path: '/pages/OthersCard/main?id=' + this.salesManId + '&fromWay=1&userId=' + this.id
-      }
     },
     // 分享名片弹窗
     showType () {
@@ -273,6 +291,9 @@ export default {
         this.job = res.data.job
         this.company = res.data.salesCompanyName
         this.imgUrl = res.data.imgUrl
+        this.id = wx.getStorageSync('userId')
+        this.salesManId = res.data.id
+        this.companyName = res.data.salesCompanyName
       }).catch(err => {
         console.log(err)
       })
@@ -302,7 +323,6 @@ export default {
           'userId': userId
         }
       }).then(res => {
-        console.log('res', res)
         this.commitInfo = res.data
       }).catch(err => {
         console.log(err.status, err.message)
@@ -312,17 +332,17 @@ export default {
       // 获取移动距离，可以通过打印出e，然后分析e的值得出
       this.startX = e.mp.changedTouches[0].clientX
     },
-    touchEnd (e, index) {
+    touchEnd (e, index, items) {
       // 获取移动距离
       this.endX = e.mp.changedTouches[0].clientX
       if (this.startX - this.endX > 10) {
-        for (let i = 0; i < this.commitInfo.length; i++) {
-          this.commitInfo[i].type = 0
+        for (let i = 0; i < items.length; i++) {
+          items[i].type = 0
         }
-        this.commitInfo[index].type = 1
+        items[index].type = 1
       } else if (this.startX - this.endX < -10) {
-        for (let i = 0; i < this.commitInfo.length; i++) {
-          this.commitInfo[i].type = 0
+        for (let i = 0; i < items.length; i++) {
+          items[i].type = 0
         }
       }
     },
@@ -332,12 +352,38 @@ export default {
         url: `../OthersCard/main?id=` + id
       })
     },
-    recover (index) {
-      this.commitInfo[index].type = 0
+    recover (index, items) {
+      items[index].type = 0
     },
     // 删除
-    delect (index) {
-      this.commitInfo.splice(index, 1)
+    delect (index, items, id) {
+      items.splice(index, 1)
+      this.cancelCollect(id)
+    },
+    // 取消收藏
+    cancelCollect (id) {
+      const userId = wx.getStorageSync('userId') // 获取本地userId
+      this.$fly.request({
+        method: 'post', // post/get 请求方式
+        url: '/platformUserSalesman/deleteBySalesmanId',
+        body: {
+          'salesmanId': id,
+          'userId': userId
+        }
+      }).then(res => {
+        console.log('取消', res)
+        if (res.code === 200) {
+          const that = this
+          wx.showToast({
+            title: '操作成功',
+            icon: 'none',
+            duration: 2000
+          })
+          that.getInfo()
+        }
+      }).catch(err => {
+        console.log(err.status, err.message)
+      })
     },
     // 按字母检索
     touchstartL (e) {

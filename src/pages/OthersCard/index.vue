@@ -41,7 +41,7 @@
               </div>
               <div class="card-footer">
                 <submit class="share"  @click="showType">分享名片</submit>
-                <submit class="save">保存名片</submit>
+                <submit class="save" @click="getCollect(postForm.id)">保存名片</submit>
               </div>
           </div>
           <!-- 标签 -->
@@ -206,6 +206,8 @@
         voiceUrl: '',
         currentAudio: '',
         imgWidth: null,
+        companyName: '',
+        id: '',
         imgHeight: null,
         name: '',
         job: '',
@@ -232,6 +234,7 @@
       }
     },
     onLoad: function (options) {
+      console.log('op', options)
       this.CardId = options.id
     },
     onShow () {
@@ -239,6 +242,13 @@
       this.showpop = false
       this.getSun()
       this.getLogo()
+    },
+    onShareAppMessage () {
+      // this.insertOpera('分享了名片', 21)
+      return {
+        title: `您好！我是${this.companyName}的${this.name},这是我的名片`,
+        path: 'pages/logs/main?id=' + this.salesManId + '&fromWay=1&userId=' + this.id
+      }
     },
     methods: {
       imgLoad (e) {
@@ -278,13 +288,6 @@
         }
         let temp = encodeURIComponent(JSON.stringify(params))
         this.routerTo('../cardPoster/main?val=' + temp)
-      },
-      onShareAppMessage () {
-        this.insertOpera('分享了名片', 21)
-        return {
-          title: `您好！我是${this.companyName}的${this.name},这是我的名片`,
-          path: '/pages/OthersCard/main?id=' + this.salesManId + '&fromWay=1&userId=' + this.id
-        }
       },
       close () {
         this.modalflag = false
@@ -339,6 +342,9 @@
           this.phone = res.data.phone
           this.imgUrl = res.data.imgUrl
           this.voiceUrl = res.data.voice
+          this.id = wx.getStorageSync('userId')
+          this.salesManId = res.data.id
+          this.companyName = res.data.salesCompanyName
           const bgM = wx.createInnerAudioContext()// 初始化createInnerAudioContext接口
           // 设置播放地址
           bgM.src = this.voiceUrl

@@ -280,6 +280,8 @@
         personApi: personApi,
         imgWidth: null,
         imgHeight: null,
+        companyName: '',
+        id: '',
         name: '',
         job: '',
         phone: '',
@@ -323,6 +325,7 @@
       }
     },
     onLoad: function (options) {
+      console.log('op', options)
       this.CardId = options.id
       wx.hideTabBar()
     },
@@ -332,6 +335,14 @@
       this.selectNavIndex = 0
       this.getSun()
       this.getLogo()
+    },
+    onShareAppMessage () {
+      // this.insertOpera('分享了名片', 21)
+      console.log(this.id)
+      return {
+        title: `您好！我是${this.companyName}的${this.name},这是我的名片`,
+        path: 'pages/logs/main?id=' + this.salesManId + '&fromWay=1&userId=' + this.id
+      }
     },
     methods: {
       imgLoad (e) {
@@ -371,13 +382,6 @@
         }
         let temp = encodeURIComponent(JSON.stringify(params))
         this.routerTo('../cardPoster/main?val=' + temp)
-      },
-      onShareAppMessage () {
-        this.insertOpera('分享了名片', 21)
-        return {
-          title: `您好！我是${this.companyName}的${this.name},这是我的名片`,
-          path: '/pages/OthersCard/main?id=' + this.salesManId + '&fromWay=1&userId=' + this.id
-        }
       },
       // 获取太阳吗
       getSun () {
@@ -466,6 +470,10 @@
             this.phone = res.data.phone
             this.imgUrl = res.data.imgUrl
             this.voiceUrl = res.data.voice
+            this.id = wx.getStorageSync('userId')
+            this.salesManId = res.data.id
+            console.log(this.salesManId)
+            this.companyName = res.data.salesCompanyName
             const bgM = wx.createInnerAudioContext()// 初始化createInnerAudioContext接口
             // 设置播放地址
             bgM.src = this.voiceUrl

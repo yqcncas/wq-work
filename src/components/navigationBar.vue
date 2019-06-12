@@ -86,7 +86,7 @@
       })
     },
     mounted () {
-      console.log(`this.backVisible:`, this.backVisible)
+      // console.log(`this.backVisible:`, this.backVisible)
     },
     onLoad () {
       this.getMsgNum()
@@ -102,7 +102,6 @@
             'salesmanId': salesmanId
           }
         }).then(res => {
-          console.log('656', res)
           this.num = res.data
         }).catch(err => {
           console.log(err)
