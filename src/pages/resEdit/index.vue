@@ -65,8 +65,10 @@ export default {
           'userId': userId
         }
       }).then(res => {
-        console.log('aaa', res)
-        this.imgUrlList = res.data.imgUrlList
+        if (res.data.imgUrlList[0] !== '') {
+          this.imgUrlList = res.data.imgUrlList
+        }
+        console.log('aaa', this.imgUrlList)
         this.title = res.data.title
         if (res.data.address) {
           this.location = res.data.address
@@ -78,15 +80,17 @@ export default {
     },
     // 上传视频
     choosedvideo (val) {
-      console.log('video', val)
       if (val.all) {
         this.video = val.all
+      } else {
+        this.video = ''
       }
     },
     choosed (val) {
-      // console.log('img', val)
       if (val.all) {
         this.imgUrlList = val.all
+      } else {
+        this.imgUrlList = ''
       }
     },
     txtInput (e) {
@@ -96,8 +100,9 @@ export default {
       wx.chooseLocation({
         success: function (res) {
           console.log(res)
-          console.log(res.name)
           that.location = res.name
+          that.latitude = res.latitude
+          that.longitude = res.longitude
         }
       })
     },
@@ -111,37 +116,67 @@ export default {
       } else {
         this.address = this.location
       }
-      this.$fly.request({
-        method: 'post',
-        url: '/dynamic/update',
-        body: {
-          'id': id,
-          'salesmanId': salesmanId,
-          'businessId': businessId,
-          'title': this.title,
-          'imgUrlListOut': this.imgUrlList,
-          'video': this.video,
-          'address': this.address,
-          'longitude': this.longitude,
-          'latitude': this.latitude
-        }
-      }).then(res => {
-        if (res.code === 200) {
-          wx.showToast({
-            title: '更新成功',
-            icon: 'none',
-            duration: 2000
-          })
-          setTimeout(function () {
+      if (this.photoId === '1') {
+        this.$fly.request({
+          method: 'post',
+          url: '/dynamic/update',
+          body: {
+            'id': id,
+            'salesmanId': salesmanId,
+            'businessId': businessId,
+            'title': this.title,
+            'imgUrlListOut': this.imgUrlList,
+            'address': this.address,
+            'longitude': this.longitude,
+            'latitude': this.latitude
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            wx.showToast({
+              title: '更新成功',
+              icon: 'none',
+              duration: 2000
+            })
             setTimeout(function () {
-              wx.navigateBack(-1)
+              setTimeout(function () {
+                wx.navigateBack(-1)
+              }, 2000)
             }, 2000)
-          }, 2000)
-        }
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-      })
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+      } else if (this.photoId === 0) {
+        this.$fly.request({
+          method: 'post',
+          url: '/dynamic/update',
+          body: {
+            'id': id,
+            'salesmanId': salesmanId,
+            'businessId': businessId,
+            'title': this.title,
+            'video': this.video,
+            'address': this.address,
+            'longitude': this.longitude,
+            'latitude': this.latitude
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            wx.showToast({
+              title: '更新成功',
+              icon: 'none',
+              duration: 2000
+            })
+            setTimeout(function () {
+              setTimeout(function () {
+                wx.navigateBack(-1)
+              }, 2000)
+            }, 2000)
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+      }
     },
     // 添加动态
     save () {
@@ -176,7 +211,6 @@ export default {
             wx.navigateBack(-1)
           }, 2000)
         }
-        console.log(res)
       }).catch(err => {
         console.log(err)
       })
@@ -206,6 +240,8 @@ export default {
       this.video = ''
       this.imgUrlList = ''
       this.location = ''
+      this.latitude = ''
+      this.longitude = ''
       this.status = false
     }
   },
@@ -213,6 +249,8 @@ export default {
   },
   onUnload () {
     this.location = '定位'
+    this.latitude = ''
+    this.longitude = ''
     this.title = ''
     this.video = ''
     this.imgUrlList = ''

@@ -69,29 +69,6 @@
       "iconPath": "static/images/person.png",
       "selectedIconPath": "/static/images/person-se.png"
       }],
-    "items": [
-      {
-        "text": "我的名片",
-        "pagePath": "pages/businesscard/main",
-        "iconPath": "static/images/my.png",
-        "selectedIconPath": "static/images/my-se.png"
-      },{
-      "text": "名片夹",
-      "pagePath": "pages/logs/main",
-      "iconPath": "static/images/personcard.png",
-      "selectedIconPath": "static/images/personcard-se.png"
-    },{
-      "text": "附近",
-      "pagePath": "pages/navigation/main",
-      "iconPath": "static/images/more.png",
-      "selectedIconPath": "static/images/more-se.png"
-    },
-      {
-        "text": "个人中心",
-        "pagePath": "pages/personal/main",
-        "iconPath": "static/images/person.png",
-        "selectedIconPath": "/static/images/person-se.png"
-      }],
     "position": "bottom"
   }
 }

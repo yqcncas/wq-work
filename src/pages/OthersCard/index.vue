@@ -283,8 +283,7 @@
         this.insertOpera('分享了名片', 21)
         return {
           title: `您好！我是${this.companyName}的${this.name},这是我的名片`,
-          path: 'pages/loading/index?id=' + this.salesManId + '&fromWay=1&userId=' + this.id,
-          apply: ''
+          path: 'pages/OthersCard/main?id=' + this.salesManId + '&fromWay=1&userId=' + this.id
         }
       },
       close () {
