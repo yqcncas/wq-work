@@ -22,6 +22,7 @@ export default {
     }
   },
   onLoad (options) {
+    console.log('1', options)
     this.goodsId = null
     if (options.fromWay) {
       this.fromWay = options.fromWay
@@ -44,9 +45,12 @@ export default {
     if (options.scene) {
       let scene = decodeURIComponent(options.scene).split('?')[1]
       this.userId = this.GetQueryString('userId', scene)
-      this.fromWay = this.GetQueryString('fromWay', scene)
+      this.fromWay = this.GetQueryString('way', scene)
       this.param = this.GetQueryString('param', scene)
-      this.salesmanId = +this.GetQueryString('salesmanId', scene)
+      this.salesmanId = this.GetQueryString('id', scene)
+      console.log(' this.fromWay', this.fromWay)
+      console.log(' this.param', this.param)
+      console.log(' this.userId', this.userId)
       if (this.salesmanId) {
         this.doLogin(this.salesmanId, this.param)
       } else {
@@ -90,25 +94,35 @@ export default {
           // wx.switchTab({
           //   url: '../businesscard/main?id=' + this.goodsId
           // })
-          if (this.goodsId) {
-            wx.reLaunch({
-              url: '../OthersCards/main?id=' + this.goodsId
+          // if (this.goodsId) {
+          //   wx.reLaunch({
+          //     url: '../OthersCards/main?id=' + this.goodsId
+          //   })
+          // } else if (this.param === 'userMsg') {
+          //   wx.reLaunch({
+          //     url: '../OthersCards/main?param=' + this.param
+          //   })
+          // } else if (this.param === 'home') {
+          //   wx.reLaunch({
+          //     url: '../OthersCards/main?'
+          //   })
+          // } else if (this.param === 'news') {
+          //   wx.reLaunch({
+          //     url: '../OthersCards/main?newsId=' + this.newsId
+          //   })
+          // } else if (this.param === 'product') {
+          //   wx.reLaunch({
+          //     url: '../OthersCards/main'
+          //   })
+          // } else {
+          // console.log(' this.salesmanIdA', this.salesmanId)
+          if (this.fromWay === '0') {
+            wx.switchTab({
+              url: '../businesscard/main'
             })
-          } else if (this.param === 'userMsg') {
+          } else if (this.fromWay === '2') {
             wx.reLaunch({
-              url: '../OthersCards/main?param=' + this.param
-            })
-          } else if (this.param === 'home') {
-            wx.reLaunch({
-              url: '../OthersCards/main?'
-            })
-          } else if (this.param === 'news') {
-            wx.reLaunch({
-              url: '../OthersCards/main?newsId=' + this.newsId
-            })
-          } else if (this.param === 'product') {
-            wx.reLaunch({
-              url: '../OthersCards/main'
+              url: '../logs/main?id=' + this.salesmanId + '&fromWay=1&userId=' + id
             })
           } else {
             wx.switchTab({

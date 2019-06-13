@@ -28,13 +28,16 @@
                   <div class="cards-main">
                     <p class="cards-img"><img :src="postForm.imgUrl" /></p>
                     <p class="cards-name">
-                      <span>{{ postForm.name }}</span>
+                      <span v-if="postForm.name">{{ postForm.name }}</span>
+                      <span v-else>无姓名</span>
                     </p>
                     <p class="cards-job">
-                      <span>{{ postForm.job }}</span>
+                      <span v-if="postForm.job">{{ postForm.job }}</span>
+                      <span v-else>无工作</span>
                     </p>
                     <p class="cards-company">
-                      <span>{{ postForm.salesCompanyName }}</span>
+                      <span v-if="postForm.salesCompanyName">{{ postForm.salesCompanyName }}</span>
+                      <span v-else>无公司名称</span>
                     </p>
                   </div>
                 </div>
@@ -98,7 +101,7 @@
             <div class="card-ma" @click="routerTo(`./showQrcode/main?companyName=${postForm.salesCompanyName}&logo=${logo}&qrcode=${qrCodeUrl}&name=${postForm.name}&job=${postForm.job}&imgUrl=${postForm.imgUrl}`)">
               <p class="ma-txt">名片码</p>
               <div class="radius-img">
-                <img :src="postForm.url" mode="aspectFill">
+                <img :src="qrCodeUrl" mode="aspectFill">
               </div>
             </div>
             <!-- 个人简介 -->
@@ -208,6 +211,7 @@
         imgWidth: null,
         companyName: '',
         id: '',
+        list: '',
         imgHeight: null,
         name: '',
         job: '',
@@ -226,14 +230,11 @@
         praiseNum: 888,
         num: 0,
         headImgList: [],
-        details: [{
-          img: '../../static/images/tiangou.jpg',
-          title: '系统产品',
-          mores: '122'
-        }]
+        details: []
       }
     },
     onLoad: function (options) {
+      console.log('aaa', options)
       this.CardId = options.id
     },
     onShow () {
@@ -281,7 +282,7 @@
           logo: this.postForm.logo,
           fixedPhone: this.postForm.fixedPhone,
           weChat: this.postForm.weChat,
-          address: this.postForm.salesAddress,
+          address: this.postForm.salesAddDetailed,
           email: this.postForm.email,
           qrCodeUrl: this.qrCodeUrl
         }
@@ -299,7 +300,8 @@
           url: '/platformSalesman/getWxACodeUnlimit',
           body: {
             'businessId': businessId,
-            'salesmanId': this.CardId
+            'salesmanId': this.CardId,
+            'fromWay': 2
           }
         }).then(res => {
           console.log('a', res)

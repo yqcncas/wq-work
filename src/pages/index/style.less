@@ -7,6 +7,16 @@
 .modify{
   margin-bottom: ~'120rpx';
 }
+.address{
+  border-bottom: none;
+  p{
+    float: left;
+    padding-top: ~'-10rpx';
+  }
+  input{
+    float: left;
+  }
+}
 .TopImg img{
   width: 100%;
   height: 100%;
@@ -39,6 +49,7 @@
     overflow: hidden;
     text-overflow:ellipsis;
     white-space: nowrap;
+    margin-top: ~'8rpx';
   }
   i{
     float: right;
@@ -124,10 +135,16 @@
         margin-left: ~"40rpx";
       }
     }
+    div:last-child{
+      height: ~'70rpx';
+      padding-top: ~'20rpx';
+      border-bottom: none;
+    }
     p{
-      padding-top: ~'15rpx';
+      padding-top: ~'0rpx';
       width: ~'50rpx';
       height: ~'50rpx';
+      padding-right: ~'16rpx';
       img{
         width: 100%;
         height: 100%;
@@ -200,7 +217,8 @@
     font-size: ~'26rpx';
   }
   .vivid-footer{
-    margin: ~'100rpx' 0;
+    margin: ~'100rpx' auto;
+    display: inline-block;
     button{
       width: ~'195rpx';
       height: ~'64rpx';

@@ -103,13 +103,16 @@
               <div class="cards-main">
                 <p class="cards-img"><img :src="postForm.imgUrl" /></p>
                 <p class="cards-name">
-                  <span>{{ postForm.name}}</span>
+                  <span v-if="postForm.name">{{ postForm.name }}</span>
+                  <span v-else>无姓名</span>
                 </p>
                 <p class="cards-job">
-                  <span>{{ postForm.job }}</span>
+                  <span v-if="postForm.job">{{ postForm.job }}</span>
+                  <span v-else>无工作</span>
                 </p>
                 <p class="cards-company">
-                  <span>{{ postForm.salesCompanyName }}</span>
+                  <span v-if="postForm.salesCompanyName">{{ postForm.salesCompanyName }}</span>
+                  <span v-else>无公司名称</span>
                 </p>
               </div>
             </div>
@@ -249,7 +252,7 @@
               <div class="product-details" v-for="(item,index) in postForm.goodsList" :key="index">
                 <div class="product-details-img">
                   <img :src="item.goodsImgUrlList[0].imgUrl"/>
-                </div>
+                </div>j
                 <div class="product-details-title">
                   {{ item.info }}
                 </div>
@@ -305,35 +308,19 @@
         imgUrl: '',
         postForm: '',
         headImgList: [],
-        details: [{
-          img: '../../static/images/tiangou.jpg',
-          title: '系统产品',
-          mores: '122'
-        }, {
-          img: '../../static/images/tiangou.jpg',
-          title: '系统产品',
-          mores: '222'
-        }, {
-          img: '../../static/images/tiangou.jpg',
-          title: '系统产品',
-          mores: '333'
-        }, {
-          img: '../../static/images/tiangou.jpg',
-          title: '系统产品',
-          mores: '444'
-        }]
+        details: []
       }
     },
     onLoad: function (options) {
       this.CardId = options.id
-      wx.hideTabBar()
     },
     onShow () {
+      wx.hideTabBar()
       this.getInfo()
+      this.getLogo()
+      this.getSun()
       this.showpop = false
       this.selectNavIndex = 0
-      this.getSun()
-      this.getLogo()
     },
     onShareAppMessage () {
       // this.insertOpera('分享了名片', 21)
@@ -374,7 +361,7 @@
           logo: this.postForm.logo,
           fixedPhone: this.postForm.fixedPhone,
           weChat: this.postForm.weChat,
-          address: this.postForm.salesAddress,
+          address: this.postForm.salesAddDetailed,
           email: this.postForm.email,
           qrCodeUrl: this.qrCodeUrl
         }
@@ -390,7 +377,8 @@
           url: '/platformSalesman/getWxACodeUnlimit',
           body: {
             'businessId': businessId,
-            'salesmanId': salesmanId
+            'salesmanId': salesmanId,
+            'fromWay': 2
           }
         }).then(res => {
           this.qrCodeUrl = res.data
@@ -462,6 +450,7 @@
             if (res.data.nickName === '') {
               this.modalFlag = true
             }
+            console.log(res.data)
             this.postForm = res.data
             this.name = res.data.name
             this.job = res.data.job
