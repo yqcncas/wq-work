@@ -14,7 +14,7 @@
           <div class="qrcode-wrap">
             <image :src="params.qrcode" mode="widthFix" class="qrcode-img"></image>
           </div>
-          <div class="wrap-img">
+          <div :class="imgA">
             <image :src="params.imgUrl" mode="widthFix" class="img-url"></image>
           </div>
         </div>
@@ -32,7 +32,8 @@
       return {
         params: {},
         bigTrans: '',
-        smallTrans: ''
+        smallTrans: '',
+        imgA: ''
       }
     },
     methods: {
@@ -47,14 +48,26 @@
       this.bigTrans = ''
       this.smallTrans = ''
       this.params = options
+      this.imgA = 'wrapImgA'
       setTimeout(() => {
         this.bigTrans = 'trans'
         this.smallTrans = 'small-trans'
+        this.imgA = 'wrapImg'
       }, 1000)
     }
   }
 </script>
 <style lang="less" scoped>
+  .Top{
+    position: absolute;
+    left: ~'20rpx';
+    top: ~'62rpx';
+    z-index: 99999;
+    .iconE{
+      color: #ffffff;
+      font-size: ~'40rpx';
+    }
+  }
   .ma-trans-page {
     width: 100%;
     height: 100%;
@@ -62,17 +75,6 @@
     color: #fff;
     font-size: ~'28rpx';
     text-align: center;
-    position: relative;
-    .Top{
-      position: absolute;
-      left: ~'20rpx';
-      top: ~'62rpx';
-      z-index: 99999;
-      .iconE{
-        color: #ffffff;
-        font-size: ~'40rpx';
-      }
-    }
     .box-trans {
       width: 100%;
       height: 100%;
@@ -90,7 +92,7 @@
     }
     .name {
       font-size: ~'44rpx';
-      padding-bottom: ~'16rpx;'
+      padding-bottom: ~'16rpx';
     }
     .middle-wrap {
       position: absolute;
@@ -114,21 +116,35 @@
     }
     .qrcode-img {
       width: ~'374rpx';
+      height: ~'374rpx';
       margin-top: ~'33rpx';
     }
-    .wrap-img {
+    .wrapImgA{
       width: ~'158rpx';
       height: ~'158rpx';
       border-radius: 50%;
       overflow: hidden;
       position: absolute;
       top: 50%;
-      margin-top:~'-88rpx';
+      margin-top: ~'-84rpx';
       left: 50%;
       margin-left: ~'-76rpx';
-      .img-url {
-        width: ~'158rpx';
-      }
+    }
+    .wrapImg {
+      width: ~'158rpx';
+      height: ~'158rpx';
+      border-radius: 50%;
+      overflow: hidden;
+      position: absolute;
+      top: 50%;
+      margin-top: ~'-84rpx';
+      left: 50%;
+      margin-left: ~'-76rpx';
+    }
+    .img-url {
+      width: 100% !important;
+      display: inline-block;
+      height: 100% !important;
     }
     .bottom-wrap {
       position: absolute;
@@ -138,6 +154,7 @@
     }
     .logo-img {
       width: ~'86rpx';
+      height: ~'86rpx';
       margin-top: ~'107rpx';
     }
     .small-trans {

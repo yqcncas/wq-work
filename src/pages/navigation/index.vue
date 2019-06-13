@@ -167,6 +167,7 @@
                      <video
                        id="myVideo"
                        :src="item.video"
+                       @fullscreenchange="bindA"
                        controls
                      ></video>
                   </span>
@@ -307,16 +308,19 @@
     },
     onShow () {
       // this.doLogin()
-      wx.hideTabBar()
       this.getSalesmanId()
       this.getCard()
     },
     onLoad () {
+      wx.hideTabBar()
       this.trade()
       this.tradeA()
       this.tradeInfor()
     },
     methods: {
+      bindA (e) {
+        wx.hideTabBar()
+      },
       // 查询salesmanId
       getSalesmanId () {
         const userId = wx.getStorageSync('userId') // 获取本地userId

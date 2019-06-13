@@ -67,13 +67,16 @@
                     <i class="iconfont iconyouce"></i>
                   </picker>
                 </div>
-                <p @click="chooseLocation()">
-                  <img src="../../../static/images/map.png">
-                </p>
+                <div class="address">
+                  <p @click="chooseLocation()">
+                    <img src="../../../static/images/map.png">
+                  </p>
+                  <input v-model="addDetailed" placeholder="详细地址"/>
+                </div>
               </div>
               <div class="Basics-footer">
                 <submit class="back" @click="back()">返回</submit>
-                <submit class="save" @click="getSalesmanUpdate()">保存</submit>
+                <button class="save" @click="getSalesmanUpdate()">保存</button>
               </div>
             </div>
           </div>
@@ -201,6 +204,8 @@ export default {
       richImg: '',
       videoImg: '',
       timeControl: '',
+      longitude: '',
+      latitude: '',
       time: '',
       address: '',
       name: '',
@@ -216,13 +221,15 @@ export default {
       playVoiceFlag: false,
       videoFlag: false,
       recordFlag: true,
+      addDetailed: '',
       currentAudio: '',
+      isDisable: false, // 表单重复提交
       voiceTime: '00:00',
       Yid: '', // 业务员id
       animal: '',
       region: [],
       voiceUrl: '',
-      pan: 0,
+      pan: false,
       video: '',
       voice: '',
       voiceTxt: '录音',
@@ -235,10 +242,10 @@ export default {
     card
   },
   onShow () {
-    this.getInfo()
     this.videoFlag = false
   },
   onLoad () {
+    this.getInfo()
   },
   methods: {
     changTab (index) {
@@ -246,20 +253,25 @@ export default {
         this.tab = index
         this.status = index
         innerAudioContext.stop()
+        this.getInfo()
       } else if (index === 2) {
         this.tab = index
         this.status = index
         innerAudioContext.stop()
+        this.getInfo()
       } else if (index === 3) {
         this.tab = index
         this.status = index
+        this.getInfo()
       } else if (index === 4) {
         this.tab = index
         this.status = index
+        this.getInfo()
         innerAudioContext.stop()
       } else {
         this.tab = index
         this.status = index
+        this.getInfo()
         innerAudioContext.stop()
         this.videoFlag = false
         this.videoImg = this.video + '?x-oss-process=video/snapshot,t_0,f_jpg,w_750,m_fast'
@@ -456,7 +468,8 @@ export default {
           this.postForm = res.data
           this.voice = res.data.voice
           this.userId = userId
-          this.pan = 1
+          this.pan = true
+          this.addDetailed = res.data.salesAddDetailed
           this.Yid = res.data.id
           this.richImg = res.data.richText
           this.video = res.data.video !== '' ? res.data.video : ''
@@ -494,7 +507,7 @@ export default {
             }, 1000)
           }
         } else {
-          this.pan = 0
+          this.pan = false
         }
       }).catch(err => {
         console.log(err.status, err.message)
@@ -516,10 +529,6 @@ export default {
       if (this.judgeNull(this.salesCompanyName, '公司')) return
       if (this.judgeNull(this.job, '职位')) return
       if (this.judgeNull(this.phone, '手机')) return
-      if (this.judgeNull(this.fixedPhone, '固话')) return
-      if (this.judgeNull(this.email, '邮箱')) return
-      if (this.judgeNull(this.weChat, '微信')) return
-      if (this.judgeNull(this.region, '区域')) return
       if (this.phone.length !== 0) {
         var reg = /^1(3|4|5|7|8)\d{9}$/
         if (!reg.test(this.phone)) {
@@ -531,6 +540,7 @@ export default {
           return false
         }
       }
+      // if (this.judgeNull(this.fixedPhone, '固话')) return
       if (this.fixedPhone) {
         var regF = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/
         if (!regF.test(this.fixedPhone)) {
@@ -542,6 +552,7 @@ export default {
           return false
         }
       }
+      if (this.judgeNull(this.email, '邮箱')) return
       if (this.email) {
         var regE = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
         if (!regE.test(this.email)) {
@@ -553,7 +564,11 @@ export default {
           return false
         }
       }
-      if (this.pan === 0) {
+      if (this.judgeNull(this.weChat, '微信')) return
+      if (this.judgeNull(this.region, '区域')) return
+      if (this.judgeNull(this.addDetailed, '详细地址')) return
+      console.log('pan', this.pan)
+      if (this.pan === false) {
         const token = wx.getStorageSync('token')
         const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
         const userId = wx.getStorageSync('userId') // 获取本地bussiness
@@ -568,6 +583,8 @@ export default {
             voice: this.voice,
             id: this.Yid, // 152
             name: this.name,
+            longitude: this.longitude,
+            latitude: this.latitude,
             addDetailed: this.addDetailed,
             address: JSON.stringify(this.region),
             companyName: this.salesCompanyName,
@@ -582,8 +599,10 @@ export default {
           header: {
             'token': token
           },
-          success: function (res) {
+          success: (res) => {
             if (res.data.code === 200) {
+              this.pan = true
+              console.log('pana', this.pan)// this.isDisable = false // 执行请求后就不能点击了
               wx.showToast({
                 title: '保存成功',
                 icon: 'none',
@@ -598,7 +617,8 @@ export default {
             console.log(res)
           }
         })
-      } else {
+      }
+      if (this.pan === true) {
         const token = wx.getStorageSync('token')
         wx.request({
           method: 'post', // post/get 请求方式
@@ -618,6 +638,8 @@ export default {
             email: this.email,
             weChat: this.weChat,
             job: this.job,
+            longitude: this.longitude,
+            latitude: this.latitude,
             info: this.info
           },
           header: {
@@ -625,6 +647,8 @@ export default {
           },
           success: function (res) {
             if (res.data.code === 200) {
+              // // this.pan = 0
+              // this.isDisable = false // 执行请求后就不能点击了
               wx.showToast({
                 title: '更新成功',
                 icon: 'none',
@@ -644,10 +668,15 @@ export default {
     // 获取当前定位
     chooseLocation () {
       var that = this
+      console.log('111')
       wx.chooseLocation({
-        success: function (res) {
-          that.region = res.address
-          that.address = that.region
+        success: (res) => {
+          console.log(res)
+          that.addDetailed = res.name
+          that.latitude = res.latitude
+          that.longitude = res.longitude
+          // that.region = res.name
+          // that.address = that.region
         }
       })
     },

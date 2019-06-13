@@ -83,7 +83,7 @@
        * 路由跳转
        */
       bindNavigateTo (url) {
-        wx.navigateTo({
+        wx.switchTab({
           url
         })
       },

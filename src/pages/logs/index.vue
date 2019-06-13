@@ -220,8 +220,10 @@ export default {
     wx.hideTabBar()
     this.showpop = false
     this.getInfo()
+    this.getSun()
   },
   onLoad (options) {
+    console.log('aaaa', options)
     if (options.id !== undefined) {
       this.goToFen('../OthersCard/main?id=' + options.id + '&fromWay=1&userId=' + options.userId)
     }
@@ -269,7 +271,7 @@ export default {
         logo: this.postForm.logo,
         fixedPhone: this.postForm.fixedPhone,
         weChat: this.postForm.weChat,
-        address: this.postForm.salesAddress,
+        address: this.postForm.salesAddDetailed,
         email: this.postForm.email,
         qrCodeUrl: this.qrCodeUrl
       }
@@ -309,6 +311,24 @@ export default {
         }
       }).then(res => {
         this.logo = res.data.logo
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    // 获取太阳吗
+    getSun () {
+      const businessId = wx.getStorageSync('businessId') // 获取本地userId
+      const salesmanId = wx.getStorageSync('salesmanId') // 获取本地userId
+      this.$fly.request({
+        method: 'post', // post/get 请求方式
+        url: '/platformSalesman/getWxACodeUnlimit',
+        body: {
+          'businessId': businessId,
+          'salesmanId': salesmanId,
+          'fromWay': 2
+        }
+      }).then(res => {
+        this.qrCodeUrl = res.data
       }).catch(err => {
         console.log(err)
       })
