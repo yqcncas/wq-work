@@ -2,6 +2,11 @@
   <!-- 名片 -->
     <div class="business">
       <!--分享的bar-->
+      <!--弹出的海报图片-->
+      <div v-if="modalflag" class="modalflag" catchtouchmove="true">
+        <canvas canvas-id="myCanvas" class="canvas" />
+        <div @click="close()" class="cancel-name">取消</div>
+      </div>
       <div class="attr-pop" :class="[showpop ? 'fadeup' : 'fadedown']">
         <div class="top">
           <div class="left">
@@ -18,6 +23,53 @@
           </div>
         </div>
         <div @click="showType" class="cancel-btn">取消</div>
+      </div>
+      <!-- 登录 -->
+      <div class="modal" v-if="modalFlag" catchtouchmove="true">
+        <div class="dialog">
+          <div class="avatar row-item">
+            <div class="vbj">
+              <span></span>
+              <div class="img-wrp">
+                <image mode="widthFix" :src="imgUrl + '?x-oss-process=style/w100'" />
+              </div>
+              <div class="Grade">
+                <i v-if="Grade === v1">
+                  <img src="../../../static/images/v1.png">
+                </i>
+                <i v-else-if="Grade === v2">
+                  <img src="../../../static/images/v2.png">
+                </i>
+                <i v-else>
+                  <img src="../../../static/images/v3.png">
+                </i>
+              </div>
+            </div>
+          </div>
+          <!--<p class="dialog-info">-->
+          <!--<span>你好！ 初次见面，先登录一下吧</span>-->
+          <!--</p>-->
+          <div class="img-show">
+            <!--<image :src="imgUrl + '?x-oss-process=style/w750'" mode="widthFix" class="img">-->
+            <!--</image>-->
+            <div class="intro">
+              <div class="first-row">
+                <span>{{ name }}</span>
+                <span>{{ job }}</span>
+              </div>
+              <div class="call-num">{{phone}}</div>
+            </div>
+          </div>
+          <form name='pushMsgFm' report-submit='true' @submit='getFormID' class="pushHight">
+            <div class='aa'>
+              <button form-type="submit" class="author-button" lang="zh_CN" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">
+                <!--<span class="iconfont icon-weixin1"></span>-->
+                <span  @getuserinfo="bindGetUserInfo">收下名片</span>
+              </button>
+              <button form-type="submit" class="look-just" lang="zh_CN" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">看看再说</button>
+            </div>
+          </form>
+        </div>
       </div>
       <div class="business-main" >
         <el-form ref="postForm" :model="postForm" >
@@ -197,6 +249,7 @@
 </template>
 
 <script>
+  import personApi from '@/api/person'
   const backgroundAudioManager = wx.createInnerAudioContext() // 播放音频
   export default {
     name: 'index',
@@ -205,6 +258,7 @@
     data () {
       return {
         CardId: '',
+        personApi: personApi,
         postForm: [],
         voiceUrl: '',
         currentAudio: '',
@@ -213,6 +267,8 @@
         id: '',
         list: '',
         imgHeight: null,
+        modalflag: false,
+        modalFlag: false,
         name: '',
         job: '',
         phone: '',
@@ -250,9 +306,89 @@
       }
     },
     methods: {
+      // 微信复制
+      textPaste () {
+        wx.setClipboardData({
+          data: this.weChat,
+          success: (res) => {
+            wx.showToast({
+              title: '复制成功',
+              icon: 'none'
+            })
+            this.insertOpera('复制了微信', 18)
+          }
+        })
+      },
+      // 邮箱内容复制
+      textPasteEmail () {
+        wx.setClipboardData({
+          data: this.email,
+          success: (res) => {
+            wx.showToast({
+              title: '复制成功',
+              icon: 'none'
+            })
+            this.insertOpera('复制了邮箱', 17)
+          }
+        })
+      },
+      // 跳到原生地址导航
+      getAddress () {
+        wx.openLocation({
+          latitude: parseFloat(this.latitude),
+          longitude: parseFloat(this.longitude),
+          scale: 18,
+          name: this.companyName,
+          address: this.address,
+          success: () => {
+            this.insertOpera('导航了地址', 19)
+          }
+        })
+      },
+      // 呼叫电话
+      makePhoneCall () {
+        wx.makePhoneCall({
+          phoneNumber: this.fixedPhone,
+          success: () => {
+            this.insertOpera('拨打了电话', 20)
+          }
+        })
+      },
       imgLoad (e) {
         this.imgWidth = e.target.width
         this.imgHeight = e.target.height
+      },
+      // 授权
+      async bindGetUserInfo (e) {
+        // 解密
+        const userInfo = e.target.userInfo
+        wx.setStorageSync('userNameS', userInfo.nickName)
+        wx.getUserInfo({
+          success: async (res) => {
+            console.log(res)
+            this.encryptedData = res.encryptedData
+            this.iv = res.iv
+            const { data } = await personApi.getPhone({
+              iv: this.iv,
+              encryptedData: this.encryptedData
+            })
+            this.unionId = JSON.parse(data).unionId
+            userInfo.unionId = this.unionId
+            // await home.updateUser(userInfo)
+            // await personApi.updateRemarksNew({ remarks: userInfo.nickName, userId: this.id })
+          }
+        })
+        wx.setStorageSync('avatarUrl', e.target.userInfo.avatarUrl)
+        this.$nextTick(() => {
+          this.modalFlag = false
+        })
+        this.insertOpera('授权了信息', 9)
+        if (this.phoneAuthorStatus === 1) {
+          this.phoneModal = true
+        }
+      },
+      close () {
+        this.modalflag = false
       },
       // 获取logo
       getLogo () {
@@ -288,9 +424,6 @@
         let temp = encodeURIComponent(JSON.stringify(params))
         this.routerTo('../cardPoster/main?val=' + temp)
       },
-      close () {
-        this.modalflag = false
-      },
       // 获取太阳吗
       getSun () {
         const businessId = wx.getStorageSync('businessId') // 获取本地userId
@@ -303,9 +436,7 @@
             'fromWay': 2
           }
         }).then(res => {
-          console.log('a', res)
           this.qrCodeUrl = res.data
-          console.log()
         }).catch(err => {
           console.log(err)
         })
@@ -335,7 +466,10 @@
             'salesmanId': this.CardId, 'userId': userId
           }
         }).then(res => {
-          console.log('res', res.data.goodsList)
+          if (res.data.nickName === '' || res.data.nickName == null) {
+            this.modalFlag = true
+          }
+          console.log('res', res)
           this.postForm = res.data
           this.name = res.data.name
           this.job = res.data.job

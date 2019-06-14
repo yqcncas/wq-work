@@ -31,6 +31,7 @@
     "pages/msgList/main",
     "pages/comLangage/main",
     "pages/OthersCard/main",
+    "pages/Member/main",
     "pages/cardPoster/main"
   ],
   "permission": {

@@ -86,6 +86,7 @@
           </div>
           <div class="conts">
             <div class="conts-main" v-if="tabs===1">
+              <div v-if="cards !== ''|| cards !== null">
               <div class="card" v-for="(item,index) in cards" :key="index">
                 <div @click="goToCard(item.id)">
                   <span><img :src="item.imgUrl"></span>
@@ -108,8 +109,15 @@
                   <i v-else></i>
                 </div>
               </div>
+              </div>
+              <div v-else class="no">
+                <p class="title">暂无名片</p>
+              </div>
             </div>
+
+
             <div class="conts-main" v-else>
+              <div v-if="card!== 1">
               <div class="card" v-for="(item,index) in enclosure" :key="index">
                 <span><img :src="item.headImg"></span>
                 <div class="card-main">
@@ -117,10 +125,11 @@
                     <span class="img"><s>企</s></span>
                     <b>{{ item.name }}</b>
                     <span class="job">{{ item.job }}</span>
-                    <span v-if="!item.status" class="status">无状态</span>
-                    <span v-else class="status">{{ item.status }}</span>
+                    <span v-if="item.isCertification === 0" class="status">已认证</span>
+                    <span v-else class="status">无状态</span>
                   </div>
-                  <p class="comyname">{{ item.Companyname}}</p>
+                  <p class="comyname" v-if="item.salesCompanyName === null">无公司</p>
+                  <p class="comyname" v-else>{{ item.salesCompanyName}}</p>
                 </div>
                 <div class="card-right">
                   <p class="eye"><img src="../../../static/images/eye.png"/><span>{{ item.eye }}</span> </p>
@@ -128,6 +137,10 @@
                   <i><img src="../../../static/images/addpersonal.png"/></i>
                 </div>
               </div>
+            </div>
+            <div v-else class="no">
+              <p class="title">暂无名片</p>
+            </div>
             </div>
           </div>
         </div>
@@ -147,23 +160,24 @@
         </div>
         <div class="conts">
           <div class="conts-mains" v-if="info === 1 ">
-            <div class="infoCard" v-for="(item, index) in Message" :key="index">
-              <span class="headImg"><img :src="item.imgUrl"></span>
-              <div class="infoCard-main">
-                <div class="infoTop">
-                  <span class="headName">{{item.name}}</span>
-                  <span class="headMap">
+            <div v-if="Message.length !== 0 && Message !== null">
+              <div class="infoCard" v-for="(item, index) in Message" :key="index">
+                <span class="headImg"><img :src="item.imgUrl"></span>
+                <div class="infoCard-main">
+                  <div class="infoTop">
+                    <span class="headName">{{item.name}}</span>
+                    <span class="headMap">
                     <s class="headMaps" v-if="item.address ">{{ item.address }}&nbsp;</s><s v-if="item.address ">·</s><s>&nbsp;{{ item.browseCount }}次浏览</s>
                   </span>
-                  <span class="headTitle">
+                    <span class="headTitle">
                   {{ item.title }}
                   </span>
-                  <span class="headImage" v-if="item.imgUrlList != 0">
+                    <span class="headImage" v-if="item.imgUrlList != 0">
                     <a  v-for="(itemA, index_) in item.imgUrlList" :key="index_">
                        <i :data-index='index_' :data-id="item.id"><img :src="itemA" @click="previewImg(itemA)" lazy-load /> </i>
                     </a>
                   </span>
-                  <span class="headVideo"  v-if="item.video !== '' && item.video !== null">
+                    <span class="headVideo"  v-if="item.video !== '' && item.video !== null">
                      <video
                        id="myVideo"
                        :src="item.video"
@@ -171,32 +185,42 @@
                        controls
                      ></video>
                   </span>
-                  <span class="headFotter">
+                    <span class="headFotter">
                     <span class="headTime">{{ item.createDate }}</span>
                     <span v-if="item.isLike == 0" class="headZan" @click="thumbsUp(item.id,0)"><img src="../../../static/images/zan.png"/> </span>
                     <span v-else class="headZan" @click="thumbsUp(item.id,1)"><img src="../../../static/images/zan-se.png"/> </span>
                   </span>
+                  </div>
                 </div>
               </div>
             </div>
+            <div v-else class="no">
+              <p class="title">暂无信息</p>
+            </div>
           </div>
+
           <div class="conts-mains"  v-else>
             <div class="infoCard">
-              <span class="headImg"><img src="../../../static/images/gongzhonghao.jpg"></span>
-              <div class="infoCard-main">
-                <div class="infoTop">
-                  <span class="headName">李颂扬</span>
-                  <span class="headMap">
+              <div v-if="card !== 1">
+                <span class="headImg"><img src="../../../static/images/gongzhonghao.jpg"></span>
+                <div class="infoCard-main">
+                  <div class="infoTop">
+                    <span class="headName">李颂扬</span>
+                    <span class="headMap">
                   <s class="headMaps">浙江温岭</s>·<s>100次浏览</s>
                   </span>
-                  <span class="headTitle">
+                    <span class="headTitle">
                   空间看垃圾堆了卡记录的借口啦来到了卡就绿卡就对了卡机看了多久啊离开卡里克多久啦大家垃圾堆了阿姐了解垃圾堆了阿克苏垃圾啊卡里克多久啦大家垃圾堆了阿姐了解垃圾堆了阿
                   </span>
-                  <span class="headFotter">
+                    <span class="headFotter">
                   <span class="headTime">昨天14：00</span>
                   <span class="headZan"><img src="../../../static/images/zan.png"/> </span>
                   </span>
+                  </div>
                 </div>
+              </div>
+              <div v-else class="no">
+                <p class="title">暂无信息</p>
               </div>
             </div>
           </div>
@@ -217,6 +241,7 @@
     data () {
       return {
         data: '',
+        card: 1,
         imgUrl: '',
         name: '',
         job: '',
@@ -228,7 +253,7 @@
         isCollect: '',
         cardRen: '热门名片',
         cardsMap: '附近名片',
-        infoTitle: '附近消息',
+        infoTitle: '附近信息',
         infoTop: '推荐信息',
         selectNavIndex: 2,
         needButton: true,
@@ -239,9 +264,7 @@
         circular: true,
         interval: 3000,
         duration: 500,
-        Message: [{
-          isLike: 0
-        }],
+        Message: [],
         Types: [],
         Types1: [],
         Types2: [ {
@@ -494,26 +517,26 @@
       },
       // 人脉集市 切换名片
       changTabs (index) {
-        if (index === 1) {
+        if (index === 2) {
           this.cardRen = '热门名片'
           this.cardsMap = '附近名片'
-          this.tabs = 2
+          this.tabs = 1
         } else {
           this.cardRen = '附近名片'
           this.cardsMap = '热门名片'
-          this.tabs = 1
+          this.tabs = 2
         }
       },
       // 信息广场 切换信息
       changInfo (index) {
-        if (index === 1) {
-          this.infoTitle = '附近消息'
+        if (index === 2) {
+          this.infoTitle = '附近信息'
           this.infoTop = '推荐信息'
-          this.info = 2
+          this.info = 1
         } else {
           this.infoTitle = '推荐信息'
-          this.infoTop = '附近消息'
-          this.info = 1
+          this.infoTop = '附近信息'
+          this.info = 2
         }
       },
       // 点击跳转进入名片页

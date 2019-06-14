@@ -111,7 +111,7 @@
         }, {
           src: '../../static/images/Member.png',
           title: '会员中心',
-          url: ''
+          url: '../Member/main'
         }]
       }
     },

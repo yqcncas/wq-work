@@ -71,7 +71,7 @@
                   <p @click="chooseLocation()">
                     <img src="../../../static/images/map.png">
                   </p>
-                  <input v-model="addDetailed" placeholder="详细地址"/>
+                  <input v-model="addDetailed" placeholder=""/>
                 </div>
               </div>
               <div class="Basics-footer">

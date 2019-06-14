@@ -99,11 +99,13 @@ export default {
     },
     // 更新审核数据
     updateInfo () {
+      if (this.judgeNull(this.companyName, '企业名称')) return
+      if (this.judgeNull(this.legalPersonaName, '法定代表人姓名')) return
+      if (this.judgeNull(this.name, '认证人姓名')) return
+      if (this.judgeNull(this.idCard, '身份证号')) return
       if (this.idCard.length > 0) {
-        console.log('111')
-        const reg = /\d{17}[\d|x]|\d{15}/
-        if (!reg.test(this.idCard) || (this.idCard.length !== 16)) {
-          console.log('1131')
+        // const reg = /\d{17}[\d|x]|\d{15}/
+        if (this.idCard && (!(/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/).test(this.idCard) || (this.idCard.length !== 15 && this.idCard.length !== 18))) {
           wx.showToast({
             title: '身份证号有误',
             icon: 'none',
@@ -112,10 +114,6 @@ export default {
           return false
         }
       }
-      if (this.judgeNull(this.companyName, '企业名称')) return
-      if (this.judgeNull(this.legalPersonaName, '法定代表人姓名')) return
-      if (this.judgeNull(this.name, '认证人姓名')) return
-      if (this.judgeNull(this.idCard, '身份证号')) return
       if (this.judgeNull(this.job, '认证职位')) return
       const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
       const userId = wx.getStorageSync('userId') // 获取本地userId
@@ -160,11 +158,13 @@ export default {
     },
     // 认证
     getInfo () {
+      if (this.judgeNull(this.companyName, '企业名称')) return
+      if (this.judgeNull(this.legalPersonaName, '法定代表人姓名')) return
+      if (this.judgeNull(this.name, '认证人姓名')) return
+      if (this.judgeNull(this.idCard, '身份证号')) return
       if (this.idCard.length > 0) {
-        console.log('111')
-        const reg = /\d{17}[\d|x]|\d{15}/
-        if (!reg.test(this.idCard) || (this.idCard.length !== 16)) {
-          console.log('1131')
+        // const reg = /\d{17}[\d|x]|\d{15}/
+        if (this.idCard && (!(/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/).test(this.idCard) || (this.idCard.length !== 15 && this.idCard.length !== 18))) {
           wx.showToast({
             title: '身份证号有误',
             icon: 'none',
@@ -173,10 +173,6 @@ export default {
           return false
         }
       }
-      if (this.judgeNull(this.companyName, '企业名称')) return
-      if (this.judgeNull(this.legalPersonaName, '法定代表人姓名')) return
-      if (this.judgeNull(this.name, '认证人姓名')) return
-      if (this.judgeNull(this.idCard, '身份证号')) return
       if (this.judgeNull(this.job, '认证职位')) return
       const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
       const userId = wx.getStorageSync('userId') // 获取本地userId

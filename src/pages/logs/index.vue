@@ -58,10 +58,17 @@
                   <p class="cardHold-top-main-company" v-if="company !== ''">{{ company }}</p>
                   <p class="cardHold-top-main-company" v-else>无公司名称</p>
                   <p class="cardHold-top-main-footer">
-                    <submit class="cardHold-top-main-footer-share"  @click="showType">
+                    <submit  v-if="name == '' && job == ''" class="cardHold-top-main-footer-share" @click="ArouterTo(`../businesscard/main`)">
                       <span><i class="iconfont iconfenxiang"></i>分享名片</span>
                     </submit>
-                     <submit class="cardHold-top-main-footer-look" @click="routerTo(`./showQrcode/main?companyName=${company}&logo=${logo}&qrcode=${qrCodeUrl}&name=${name}&job=${job}&imgUrl=${imgUrl}`)">
+                    <submit v-else class="cardHold-top-main-footer-share" @click="showType">
+                      <span><i class="iconfont iconfenxiang"></i>分享名片</span>
+                    </submit>
+                    <submit v-if="name == '' && job == ''" class="cardHold-top-main-footer-look" @click="ArouterTo(`../businesscard/main`)">
+                      <i class="iconfont iconiconfontsaomiaoerweima-copy"></i>
+                      <span>名片码</span>
+                    </submit>
+                     <submit v-else class="cardHold-top-main-footer-look" @click="routerTo(`./showQrcode/main?companyName=${company}&logo=${logo}&qrcode=${qrCodeUrl}&name=${name}&job=${job}&imgUrl=${imgUrl}`)">
                        <i class="iconfont iconiconfontsaomiaoerweima-copy"></i>
                        <span>名片码</span>
                     </submit>
@@ -449,6 +456,11 @@ export default {
     goGroup () {
       wx.navigateTo({
         url: '../GroupCard/main'
+      })
+    },
+    ArouterTo (url) {
+      wx.switchTab({
+        url
       })
     },
     routerTo (url) {
