@@ -22,7 +22,7 @@ export default {
     }
   },
   onLoad (options) {
-    console.log('1', options)
+    this.fromWay = 0
     this.goodsId = null
     if (options.fromWay) {
       this.fromWay = options.fromWay
@@ -31,6 +31,7 @@ export default {
       this.newsId = options.newsId
     }
     if (options.id) {
+      this.salesmanId = options.id
       wx.setStorageSync('codeUserId', options.id)
     }
     if (options.goodsId) {
@@ -77,8 +78,6 @@ export default {
     onMessage (res) {
       this.eatinCart(res)
     },
-    onShow () {
-    },
     // 处理返回数据
     eatinCart (res) {
       const { data: { token, isSalesman, id, businessId } } = res
@@ -90,7 +89,6 @@ export default {
       const updateManager = wx.getUpdateManager()
       updateManager.onCheckForUpdate((res) => {
         if (!res.hasUpdate) {
-          console.log('a a a ', this.param)
           // wx.switchTab({
           //   url: '../businesscard/main?id=' + this.goodsId
           // })
@@ -115,12 +113,15 @@ export default {
           //     url: '../OthersCards/main'
           //   })
           // } else {
-          // console.log(' this.salesmanIdA', this.salesmanId)
           if (this.fromWay === '0') {
             wx.switchTab({
               url: '../businesscard/main'
             })
           } else if (this.fromWay === '2') {
+            wx.reLaunch({
+              url: '../logs/main?id=' + this.salesmanId + '&fromWay=2&userId=' + id
+            })
+          } else if (this.fromWay === '1') {
             wx.reLaunch({
               url: '../logs/main?id=' + this.salesmanId + '&fromWay=1&userId=' + id
             })

@@ -324,9 +324,11 @@
     },
     onShareAppMessage () {
       // this.insertOpera('分享了名片', 21)
+      console.log('aa', this.id)
+      console.log('aa', this.salesManId)
       return {
         title: `您好！我是${this.companyName}的${this.name},这是我的名片`,
-        path: 'pages/logs/main?id=' + this.salesManId + '&fromWay=1&userId=' + this.id
+        path: 'pages/loading/main?id=' + this.salesManId + '&fromWay=1&userId=' + this.id
       }
     },
     methods: {
@@ -447,7 +449,7 @@
           }
         }).then(res => {
           if (res.data) {
-            if (res.data.nickName === '') {
+            if (res.data.nickName === '' || res.data.nickName == null) {
               this.modalFlag = true
             }
             console.log(res.data)

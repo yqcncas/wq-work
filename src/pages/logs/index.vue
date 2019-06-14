@@ -223,8 +223,8 @@ export default {
     this.getSun()
   },
   onLoad (options) {
-    console.log('aaaa', options)
-    if (options.id !== undefined) {
+    console.log('aaaaaa', options)
+    if (options.id !== undefined && options.userId !== undefined) {
       this.goToFen('../OthersCard/main?id=' + options.id + '&fromWay=1&userId=' + options.userId)
     }
     var that = this
@@ -239,7 +239,7 @@ export default {
     // this.insertOpera('分享了名片', 21)
     return {
       title: `您好！我是${this.companyName}的${this.name},这是我的名片`,
-      path: 'pages/logs/main?id=' + this.salesManId + '&fromWay=1&userId=' + this.id
+      path: 'pages/loading/main?id=' + this.salesManId + '&fromWay=1&userId=' + this.id
     }
   },
   watch () {

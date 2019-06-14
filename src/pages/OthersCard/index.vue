@@ -234,7 +234,6 @@
       }
     },
     onLoad: function (options) {
-      console.log('aaa', options)
       this.CardId = options.id
     },
     onShow () {
@@ -247,7 +246,7 @@
       // this.insertOpera('分享了名片', 21)
       return {
         title: `您好！我是${this.companyName}的${this.name},这是我的名片`,
-        path: 'pages/logs/main?id=' + this.salesManId + '&fromWay=1&userId=' + this.id
+        path: 'pages/loading/main?id=' + this.salesManId + '&fromWay=1&userId=' + this.id
       }
     },
     methods: {
@@ -336,7 +335,7 @@
             'salesmanId': this.CardId, 'userId': userId
           }
         }).then(res => {
-          console.log('res', res.data)
+          console.log('res', res.data.goodsList)
           this.postForm = res.data
           this.name = res.data.name
           this.job = res.data.job
