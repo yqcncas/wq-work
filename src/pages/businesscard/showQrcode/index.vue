@@ -139,7 +139,7 @@ export default {
     top: 50%;
     margin-top: ~'-84rpx';
     left: 50%;
-    margin-left: ~'-76rpx';
+    margin-left: ~'-75rpx';
   }
     .img-url {
       width: 100% !important;

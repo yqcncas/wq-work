@@ -324,12 +324,62 @@
     },
     onShareAppMessage () {
       // this.insertOpera('分享了名片', 21)
+      console.log('aa', this.id)
+      console.log('aa', this.salesManId)
       return {
         title: `您好！我是${this.companyName}的${this.name},这是我的名片`,
-        path: 'pages/logs/main?id=' + this.salesManId + '&fromWay=1&userId=' + this.id
+        path: 'pages/loading/main?id=' + this.salesManId + '&fromWay=1&userId=' + this.id
       }
     },
     methods: {
+      // 微信复制
+      textPaste () {
+        wx.setClipboardData({
+          data: this.weChat,
+          success: (res) => {
+            wx.showToast({
+              title: '复制成功',
+              icon: 'none'
+            })
+            this.insertOpera('复制了微信', 18)
+          }
+        })
+      },
+      // 邮箱内容复制
+      textPasteEmail () {
+        wx.setClipboardData({
+          data: this.email,
+          success: (res) => {
+            wx.showToast({
+              title: '复制成功',
+              icon: 'none'
+            })
+            this.insertOpera('复制了邮箱', 17)
+          }
+        })
+      },
+      // 跳到原生地址导航
+      getAddress () {
+        wx.openLocation({
+          latitude: parseFloat(this.latitude),
+          longitude: parseFloat(this.longitude),
+          scale: 18,
+          name: this.companyName,
+          address: this.address,
+          success: () => {
+            this.insertOpera('导航了地址', 19)
+          }
+        })
+      },
+      // 呼叫电话
+      makePhoneCall () {
+        wx.makePhoneCall({
+          phoneNumber: this.fixedPhone,
+          success: () => {
+            this.insertOpera('拨打了电话', 20)
+          }
+        })
+      },
       imgLoad (e) {
         this.imgWidth = e.target.width
         this.imgHeight = e.target.height
@@ -447,7 +497,7 @@
           }
         }).then(res => {
           if (res.data) {
-            if (res.data.nickName === '') {
+            if (res.data.nickName === '' || res.data.nickName == null) {
               this.modalFlag = true
             }
             console.log(res.data)

@@ -72,7 +72,9 @@ fly.interceptors.request.use((request) => {
     'content-type': 'application/json',
     'token': token
   }
-
+  // wx.showLoading({
+  //   title: '加载中'
+  // })
   let authParams = {
     // 公共参数
     'categoryType': 'SaleGoodsType@sim',

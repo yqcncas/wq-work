@@ -52,15 +52,7 @@ export default {
     return {
       num: 0,
       status: true,
-      release: [{
-        createDate: '22',
-        createMonth: '6月',
-        browseCount: 10,
-        imgUrlList: '',
-        video: 'https://oss.wq1516.com/salesVideo/201906111445321560235532181.mp4',
-        title: '   益赞名片功能更新 | 龙虎榜模块V升级服务在升级！'
-      }
-      ]
+      release: []
     }
   },
   onShow () {

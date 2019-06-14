@@ -58,10 +58,17 @@
                   <p class="cardHold-top-main-company" v-if="company !== ''">{{ company }}</p>
                   <p class="cardHold-top-main-company" v-else>无公司名称</p>
                   <p class="cardHold-top-main-footer">
-                    <submit class="cardHold-top-main-footer-share"  @click="showType">
+                    <submit  v-if="name == '' && job == ''" class="cardHold-top-main-footer-share" @click="ArouterTo(`../businesscard/main`)">
                       <span><i class="iconfont iconfenxiang"></i>分享名片</span>
                     </submit>
-                     <submit class="cardHold-top-main-footer-look" @click="routerTo(`./showQrcode/main?companyName=${company}&logo=${logo}&qrcode=${qrCodeUrl}&name=${name}&job=${job}&imgUrl=${imgUrl}`)">
+                    <submit v-else class="cardHold-top-main-footer-share" @click="showType">
+                      <span><i class="iconfont iconfenxiang"></i>分享名片</span>
+                    </submit>
+                    <submit v-if="name == '' && job == ''" class="cardHold-top-main-footer-look" @click="ArouterTo(`../businesscard/main`)">
+                      <i class="iconfont iconiconfontsaomiaoerweima-copy"></i>
+                      <span>名片码</span>
+                    </submit>
+                     <submit v-else class="cardHold-top-main-footer-look" @click="routerTo(`./showQrcode/main?companyName=${company}&logo=${logo}&qrcode=${qrCodeUrl}&name=${name}&job=${job}&imgUrl=${imgUrl}`)">
                        <i class="iconfont iconiconfontsaomiaoerweima-copy"></i>
                        <span>名片码</span>
                     </submit>
@@ -223,8 +230,8 @@ export default {
     this.getSun()
   },
   onLoad (options) {
-    console.log('aaaa', options)
-    if (options.id !== undefined) {
+    console.log('aaaaaa', options)
+    if (options.id !== undefined && options.userId !== undefined) {
       this.goToFen('../OthersCard/main?id=' + options.id + '&fromWay=1&userId=' + options.userId)
     }
     var that = this
@@ -239,7 +246,7 @@ export default {
     // this.insertOpera('分享了名片', 21)
     return {
       title: `您好！我是${this.companyName}的${this.name},这是我的名片`,
-      path: 'pages/logs/main?id=' + this.salesManId + '&fromWay=1&userId=' + this.id
+      path: 'pages/loading/main?id=' + this.salesManId + '&fromWay=1&userId=' + this.id
     }
   },
   watch () {
@@ -449,6 +456,11 @@ export default {
     goGroup () {
       wx.navigateTo({
         url: '../GroupCard/main'
+      })
+    },
+    ArouterTo (url) {
+      wx.switchTab({
+        url
       })
     },
     routerTo (url) {

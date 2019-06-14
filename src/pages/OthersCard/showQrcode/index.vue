@@ -128,7 +128,7 @@
       top: 50%;
       margin-top: ~'-84rpx';
       left: 50%;
-      margin-left: ~'-76rpx';
+      margin-left: ~'-74rpx';
     }
     .wrapImg {
       width: ~'158rpx';

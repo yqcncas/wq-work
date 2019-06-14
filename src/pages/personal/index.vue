@@ -111,7 +111,7 @@
         }, {
           src: '../../static/images/Member.png',
           title: '会员中心',
-          url: ''
+          url: '../Member/main'
         }]
       }
     },
@@ -134,7 +134,8 @@
             'userId': userId
           }
         }).then(res => {
-          if (res.data) {
+          console.log('resaaa', res)
+          if (res.data && res.data !== null) {
             this.postForm = res.data
           } else {
             this.choose.map((item) => {

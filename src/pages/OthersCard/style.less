@@ -1,12 +1,3 @@
-.canvas {
-  width: ~'600rpx';
-  height: ~'900rpx';
-  margin: ~'100rpx' auto;
-  overflow: hidden;
-}
-.font-26 {
-  font-size: ~'26rpx';
-}
 .modal {
   z-index: 999;
   width: 100%;
@@ -27,6 +18,239 @@
     position: absolute;
     left: 50%;
     top: 15%;
+    border-radius: ~'26rpx';
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: ~'600rpx';
+    height: ~'717rpx';
+    box-sizing: border-box;
+    background-image: url("https://oss.wq1516.com/salesInfo/201906110842441560213764988.png");
+    background-size: 100% 100%;
+    .img-show {
+      width: 100%;
+      height: ~'485rpx';
+      position: relative;
+      overflow: hidden;
+      margin-bottom: ~'26rpx';
+      border-radius: ~'8rpx';
+      .img {
+        width: 100%;
+        height: 100%;
+      }
+
+      .intro {
+        width: ~'100%';
+        height: ~'200rpx';
+        position: absolute;
+        //background: rgba(0, 0, 0, 0.3);
+        bottom: ~'30rpx';
+        font-weight: 100;
+        text-align: center;
+        .first-row {
+          display: flex;
+          flex-direction: inherit;
+          width: 100%;
+          margin-top: ~'0rpx';
+          color: #000000;
+          span:nth-child(1) {
+            width: 50%;
+            font-size: ~'34rpx';
+            color: #000000;
+            font-weight: 500;
+            text-align: right;
+          }
+
+          span:nth-child(2) {
+            width: 50%;
+            font-size: ~'28rpx';
+            color: #000000;
+            text-align: left;
+            display: flex;
+            align-items: flex-end;
+            padding-left: ~'10rpx';
+          }
+        }
+
+        .call-num {
+          font-size: ~'30rpx';
+          color: #9B9B9B;
+          margin-top: ~'15rpx';
+          text-align: center;
+
+        }
+      }
+    }
+
+    .look-just {
+      font-size: ~'30rpx';
+      color: #cccccc;
+      margin: 0;
+      padding: 0;
+      border: none; // 自定义边框
+      outline: none; // 消除默认点击蓝色边框效果
+      background-color: #fff;
+      height: ~'67rpx';
+      padding-bottom: ~'0rpx';
+      display: flex;
+      align-items: center;
+    }
+
+    .look-just::after {
+      border: none;
+    }
+
+    .dialog-info {
+      font-size: ~'26rpx';
+      padding: ~'30rpx' 0;
+    }
+
+    .avatar {
+      display: flex;
+      align-items: center;
+      width: ~'100%';
+      height: ~'350rpx';
+      border-top-left-radius: ~'30rpx';
+      border-top-right-radius: ~'30rpx';
+      justify-content: space-around;
+      z-index: 99999;
+      .say {
+        font-size: ~'77rpx';
+        width: ~'355rpx';
+        position: relative;
+
+        span {
+          font-size: ~'28rpx';
+          position: absolute;
+          left: ~'34rpx';
+          top: ~'37rpx';
+        }
+      }
+      .vbj{
+        width:100%;
+        height: 100%;
+        position: relative;
+        margin-top: ~'40rpx';
+        span{
+          display: inline-block;
+          width: ~'450rpx';
+          height: ~'400rpx';
+          background-image: url("https://oss.wq1516.com/salesInfo/201906110853451560214425913.png");
+          background-size: 100% 100%;
+        }
+        .img-wrp {
+          overflow: hidden;
+          border-radius: 50%;
+          position: absolute;
+          top: ~'140rpx';
+          left: ~'200rpx';
+
+          //border: ~'2rpx' solid rgba(151, 151, 151, 1);
+          /*border: red 2rpx solid;*/
+          width: ~'189rpx';
+          height: ~'189rpx';
+          box-sizing: border-box;
+
+          /*margin: 0rpx auto 0;*/
+          image {
+            width: 100%;
+          }
+        }
+        .Grade{
+          width: ~'50rpx';
+          height: ~'50rpx';
+          position: absolute;
+          top: ~'280rpx';
+          left: ~'330rpx';
+          img{
+            display: inline-block;
+            width: ~'50rpx';
+            height: ~'50rpx';
+          }
+        }
+      }
+    }
+
+    .aa {
+      width: 100%;
+      position: fixed;
+      bottom: ~'0rpx';
+      right: 0;
+      padding-bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: ~'16rpx';
+      text-align: center;
+      flex-direction: column;
+    }
+
+    .btn {
+      color: #9c3232;
+      width: ~'20rpx';
+      height: ~'20rpx';
+      margin: 0;
+      padding: 0;
+      border-radius: 0;
+      position: fixed;
+      background-color: #fff;
+      top: 0;
+
+      &::after {
+        border: none;
+      }
+    }
+
+    .author-button {
+      .icon-weixin1 {
+        font-size: ~'28rpx';
+        padding-right: ~'8rpx';
+      }
+
+      background-image: linear-gradient(to right, #2b93ec 30%, #54c6f7);
+      border-radius: ~'50rpx';
+      border: none;
+      font-size: ~'36rpx';
+      line-height:~'80rpx' ;
+      color: #fff;
+      width: ~'347rpx';
+      height: ~'80rpx';
+    }
+  }
+}
+
+.canvas {
+  width: ~'600rpx';
+  height: ~'900rpx';
+  margin: ~'100rpx' auto;
+  overflow: hidden;
+}
+.font-26 {
+  font-size: ~'26rpx';
+}
+.modal {
+  z-index: 999;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  background: rgba(0, 0, 0, 0.5);
+  text-align: center;
+  position: fixed;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+
+  .dialog {
+    /*padding-top: 70rpx;*/
+    padding-bottom: ~'20rpx';
+    background-color: white;
+    transform: translateX(-50%);
+    position: absolute;
+    left: 50%;
+    top: 17%;
     border-radius: ~'26rpx';
     text-align: center;
     display: flex;
@@ -344,8 +568,8 @@
       font-size: ~'24rpx';
       text-align: center;
       position: fixed;
-      right: 0;
-      bottom: ~'120rpx';
+      right: ~'10rpx';
+      bottom: ~'110rpx';
       span{
         display: inline-block;
         width: ~'50rpx';
