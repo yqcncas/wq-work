@@ -28,7 +28,7 @@
       </div>
       <!-- 时间 -->
       <div class="radar-time common-pad" v-if="active===0">
-        <div v-for="(item,i) in list" :key="i" @click="routeTo(`../custom/detail/index?id=${item.userId}`)">
+        <div v-for="(item,i) in list" :key="i" @click="routeTo(`../custom/detail/main?id=${item.userId}`)">
           <p class="time" v-if="i===0">{{item.dataTime}}</p>
           <p class="time" v-if="i>0&&item.dataTime!==list[i-1].dataTime">{{item.dataTime}}</p>
           <div class="time-wrap">
@@ -251,6 +251,7 @@
         // })
         const { data: { list, lastPage, pageNum, nextPage } } = await personApi.InteractionOpSearch({ salesmanId: this.salesmanId, pageNum: this.pageNum, pageSize: this.pageSize, timeType: this.timeActive })
         wx.hideLoading()
+        console.log(list)
         list.map(item => {
           item.visible = false
           item.dataTime = this.moment(item.browseDate).format('YYYY.MM.DD')

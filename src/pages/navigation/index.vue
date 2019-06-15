@@ -111,7 +111,7 @@
               </div>
               </div>
               <div v-else class="no">
-                <p class="title">暂无名片</p>
+                <p class="title">暂无热门名片</p>
               </div>
             </div>
 
@@ -139,7 +139,7 @@
               </div>
             </div>
             <div v-else class="no">
-              <p class="title">暂无名片</p>
+              <p class="title">暂无附近名片</p>
             </div>
             </div>
           </div>
@@ -195,13 +195,13 @@
               </div>
             </div>
             <div v-else class="no">
-              <p class="title">暂无信息</p>
+              <p class="title">暂无推荐信息</p>
             </div>
           </div>
 
           <div class="conts-mains"  v-else>
+            <div v-if="card !== 1">
             <div class="infoCard">
-              <div v-if="card !== 1">
                 <span class="headImg"><img src="../../../static/images/gongzhonghao.jpg"></span>
                 <div class="infoCard-main">
                   <div class="infoTop">
@@ -219,9 +219,9 @@
                   </div>
                 </div>
               </div>
-              <div v-else class="no">
-                <p class="title">暂无信息</p>
-              </div>
+            </div>
+            <div v-else class="no">
+              <p class="title">暂无附近信息</p>
             </div>
           </div>
         </div>
@@ -331,7 +331,7 @@
     },
     onShow () {
       // this.doLogin()
-      this.getSalesmanId()
+      // this.getSalesmanId()
       this.getCard()
     },
     onLoad () {
@@ -344,22 +344,22 @@
       bindA (e) {
         wx.hideTabBar()
       },
-      // 查询salesmanId
-      getSalesmanId () {
-        const userId = wx.getStorageSync('userId') // 获取本地userId
-        this.$fly.request({
-          method: 'get',
-          url: '/platformSalesman/selectSelfInfo',
-          body: {
-            'userId': userId
-          }
-        }).then(res => {
-          const salesmanId = res.data.id
-          wx.setStorageSync('salesmanId', salesmanId)
-        }).catch(err => {
-          console.log(err)
-        })
-      },
+      // // 查询salesmanId
+      // getSalesmanId () {
+      //   const userId = wx.getStorageSync('userId') // 获取本地userId
+      //   this.$fly.request({
+      //     method: 'get',
+      //     url: '/platformSalesman/selectSelfInfo',
+      //     body: {
+      //       'userId': userId
+      //     }
+      //   }).then(res => {
+      //     const salesmanId = res.data.id
+      //     wx.setStorageSync('salesmanId', salesmanId)
+      //   }).catch(err => {
+      //     console.log(err)
+      //   })
+      // },
       // 预览图片
       previewImg (e) {
         wx.previewImage({

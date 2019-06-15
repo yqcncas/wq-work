@@ -1,6 +1,6 @@
 <template>
   <!-- 名片 -->
-    <div  class="center"  v-if="postForm === ''">
+    <div  class="center"  v-if="postForm.length === 0 || postForm === null">
       <vue-tab-bar
         @fetch-index="clickIndexNav"
         :selectNavIndex=selectNavIndex
@@ -8,7 +8,7 @@
         :handButton="handButton"
         :btnText="btnText">
       </vue-tab-bar>
-      <div>
+      <div class="mian">
         <p>目前您还没有名片</p>
         <p>点击下方按钮去创建吧</p>
         <p @click="goToCard()" class="addImg">
@@ -252,7 +252,10 @@
               <div class="product-details" v-for="(item,index) in postForm.goodsList" :key="index">
                 <div class="product-details-img">
                   <img :src="item.goodsImgUrlList[0].imgUrl"/>
-                </div>j
+                </div>
+                <div class="product-details-title">
+                  {{ item.name }}
+                </div>
                 <div class="product-details-title">
                   {{ item.info }}
                 </div>
@@ -280,33 +283,35 @@
     },
     data () {
       return {
+        CardId: '',
         personApi: personApi,
+        postForm: [],
+        voiceUrl: '',
+        currentAudio: '',
         imgWidth: null,
-        imgHeight: null,
         companyName: '',
         id: '',
+        list: '',
+        imgHeight: null,
+        modalflag: false,
+        modalFlag: false,
         name: '',
         job: '',
         phone: '',
+        userId: '',
         logo: '',
-        modalflag: false,
-        modalFlag: false,
-        showpop: false,
-        selectNavIndex: 0,
-        clickIndexNav: 0,
-        needButton: true,
-        handButton: true,
-        changeVoiceFlag: false,
-        qrCodeUrl: 'https://oss.wq1516.com/default.png',
-        tagPraiseMapList: [],
-        btnText: '我的名片',
-        indicatorDots: true,
-        autoplay: false,
-        circular: true,
-        num: 10,
         apply: '',
         imgUrl: '',
-        postForm: '',
+        showpop: false,
+        changeVoiceFlag: false,
+        fixedPhone: '15988993797',
+        weChat: 'Williamchen',
+        qrCodeUrl: 'https://oss.wq1516.com/default.png',
+        address: '浙江温岭',
+        email: '351574718@qq.com',
+        recordNum: 999,
+        praiseNum: 888,
+        num: 0,
         headImgList: [],
         details: []
       }
@@ -323,62 +328,18 @@
       this.selectNavIndex = 0
     },
     onShareAppMessage () {
-      // this.insertOpera('分享了名片', 21)
-      console.log('aa', this.id)
-      console.log('aa', this.salesManId)
+      this.insertOpera('分享了名片', 21)
       return {
         title: `您好！我是${this.companyName}的${this.name},这是我的名片`,
         path: 'pages/loading/main?id=' + this.salesManId + '&fromWay=1&userId=' + this.id
       }
     },
     methods: {
-      // 微信复制
-      textPaste () {
-        wx.setClipboardData({
-          data: this.weChat,
-          success: (res) => {
-            wx.showToast({
-              title: '复制成功',
-              icon: 'none'
-            })
-            this.insertOpera('复制了微信', 18)
-          }
-        })
-      },
-      // 邮箱内容复制
-      textPasteEmail () {
-        wx.setClipboardData({
-          data: this.email,
-          success: (res) => {
-            wx.showToast({
-              title: '复制成功',
-              icon: 'none'
-            })
-            this.insertOpera('复制了邮箱', 17)
-          }
-        })
-      },
-      // 跳到原生地址导航
-      getAddress () {
-        wx.openLocation({
-          latitude: parseFloat(this.latitude),
-          longitude: parseFloat(this.longitude),
-          scale: 18,
-          name: this.companyName,
-          address: this.address,
-          success: () => {
-            this.insertOpera('导航了地址', 19)
-          }
-        })
-      },
-      // 呼叫电话
-      makePhoneCall () {
-        wx.makePhoneCall({
-          phoneNumber: this.fixedPhone,
-          success: () => {
-            this.insertOpera('拨打了电话', 20)
-          }
-        })
+      // 插入雷达
+      async insertOpera (info, recordType) {
+        this.businessId = wx.getStorageSync('businessId')
+        this.id = wx.getStorageSync('userId')
+        await personApi.OperationInsert({ businessId: this.businessId, info, recordType, salesmanId: this.salesManId, userId: this.id })
       },
       imgLoad (e) {
         this.imgWidth = e.target.width
@@ -440,10 +401,54 @@
       showType () {
         this.showpop = !this.showpop
       },
-      // 插入雷达
-      // async insertOpera (info, recordType) {
-      //   await personApi.OperationInsert({ businessId: this.businessId, info, recordType, salesmanId: this.salesManId, userId: this.id })
-      // },
+      // 微信复制
+      textPaste () {
+        wx.setClipboardData({
+          data: this.weChat,
+          success: (res) => {
+            wx.showToast({
+              title: '复制成功',
+              icon: 'none'
+            })
+            this.insertOpera('复制了微信', 18)
+          }
+        })
+      },
+      // 邮箱内容复制
+      textPasteEmail () {
+        wx.setClipboardData({
+          data: this.email,
+          success: (res) => {
+            wx.showToast({
+              title: '复制成功',
+              icon: 'none'
+            })
+            this.insertOpera('复制了邮箱', 17)
+          }
+        })
+      },
+      // 跳到原生地址导航
+      getAddress () {
+        wx.openLocation({
+          latitude: parseFloat(this.latitude),
+          longitude: parseFloat(this.longitude),
+          scale: 18,
+          name: this.companyName,
+          address: this.address,
+          success: () => {
+            this.insertOpera('导航了地址', 19)
+          }
+        })
+      },
+      // 呼叫电话
+      makePhoneCall () {
+        wx.makePhoneCall({
+          phoneNumber: this.fixedPhone,
+          success: () => {
+            this.insertOpera('拨打了电话', 20)
+          }
+        })
+      },
       // 授权
       async bindGetUserInfo (e) {
         // 解密
@@ -460,6 +465,7 @@
             })
             this.unionId = JSON.parse(data).unionId
             userInfo.unionId = this.unionId
+            this.insertOpera('授权了信息', 9)
             // await home.updateUser(userInfo)
             // await personApi.updateRemarksNew({ remarks: userInfo.nickName, userId: this.id })
           }
@@ -468,7 +474,6 @@
         this.$nextTick(() => {
           this.modalFlag = false
         })
-        this.insertOpera('授权了信息', 9)
         if (this.phoneAuthorStatus === 1) {
           this.phoneModal = true
         }
@@ -488,19 +493,19 @@
       },
       // 页面加载信息
       getInfo () {
-        const userId = wx.getStorageSync('userId') // 获取本地userId
+        this.userId = wx.getStorageSync('userId') // 获取本地userId
+        console.log('userId', this.userId)
         this.$fly.request({
           method: 'get', // post/get 请求方式
           url: '/platformSalesman/selectSelfInfo',
           body: {
-            'userId': userId
+            'userId': this.userId
           }
         }).then(res => {
           if (res.data) {
             if (res.data.nickName === '' || res.data.nickName == null) {
               this.modalFlag = true
             }
-            console.log(res.data)
             this.postForm = res.data
             this.name = res.data.name
             this.job = res.data.job
@@ -509,7 +514,6 @@
             this.voiceUrl = res.data.voice
             this.id = wx.getStorageSync('userId')
             this.salesManId = res.data.id
-            console.log(this.salesManId)
             this.companyName = res.data.salesCompanyName
             const bgM = wx.createInnerAudioContext()// 初始化createInnerAudioContext接口
             // 设置播放地址
@@ -593,7 +597,7 @@
           backgroundAudioManager.play()
           backgroundAudioManager.onPlay(() => {
             console.log('开始播放')
-            // this.insertOpera('播放了语音', 16)
+            this.insertOpera('播放了语音', 16)
           })
           backgroundAudioManager.onError((res) => {
             console.log('fail')

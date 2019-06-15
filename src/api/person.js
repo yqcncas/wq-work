@@ -90,11 +90,13 @@ const person = {
   sendMsg: ({
     message,
     id,
-    businessId
-  }) => request.post('/msg/insertMsg', {
+    businessId,
+    salesmanId
+  }) => request.post('/msg/insertMsgForPlatform', {
     'message': message,
     'userId': id,
-    'businessId': businessId
+    'businessId': businessId,
+    'salesmanId': salesmanId
   }, {
     baseURL: baseUrlApi
   }),
@@ -113,8 +115,8 @@ const person = {
     id,
     pageNum,
     pageSize
-  }) => request.get('/msg/selectMsgForSales', {
-    'userId': id,
+  }) => request.get('/platformMessage/selectAllMsgByUserId', {
+    'toUserId': id,
     'pageNum': pageNum,
     'pageSize': pageSize
   }, {
@@ -123,7 +125,7 @@ const person = {
   selectMsgForUser: ({
     pageNum,
     pageSize
-  }) => request.get('/msg/selectMsgForUser', {
+  }) => request.get('/platformMessage/selectAllMsgByUserId', {
     'pageNum': pageNum,
     'pageSize': pageSize
   }, {

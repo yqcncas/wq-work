@@ -230,12 +230,16 @@
                     <div class="product-details-img">
                       <img :src="item.goodsImgUrlList[0].imgUrl"/>
                     </div>
-                    <div class="product-details-title">
-                      {{ item.info }}
-                    </div>
-                    <div class="product-details-click">
-                      ￥  {{ item.price }}
-                    </div>
+                  <div class="product-details-title">
+                    {{ item.name }}
+                  </div>
+                  <div class="product-details-title">
+                    {{ item.info }}
+                  </div>
+                  <div class="product-details-click">
+                    ￥  {{ item.price }}
+                  </div>
+
                 </div>
               </div>
             </div>
@@ -291,6 +295,7 @@
     },
     onLoad: function (options) {
       this.CardId = options.id
+      this.insertOpera('查看名片', 23, this.CardId)
     },
     onShow () {
       this.getInfo()
@@ -299,13 +304,20 @@
       this.getLogo()
     },
     onShareAppMessage () {
-      // this.insertOpera('分享了名片', 21)
+      this.insertOpera('分享了名片', 21)
       return {
         title: `您好！我是${this.companyName}的${this.name},这是我的名片`,
         path: 'pages/loading/main?id=' + this.salesManId + '&fromWay=1&userId=' + this.id
       }
     },
     methods: {
+      // 插入雷达
+      async insertOpera (info, recordType, id) {
+        this.businessId = wx.getStorageSync('businessId')
+        this.id = wx.getStorageSync('userId')
+        // this.salesManIdA = this.cardId
+        await personApi.OperationInsert({ businessId: this.businessId, info, recordType, salesmanId: id, userId: this.id })
+      },
       // 微信复制
       textPaste () {
         wx.setClipboardData({
@@ -511,6 +523,7 @@
             that.postForm.isCollect = 1
             that.postForm.collectCount++
             that.getInfo()
+            // this.insertOpera('添加了收藏', 22)
           }
         }).catch(err => {
           console.log(err.status, err.message)
@@ -560,7 +573,7 @@
           backgroundAudioManager.play()
           backgroundAudioManager.onPlay(() => {
             console.log('开始播放')
-            // this.insertOpera('播放了语音', 16)
+            this.insertOpera('播放了语音', 16)
           })
           backgroundAudioManager.onError((res) => {
             console.log('fail')

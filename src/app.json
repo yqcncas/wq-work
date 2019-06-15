@@ -32,7 +32,12 @@
     "pages/comLangage/main",
     "pages/OthersCard/main",
     "pages/Member/main",
-    "pages/cardPoster/main"
+    "pages/cardPoster/main",
+    "pages/custom/edit/main",
+    "pages/custom/chooseTag/main",
+    "pages/custom/detail/main",
+    "pages/custom/selfTag/main",
+    "pages/custom/main"
   ],
   "permission": {
     "scope.userLocation": {

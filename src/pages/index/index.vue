@@ -189,6 +189,7 @@
 </template>
 
 <script>
+import personApi from '@/api/person'
 import card from '@/components/card'
 import { UPLOAD_FILE, UPLOAD_API } from '@/api/uploadFile'
 const innerAudioContext = wx.createInnerAudioContext()
@@ -198,6 +199,7 @@ export default {
     return {
       tab: 1,
       info: '',
+      personApi: personApi,
       infoA: '还没有简介吧？快去填写，让更多人认识你，了解你',
       num: 0,
       richTextList: [],
@@ -523,6 +525,13 @@ export default {
         return true
       }
     },
+    // 插入雷达
+    async insertOpera (info, recordType) {
+      this.businessId = wx.getStorageSync('businessId')
+      this.id = wx.getStorageSync('userId')
+      this.salesmanId = wx.getStorageSync('salesmanId')
+      await personApi.OperationInsert({ businessId: this.businessId, info, recordType, salesmanId: this.salesManId, userId: this.id })
+    },
     // 更新名片信息接口
     getSalesmanUpdate () {
       if (this.judgeNull(this.name, '姓名')) return
@@ -617,6 +626,7 @@ export default {
             console.log(res)
           }
         })
+        this.insertOpera('完善了资料', 10)
       }
       if (this.pan === true) {
         const token = wx.getStorageSync('token')
@@ -663,6 +673,7 @@ export default {
             console.log(res)
           }
         })
+        this.insertOpera('完善了资料', 10)
       }
     },
     // 获取当前定位
