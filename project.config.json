@@ -34,7 +34,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 18,
+			"current": 19,
 			"list": [
 				{
 					"id": 1,
@@ -166,6 +166,13 @@
 					"id": -1,
 					"name": "会员",
 					"pathName": "pages/Member/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 19,
+					"name": "aa a ",
+					"pathName": "pages/navigation/main",
 					"query": "",
 					"scene": null
 				}

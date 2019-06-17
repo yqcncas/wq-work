@@ -123,9 +123,11 @@ const person = {
     baseURL: baseUrlApi
   }),
   selectMsgForUser: ({
+    id,
     pageNum,
     pageSize
   }) => request.get('/platformMessage/selectAllMsgByUserId', {
+    'toUserId': id,
     'pageNum': pageNum,
     'pageSize': pageSize
   }, {

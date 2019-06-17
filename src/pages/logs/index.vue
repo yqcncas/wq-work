@@ -19,6 +19,7 @@
         <div class="right" @click='posterRouer'>
           <div class="wxhy-btn">
             <span class="wx-qr iconfont iconcardcode"></span>
+
             <span class="font-26">名片码</span>
           </div>
         </div>
@@ -91,7 +92,7 @@
                 <P class="cardHold-blok-J">客户数据追踪、统计、AI分析</P>
               </div>
             </div>
-            <div class="cardHold-blok"  @click="goRadar">
+            <div v-else class="cardHold-blok"  @click="goRadar">
               <div class="cardHold-Img">
                 <img src="../../../static/images/leida.png">
               </div>
@@ -248,14 +249,14 @@ export default {
     this.getSun()
   },
   onLoad (options) {
-    console.log('aaaaaa', options)
+    // console.log('aaaaaa', options)
     if (options.id !== undefined && options.userId !== undefined) {
       this.goToFen('../OthersCard/main?id=' + options.id + '&fromWay=1&userId=' + options.userId)
     }
     var that = this
     wx.getSystemInfo({
       success: function (res) {
-        console.log('res', res.windowHeight)
+        // console.log('res', res.windowHeight)
         that.windowHeight = res.windowHeight + 22
       }
     })
@@ -313,7 +314,6 @@ export default {
           'userId': userId
         }
       }).then(res => {
-        console.log(res)
         if (res.code === 200) {
           this.postForm = res.data
           this.name = res.data.name
@@ -419,7 +419,7 @@ export default {
           'userId': userId
         }
       }).then(res => {
-        console.log('取消', res)
+        // console.log('取消', res)
         if (res.code === 200) {
           const that = this
           wx.showToast({

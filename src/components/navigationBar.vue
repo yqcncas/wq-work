@@ -89,6 +89,8 @@
       // console.log(`this.backVisible:`, this.backVisible)
     },
     onLoad () {
+    },
+    onShow () {
       this.getMsgNum()
     },
     methods: {

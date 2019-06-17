@@ -2,7 +2,7 @@
     <div class="message">
       <div class="cardHold-ftMain">
         <div v-if="commitInfo !== null || commitInfo.length !== 0 || commitInfo !== ''">
-        <div class="cardHold-ftMain-ct" v-for="(item,index) in commitInfo" :key="index" @click="routeTo(item.userId)">
+        <div class="cardHold-ftMain-ct" v-for="(item,index) in commitInfo" :key="index" @click="routeTo(item.toUserId)">
           <div class="center" @touchstart="touchStart($event)" @touchend="touchEnd($event,index)" :data-type="item.type" >
             <div class="cardHold-ftMain-ct-img" @click="recover(index)">
               <img :src="item.avatarUrl" aspectFit class="imgA"/>
@@ -11,7 +11,7 @@
               </a>
             </div>
             <div class="cardHold-ftMain-rt" @click="recover(index)">
-              <span class="name">{{ item.nickName }}</span>
+              <span class="name">{{ item.name }}</span>
               <span class="time">{{ item.sendTime }}</span>
               <p class="company">{{ item.message }}</p>
             </div>
@@ -41,31 +41,48 @@
         toView: '',
         indexShow: false,
         scrollTop: 0,
+        pageNum: '',
+        pageSize: '',
         indexEnglish: '',
         commitInfo: []
       }
     },
     onShow () {
-      this.getInfo()
+      this.getInfo(1)
+    },
+    async onPullDownRefresh () {
+      if (this.pageNum < this.lastPage) {
+        this.pageNum = this.nextPage
+        this.getInfo(this.pageNum)
+      } else {
+        wx.showToast({
+          title: '没有更多了',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+      wx.stopPullDownRefresh()
     },
     methods: {
       // 获取消息
-      getInfo (e) {
+      getInfo (id) {
         this.$fly.request({
           method: 'get',
           url: '/platformMessage/findListByUserId',
           body: {
-            'pageNum': 0,
+            'pageNum': id,
             'pageSize': 10
           }
         }).then(res => {
-          console.log('resA', res)
-          this.commitInfo = res.data
-          this.Message = res.data
+          this.commitInfo = res.data.list
+          this.Message = res.data.list
+          this.lastPage = res.data.lastPage
+          this.pageNum = res.data.pageNum
+          this.nextPage = res.data.nextPage
           // 时间戳转换成特定日期格式
           let today = this.moment().format('YYYY/MM/DD')
           let yesterday = this.moment(new Date()).add(-1, 'days').format('YYYY/MM/DD')
-          const newList = res.data
+          const newList = res.data.list
           newList.map(item => {
             let temp = this.moment(item.sendTime)
             let tempData = this.moment(item.sendTime).format('YYYY/MM/DD')

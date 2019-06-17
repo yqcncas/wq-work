@@ -108,12 +108,14 @@ export default {
         }
       }).then(res => {
         console.log(res)
-        this.release = res.data.list
-        const newList = res.data.list
-        newList.map(item => {
-          let temp = this.moment(item.createDate).toObject()
-          item.createDate = temp
-        })
+        if (res.code === 200) {
+          this.release = res.data.list
+          const newList = res.data.list
+          newList.map(item => {
+            let temp = this.moment(item.createDate).toObject()
+            item.createDate = temp
+          })
+        }
       }).catch(err => {
         console.log(err)
       })
