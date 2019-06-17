@@ -7,12 +7,14 @@
 
 <script>
 import homeApi from '@/api/home'
+import personApi from '@/api/person'
 import { setIsSalesMan, getExt } from '@/utils/index'
 import { initSocket, resiverMessage } from '@/utils/socket'
 export default {
   data () {
     return {
       id: '',
+      personApi: personApi,
       goodsId: null,
       param: '',
       userId: null,
@@ -49,9 +51,9 @@ export default {
       this.fromWay = this.GetQueryString('way', scene)
       this.param = this.GetQueryString('param', scene)
       this.salesmanId = this.GetQueryString('id', scene)
-      console.log(' this.fromWay', this.fromWay)
-      console.log(' this.param', this.param)
-      console.log(' this.userId', this.userId)
+      // console.log(' this.fromWay', this.fromWay)
+      // console.log(' this.param', this.param)
+      // console.log(' this.userId', this.userId)
       if (this.salesmanId) {
         this.doLogin(this.salesmanId, this.param)
       } else {
@@ -70,11 +72,14 @@ export default {
           let shopId = getExt().shopId
           let data = { code: res.code, id: shopId, userId: this.userId, fromWay: this.fromWay, salesmanId, param }
           const result = await homeApi.doLogin(data)
-          console.log('res', result)
           this.eatinCart(result)
         }
       })
     },
+    // // 插入雷达
+    // async insertOpera (info, recordType) {
+    //   await personApi.OperationInsert({ businessId: this.businessId, info, recordType, salesmanId: this.salesManId, userId: this.userId })
+    // },
     onMessage (res) {
       this.eatinCart(res)
     },
@@ -82,6 +87,8 @@ export default {
     eatinCart (res) {
       const { data: { token, isSalesman, id, businessId } } = res
       this.wesocket({ cmd: 'login', userId: id })
+      this.userId = wx.getStorageSync('userId', id)
+      this.businessId = wx.getStorageSync('businessId', businessId)
       wx.setStorageSync('token', token)
       wx.setStorageSync('businessId', businessId)
       setIsSalesMan(isSalesman)
@@ -89,6 +96,7 @@ export default {
       const updateManager = wx.getUpdateManager()
       updateManager.onCheckForUpdate((res) => {
         if (!res.hasUpdate) {
+          // this.insertOpera('用户登陆', 0)
           // wx.switchTab({
           //   url: '../businesscard/main?id=' + this.goodsId
           // })

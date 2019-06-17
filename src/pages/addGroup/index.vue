@@ -38,7 +38,7 @@
       </div>
       <!--保存-->
       <div class="footer">
-        <button class="save">保存</button>
+        <button class="save"><span>保存</span></button>
       </div>
     </div>
 </template>

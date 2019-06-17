@@ -237,12 +237,18 @@ export default {
     // 选择会员
     changTabMeberA (index) {
       this.tabA = index
+      this.tabB = 0
+      this.tabC = 0
     },
     changTabMeberB (index) {
       this.tabB = index
+      this.tabA = 0
+      this.tabC = 0
     },
     changTabMeberC (index) {
       this.tabC = index
+      this.tabB = 0
+      this.tabA = 0
     },
     changTab (index) {
       if (index === 1) {

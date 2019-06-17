@@ -29,7 +29,7 @@ export function initSocket (websocketData) {
 
 export function resiverMessage (context) {
   wx.onSocketClose(res => {
-    console.log('登录')
+    console.log('1登录')
     console.log(res)
     initSocket(loginData)
   })

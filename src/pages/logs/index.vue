@@ -82,7 +82,7 @@
       <div class="cardHold-main">
         <div class="cardHold-main-me">
           <div class="cardHold-main-mes">
-            <div class="cardHold-blok" @click="goRadar">
+            <div v-if="name == '' && job == ''"  class="cardHold-blok" @click="ArouterTo(`../businesscard/main`)">
               <div class="cardHold-Img">
                 <img src="../../../static/images/leida.png">
               </div>
@@ -91,7 +91,25 @@
                 <P class="cardHold-blok-J">客户数据追踪、统计、AI分析</P>
               </div>
             </div>
-            <div class="cardHold-blok" @click="goGroup">
+            <div class="cardHold-blok"  @click="goRadar">
+              <div class="cardHold-Img">
+                <img src="../../../static/images/leida.png">
+              </div>
+              <div class="cardHold-blok-right cardHold-blok-right-bt">
+                <p class="cardHold-blok-name">AI雷达</p>
+                <P class="cardHold-blok-J">客户数据追踪、统计、AI分析</P>
+              </div>
+            </div>
+            <div  v-if ="name === '' && job == ''"  @click="ArouterTo(`../businesscard/main`)" class="cardHold-blok" >
+              <div class="cardHold-Img1">
+                <img src="../../../static/images/qun.png">
+              </div>
+              <div class="cardHold-blok-right">
+                <p class="cardHold-blok-name">群名片</p>
+                <P class="cardHold-blok-J">邀请微信好友加入</P>
+              </div>
+            </div>
+            <div v-else class="cardHold-blok" @click="goGroup">
               <div class="cardHold-Img1">
                 <img src="../../../static/images/qun.png">
               </div>
@@ -295,14 +313,17 @@ export default {
           'userId': userId
         }
       }).then(res => {
-        this.postForm = res.data
-        this.name = res.data.name
-        this.job = res.data.job
-        this.company = res.data.salesCompanyName
-        this.imgUrl = res.data.imgUrl
-        this.id = wx.getStorageSync('userId')
-        this.salesManId = res.data.id
-        this.companyName = res.data.salesCompanyName
+        console.log(res)
+        if (res.code === 200) {
+          this.postForm = res.data
+          this.name = res.data.name
+          this.job = res.data.job
+          this.company = res.data.salesCompanyName
+          this.imgUrl = res.data.imgUrl
+          this.id = wx.getStorageSync('userId')
+          this.salesManId = res.data.id
+          this.companyName = res.data.salesCompanyName
+        }
       }).catch(err => {
         console.log(err)
       })
