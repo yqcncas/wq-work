@@ -133,8 +133,8 @@
             <div class="block-4">
               <div class="group-3">
                 <!--浏览记录的头像-->
-                <span class="logo-main" v-if="postForm.headImgList.list.length !== 0"><img v-for="(item,index) in postForm.headImgList.list" :key="index" :src="item" class="logo" /></span>
-                <div class="word" v-if="postForm.headImgList.length === 10">…</div>
+                <span class="logo-main" v-if="postForm.headImgList.list || postForm.headImgList.list.length !== 0"><img v-for="(item,index) in postForm.headImgList.list" :key="index" :src="item" class="logo" /></span>
+                <div class="word" v-if="postForm.headImgList.list.length === 10">…</div>
               </div>
               <div class="zan">
                 <img  @click="cancelCollect(postForm.id)" v-if="postForm.isCollect == 1" src="../../../static/images/love-se.png" class="icon-8" />
