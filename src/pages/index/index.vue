@@ -2,7 +2,7 @@
   <div class="modify">
     <el-form ref="postForm" :model="postForm" >
       <div class="TopImg">
-        <img src="../../../static/images/mao.jpg"/>
+        <img src="https://oss.wq1516.com/salesInfo/201906181304341560834274402.jpg"/>
       </div>
       <div class="test">
         <i @click="back()" class="iconfont iconE leftA"></i>

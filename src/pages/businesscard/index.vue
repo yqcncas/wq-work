@@ -98,7 +98,7 @@
       <el-form ref="postForm" :model="postForm" >
         <div class="cards">
           <div class="card-top">
-            <img src="../../../static/images/cardbj.jpg" />
+            <img src="https://oss.wq1516.com/salesInfo/201906181125191560828319376.jpg" />
             <div class="cards-M">
               <div class="cards-main">
                 <p class="cards-img"><img :src="postForm.imgUrl" /></p>
@@ -156,8 +156,8 @@
           <div class="block-4">
             <div class="group-3">
               <!--浏览记录的头像-->
-              <span class="logo-main"><img v-for="(item,index) in postForm.headImgList.list" :key="index" :src="item" class="logo" /></span>
-              <div v-if="postForm.headImgList.list == ''" class="word">…</div>
+              <span class="logo-main" v-if="postForm.headImgList.list || postForm.headImgList.list.length !== 0"><img v-for="(item,index) in postForm.headImgList.list" :key="index" :src="item" class="logo" /></span>
+              <div class="word" v-if="postForm.headImgList.list.length === 10">…</div>
             </div>
             <div class="zan">
               <img v-if="postForm.isCollect == 1" src="../../../static/images/love-se.png" class="icon-8" />
@@ -211,7 +211,7 @@
                     <span>您好！我是{{ postForm.salesCompanyName }}的{{ postForm.name }}</span>
                   </div>
                   <div class="personal-teach">
-                        <span v-html="postForm.info">
+                        <span v-if="postForm.info" v-html="postForm.info">
                         </span>
                   </div>
                 </div>
@@ -249,16 +249,16 @@
                 </span>
             </div>
             <div class="product-main">
-              <div class="product-details" v-for="(item,index) in postForm.goodsList" :key="index">
+              <div class="product-details" v-for="(item,index) in postForm.goodsList" :key="index" @click="goToProduct(postForm.goodsList[index].id)">
                 <div class="product-details-img">
                   <img :src="item.goodsImgUrlList[0].imgUrl"/>
                 </div>
                 <div class="product-details-title">
                   {{ item.name }}
                 </div>
-                <div class="product-details-title">
-                  {{ item.info }}
-                </div>
+                <!--<div class="product-details-title">-->
+                  <!--{{ item.info }}-->
+                <!--</div>-->
                 <div class="product-details-click">
                   ￥  {{ item.price }}
                 </div>
@@ -358,6 +358,12 @@
           this.logo = res.data.logo
         }).catch(err => {
           console.log(err)
+        })
+      },
+      // 传id 跳入产品信息
+      goToProduct (id) {
+        wx.navigateTo({
+          url: '../productA/detail/main?id=' + id
         })
       },
       //   跳转到海报带参

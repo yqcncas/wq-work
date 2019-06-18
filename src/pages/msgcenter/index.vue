@@ -24,39 +24,39 @@
         <div v-for="(item,i) in msgforuser" :key="i" class="box-ms">
           <p class="time-msg" v-if="i>0&&(msgforuser[i-1].sendTime!==item.sendTime)">{{item.sendTime}}</p>
           <p class="time-msg" v-if="i===0">{{item.sendTime}}</p>
-          <div v-if="type=='sale'">
-            <div v-if="item.sendDir === 0" class="left">
+          <div v-if="type=== 'sale'">
+            <div v-if="item.toUserId !== userId" class="left">
               <div class="leftmsg">
-                <img :src="userHeadImg" class="img-header" />
+                <img :src="item.avatarUrl" class="img-header" />
                 <span class="white">
                   {{item.message}}
                 </span>
               </div>
             </div>
-            <div v-if="item.sendDir === 1" class="right">
+            <div v-else-if="item.toUserId === userId" class="right">
               <div class="rightmsg">
                 <span class="green">
                   {{item.message}}
                 </span>
-                <img :src="salesManHeadImg" class="img-header" />
+                <img :src="item.avatarUrl" class="img-header" />
               </div>
             </div>
           </div>
           <div v-else>
-            <div v-if="item.sendDir === 1" class="left">
+            <div v-if="item.toUserId !== userId" class="left">
               <div class="leftmsg">
-                <img :src="salesManHeadImg" class="img-header" />
+                <img :src="item.avatarUrl" class="img-header" />
                 <span class="white">
                   {{item.message}}
                 </span>
               </div>
             </div>
-            <div v-if="item.sendDir === 0" class="right">
+            <div v-else-if="item.toUserId === userId" class="right">
               <div class="rightmsg">
                 <span class="green">
                   {{item.message}}
                 </span>
-                <img :src="userHeadImg" class="img-header" />
+                <img :src="item.avatarUrl" class="img-header" />
               </div>
             </div>
           </div>
@@ -104,6 +104,7 @@
         apiproducts: apiproducts,
         apicustom: apicustom,
         flag: true,
+        pageNumA: '',
         msgs: [
           {
             name: '小蓝',
@@ -111,7 +112,7 @@
             msg1: '17878945612',
             msg2: '温岭市',
             msg3: '2018-11-7',
-            msg4: '万千科技'
+            msg4: '万仟科技'
           }
         ],
         type: 'sale',
@@ -265,7 +266,6 @@
         })
       },
       onMessage (res) {
-        console.log(1111)
         console.log(res)
         this.eatinCart(res)
       },
@@ -292,23 +292,25 @@
         resiverMsg(this, data)
       },
       async selectMsgForUser ({ type = 0, mode }) {
+        console.log('1', this.pageNum)
         let result = {}
         if (this.type === 'sale') {
           result = await apicustom.selectMsgForSales({ id: this.userId, pageNum: this.pageNum, pageSize: this.pageSize })
         } else {
-          result = await apicustom.selectMsgForUser({ pageNum: this.pageNum, pageSize: this.pageSize })
+          result = await apicustom.selectMsgForUser({ id: this.userId, pageNum: this.pageNum, pageSize: this.pageSize })
         }
+        console.log('userId', result)
         const code = result.code
-        const data = result.data
-        this.userHeadImg = data.userHeadImg
-        this.salesManHeadImg = data.salesManHeadImg
-        this.userPhone = data.userPhone
-        this.salesPhone = data.salesPhone
-        this.weChat = data.salesWeChat
+        const data = result.data.list
+        // this.userHeadImg = data.userHeadImg
+        // // this.salesManHeadImg = data.salesManHeadImg
+        // this.userPhone = data.userPhone
+        // this.salesPhone = data.salesPhone
+        // this.weChat = data.salesWeChat
         let today = this.moment().format('YYYY/MM/DD')
         let yesterday = this.moment(new Date()).add(-1, 'days').format('YYYY/MM/DD')
         if (code === 200) {
-          data.pageInfo.list.map(item => {
+          data.map(item => {
             let temp = this.moment(item.sendTime)
             let tempData = this.moment(item.sendTime).format('YYYY/MM/DD')
             if (tempData === today) {
@@ -322,18 +324,18 @@
             }
           })
           if (type === 0) {
-            this.msgforuser = data.pageInfo.list
+            this.msgforuser = data
             if (mode === 1) {
               this.msgforuser.reverse()
             }
           } else {
-            data.pageInfo.list.forEach(e => {
+            data.forEach(e => {
               this.msgforuser.unshift(e)
             })
           }
-          this.lastPage = data.pageInfo.lastPage
-          this.pageNum = data.pageInfo.pageNum
-          this.nextPage = data.pageInfo.nextPage
+          this.lastPage = result.data.lastPage
+          this.pageNum = result.data.pageNum
+          this.nextPage = result.data.nextPage
         } else {
           wx.showToast({
             title: '失败',
@@ -344,6 +346,8 @@
       }
     },
     async onPullDownRefresh () {
+      console.log('11', this.pageNum)
+      console.log('22', this.lastPage)
       if (this.pageNum < this.lastPage) {
         this.pageNum = this.nextPage
         this.selectMsgForUser({ type: 1 })
@@ -360,6 +364,7 @@
       this.userId = +options.id
       if (options.id) {
         this.type = 'sale'
+        this.pageNum = 1
         // this.selectSendRecord()
       } else {
         this.type = 'custom'

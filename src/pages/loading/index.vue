@@ -26,6 +26,7 @@ export default {
   onLoad (options) {
     this.fromWay = 0
     this.goodsId = null
+    console.log('21', options)
     if (options.fromWay) {
       this.fromWay = options.fromWay
     }
@@ -39,8 +40,8 @@ export default {
     if (options.goodsId) {
       this.goodsId = options.goodsId
     }
-    if (options.param) {
-      this.param = options.param
+    if (options.prams) {
+      this.param = options.prams
     }
     if (options.userId) {
       this.userId = options.userId
@@ -121,22 +122,28 @@ export default {
           //     url: '../OthersCards/main'
           //   })
           // } else {
-          if (this.fromWay === '0') {
-            wx.switchTab({
-              url: '../businesscard/main'
-            })
-          } else if (this.fromWay === '2') {
+          if (this.param === 'product') {
             wx.reLaunch({
-              url: '../logs/main?id=' + this.salesmanId + '&fromWay=2&userId=' + id
-            })
-          } else if (this.fromWay === '1') {
-            wx.reLaunch({
-              url: '../logs/main?id=' + this.salesmanId + '&fromWay=1&userId=' + id
+              url: '../logs/main?id=' + this.salesmanId + '&fromWay=1&userId=' + id + '&goodsId=' + this.goodsId
             })
           } else {
-            wx.switchTab({
-              url: '../businesscard/main'
-            })
+            if (this.fromWay === '0') {
+              wx.switchTab({
+                url: '../businesscard/main'
+              })
+            } else if (this.fromWay === '2') {
+              wx.reLaunch({
+                url: '../logs/main?id=' + this.salesmanId + '&fromWay=2&userId=' + id
+              })
+            } else if (this.fromWay === '1') {
+              wx.reLaunch({
+                url: '../logs/main?id=' + this.salesmanId + '&fromWay=1&userId=' + id
+              })
+            } else {
+              wx.switchTab({
+                url: '../businesscard/main'
+              })
+            }
           }
         }
       })

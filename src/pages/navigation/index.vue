@@ -105,7 +105,7 @@
                 <div class="card-right">
                   <p class="eye"><img src="../../../static/images/eye.png"/><span>{{ item.browseCount }}</span> </p>
                   <p class="star"><img src="../../../static/images/star.png"/><span>{{ item.praiseCount }}</span> </p>
-                  <i v-if="item.isCollect === 0" @click="getCollect(item.id)"><img src="../../../static/images/addpersonal.png"/></i>
+                  <i v-if="item.isCollect === 0" @click="getCollect(item.id, index)"><img src="../../../static/images/addpersonal.png"/></i>
                   <i v-else></i>
                 </div>
               </div>
@@ -174,7 +174,7 @@
                   </span>
                     <span class="headImage" v-if="item.imgUrlList != 0">
                     <a  v-for="(itemA, index_) in item.imgUrlList" :key="index_">
-                       <i :data-index='index_' :data-id="item.id"><img :src="itemA" @click="previewImg(itemA)" lazy-load /> </i>
+                       <i :data-index='index_' :data-id="item.id"><img :src="itemA" @click="previewImg(item.imgUrlList,index_)" lazy-load /> </i>
                     </a>
                   </span>
                     <span class="headVideo"  v-if="item.video !== '' && item.video !== null">
@@ -187,8 +187,8 @@
                   </span>
                     <span class="headFotter">
                     <span class="headTime">{{ item.createDate }}</span>
-                    <span v-if="item.isLike == 0" class="headZan" @click="thumbsUp(item.id,0)"><img src="../../../static/images/zan.png"/> </span>
-                    <span v-else class="headZan" @click="thumbsUp(item.id,1)"><img src="../../../static/images/zan-se.png"/> </span>
+                    <span v-if="item.isLike == 0" class="headZan" @click="thumbsUp(item.id,0,index)"><img src="../../../static/images/zan.png"/> </span>
+                    <span v-else class="headZan" @click="thumbsUp(item.id,1,index)"><img src="../../../static/images/zan-se.png"/> </span>
                   </span>
                   </div>
                 </div>
@@ -251,6 +251,7 @@
         status: 1,
         zan: 2,
         isCollect: '',
+        show: 1,
         cardRen: '热门名片',
         cardsMap: '附近名片',
         infoTitle: '附近信息',
@@ -310,6 +311,14 @@
           src: '../../static/svg/information/qi.svg'
         }],
         cards: [],
+        lastPage: '',
+        nextPage: '',
+        pageNum: 0,
+        pageSize: 0,
+        lastPageA: '',
+        nextPageA: '',
+        pageNumA: 0,
+        pageSizeA: 0,
         enclosure: [{
           headImg: '../../static/images/gongzhonghao.jpg',
           name: '李松阳',
@@ -332,69 +341,60 @@
     onShow () {
       // this.doLogin()
       // this.getSalesmanId()
-      this.getCard()
     },
     onLoad () {
       wx.hideTabBar()
       this.trade()
       this.tradeA()
+      this.cards = []
+      this.Message = []
+      this.show = 1
+      this.pageNum = 1
+      this.pageNumA = 1
+      this.getCard()
       this.tradeInfor()
+    },
+    async onReachBottom () {
+      if (this.show === 1) {
+        if (this.pageNum < this.lastPage) {
+          this.pageNum = this.nextPage
+          this.getCard(this.pageNum)
+        } else {
+          wx.showToast({
+            title: '没有更多了',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      } else if (this.show === 0) {
+        if (this.pageNumA < this.lastPageA) {
+          this.pageNumA = this.nextPageA
+          this.tradeInfor(this.pageNumA)
+        } else {
+          wx.showToast({
+            title: '没有更多了',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      }
     },
     methods: {
       bindA (e) {
         wx.hideTabBar()
       },
-      // // 查询salesmanId
-      // getSalesmanId () {
-      //   const userId = wx.getStorageSync('userId') // 获取本地userId
-      //   this.$fly.request({
-      //     method: 'get',
-      //     url: '/platformSalesman/selectSelfInfo',
-      //     body: {
-      //       'userId': userId
-      //     }
-      //   }).then(res => {
-      //     const salesmanId = res.data.id
-      //     wx.setStorageSync('salesmanId', salesmanId)
-      //   }).catch(err => {
-      //     console.log(err)
-      //   })
-      // },
       // 预览图片
-      previewImg (e) {
+      previewImg (e, A) {
+        var imgs = e
+        var temp = []
+        imgs.map(res => {
+          temp.push(res)
+        })
         wx.previewImage({
-          current: e,
-          urls: [e]
+          current: temp[A],
+          urls: temp
         })
       },
-      // // 调用登录接口
-      // doLogin () {
-      //   wx.login({
-      //     success: function (res) {
-      //       if (res.code) {
-      //         // 发起网络请求
-      //         wx.request({
-      //           url: `http://api.wq1516.com:8989/server/platformUser/login`,
-      //           method: 'post',
-      //           data: {
-      //             code: res.code,
-      //             id: 1
-      //           },
-      //           success: function (e) {
-      //             console.log('1', e)
-      //             wx.setStorageSync('token', e.data.data.token)
-      //             wx.setStorageSync('businessId', e.data.data.businessId)
-      //             wx.setStorageSync('userId', e.data.data.id)
-      //             const token = wx.getStorageSync('token') // 获取本地token
-      //             console.log('10', token)
-      //           }
-      //         })
-      //       } else {
-      //         console.log('获取用户登录态失败！' + res.errMsg)
-      //       }
-      //     }
-      //   })
-      // },
       // 人脉集市
       trade () {
         this.$fly.request({
@@ -431,34 +431,43 @@
           method: 'get', // post/get 请求方式
           url: '/dynamic/selectAll',
           body: {
-            'pageNum': 0,
-            'pageSize': 0,
+            'pageNum': this.pageNumA,
+            'pageSize': 10,
             'businessId': businessId,
             'userId': userId
           }
         }).then(res => {
-          // console.log('22', res.data.list)
-          this.Message = res.data.list
-          // 时间戳转换成特定日期格式
-          let today = this.moment().format('YYYY/MM/DD')
-          let yesterday = this.moment(new Date()).add(-1, 'days').format('YYYY/MM/DD')
-          const newList = res.data.list
-          newList.map(item => {
-            if (item.address === null) {
-              item.address = ''
-            }
-            let temp = this.moment(item.createDate)
-            let tempData = this.moment(item.createDate).format('YYYY/MM/DD')
-            if (tempData === today) {
-              item.createDate = temp.format('A hh:mm')
-            } else if (tempData === yesterday) {
-              item.createDate = '昨天'
-            } else if (this.moment(Date.now() - 3 * 24 * 60 * 60 * 1000) < item.createDate) {
-              item.createDate = temp.format('dddd')
-            } else {
-              item.createDate = tempData
-            }
-          })
+          if (res.code === 200) {
+            const data = res.data.list
+            data.map(item => {
+              this.Message.push(item)
+            })
+            // this.Message = res.data.list
+            console.log('444', res)
+            this.lastPageA = res.data.lastPage
+            this.pageNumA = res.data.pageNum
+            this.nextPageA = res.data.nextPage
+            // 时间戳转换成特定日期格式
+            let today = this.moment().format('YYYY/MM/DD')
+            let yesterday = this.moment(new Date()).add(-1, 'days').format('YYYY/MM/DD')
+            const newList = res.data.list
+            newList.map(item => {
+              if (item.address === null) {
+                item.address = ''
+              }
+              let temp = this.moment(item.createDate)
+              let tempData = this.moment(item.createDate).format('YYYY/MM/DD')
+              if (tempData === today) {
+                item.createDate = temp.format('A hh:mm')
+              } else if (tempData === yesterday) {
+                item.createDate = '昨天'
+              } else if (this.moment(Date.now() - 3 * 24 * 60 * 60 * 1000) < item.createDate) {
+                item.createDate = temp.format('dddd')
+              } else {
+                item.createDate = tempData
+              }
+            })
+          }
         }).catch(err => {
           console.log(err.status, err.message)
         })
@@ -471,20 +480,33 @@
           method: 'get', // post/get 请求方式
           url: '/platformSalesman/getByCode',
           body: {
-            'pageNum': 1,
+            'pageNum': this.pageNum,
             'pageSize': 10,
             'businessId': businessId,
             'userId': userId
           }
         }).then(res => {
-          // console.log('22', res)
-          this.cards = res.data.list
+          if (res.code === 200) {
+            const data = res.data.list
+            data.map(item => {
+              this.cards.push(item)
+            })
+            this.lastPage = res.data.lastPage
+            this.pageNum = res.data.pageNum
+            this.nextPage = res.data.nextPage
+          } else {
+            wx.showToast({
+              title: '加载失败',
+              icon: 'none',
+              duration: 2000
+            })
+          }
         }).catch(err => {
           console.log(err.status, err.message)
         })
       },
       // 获取收藏
-      getCollect (id) {
+      getCollect (id, index) {
         const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
         const userId = wx.getStorageSync('userId') // 获取本地userId
         this.$fly.request({
@@ -498,7 +520,8 @@
         }).then(res => {
           if (res.code === 200) {
             const that = this
-            that.getCard()
+            this.number = this.lastPage
+            that.cards[index].isCollect = 1
           }
         }).catch(err => {
           console.log(err.status, err.message)
@@ -509,10 +532,11 @@
         if (index === 1) {
           this.tab = index
           this.status = index
+          this.show = 1
         } else {
           this.tab = index
           this.status = index
-          this.tradeInfor()
+          this.show = 0
         }
       },
       // 人脉集市 切换名片
@@ -556,7 +580,7 @@
         })
       },
       // 信息广场 点赞和取消点赞
-      thumbsUp (id, status) {
+      thumbsUp (id, status, index) {
         // console.log(id, status)
         this.$fly.request({
           method: 'post', // post/get 请求方式
@@ -566,18 +590,60 @@
           }
         }).then(res => {
           if (status === 0) {
-            // console.log('564', res) // 点赞
-            this.tradeInfor()
-            // this.Message[id - 1].isLike = 0
+            this.Message[index].isLike = 1
           } else if (status === 1) {
             // console.log('768', res) // 取消点赞
-            this.tradeInfor()
-            // this.Message[id - 1].isLike = 1
+            // this.tradeInfor()
+            this.Message[index].isLike = 0
           }
         }).catch(err => {
-          console.log(err.status, err.message)
+          console.log(err, err.message)
         })
       }
+      // // 调用登录接口
+      // doLogin () {
+      //   wx.login({
+      //     success: function (res) {
+      //       if (res.code) {
+      //         // 发起网络请求
+      //         wx.request({
+      //           url: `http://api.wq1516.com:8989/server/platformUser/login`,
+      //           method: 'post',
+      //           data: {
+      //             code: res.code,
+      //             id: 1
+      //           },
+      //           success: function (e) {
+      //             console.log('1', e)
+      //             wx.setStorageSync('token', e.data.data.token)
+      //             wx.setStorageSync('businessId', e.data.data.businessId)
+      //             wx.setStorageSync('userId', e.data.data.id)
+      //             const token = wx.getStorageSync('token') // 获取本地token
+      //             console.log('10', token)
+      //           }
+      //         })
+      //       } else {
+      //         console.log('获取用户登录态失败！' + res.errMsg)
+      //       }
+      //     }
+      //   })
+      // },
+      // // 查询salesmanId
+      // getSalesmanId () {
+      //   const userId = wx.getStorageSync('userId') // 获取本地userId
+      //   this.$fly.request({
+      //     method: 'get',
+      //     url: '/platformSalesman/selectSelfInfo',
+      //     body: {
+      //       'userId': userId
+      //     }
+      //   }).then(res => {
+      //     const salesmanId = res.data.id
+      //     wx.setStorageSync('salesmanId', salesmanId)
+      //   }).catch(err => {
+      //     console.log(err)
+      //   })
+      // },
     }
   }
 </script>

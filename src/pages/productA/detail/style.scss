@@ -1,0 +1,472 @@
+%oveflowHidd {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+%flexRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+}
+
+.pro-detail {
+  background-color: #f0eff5;
+  width: 100%;
+  height: auto;
+  padding-bottom: 110rpx;
+  position: relative;
+
+  // 轮播图
+  .swiper {
+    width: 100%;
+    height: 750rpx;
+  }
+
+  .slide-image {
+    width: 100%;
+    height: 100%;
+  }
+
+  //   收藏分享按钮
+  .button-group {
+    position: absolute;
+    right: 36rpx;
+    top: 32rpx;
+
+    .bg-wrap {
+      width: 62rpx;
+      height: 62rpx;
+      background-color: rgba(0, 0, 0, 0.4);
+      border-radius: 50%;
+      color: #fff;
+      text-align: center;
+      line-height: 62rpx;
+      float: left;
+    }
+
+    .iconfont {
+      font-size: 38rpx;
+    }
+
+    .share-btn {
+      margin-left: 16rpx;
+    }
+  }
+
+  //   标题
+  .pro-d-title {
+    width: auto;
+    // height: 140rpx;
+    background-color: #fff;
+    color: #000;
+    position: relative;
+    margin-bottom: 8rpx;
+    padding: 16rpx 36rpx;
+
+    .name {
+      font-size: 28rpx;
+      width: 678rpx;
+      @extend %oveflowHidd;
+    }
+
+    .price {
+      font-size: 36rpx;
+      color: #2B94EC;
+    }
+
+    .small-p {
+      font-size: 24rpx;
+    }
+  }
+
+  //   选择型号
+  .choose-model {
+    width: 100%;
+    height: 90rpx;
+    background-color: #fff;
+    font-size: 32rpx;
+    color: #000;
+    box-sizing: border-box;
+    margin-bottom: 4rpx;
+    padding: 0 52rpx 0 36rpx;
+    @extend %flexRow;
+  }
+
+  .text-choose {
+    font-size: 24rpx;
+    color: #9b9b9b;
+  }
+
+  .c-model-d {
+    width: 500rpx;
+    @extend %oveflowHidd;
+    text-align: center;
+  }
+
+  .icon-arrow-right {
+    color: #4a4a4a;
+  }
+
+  //   提示
+  .tip-box {
+    margin-top: 10rpx;
+    width: 100%;
+    height: 180rpx;
+    background-color: #fff;
+    @extend %flexRow;
+    justify-content: space-around;
+    color: #666;
+    text-align: center;
+    font-size: 28rpx;
+    margin-bottom: 20rpx;
+
+    .iconfont {
+      font-size: 48rpx;
+    }
+  }
+
+
+  // 围观人数
+  .people-num {
+    width: 100%;
+    height: 120rpx;
+    background-color: #fff;
+    margin-bottom: 12rpx;
+    display: flex;
+    align-items: center;
+
+    .left-p {
+      float: left;
+      width: 170rpx;
+      text-align: center;
+      font-size: 26rpx;
+      color: #000;
+    }
+
+    .txt {
+      font-size: 24rpx;
+      color: #9B9B9B;
+    }
+
+    .right-p {
+      margin-left: 10rpx;
+      display: flex;
+      align-items: center;
+    }
+
+    .avatarUrl {
+      width: 58rpx;
+      height: 58rpx;
+      border-radius: 50%;
+      border: 1rpx solid #fff;
+      box-sizing: border-box;
+      margin-left: -18rpx;
+    }
+
+    .more {
+        display: inline-block;
+        background-color: #9B9B9B;
+        text-align: center;
+        line-height: 40rpx;
+        .radius{
+            width: 4rpx;
+            height: 4rpx;
+            background-color: #fff;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .radius+.radius{
+            margin-left: 6rpx;
+        }
+    }
+  }
+
+  // 富文本
+  .rich-content {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 20rpx;
+  }
+
+  //   常见问题
+  .common-problem {
+    .h {
+      padding: 35rpx 0;
+      background: #fff;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .line {
+        display: inline-block;
+        height: 3rpx;
+        width: 100rpx;
+        background: #ccc;
+      }
+
+      .title {
+        padding: 0 25rpx;
+        background: #fff;
+      }
+    }
+
+    .b {
+      padding: 0rpx 30rpx;
+      background: #fff;
+
+      .item {
+        padding-bottom: 25rpx;
+
+        .question-box {
+          display: flex;
+
+          .spot {
+            height: 8rpx;
+            width: 8rpx;
+            background: #b4282d;
+            border-radius: 50%;
+            margin-top: 11rpx;
+          }
+
+          .question {
+            line-height: 30rpx;
+            padding-left: 8rpx;
+            display: block;
+            font-size: 26rpx;
+            padding-bottom: 15rpx;
+            color: #303030;
+          }
+        }
+
+        .answer {
+          line-height: 40rpx;
+          padding-left: 16rpx;
+          font-size: 26rpx;
+          color: #787878;
+        }
+      }
+    }
+  }
+
+  .pop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  //   选择产品型号
+  .choose-model-flex {
+    position: fixed;
+    bottom: -800rpx;
+    transition: all 0.4s ease;
+    width: 100%;
+    background-color: #fff;
+    z-index: 1000;
+
+    .box-two {
+      padding: 30rpx;
+    }
+
+    .top-box-model {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .model-img {
+      width: 260rpx;
+      height: 260rpx;
+    }
+
+    .detail-model {
+      font-size: 24rpx;
+      color: #9b9b9b;
+      display: inline-block;
+      vertical-align: top;
+      margin-left: 50rpx;
+
+      p {
+        margin-bottom: 10rpx;
+      }
+    }
+
+    .left-title {
+      width: 200rpx;
+      display: inline-block;
+    }
+
+    .big-num {
+      font-size: 28rpx;
+      color: #4a4a4a;
+    }
+
+    .price {
+      color: #000;
+    }
+
+    // 型号list
+    .model-l-box {
+      @extend %flexRow;
+      justify-content: flex-start;
+    }
+
+    .model-list {
+      width: 470rpx;
+      display: inline-block;
+    }
+
+    .item-model {
+      min-width: 140rpx;
+      padding: 0 10rpx;
+      height: 60rpx;
+      line-height: 60rpx;
+      text-align: center;
+      font-size: 24rpx;
+      color: #4a4a4a;
+      background-color: #fafafa;
+      border: 2rpx solid #efefef;
+      display: inline-block;
+      box-sizing: border-box;
+      margin: 28rpx 14rpx 0 0;
+    }
+
+    .item-model:nth-child(1),
+    .item-model:nth-child(2),
+    .item-model:nth-child(3) {
+      margin-top: 0;
+    }
+
+    .tored {
+      border-color: #ff424e;
+      color: #ff424e;
+    }
+
+    // 数量
+    .count {
+      font-size: 24rpx;
+      @extend %flexRow;
+      justify-content: flex-start;
+      text-align: center;
+    }
+
+    .cut,
+    .add,
+    .number {
+      display: inline-block;
+    }
+
+    .cut,
+    .add {
+      width: 50rpx;
+      height: 50rpx;
+      line-height: 50rpx;
+      background-color: #d8d8d8;
+      color: #fff;
+    }
+
+    .number {
+      width: 80rpx;
+      width: 80rpx;
+      height: 50rpx;
+      line-height: 50rpx;
+      min-height: inherit;
+      border: 2rpx solid #d8d8d8;
+      box-sizing: border-box;
+    }
+
+    .cancel-bg {
+      background-color: #f0eff5;
+      padding: 20rpx 0;
+    }
+
+    .cancel-model {
+      width: 100%;
+      height: 80rpx;
+      text-align: center;
+      font-size: 24rpx;
+      color: #4a4a4a;
+      background-color: #fff;
+      line-height: 80rpx;
+    }
+  }
+
+  .fadeup {
+    transform: translateY(-890rpx);
+  }
+
+  //   加入购物车
+  .add-cart {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 90rpx;
+    box-sizing: border-box;
+    background-color: #fff;
+    @extend %flexRow;
+    justify-content: flex-start;
+    font-size: 32rpx;
+    text-align: center;
+    color: #4a4a4a;
+
+    .icon-box {
+      @extend %flexRow;
+      justify-content: space-around;
+      flex: 1;
+    }
+
+    .icon-btn {
+      font-size: 22rpx;
+
+      .iconfont {
+        font-size: 38rpx;
+        color: #057aff;
+        line-height: 1;
+        position: relative;
+      }
+
+      .tip-num {
+        position: absolute;
+        width: 30rpx;
+        height: 30rpx;
+        background-color: #ff424e;
+        border-radius: 50%;
+        color: #fff;
+        font-size: 22rpx;
+        line-height: 30rpx;
+        right: -4rpx;
+        top: -6rpx;
+      }
+    }
+
+    .common-btn {
+      width: 280rpx;
+      height: 90rpx;
+      line-height: 90rpx;
+      box-sizing: border-box;
+    }
+
+    .buy-now {
+      background-color: #2a94ec;
+      color: #fff;
+    }
+
+    .add-btn {
+      border-left: 2rpx solid #eee;
+      color: #2a94ec;
+    }
+
+    .disabled-bg {
+      background-color: #ddd;
+      color: #eee;
+    }
+
+    .disabled-bg+.disabled-bg {
+      border-left: 2rpx solid #eee;
+    }
+  }
+}
