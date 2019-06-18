@@ -211,7 +211,7 @@
                     <span>您好！我是{{ postForm.salesCompanyName }}的{{ postForm.name }}</span>
                   </div>
                   <div class="personal-teach">
-                        <span v-html="postForm.info">
+                        <span v-if="postForm.info" v-html="postForm.info">
                         </span>
                   </div>
                 </div>

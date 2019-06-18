@@ -12,7 +12,7 @@
     <!-- 收藏分享按钮 -->
     <div class="button-group flexRow">
       <p class="bg-wrap">
-        <i class="iconfont" :class="[collectFlag ? 'iconshoucang1' :'iconshoucang2']" @click="collect(id,collectFlag)"></i>
+        <i class="iconfont" :class="[isCollect === 1 ? 'iconshoucang1' :'iconshoucang2']" @click="collect(id,isCollect)"></i>
       </p>
       <button open-type="share" class="share-btn bg-wrap">
         <i class="iconfont icon31zhuanfa" @click="shareGoods"></i>
@@ -150,6 +150,7 @@ export default {
       modelId: null,
       modelName: '',
       allnumber: 0,
+      isCollect: '',
       msgNum: 0,
       id: '',
       collectFlag: false,
@@ -190,6 +191,7 @@ export default {
       promotionPrice: '',
       price: '',
       isSalesMan: null,
+      goodsModelId: null,
       url: '',
       businessId: '',
       salesmanId: '',
@@ -284,24 +286,45 @@ export default {
     },
     // 收藏按钮的逻辑，如果标志位false表明没有加入收藏夹
     collect (id, flag) {
-      if (flag === false) {
-        this.addComment({ commentType: 2, commentgoodsid: id })
-        this.praiseCount = 1
-        this.collectFlag = true
+      if (flag === 0) {
+        // this.praiseCount = 1
+        this.isCollect = 1
+        this.getCollect(this.goodsId, this.goodsModelId, this.isCollect)
       } else {
-        this.deleteComment({ commentType: 2, commentgoodsid: id })
-        this.praiseCount = 0
-        this.collectFlag = false
+        // this.deleteComment({ commentType: 2, commentgoodsid: id })
+        // this.praiseCount = 0
+        this.collectFlag = 0
+        this.getCollect(this.goodsId, this.goodsModelId, this.isCollect)
       }
     },
-    // 一个点击赞之后的收藏的按钮,数据库里增加赞的记录
-    async addComment ({ commentType, commentgoodsid, commentuserid }) {
-      await productApi.addComment({ commentType: commentType, commentgoodsid: commentgoodsid, commentuserid: commentuserid })
+    // 添加 取消 收藏
+    getCollect (goodsId, goodsModelId, status) {
+      const salesmanId = wx.getStorageSync('salesmanId')
+      this.$fly.request({
+        method: 'post', // post/get 请求方式
+        url: '/platformGoods/collectGoods',
+        body: {
+          'goodsId': goodsId,
+          'goodsModelId': goodsModelId,
+          'isCollect': status,
+          'salesmanId': salesmanId
+        }
+      }).then(res => {
+        if (res.code === 200) {
+          this.getProdDetail(goodsId)
+        }
+      }).catch(err => {
+        console.log(err)
+      })
     },
-    // 一个点击赞空白的按钮,数据库里取消赞的记录
-    async deleteComment ({ commentType, commentgoodsid, commentuserid }) {
-      await productApi.deleteComment({ commentType: commentType, commentgoodsid: commentgoodsid, commentuserid: commentuserid })
-    },
+    // // 一个点击赞之后的收藏的按钮,数据库里增加赞的记录
+    // async addComment ({ commentType, commentgoodsid, commentuserid }) {
+    //   await productApi.addComment({ commentType: commentType, commentgoodsid: commentgoodsid, commentuserid: commentuserid })
+    // },
+    // // 一个点击赞空白的按钮,数据库里取消赞的记录
+    // async deleteComment ({ commentType, commentgoodsid, commentuserid }) {
+    //   await productApi.deleteComment({ commentType: commentType, commentgoodsid: commentgoodsid, commentuserid: commentuserid })
+    // },
     async buy () {
       if (this.buyStatus === 0) return
       if (this.modelText !== '请选择型号' || this.goodmodel.length === 0) {
@@ -395,7 +418,7 @@ export default {
     // 得到一个商品的详情
     async getProdDetail (id) {
       const result = await productApi.getProdDetail(id)
-      // console.log('44', result)
+      console.log('44', result)
       this.goodsImgList = result.data.goodsImgList
       const gooddetail = result.data.goods
       this.goodmodel = result.data.goodsModels
@@ -408,16 +431,18 @@ export default {
       this.buyStatus = gooddetail.buyStatus
       // 商品的model
       this.goodsId = gooddetail.id
+      this.goodsModelId = gooddetail.goodsModelId
+      this.isCollect = result.data.isCollect
       //   围观人数
       this.browseCount = result.data.userNum
       //   围观头像
       this.avatarUrlList = result.data.avatarUrlList
       // this.allnumber = gooddetail.allnumber
-      if (gooddetail.praiseCount > 0) {
-        this.collectFlag = true
-      } else {
-        this.collectFlag = false
-      }
+      // if (gooddetail.praiseCount > 0) {
+      //   this.collectFlag = true
+      // } else {
+      //   this.collectFlag = false
+      // }
       //   insert雷达
       this.businessId = wx.getStorageSync('businessId')
       this.salesmanId = wx.getStorageSync('salesManId')

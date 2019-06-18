@@ -341,6 +341,11 @@
     onShow () {
       // this.doLogin()
       // this.getSalesmanId()
+    },
+    onLoad () {
+      wx.hideTabBar()
+      this.trade()
+      this.tradeA()
       this.cards = []
       this.Message = []
       this.show = 1
@@ -348,11 +353,6 @@
       this.pageNumA = 1
       this.getCard()
       this.tradeInfor()
-    },
-    onLoad () {
-      wx.hideTabBar()
-      this.trade()
-      this.tradeA()
     },
     async onReachBottom () {
       if (this.show === 1) {
@@ -443,6 +443,7 @@
               this.Message.push(item)
             })
             // this.Message = res.data.list
+            console.log('444', res)
             this.lastPageA = res.data.lastPage
             this.pageNumA = res.data.pageNum
             this.nextPageA = res.data.nextPage
@@ -536,7 +537,6 @@
           this.tab = index
           this.status = index
           this.show = 0
-          this.pageNumA = 1
         }
       },
       // 人脉集市 切换名片
