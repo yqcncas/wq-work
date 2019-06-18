@@ -174,7 +174,7 @@
                   </span>
                     <span class="headImage" v-if="item.imgUrlList != 0">
                     <a  v-for="(itemA, index_) in item.imgUrlList" :key="index_">
-                       <i :data-index='index_' :data-id="item.id"><img :src="itemA" @click="previewImg(itemA)" lazy-load /> </i>
+                       <i :data-index='index_' :data-id="item.id"><img :src="itemA" @click="previewImg(item.imgUrlList,index_)" lazy-load /> </i>
                     </a>
                   </span>
                     <span class="headVideo"  v-if="item.video !== '' && item.video !== null">
@@ -366,7 +366,7 @@
             duration: 2000
           })
         }
-      } else {
+      } else if (this.show === 0) {
         if (this.pageNumA < this.lastPageA) {
           this.pageNumA = this.nextPageA
           this.tradeInfor(this.pageNumA)
@@ -384,10 +384,15 @@
         wx.hideTabBar()
       },
       // 预览图片
-      previewImg (e) {
+      previewImg (e, A) {
+        var imgs = e
+        var temp = []
+        imgs.map(res => {
+          temp.push(res)
+        })
         wx.previewImage({
-          current: e,
-          urls: [e]
+          current: temp[A],
+          urls: temp
         })
       },
       // 人脉集市
@@ -426,7 +431,7 @@
           method: 'get', // post/get 请求方式
           url: '/dynamic/selectAll',
           body: {
-            'pageNum': this.pageNum,
+            'pageNum': this.pageNumA,
             'pageSize': 10,
             'businessId': businessId,
             'userId': userId
@@ -531,7 +536,6 @@
           this.tab = index
           this.status = index
           this.show = 0
-          this.message = []
           this.pageNumA = 1
         }
       },
