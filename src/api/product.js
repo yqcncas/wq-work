@@ -37,7 +37,7 @@ const product = {
     baseURL: baseUrlApi
   }),
   // 得到商品的详情
-  getProdDetail: (id) => request.get('/goods/findOneForUser', {
+  getProdDetail: (id) => request.get('/platformGoods/findOneForUser', {
     id: id
   }, {
     baseURL: baseUrlApi

@@ -89,6 +89,11 @@
       // console.log(`this.backVisible:`, this.backVisible)
     },
     onLoad () {
+      setInterval(() => {
+        const that = this
+        console.log('resA A A ')
+        that.getMsgNum()
+      }, 3000)
     },
     onShow () {
       this.getMsgNum()

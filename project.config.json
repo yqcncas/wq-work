@@ -34,7 +34,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 19,
+			"current": 14,
 			"list": [
 				{
 					"id": 1,
@@ -137,7 +137,7 @@
 				{
 					"id": 14,
 					"name": "添加产品",
-					"pathName": "pages/addProduct/main",
+					"pathName": "pages/loading/main",
 					"query": "",
 					"scene": null
 				},

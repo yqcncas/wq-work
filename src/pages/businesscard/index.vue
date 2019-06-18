@@ -98,7 +98,7 @@
       <el-form ref="postForm" :model="postForm" >
         <div class="cards">
           <div class="card-top">
-            <img src="../../../static/images/cardbj.jpg" />
+            <img src="https://oss.wq1516.com/salesInfo/201906181125191560828319376.jpg" />
             <div class="cards-M">
               <div class="cards-main">
                 <p class="cards-img"><img :src="postForm.imgUrl" /></p>
@@ -249,16 +249,16 @@
                 </span>
             </div>
             <div class="product-main">
-              <div class="product-details" v-for="(item,index) in postForm.goodsList" :key="index">
+              <div class="product-details" v-for="(item,index) in postForm.goodsList" :key="index" @click="goToProduct(postForm.goodsList[index].id)">
                 <div class="product-details-img">
                   <img :src="item.goodsImgUrlList[0].imgUrl"/>
                 </div>
                 <div class="product-details-title">
                   {{ item.name }}
                 </div>
-                <div class="product-details-title">
-                  {{ item.info }}
-                </div>
+                <!--<div class="product-details-title">-->
+                  <!--{{ item.info }}-->
+                <!--</div>-->
                 <div class="product-details-click">
                   ￥  {{ item.price }}
                 </div>
@@ -358,6 +358,12 @@
           this.logo = res.data.logo
         }).catch(err => {
           console.log(err)
+        })
+      },
+      // 传id 跳入产品信息
+      goToProduct (id) {
+        wx.navigateTo({
+          url: '../productA/detail/main?id=' + id
         })
       },
       //   跳转到海报带参
@@ -507,7 +513,6 @@
               this.modalFlag = true
             }
             this.postForm = res.data
-            console.log(this.postForm)
             this.name = res.data.name
             this.job = res.data.job
             this.phone = res.data.phone

@@ -31,7 +31,7 @@
       <scroll-view class="scroll" scroll-y  :scroll-into-view="toView"  :style="'height:' + windowHeight + 'px'" :scroll-top="scrollTop"  >
       <div class="cardHold-top">
         <div class="cardHold-top-img">
-          <img src="../../../static/images/cardHold.jpg"/>
+          <img src="https://oss.wq1516.com/salesInfo/201906181129151560828555097.jpg"/>
         </div>
         <div class="cardHold-top-text">
           <span>名片夹</span>
@@ -249,9 +249,15 @@ export default {
     this.getSun()
   },
   onLoad (options) {
-    // console.log('aaaaaa', options)
-    if (options.id !== undefined && options.userId !== undefined) {
-      this.goToFen('../OthersCard/main?id=' + options.id + '&fromWay=1&userId=' + options.userId)
+    console.log('aaaaaa', options)
+    if (options.goodsId) {
+      console.log('55')
+      this.goToFen('../OthersCard/main?id=' + options.id + '&fromWay=1&userId=' + options.userId + '&goodsId=' + options.goodsId)
+    } else {
+      if (options.id !== undefined && options.userId !== undefined) {
+        console.log('66')
+        this.goToFen('../OthersCard/main?id=' + options.id + '&fromWay=1&userId=' + options.userId)
+      }
     }
     var that = this
     wx.getSystemInfo({
