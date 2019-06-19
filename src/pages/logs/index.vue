@@ -145,7 +145,7 @@
                         <span class="grade">{{ item.grade }}</span>
                         <p class="company">{{ item.salesCompanyName }}</p>
                       </div>
-                        <div class="phone">
+                        <div class="phone" @click="makePhoneCall(item.phone)">
                           <img src="../../../static/images/call.png"/>
                         </div>
                     </div>
@@ -158,7 +158,7 @@
                       <span class="grade">{{ item.grade }}</span>
                       <p class="company">{{ item.salesCompanyName }}</p>
                       </div>
-                      <div class="phone">
+                      <div class="phone"  @click="makePhoneCall(item.phone)">
                         <img src="../../../static/images/call.png"/>
                       </div>
                     </div>
@@ -171,7 +171,7 @@
                       <span class="grade">{{ item.grade }}</span>
                       <p class="company">{{ item.salesCompanyName }}</p>
                     </div>
-                      <div class="phone">
+                      <div class="phone"  @click="makePhoneCall(item.phone)">
                         <img src="../../../static/images/call.png"/>
                       </div>
                     </div>
@@ -278,6 +278,22 @@ export default {
     // console.log(this.toView)
   },
   methods: {
+    // 呼叫电话
+    makePhoneCall (phone) {
+      wx.makePhoneCall({
+        phoneNumber: phone,
+        success: () => {
+          this.insertOpera('拨打了电话', 20)
+        },
+        fail: () => {
+          wx.showToast({
+            title: '用户没有授权手机号',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      })
+    },
     goToFen (url) {
       wx.navigateTo({
         url: url
