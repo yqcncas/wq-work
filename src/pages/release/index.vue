@@ -61,6 +61,7 @@ export default {
     this.getDynamic()
   },
   methods: {
+    // 选择发布何种类型
     preview (index) {
       wx.showActionSheet({
         itemList: ['文字', '照片', '视频'],

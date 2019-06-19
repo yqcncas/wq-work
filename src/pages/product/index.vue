@@ -64,7 +64,7 @@
             this.products = res.data.list
             this.prolength = res.data.list.length
           }
-          console.log(res)
+          // console.log(res)
         }).catch(err => {
           console.log(err.status, err.message)
         })

@@ -145,7 +145,7 @@
                         <span class="grade">{{ item.grade }}</span>
                         <p class="company">{{ item.salesCompanyName }}</p>
                       </div>
-                        <div class="phone">
+                        <div class="phone" @click="makePhoneCall(item.phone)">
                           <img src="../../../static/images/call.png"/>
                         </div>
                     </div>
@@ -158,7 +158,7 @@
                       <span class="grade">{{ item.grade }}</span>
                       <p class="company">{{ item.salesCompanyName }}</p>
                       </div>
-                      <div class="phone">
+                      <div class="phone"  @click="makePhoneCall(item.phone)">
                         <img src="../../../static/images/call.png"/>
                       </div>
                     </div>
@@ -171,7 +171,7 @@
                       <span class="grade">{{ item.grade }}</span>
                       <p class="company">{{ item.salesCompanyName }}</p>
                     </div>
-                      <div class="phone">
+                      <div class="phone"  @click="makePhoneCall(item.phone)">
                         <img src="../../../static/images/call.png"/>
                       </div>
                     </div>
@@ -247,15 +247,13 @@ export default {
     this.showpop = false
     this.getInfo()
     this.getSun()
+    this.getSalesmanId()
   },
   onLoad (options) {
-    console.log('aaaaaa', options)
     if (options.goodsId) {
-      console.log('55')
       this.goToFen('../OthersCard/main?id=' + options.id + '&fromWay=1&userId=' + options.userId + '&goodsId=' + options.goodsId)
     } else {
       if (options.id !== undefined && options.userId !== undefined) {
-        console.log('66')
         this.goToFen('../OthersCard/main?id=' + options.id + '&fromWay=1&userId=' + options.userId)
       }
     }
@@ -267,6 +265,7 @@ export default {
       }
     })
   },
+  // 分享名片
   onShareAppMessage () {
     // this.insertOpera('分享了名片', 21)
     return {
@@ -278,11 +277,29 @@ export default {
     // console.log(this.toView)
   },
   methods: {
+    // 呼叫电话
+    makePhoneCall (phone) {
+      wx.makePhoneCall({
+        phoneNumber: phone,
+        success: () => {
+          this.insertOpera('拨打了电话', 20)
+        },
+        fail: () => {
+          wx.showToast({
+            title: '取消拨打',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      })
+    },
+    // 跳转
     goToFen (url) {
       wx.navigateTo({
         url: url
       })
     },
+    // 获取页面长宽
     imgLoad (e) {
       this.imgWidth = e.target.width
       this.imgHeight = e.target.height
@@ -386,6 +403,7 @@ export default {
       // 获取移动距离，可以通过打印出e，然后分析e的值得出
       this.startX = e.mp.changedTouches[0].clientX
     },
+    // 获取移动距离，可以通过打印出e，然后分析e的值得出
     touchEnd (e, index, items) {
       // 获取移动距离
       this.endX = e.mp.changedTouches[0].clientX
@@ -406,6 +424,7 @@ export default {
         url: `../OthersCard/main?id=` + id
       })
     },
+    // 恢复弹出删除原本样式
     recover (index, items) {
       items[index].type = 0
     },
@@ -475,21 +494,46 @@ export default {
         return 'AAA'
       }
     },
+    // 跳转雷达
     goRadar () {
       wx.navigateTo({
         url: '../radar/main'
       })
     },
-    goGroup () {
-      wx.navigateTo({
-        url: '../GroupCard/main'
+    // 查询salesmanId
+    getSalesmanId () {
+      const userId = wx.getStorageSync('userId') // 获取本地userId
+      this.$fly.request({
+        method: 'get',
+        url: '/platformSalesman/selectSelfInfo',
+        body: {
+          'userId': userId
+        }
+      }).then(res => {
+        this.salesmanId = res.data.id
+        wx.setStorageSync('salesmanId', this.salesmanId)
+      }).catch(err => {
+        console.log(err)
       })
     },
+    // 跳转群组
+    goGroup () {
+      wx.showToast({
+        title: '功能还在开发中哦',
+        duration: 2000,
+        icon: 'none'
+      })
+      // wx.navigateTo({
+      //   url: '../GroupCard/main'
+      // })
+    },
+    // 挑战
     ArouterTo (url) {
       wx.switchTab({
         url
       })
     },
+    // 挑战
     routerTo (url) {
       wx.navigateTo({
         url

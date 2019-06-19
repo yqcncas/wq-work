@@ -25,6 +25,7 @@ export default {
     }
   },
   methods: {
+    // 初始数据
     getSalesmanUpdate () {
       if (this.obj.info === '') {
         this.info = '还没有简介吧？快去填写，让更多人认识你，了解你'
@@ -61,6 +62,7 @@ export default {
         })
       })
     },
+    // 规定输入字符
     txtInput () {
       this.num = this.obj.info.length
       if (this.num >= 120) {
@@ -71,6 +73,7 @@ export default {
         })
       }
     },
+    // 跳转
     routeTo () {
       wx.navigateTo({
         url: `../profileModel/main`

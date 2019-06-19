@@ -78,11 +78,13 @@
       }
     },
     methods: {
+      // 跳转
       goToTrade () {
         wx.navigateTo({
           url: `../chooseTrade/main?id=` + this.TradeId + '&name=' + this.choose
         })
       },
+      // 跳转
       goTo () {
         wx.navigateTo({
           url: `../personal/main`

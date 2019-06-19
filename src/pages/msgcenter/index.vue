@@ -134,11 +134,13 @@
         let userId = wx.getStorageSync('userId')
         await apicustom.OperationInsert({ businessId, info, recordType, salesmanId, userId })
       },
+      // 获取聊天数量
       async selectSendRecord () {
         let salesManId = wx.getStorageSync('salesManId')
         const result = await apicustom.selectSendRecord({ userId: this.userId, salesmanId: salesManId })
         this.msgNum = result.data
       },
+      // 获取消息
       async activeMsg () {
         if (this.msgNum === 0) return
         let salesManId = wx.getStorageSync('salesManId')

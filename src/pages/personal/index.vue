@@ -146,6 +146,7 @@
           console.log(err.status, err.message)
         })
       },
+      // 获取信息
       getRecord () {
         const userId = wx.getStorageSync('userId') // 获取本地userId
         this.$fly.request({

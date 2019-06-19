@@ -288,13 +288,13 @@ export default {
     collect (id, flag) {
       if (flag === 0) {
         // this.praiseCount = 1
-        this.isCollect = 1
-        this.getCollect(this.goodsId, this.goodsModelId, this.isCollect)
+        const isCollect = 1
+        this.getCollect(this.goodsId, this.goodsModelId, isCollect)
       } else {
         // this.deleteComment({ commentType: 2, commentgoodsid: id })
         // this.praiseCount = 0
-        this.collectFlag = 0
-        this.getCollect(this.goodsId, this.goodsModelId, this.isCollect)
+        const isCollect = 0
+        this.getCollect(this.goodsId, this.goodsModelId, isCollect)
       }
     },
     // 添加 取消 收藏

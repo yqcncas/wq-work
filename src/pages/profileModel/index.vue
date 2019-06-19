@@ -30,6 +30,7 @@ export default {
     //     })
     //   }
     // },
+    // 选择模板
     chooseOne (info) {
       wx.setStorageSync('info', info)
       wx.navigateBack({
