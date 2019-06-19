@@ -205,12 +205,12 @@
                 <span class="company-title">公司介绍</span>
               </div>
               <div class="company-main">
-                  <div class="company-bg">
-                    <img :src="postForm.companyImgUrl"/>
-                  </div>
-                  <div class="company-title">
-                    <span>{{ postForm.companyInfo }}</span>
-                  </div>
+                <div class="company-bg" v-if="postForm.companyImgUrl">
+                  <img :src="postForm.companyImgUrl"/>
+                </div>
+                <div class="company-title" v-if="postForm.companyInfo">
+                  <span>{{ postForm.companyInfo }}</span>
+                </div>
               </div>
             </div>
 
@@ -307,6 +307,7 @@
       this.showpop = false
       this.getSun()
       this.getLogo()
+      this.getInfoA()
     },
     onShareAppMessage () {
       this.insertOpera('分享了名片', 21)
@@ -316,8 +317,16 @@
       }
     },
     methods: {
+      // 插入雷达
+      async insertOperaA (info, recordType, id) {
+        await personApi.OperationInsert({businessId: this.businessId, goodsId: id, info, recordType, salesmanId: this.salesmanId, userId: this.userId})
+      },
       // 传id 跳入产品信息
       goToProduct (id) {
+        this.businessId = wx.getStorageSync('businessId')
+        this.salesmanId = wx.getStorageSync('salesManId')
+        this.userId = wx.getStorageSync('userId')
+        this.insertOperaA('查看了产品', 3, id)
         wx.navigateTo({
           url: '../productA/detail/main?id=' + id
         })
@@ -481,6 +490,27 @@
           url
         })
       },
+      // 页面是否加载收下信息
+      getInfoA () {
+        this.userId = wx.getStorageSync('userId') // 获取本地userId
+        console.log('userId', this.userId)
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/platformSalesman/selectSelfInfo',
+          body: {
+            'userId': this.userId
+          }
+        }).then(res => {
+          console.log('res', res)
+          if (res.data) {
+            if (res.data.nickName === '' || res.data.nickName == null) {
+              this.modalFlag = true
+            }
+          }
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      },
       // 页面加载信息
       getInfo () {
         const userId = wx.getStorageSync('userId') // 获取本地userId
@@ -491,10 +521,6 @@
             'salesmanId': this.CardId, 'userId': userId
           }
         }).then(res => {
-          if (res.data.nickName === '' || res.data.nickName == null) {
-            this.modalFlag = true
-          }
-          console.log('res', res)
           this.postForm = res.data
           this.name = res.data.name
           this.job = res.data.job
