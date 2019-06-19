@@ -247,6 +247,7 @@ export default {
     this.showpop = false
     this.getInfo()
     this.getSun()
+    this.getSalesmanId()
   },
   onLoad (options) {
     if (options.goodsId) {
@@ -499,11 +500,32 @@ export default {
         url: '../radar/main'
       })
     },
+    // 查询salesmanId
+    getSalesmanId () {
+      const userId = wx.getStorageSync('userId') // 获取本地userId
+      this.$fly.request({
+        method: 'get',
+        url: '/platformSalesman/selectSelfInfo',
+        body: {
+          'userId': userId
+        }
+      }).then(res => {
+        this.salesmanId = res.data.id
+        wx.setStorageSync('salesmanId', this.salesmanId)
+      }).catch(err => {
+        console.log(err)
+      })
+    },
     // 跳转群组
     goGroup () {
-      wx.navigateTo({
-        url: '../GroupCard/main'
+      wx.showToast({
+        title: '功能还在开发中哦',
+        duration: 2000,
+        icon: 'none'
       })
+      // wx.navigateTo({
+      //   url: '../GroupCard/main'
+      // })
     },
     // 挑战
     ArouterTo (url) {
