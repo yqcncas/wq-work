@@ -286,7 +286,7 @@ export default {
         },
         fail: () => {
           wx.showToast({
-            title: '取消播放',
+            title: '取消拨打',
             icon: 'none',
             duration: 2000
           })
