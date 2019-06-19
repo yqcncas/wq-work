@@ -167,6 +167,7 @@ export default {
       context.stroke()
       context.closePath()
     },
+    // 下载资源
     downImg () {
       wx.downloadFile({
         url: this.params.qrCodeUrl,

@@ -81,7 +81,7 @@ export default {
         } else if (this.status === 2) {
           this.disabled = false
         } else {
-          console.log('111')
+          console.log('申请认证失败')
         }
       }).catch(err => {
         console.log(err)
@@ -149,7 +149,7 @@ export default {
         console.log(err)
         if (err === '请求失败') {
           wx.showToast({
-            title: '网络错误',
+            title: '修改认证数据失败',
             icon: 'none',
             duration: 1000
           })

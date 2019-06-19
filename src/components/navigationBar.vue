@@ -91,7 +91,7 @@
     onLoad () {
       setInterval(() => {
         const that = this
-        console.log('resA A A ')
+        console.log('获取消息数量')
         that.getMsgNum()
       }, 3000)
     },

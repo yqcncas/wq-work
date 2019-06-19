@@ -581,10 +581,11 @@
       //     console.log(err.status, err.message)
       //   })
       // },
-      // 播放音频
+      // 选择音频
       changeVoice () {
         this.changeVoiceFlag = !this.changeVoiceFlag
       },
+      // 播放音频
       playAudio () {
         // const url = this.videoUrl // event.currentTarget.dataset.url
         const url = this.voiceUrl

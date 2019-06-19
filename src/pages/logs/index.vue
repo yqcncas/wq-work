@@ -249,13 +249,10 @@ export default {
     this.getSun()
   },
   onLoad (options) {
-    console.log('aaaaaa', options)
     if (options.goodsId) {
-      console.log('55')
       this.goToFen('../OthersCard/main?id=' + options.id + '&fromWay=1&userId=' + options.userId + '&goodsId=' + options.goodsId)
     } else {
       if (options.id !== undefined && options.userId !== undefined) {
-        console.log('66')
         this.goToFen('../OthersCard/main?id=' + options.id + '&fromWay=1&userId=' + options.userId)
       }
     }
@@ -267,6 +264,7 @@ export default {
       }
     })
   },
+  // 分享名片
   onShareAppMessage () {
     // this.insertOpera('分享了名片', 21)
     return {
@@ -287,18 +285,20 @@ export default {
         },
         fail: () => {
           wx.showToast({
-            title: '用户没有授权手机号',
+            title: '取消播放',
             icon: 'none',
             duration: 2000
           })
         }
       })
     },
+    // 跳转
     goToFen (url) {
       wx.navigateTo({
         url: url
       })
     },
+    // 获取页面长宽
     imgLoad (e) {
       this.imgWidth = e.target.width
       this.imgHeight = e.target.height
@@ -402,6 +402,7 @@ export default {
       // 获取移动距离，可以通过打印出e，然后分析e的值得出
       this.startX = e.mp.changedTouches[0].clientX
     },
+    // 获取移动距离，可以通过打印出e，然后分析e的值得出
     touchEnd (e, index, items) {
       // 获取移动距离
       this.endX = e.mp.changedTouches[0].clientX
@@ -422,6 +423,7 @@ export default {
         url: `../OthersCard/main?id=` + id
       })
     },
+    // 恢复弹出删除原本样式
     recover (index, items) {
       items[index].type = 0
     },
@@ -491,21 +493,25 @@ export default {
         return 'AAA'
       }
     },
+    // 跳转雷达
     goRadar () {
       wx.navigateTo({
         url: '../radar/main'
       })
     },
+    // 跳转群组
     goGroup () {
       wx.navigateTo({
         url: '../GroupCard/main'
       })
     },
+    // 挑战
     ArouterTo (url) {
       wx.switchTab({
         url
       })
     },
+    // 挑战
     routerTo (url) {
       wx.navigateTo({
         url

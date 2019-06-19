@@ -125,6 +125,7 @@
           }
         }
       },
+      // 恢复
       recover (index) {
         this.commitInfo[index].type = 0
       },

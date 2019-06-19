@@ -83,12 +83,10 @@
             'id': id
           }
         }).then(res => {
-          console.log(res)
           this.name = res.data.goods.name
           this.info = res.data.goods.info
           this.price = res.data.goods.price
           this.goodsImgUrlList = res.data.goodsImgList
-          console.log(this.goodsImgUrlList)
         }).catch(err => {
           console.log(err)
           if (err === '请求失败') {

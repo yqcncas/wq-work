@@ -18,6 +18,7 @@
       }
     },
     methods: {
+      // 规定输入多少字符
       txtInput () {
         this.num = this.obj.info.length
         if (this.num >= 100) {
@@ -28,6 +29,7 @@
           })
         }
       },
+      // 跳转
       routeTo () {
         wx.navigateTo({
           url: `../profileModel/main`

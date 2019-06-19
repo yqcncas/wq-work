@@ -250,6 +250,7 @@ export default {
     this.getInfo()
   },
   methods: {
+    // 切换
     changTab (index) {
       if (index === 1) {
         this.tab = index
@@ -279,6 +280,7 @@ export default {
         this.videoImg = this.video + '?x-oss-process=video/snapshot,t_0,f_jpg,w_750,m_fast'
       }
     },
+    // 跳转到个人简介编辑
     routeTo (info) {
       wx.navigateTo({
         url: `../profile/main?id=${this.Yid}&userId=${this.userId}&name=${this.name}&info=${info}`
@@ -364,6 +366,7 @@ export default {
     end () {
       this.videoFlag = false
     },
+    // 上传图片
     uploadOneByOne (imgPaths, successUp, failUp, count, length) {
       const token = wx.getStorageSync('token')
       wx.showLoading({
@@ -411,7 +414,7 @@ export default {
       this.richTextList.splice(i, 1)
       this.richImg = this.richTextList.join(',')
       if (this.richImg.richTextList === 0) {
-        console.log('aaa')
+        // console.log('aaa')
         this.richImg = ''
       }
       this.getSalesmanUpdate()
@@ -515,6 +518,7 @@ export default {
         console.log(err.status, err.message)
       })
     },
+    // 检测有没有输入值
     judgeNull (str, name) {
       if (str === '' || str.length === 0) {
         wx.showToast({
@@ -538,6 +542,7 @@ export default {
       if (this.judgeNull(this.salesCompanyName, '公司')) return
       if (this.judgeNull(this.job, '职位')) return
       if (this.judgeNull(this.phone, '手机')) return
+      // 检测手机号
       if (this.phone.length !== 0) {
         var reg = /^1(3|4|5|7|8)\d{9}$/
         if (!reg.test(this.phone)) {
@@ -562,6 +567,7 @@ export default {
         }
       }
       if (this.judgeNull(this.email, '邮箱')) return
+      // 检测邮箱
       if (this.email) {
         var regE = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
         if (!regE.test(this.email)) {
@@ -740,13 +746,16 @@ export default {
         }
       })
     },
+    // 设定定时
     startCount () {
       // this.num += 1
       this.timeControl = setTimeout(this.startCount, 1000)
     },
+    // 选择语音
     chooseVocie () {
       this.getSalesmanUpdate()
     },
+    // 获取语音时长
     formatSeconds (value) {
       let theTime = parseInt(value)// 秒
       let middle = 0// 分
@@ -776,6 +785,7 @@ export default {
       }
       return result
     },
+    // 录音状态
     voiceControl () {
       if (this.voiceTxt === '停止') {
         this.stopVoice()
@@ -854,7 +864,7 @@ export default {
       this.recordFlag = true
       this.voiceTxt = '重录'
     },
-    // playvoice
+    // playvoice 播放
     play () {
       const url = this.voice
       if (url === '') {

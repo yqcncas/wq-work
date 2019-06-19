@@ -86,6 +86,7 @@ export default {
         this.video = ''
       }
     },
+    // 选择图片
     choosed (val) {
       if (val.all) {
         this.imgUrlList = val.all

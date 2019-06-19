@@ -33,7 +33,6 @@
       this.getTrade() // 获取行业
     },
     onLoad (options) {
-      console.log(options)
       this.tab = parseInt(options.id)
       this.tradeName = options.name
       this.TradeId = options.id
@@ -59,7 +58,7 @@
         this.status = index
         this.TradeId = index
         this.tradeName = name
-        console.log(this.TradeId)
+        // console.log(this.TradeId)
       },
       // 行业确定选择
       goBackTrade () {

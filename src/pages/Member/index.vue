@@ -250,6 +250,7 @@ export default {
       this.tabB = 0
       this.tabA = 0
     },
+    // 选择
     changTab (index) {
       if (index === 1) {
         this.tab = index

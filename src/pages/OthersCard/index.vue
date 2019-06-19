@@ -468,12 +468,14 @@
       showType () {
         this.showpop = !this.showpop
       },
+      // 跳转
       goInto () {
         console.log('11')
         wx.navigateTo({
           url: '../index/main'
         })
       },
+      // 跳转
       routerTo (url) {
         wx.navigateTo({
           url
@@ -562,10 +564,11 @@
           console.log(err.status, err.message)
         })
       },
-      // 播放音频
+      // 旋转音频
       changeVoice () {
         this.changeVoiceFlag = !this.changeVoiceFlag
       },
+      // 播放音频
       playAudio () {
         // const url = this.videoUrl // event.currentTarget.dataset.url
         const url = this.voiceUrl
