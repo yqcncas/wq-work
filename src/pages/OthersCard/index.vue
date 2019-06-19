@@ -501,7 +501,6 @@
             'userId': this.userId
           }
         }).then(res => {
-          console.log('res', res)
           if (res.data) {
             if (res.data.nickName === '' || res.data.nickName == null) {
               this.modalFlag = true
