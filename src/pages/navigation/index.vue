@@ -522,6 +522,11 @@
             const that = this
             this.number = this.lastPage
             that.cards[index].isCollect = 1
+            wx.showToast({
+              title: '收藏成功',
+              icon: 'none',
+              duration: 2000
+            })
           }
         }).catch(err => {
           console.log(err.status, err.message)
@@ -591,10 +596,20 @@
         }).then(res => {
           if (status === 0) {
             this.Message[index].isLike = 1
+            wx.showToast({
+              title: '点赞成功',
+              icon: 'none',
+              duration: 2000
+            })
           } else if (status === 1) {
             // console.log('768', res) // 取消点赞
             // this.tradeInfor()
             this.Message[index].isLike = 0
+            wx.showToast({
+              title: '取消点赞',
+              icon: 'none',
+              duration: 2000
+            })
           }
         }).catch(err => {
           console.log(err, err.message)
