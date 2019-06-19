@@ -251,7 +251,7 @@
         // })
         const { data: { list, lastPage, pageNum, nextPage } } = await personApi.InteractionOpSearch({ salesmanId: this.salesmanId, pageNum: this.pageNum, pageSize: this.pageSize, timeType: this.timeActive })
         wx.hideLoading()
-        console.log(list)
+        // console.log('1嗄', list)
         list.map(item => {
           item.visible = false
           item.dataTime = this.moment(item.browseDate).format('YYYY.MM.DD')

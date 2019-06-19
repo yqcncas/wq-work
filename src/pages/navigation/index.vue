@@ -41,14 +41,14 @@
             <div v-if="tab===1">
               <swiper class="swiper" :indicator-dots="indicatorDots" :autoplay="autoplay" :circular= 'circular' :interval="interval" :duration="duration">
                 <swiper-item>
-                      <span class="lf-main" v-for="(item, index) in Types" :key="index" @click="routerTo(item.url)">
+                      <span class="lf-main" v-for="(item, index) in Types" :key="index" @click="routerTo(item.id)">
                         <span class="Typesrc"><img :src="item.imgUrl"></span>
                         <span class="title">{{ item.tradeName }}</span>
                       </span>
                   <!--<image :src="item.url" class="slide-image" mode="aspectFill"/>-->
                 </swiper-item>
                 <swiper-item>
-                      <span class="lf-main" v-for="(item, index) in Types1" :key="index">
+                      <span class="lf-main" v-for="(item, index) in Types1" :key="index" @click="routerTo(item.id)">
                         <span class="Typesrc"><img :src="item.imgUrl"></span>
                         <span class="title">{{ item.tradeName }}</span>
                       </span>
@@ -59,7 +59,7 @@
             <div v-else>
               <swiper class="swiper" :indicator-dots="indicatorDots" :autoplay="autoplay" :circular= 'circular' :interval="interval" :duration="duration">
                 <swiper-item>
-                      <span class="lf-main" v-for="(item, index) in Types2" :key="index">
+                      <span class="lf-main" v-for="(item, index) in Types2" :key="index" @click="routerTo(item.id)">
                         <span class="Typesrc"><img :src="item.src"></span>
                         <span class="title">{{ item.title }}</span>
                       </span>
@@ -579,9 +579,9 @@
           url: `../message/main`
         })
       },
-      routerTo (url) {
+      routerTo (id) {
         wx.navigateTo({
-          url
+          url: `../classify/main?id=` + id
         })
       },
       // 信息广场 点赞和取消点赞
