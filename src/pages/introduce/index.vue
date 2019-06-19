@@ -1,28 +1,28 @@
 <template>
-    <div class="introduce">
-        <div class="top">
-          <div class="industry">
-            <span class="title">行业</span>
-            <span class="choose" @click="goToTrade()" >{{ choose }}<i class="iconfont iconyouce"></i></span>
-          </div>
-          <div class="studs">
-            <span class="title">类型</span>
-            <picker class="choose" mode="selector" :value="index" :range="valueA" range-key="tradeName" @change="bindRegionChange( valueA[index].id)">
-              <span class="picker">{{ valueA[index].tradeName}}<i class="iconfont iconyouce"></i></span>
-            </picker>
-          </div>
-          <div class="textArea">
-            <textarea v-model="info" placeholder="填写公司简介"></textarea>
-            <uploadImg ref="imtUrl" width="120rpx" height="120rpx" max="1" @choosed="choosed" :srcs="imgUrl"></uploadImg>
-          </div>
-        </div>
-        <div v-if="panA === 1" class="footer">
-          <button class="save" @click="save()">保存</button>
-        </div>
-        <div v-else class="footer">
-          <button  class="save" @click="update()">更新</button>
-        </div>
+  <div class="introduce">
+    <div class="top">
+      <div class="industry">
+        <span class="title">行业</span>
+        <span class="choose" @click="goToTrade()" >{{ choose }}<i class="iconfont iconyouce"></i></span>
+      </div>
+      <div class="studs">
+        <span class="title">类型</span>
+        <picker class="choose" mode="selector" :value="index" :range="valueA" range-key="tradeName" @change="bindRegionChange( valueA[index].id)">
+          <span class="picker">{{ valueA[index].tradeName}}<i class="iconfont iconyouce"></i></span>
+        </picker>
+      </div>
+      <div class="textArea">
+        <textarea v-model="info" placeholder="填写公司简介"></textarea>
+        <uploadImg ref="imtUrl" width="120rpx" height="120rpx" max="1" @choosed="choosed" :srcs="imgUrl"></uploadImg>
+      </div>
     </div>
+    <div v-if="panA == 1" class="footer">
+      <button class="save" @click="save()">保存</button>
+    </div>
+    <div v-else-if="panA == 2" class="footer">
+      <button  class="save" @click="update()">更新</button>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -52,39 +52,50 @@
         imgUrl: '',
         secTradeId: '',
         pan: 1,
-        panA: ''
+        panA: 1,
+        dataA: ''
       }
     },
     onShow () {
       this.getSalesmanId()
-      this.getSelectOne()
-      if (this.pan === 2) {
+      this.dataA = wx.getStorageSync('choose')
+      if (this.dataA.id !== '') {
+        this.TradeName = this.dataA.name
+        this.tradeName = this.dataA.name
+        this.choose = this.TradeName
+        this.TradeId = this.dataA.id
+        this.tradeId = this.dataA.id
+        this.pan = this.dataA.pan
       } else {
+        this.pan = 1
+        this.getSelectOne()
+      }
+      if (this.dataA.id) {
+        this.lookUp()
+      }
+      console.log('data', this.dataA)
+    },
+    onUnload () {
+      wx.setStorage({
+        key: 'choose',
+        data: {name: '', id: '', pan: 1},
+        success: function () {
+        }
+      })
+    },
+    onLoad: function (options) {
+      console.log('aaaa', this.dataA)
+      this.getSelectOne()
+      if (this.pan !== 2) {
         this.panA = 1
       }
     },
-    onLoad: function (options) {
-      this.TradeName = options.name
-      this.choose = this.TradeName
-      this.TradeId = options.id
-      this.tradeId = options.id
-      if (options.pan) {
-        this.pan = options.pan
-      } else {
-        this.pan = 1
-      }
-      if (options.id) {
-        this.lookUp()
-      }
-    },
     methods: {
-      // 跳转
       goToTrade () {
         wx.navigateTo({
           url: `../chooseTrade/main?id=` + this.TradeId + '&name=' + this.choose
         })
       },
-      // 跳转
       goTo () {
         wx.navigateTo({
           url: `../personal/main`
@@ -117,7 +128,7 @@
             'salesmanId': salesmanId
           }
         }).then(res => {
-          console.log('11', res)
+          console.log('res', res)
           if (res.code === 200) {
             this.imgUrl = res.data.imgUrl
             this.info = res.data.info
@@ -125,6 +136,7 @@
             this.TradeId = res.data.tradeId
             this.id = res.data.id
             this.choose = res.data.tradeName
+            this.tradeName = res.data.tradeName
             this.label = res.data.sechTradeName
             this.panA = 2
             this.lookUp()
@@ -145,7 +157,7 @@
           }
         }).then(res => {
           this.valueA = res.data.list
-          this.secTradeId = res.data.id
+          this.secTradeId = ''
         }).catch(err => {
           console.log(err)
         })
@@ -183,8 +195,16 @@
               duration: 2000
             })
             setTimeout(function () {
-              wx.navigateBack(-1)
-            }, 3000)
+              wx.navigateBack({
+                delta: 20
+              })
+            }, 2000)
+          } else {
+            wx.showToast({
+              title: res.message,
+              icon: 'none',
+              duration: 2000
+            })
           }
           console.log(res)
         }).catch(err => {
@@ -212,8 +232,16 @@
               duration: 2000
             })
             setTimeout(function () {
-              wx.navigateBack(-1)
-            }, 3000)
+              wx.navigateBack({
+                delta: 20
+              })
+            }, 2000)
+          } else {
+            wx.showToast({
+              title: res.message,
+              icon: 'none',
+              duration: 2000
+            })
           }
         }).catch(err => {
           console.log(err)
@@ -224,5 +252,5 @@
 </script>
 
 <style lang="less" scoped>
-@import "./style.less";
+  @import "./style.less";
 </style>

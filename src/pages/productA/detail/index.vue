@@ -317,14 +317,14 @@ export default {
         console.log(err)
       })
     },
-    // // 一个点击赞之后的收藏的按钮,数据库里增加赞的记录
-    // async addComment ({ commentType, commentgoodsid, commentuserid }) {
-    //   await productApi.addComment({ commentType: commentType, commentgoodsid: commentgoodsid, commentuserid: commentuserid })
-    // },
-    // // 一个点击赞空白的按钮,数据库里取消赞的记录
-    // async deleteComment ({ commentType, commentgoodsid, commentuserid }) {
-    //   await productApi.deleteComment({ commentType: commentType, commentgoodsid: commentgoodsid, commentuserid: commentuserid })
-    // },
+    // 一个点击赞之后的收藏的按钮,数据库里增加赞的记录
+    async addComment ({ commentType, commentgoodsid, commentuserid }) {
+      await productApi.addComment({ commentType: commentType, commentgoodsid: commentgoodsid, commentuserid: commentuserid })
+    },
+    // 一个点击赞空白的按钮,数据库里取消赞的记录
+    async deleteComment ({ commentType, commentgoodsid, commentuserid }) {
+      await productApi.deleteComment({ commentType: commentType, commentgoodsid: commentgoodsid, commentuserid: commentuserid })
+    },
     async buy () {
       if (this.buyStatus === 0) return
       if (this.modelText !== '请选择型号' || this.goodmodel.length === 0) {
@@ -353,7 +353,7 @@ export default {
           wx.setStorageSync('goodsList', JSON.stringify(data.goodsList))
           wx.setStorageSync('payInfo', JSON.stringify(data.payInfo))
           wx.navigateTo({
-            url: '../../../packageA/pages/order/index?buyWay=0&id=' + this.id
+            url: '../../../packageA/pages/order/main?buyWay=0&id=' + this.id
           })
         } else {
           wx.showToast({

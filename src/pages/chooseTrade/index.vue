@@ -1,21 +1,21 @@
 <template>
-    <div class="addGroup">
-      <!--群类型-->
-      <div class="main">
-        <div class="type">
-          <div class="type-Main">
-            <div v-for="(item,index) in Trade" :key="index">
+  <div class="addGroup">
+    <!--群类型-->
+    <div class="main">
+      <div class="type">
+        <div class="type-Main">
+          <div v-for="(item,index) in Trade" :key="index">
                <span :class="{'selected':tab === item.id,'testTitle':true}"
                      @click="changTab(item.id,item.tradeName )">{{item.tradeName}}</span>
-            </div>
           </div>
         </div>
       </div>
-      <!--保存-->
-      <div class="footer">
-        <button class="save" @click="goBackTrade()">确定</button>
-      </div>
     </div>
+    <!--保存-->
+    <div class="footer">
+      <button class="save" @click="goBackTrade()">确定</button>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -33,6 +33,7 @@
       this.getTrade() // 获取行业
     },
     onLoad (options) {
+      console.log(options)
       this.tab = parseInt(options.id)
       this.tradeName = options.name
       this.TradeId = options.id
@@ -58,12 +59,17 @@
         this.status = index
         this.TradeId = index
         this.tradeName = name
-        // console.log(this.TradeId)
       },
       // 行业确定选择
       goBackTrade () {
-        wx.redirectTo({
-          url: '../introduce/main?id=' + this.TradeId + '&name=' + this.tradeName + '&pan=2'
+        wx.setStorage({
+          key: 'choose',
+          data: {name: this.tradeName, id: this.TradeId, pan: 2},
+          success: function () {
+            wx.navigateBack({
+              delta: 1
+            }) // 返回上一个页面
+          }
         })
       }
     }
@@ -71,5 +77,5 @@
 </script>
 
 <style lang="less" scoped>
-@import "./style.less";
+  @import "./style.less";
 </style>

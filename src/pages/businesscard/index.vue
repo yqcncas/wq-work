@@ -228,10 +228,10 @@
               <span class="company-title">公司介绍</span>
             </div>
             <div class="company-main">
-              <div class="company-bg">
+              <div class="company-bg" v-if="postForm.companyImgUrl">
                 <img :src="postForm.companyImgUrl"/>
               </div>
-              <div class="company-title">
+              <div class="company-title" v-if="postForm.companyInfo">
                 <span>{{ postForm.companyInfo }}</span>
               </div>
             </div>
@@ -360,8 +360,16 @@
           console.log(err)
         })
       },
+      // 插入雷达
+      async insertOperaA (info, recordType, id) {
+        await personApi.OperationInsert({businessId: this.businessId, goodsId: id, info, recordType, salesmanId: this.salesmanId, userId: this.userId})
+      },
       // 传id 跳入产品信息
       goToProduct (id) {
+        this.businessId = wx.getStorageSync('businessId')
+        this.salesmanId = wx.getStorageSync('salesManId')
+        this.userId = wx.getStorageSync('userId')
+        this.insertOperaA('查看了产品', 3, id)
         wx.navigateTo({
           url: '../productA/detail/main?id=' + id
         })
