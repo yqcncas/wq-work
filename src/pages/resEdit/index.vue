@@ -178,7 +178,8 @@ export default {
             'imgUrlListOut': this.imgUrlList,
             'address': this.address,
             'longitude': this.longitude,
-            'latitude': this.latitude
+            'latitude': this.latitude,
+            'trade': 0
           }
         }).then(res => {
           if (res.code === 200) {
@@ -208,7 +209,8 @@ export default {
             'video': this.video,
             'address': this.address,
             'longitude': this.longitude,
-            'latitude': this.latitude
+            'latitude': this.latitude,
+            'trade': 0
           }
         }).then(res => {
           if (res.code === 200) {

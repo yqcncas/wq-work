@@ -1,12 +1,12 @@
 <template>
   <div>
-    <vue-tab-bar
-      @fetch-index="clickIndexNav"
-      :selectNavIndex=selectNavIndex
-      :needButton="needButton"
-      :handButton="handButton"
-      :btnText="btnText">
-    </vue-tab-bar>
+    <!--<vue-tab-bar-->
+      <!--@fetch-index="clickIndexNav"-->
+      <!--:selectNavIndex=selectNavIndex-->
+      <!--:needButton="needButton"-->
+      <!--:handButton="handButton"-->
+      <!--:btnText="btnText">-->
+    <!--</vue-tab-bar>-->
     <!--分享的bar-->
     <div class="attr-pop" :class="[showpop ? 'fadeup' : 'fadedown']">
       <div class="top">
@@ -243,7 +243,7 @@ export default {
   onShow () {
     this.getLogo()
     this.getMy()
-    wx.hideTabBar()
+    // wx.hideTabBar()
     this.showpop = false
     this.getInfo()
     this.getSun()

@@ -1,13 +1,13 @@
 <template>
   <!-- 名片 -->
     <div  class="center"  v-if="postForm.length === 0 || postForm === null">
-      <vue-tab-bar
-        @fetch-index="clickIndexNav"
-        :selectNavIndex=selectNavIndex
-        :needButton="needButton"
-        :handButton="handButton"
-        :btnText="btnText">
-      </vue-tab-bar>
+      <!--<vue-tab-bar-->
+        <!--@fetch-index="clickIndexNav"-->
+        <!--:selectNavIndex=selectNavIndex-->
+        <!--:needButton="needButton"-->
+        <!--:handButton="handButton"-->
+        <!--:btnText="btnText">-->
+      <!--</vue-tab-bar>-->
       <div class="mian">
         <p>目前您还没有名片</p>
         <p>点击下方按钮去创建吧</p>
@@ -17,13 +17,13 @@
       </div>
     </div>
     <div class="business" v-else @load="imgLoad">
-      <vue-tab-bar
-        @fetch-index="clickIndexNav"
-        :selectNavIndex=selectNavIndex
-        :needButton="needButton"
-        :handButton="handButton"
-        :btnText="btnText">
-      </vue-tab-bar>
+      <!--<vue-tab-bar-->
+        <!--@fetch-index="clickIndexNav"-->
+        <!--:selectNavIndex=selectNavIndex-->
+        <!--:needButton="needButton"-->
+        <!--:handButton="handButton"-->
+        <!--:btnText="btnText">-->
+      <!--</vue-tab-bar>-->
       <!--弹出的海报图片-->
       <div v-if="modalflag" class="modalflag" catchtouchmove="true">
         <canvas canvas-id="myCanvas" class="canvas" />
@@ -97,6 +97,23 @@
       <div class="business-main">
       <el-form ref="postForm" :model="postForm" >
         <div class="cards">
+          <div class="cards-radar">
+            <div class="main">
+              <swiper class="swiper" :autoplay="autoplay" :circular= 'circular' :vertical="vertical" :interval="interval" :duration="duration" :easing-function="easeInOutCubic">
+                <block v-for="(item, index) in infoMation" :key="index" @click="routerTo(item.id)">
+                  <swiper-item>
+                    <div class="top">
+                        <div class="imgUrl"><img :src= item.avatarUrl /></div>
+                        <div class="name">{{item.userName}}</div>
+                        <div class="date">{{item.browseDate}}</div>
+                    </div>
+                    <div class="operation">{{item.info}}</div>
+                  </swiper-item>
+                </block>
+              </swiper>
+            </div>
+            <div class="title">寻客雷达</div>
+          </div>
           <div class="card-top">
             <img src="https://oss.wq1516.com/salesInfo/201906181125191560828319376.jpg" />
             <div class="cards-M">
@@ -284,6 +301,11 @@
     data () {
       return {
         CardId: '',
+        circular: true,
+        autoplay: true,
+        interval: 5000,
+        vertical: true,
+        easeInOutCubic: 'easeInOutCubic',
         personApi: personApi,
         postForm: [],
         voiceUrl: '',
@@ -313,14 +335,16 @@
         praiseNum: 888,
         num: 0,
         headImgList: [],
-        details: []
+        details: [],
+        infoMation: []
       }
     },
     onLoad: function (options) {
       this.CardId = options.id
+      this.getOpA()
     },
     onShow () {
-      wx.hideTabBar()
+      // wx.hideTabBar()
       this.getInfo()
       this.getLogo()
       this.getSun()
@@ -335,6 +359,42 @@
       }
     },
     methods: {
+      // 获取操作动态
+      getOpA () {
+        const salesmanId = wx.getStorageSync('salesmanId')
+        console.log('salesmanId', salesmanId)
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/platformOperationRecord/selectAllOperation',
+          body: {
+            'salesmanId': salesmanId,
+            'pageNum': 0,
+            'pageSize': 0
+          }
+        }).then(res => {
+          console.log('res', res)
+          this.infoMation = res.data.list
+          let today = this.moment().format('YYYY/MM/DD')
+          let yesterday = this.moment(new Date()).add(-1, 'days').format('YYYY/MM/DD')
+          const dataA = res.data.list
+          dataA.map(item => {
+            let temp = this.moment(item.browseDate)
+            let tempData = this.moment(item.browseDate).format('YYYY/MM/DD')
+            if (tempData === today) {
+              item.browseDate = temp.format('A hh:mm')
+            } else if (tempData === yesterday) {
+              item.browseDate = '昨天'
+            } else if (this.moment(Date.now() - 3 * 24 * 60 * 60 * 1000) < item.browseDate) {
+              item.browseDate = temp.format('dddd')
+            } else {
+              item.browseDate = tempData
+            }
+          })
+          // this.logo = res.data.logo
+        }).catch(err => {
+          console.log(err)
+        })
+      },
       // 插入雷达
       async insertOpera (info, recordType) {
         this.businessId = wx.getStorageSync('businessId')
@@ -356,6 +416,8 @@
           }
         }).then(res => {
           this.logo = res.data.logo
+          const tradeStatus = res.data.tradeStatus
+          wx.setStorageSync('tradeStatus', tradeStatus)
         }).catch(err => {
           console.log(err)
         })

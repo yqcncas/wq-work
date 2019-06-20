@@ -397,11 +397,64 @@ font-size: ~'26rpx';
     }
     .cards{
       width: ~'656rpx';
-      height: ~'706rpx';
+      height: ~'850rpx';
       display: block;
       margin: 0 auto;
       background: #ffffff;
       border-radius: ~'10rpx';
+      .cards-radar{
+        z-index: 9;
+        width: 100%;
+        font-size: ~'28rpx';
+        height: ~'144rpx';
+        position: relative;
+        .swiper{
+          width: ~'616rpx';
+          height: ~'104rpx';
+          padding:  ~'20rpx' ;
+          .top{
+            width: 100%;
+            height: ~'60rpx';
+            display: flex;
+            align-items: center;
+            .imgUrl{
+              display: inline-block;
+              img{
+                width: ~'50rpx';
+                height: ~'50rpx';
+                border-radius: 50%;
+              }
+            }
+            .name{
+              color: #5B5B5B;
+              padding: 0 ~'20rpx';
+              display: inline-block;
+            }
+            .date{
+              color: #9D9D9D;
+              font-size: ~'24rpx';
+              display: inline-block;
+            }
+          }
+          .operation{
+            color: #9D9D9D;
+            font-size: ~'24rpx';
+            margin-top: ~'10rpx';
+          }
+        }
+        .title{
+          position: absolute;
+          right: 0;
+          top: 0;
+          width: ~'112rpx';
+          height: ~'35rpx';
+          font-size: ~'24rpx';
+          color: #ffffff;
+          border-top-right-radius: ~'10rpx';
+          text-align: center;
+          background:#2A94EC ;
+        }
+      }
       .card-top{
         z-index: 9;
         width: 100%;
@@ -409,8 +462,8 @@ font-size: ~'26rpx';
         img{
           width: 100%;
           height: 100%;
-          border-top-left-radius: ~'10rpx';
-          border-top-right-radius: ~'10rpx';
+          //border-top-left-radius: ~'10rpx';
+          //border-top-right-radius: ~'10rpx';
         }
         .cards-M{
           margin-top: ~'-500rpx';
@@ -635,7 +688,7 @@ font-size: ~'26rpx';
 .card-ma {
   position: absolute;
   left: 0;
-  top: ~'775rpx';
+  top: ~'920rpx';
   border: ~'2rpx' solid #eee;
   background-color: #fff;
   border-left: 0;

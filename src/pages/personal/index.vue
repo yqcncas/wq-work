@@ -1,12 +1,12 @@
 <template>
   <div class="index">
-    <vue-tab-bar
-      @fetch-index="clickIndexNav"
-      :selectNavIndex=selectNavIndex
-      :needButton="needButton"
-      :handButton="handButton"
-      :btnText="btnText">
-    </vue-tab-bar>
+    <!--<vue-tab-bar-->
+      <!--@fetch-index="clickIndexNav"-->
+      <!--:selectNavIndex=selectNavIndex-->
+      <!--:needButton="needButton"-->
+      <!--:handButton="handButton"-->
+      <!--:btnText="btnText">-->
+    <!--</vue-tab-bar>-->
     <!--<button class='pop_btn' plain="false" open-type='getPhoneNumber' bindgetphonenumber="getPhoneNumber">获取用户手机号</button>-->
       <div class="top">
         <el-form ref="postForm" :model="postForm">
@@ -119,7 +119,7 @@
     created () {
     },
     onShow () {
-      wx.hideTabBar()
+      // wx.hideTabBar()
       this.getInfo()
       this.getRecord()
     },

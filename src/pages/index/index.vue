@@ -40,6 +40,13 @@
                   <label>公司</label>
                   <input v-model="salesCompanyName" placeholder="请输入公司"/>
                 </div>
+                <!--<div>-->
+                  <!--<label>行业</label>-->
+                  <!--<picker mode="multiSelector" class="pick-region" @change="bindcolumnchange" :range="TradeData" :range-key = 'pid' :value="Trade">-->
+                    <!--<view type="text" placeholder="行业、类型" class="pick-item-s">{{TradeA}}</view>-->
+                    <!--<i class="iconfont iconyouce"></i>-->
+                  <!--</picker>-->
+                <!--</div>-->
                 <div>
                   <label>职位</label>
                   <input v-model="job" placeholder="请输入职位"/>
@@ -213,6 +220,9 @@ export default {
       name: '',
       salesCompanyName: '',
       salesAddress: '',
+      TradeData: [[], []],
+      multiArray: [],
+      Trade: [],
       job: '',
       phone: '',
       imgUrl: 'https://oss.wq1516.com/default-avatar.png',
@@ -230,6 +240,7 @@ export default {
       Yid: '', // 业务员id
       animal: '',
       region: [],
+      regionA: [],
       voiceUrl: '',
       pan: false,
       video: '',
@@ -248,6 +259,7 @@ export default {
   },
   onLoad () {
     this.getInfo()
+    this.getTrade()
   },
   methods: {
     // 切换
@@ -501,7 +513,7 @@ export default {
             this.voiceTxt = '重录'
             const bg = wx.createInnerAudioContext()
             bg.src = this.voice
-            console.log('33', this.voice)
+            // console.log('33', this.voice)
             bg.onCanplay(() => {
               console.log(bg.duration)
             })
@@ -592,6 +604,7 @@ export default {
           url: UPLOAD_API + '/platformSalesman/add',
           data: {
             businessId: businessId,
+            tradeId: 0,
             userId: userId,
             imgUrl: this.imgUrl,
             video: this.video,
@@ -916,9 +929,68 @@ export default {
       const videoContext = wx.createVideoContext('myVideo')
       videoContext.play()
     },
+    // getTrade () {
+    //   this.$fly.request({
+    //     method: 'get', // post/get 请求方式
+    //     url: '/trade/selectAllByGroup',
+    //     body: {
+    //     }
+    //   }).then(res => {
+    //     console.log('resa', res)
+    //     this.TradeData = res.data.firstTrade
+    //     // this.cards = res.data.list
+    //   }).catch(err => {
+    //     console.log(err.status, err.message)
+    //   })
+    // },
+    // 查找类型
+    lookUp (id) {
+      this.$fly.request({
+        method: 'get',
+        url: '/trade/selectAllByTradeId',
+        body: {
+          'tradeId': id
+        }
+      }).then(res => {
+        const TradeA = res.data.list
+        TradeA.map(item => {
+          this.TradeData[0].push(item.tradeName)
+        })
+        // this.valueA = res.data.list
+        // this.secTradeId = ''
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    getTrade () {
+      this.$fly.request({
+        method: 'get', // post/get 请求方式
+        url: '/trade/selectAll',
+        body: {
+        }
+      }).then(res => {
+        console.log('ara', res)
+        const TradeA = res.data.list
+        TradeA.map(item => {
+          this.TradeData[0].push(item.tradeName)
+        })
+        console.log('ara', this.TradeData)
+        // this.TradeData[0] = res.data.list.tradeName
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    // 选择的是行业类型
+    bindcolumnchange (e) {
+      console.log('e', e)
+      var value = e.mp.detail.value
+      this.TradeA = value[0] + '' + value[1]
+      this.Trade = value
+    },
     // 选择的是地址插件
     bindRegionChange (e) {
       var value = e.mp.detail.value
+      console.log('value', value)
       this.address = value[0] + '' + value[1] + '' + value[2]
       this.region = value
     }
