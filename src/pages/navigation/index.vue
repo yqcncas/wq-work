@@ -1,13 +1,13 @@
 <template>
   <scroll-view scroll-top="0">
     <div class="index">
-      <vue-tab-bar
-        @fetch-index="clickIndexNav"
-        :selectNavIndex=selectNavIndex
-        :needButton="needButton"
-        :handButton="handButton"
-        :btnText="btnText">
-      </vue-tab-bar>
+      <!--<vue-tab-bar-->
+        <!--@fetch-index="clickIndexNav"-->
+        <!--:selectNavIndex=selectNavIndex-->
+        <!--:needButton="needButton"-->
+        <!--:handButton="handButton"-->
+        <!--:btnText="btnText">-->
+      <!--</vue-tab-bar>-->
       <div class="top">
         <section class="sec-nav" @click="getInto">
           <navigation-bar
@@ -25,7 +25,7 @@
         </div>
       </div>
 
-      <div class="main">
+      <div class="main" v-if="tradeStatus !== 0">
         <div class="test">
           <div class="testNav">
             <div
@@ -41,19 +41,19 @@
             <div v-if="tab===1">
               <swiper class="swiper" :indicator-dots="indicatorDots" :autoplay="autoplay" :circular= 'circular' :interval="interval" :duration="duration">
                 <swiper-item>
-                      <span class="lf-main" v-for="(item, index) in Types" :key="index" @click="routerTo(item.id)">
+                      <span class="lf-main" v-for="(item, index) in Types" :key="index" @click="routerTo(item.pid)">
                         <span class="Typesrc"><img :src="item.imgUrl"></span>
                         <span class="title">{{ item.tradeName }}</span>
                       </span>
                   <!--<image :src="item.url" class="slide-image" mode="aspectFill"/>-->
                 </swiper-item>
-                <swiper-item>
-                      <span class="lf-main" v-for="(item, index) in Types1" :key="index" @click="routerTo(item.id)">
-                        <span class="Typesrc"><img :src="item.imgUrl"></span>
-                        <span class="title">{{ item.tradeName }}</span>
-                      </span>
-                  <!--<image :src="item.url" class="slide-image" mode="aspectFill"/>-->
-                </swiper-item>
+                <!--<swiper-item>-->
+                      <!--<span class="lf-main" v-for="(item, index) in Types1" :key="index" @click="routerTo(item.id)">-->
+                        <!--<span class="Typesrc"><img :src="item.imgUrl"></span>-->
+                        <!--<span class="title">{{ item.tradeName }}</span>-->
+                      <!--</span>-->
+                  <!--&lt;!&ndash;<image :src="item.url" class="slide-image" mode="aspectFill"/>&ndash;&gt;-->
+                <!--</swiper-item>-->
               </swiper>
             </div>
             <div v-else>
@@ -72,112 +72,112 @@
       </div>
 
 
+      <div v-if="tradeStatus !== 0">
+        <div class="fotter" v-if="status === 1">
+          <div class="test1">
+            <div class="testNav1">
+              <div
+                :class="{'selected2':tabs,'testTitle1':true}"
+              >{{ cardRen }}</div>
+              <div
+                :class="{'testTitle2':true}"
+                @click="changTabs(tabs)"
+              ><img src="../../../static/images/qiehuan.png" class="switch"/> {{cardsMap }}</div>
+            </div>
+            <div class="conts">
+              <div class="conts-main" v-if="tabs===1">
+                <div v-if="cards !== ''|| cards !== null">
+                  <div class="card" v-for="(item,index) in cards" :key="index">
+                    <div @click="goToCard(item.id)">
+                      <span><img :src="item.imgUrl"></span>
+                      <div class="card-main">
+                        <div class="qiye">
+                          <span class="img"><s>企</s></span>
+                          <b>{{ item.name }}</b>
+                          <span class="job">{{ item.job }}</span>
+                          <span v-if="item.isCertification === 0" class="status">已认证</span>
+                          <span v-else class="status">无状态</span>
+                        </div>
+                        <p class="comyname" v-if="item.salesCompanyName === null">无公司</p>
+                        <p class="comyname" v-else>{{ item.salesCompanyName}}</p>
+                      </div>
+                    </div>
+                    <div class="card-right">
+                      <p class="eye"><img src="../../../static/images/eye.png"/><span>{{ item.browseCount }}</span> </p>
+                      <p class="star"><img src="../../../static/images/star.png"/><span>{{ item.praiseCount }}</span> </p>
+                      <i v-if="item.isCollect === 0" @click="getCollect(item.id, index)"><img src="../../../static/images/addpersonal.png"/></i>
+                      <i v-else></i>
+                    </div>
+                  </div>
+                </div>
+                <div v-else class="no">
+                  <p class="title">暂无热门名片</p>
+                </div>
+              </div>
 
-      <div class="fotter" v-if="status === 1">
-        <div class="test1">
-          <div class="testNav1">
-            <div
-              :class="{'selected2':tabs,'testTitle1':true}"
-            >{{ cardRen }}</div>
-            <div
-              :class="{'testTitle2':true}"
-              @click="changTabs(tabs)"
-            ><img src="../../../static/images/qiehuan.png" class="switch"/> {{cardsMap }}</div>
+
+              <div class="conts-main" v-else>
+                <div v-if="card!== 1">
+                  <div class="card" v-for="(item,index) in enclosure" :key="index">
+                    <span><img :src="item.headImg"></span>
+                    <div class="card-main">
+                      <div class="qiye">
+                        <span class="img"><s>企</s></span>
+                        <b>{{ item.name }}</b>
+                        <span class="job">{{ item.job }}</span>
+                        <span v-if="item.isCertification === 0" class="status">已认证</span>
+                        <span v-else class="status">无状态</span>
+                      </div>
+                      <p class="comyname" v-if="item.salesCompanyName === null">无公司</p>
+                      <p class="comyname" v-else>{{ item.salesCompanyName}}</p>
+                    </div>
+                    <div class="card-right">
+                      <p class="eye"><img src="../../../static/images/eye.png"/><span>{{ item.eye }}</span> </p>
+                      <p class="star"><img src="../../../static/images/star.png"/><span>{{ item.star }}</span> </p>
+                      <i><img src="../../../static/images/addpersonal.png"/></i>
+                    </div>
+                  </div>
+                </div>
+                <div v-else class="no">
+                  <p class="title">暂无附近名片</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="info" v-else>
+          <div class="infoTest">
+            <div class="InfoNav">
+              <div
+                :class="{'selected1':info,'testTitle1':true}"
+              >{{ infoTop }}</div>
+              <div
+                :class="{'testTitle2':true}"
+                @click="changInfo(info)"
+              ><img src="../../../static/images/qiehuan.png" class="switch"/> 切换为{{ infoTitle }}</div>
+            </div>
           </div>
           <div class="conts">
-            <div class="conts-main" v-if="tabs===1">
-              <div v-if="cards !== ''|| cards !== null">
-              <div class="card" v-for="(item,index) in cards" :key="index">
-                <div @click="goToCard(item.id)">
-                  <span><img :src="item.imgUrl"></span>
-                  <div class="card-main">
-                    <div class="qiye">
-                      <span class="img"><s>企</s></span>
-                      <b>{{ item.name }}</b>
-                      <span class="job">{{ item.job }}</span>
-                      <span v-if="item.isCertification === 0" class="status">已认证</span>
-                      <span v-else class="status">无状态</span>
-                    </div>
-                    <p class="comyname" v-if="item.salesCompanyName === null">无公司</p>
-                    <p class="comyname" v-else>{{ item.salesCompanyName}}</p>
-                  </div>
-                </div>
-                <div class="card-right">
-                  <p class="eye"><img src="../../../static/images/eye.png"/><span>{{ item.browseCount }}</span> </p>
-                  <p class="star"><img src="../../../static/images/star.png"/><span>{{ item.praiseCount }}</span> </p>
-                  <i v-if="item.isCollect === 0" @click="getCollect(item.id, index)"><img src="../../../static/images/addpersonal.png"/></i>
-                  <i v-else></i>
-                </div>
-              </div>
-              </div>
-              <div v-else class="no">
-                <p class="title">暂无热门名片</p>
-              </div>
-            </div>
-
-
-            <div class="conts-main" v-else>
-              <div v-if="card!== 1">
-              <div class="card" v-for="(item,index) in enclosure" :key="index">
-                <span><img :src="item.headImg"></span>
-                <div class="card-main">
-                  <div class="qiye">
-                    <span class="img"><s>企</s></span>
-                    <b>{{ item.name }}</b>
-                    <span class="job">{{ item.job }}</span>
-                    <span v-if="item.isCertification === 0" class="status">已认证</span>
-                    <span v-else class="status">无状态</span>
-                  </div>
-                  <p class="comyname" v-if="item.salesCompanyName === null">无公司</p>
-                  <p class="comyname" v-else>{{ item.salesCompanyName}}</p>
-                </div>
-                <div class="card-right">
-                  <p class="eye"><img src="../../../static/images/eye.png"/><span>{{ item.eye }}</span> </p>
-                  <p class="star"><img src="../../../static/images/star.png"/><span>{{ item.star }}</span> </p>
-                  <i><img src="../../../static/images/addpersonal.png"/></i>
-                </div>
-              </div>
-            </div>
-            <div v-else class="no">
-              <p class="title">暂无附近名片</p>
-            </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="info" v-else>
-        <div class="infoTest">
-          <div class="InfoNav">
-            <div
-              :class="{'selected1':info,'testTitle1':true}"
-            >{{ infoTop }}</div>
-            <div
-              :class="{'testTitle2':true}"
-              @click="changInfo(info)"
-            ><img src="../../../static/images/qiehuan.png" class="switch"/> 切换为{{ infoTitle }}</div>
-          </div>
-        </div>
-        <div class="conts">
-          <div class="conts-mains" v-if="info === 1 ">
-            <div v-if="Message.length !== 0 && Message !== null">
-              <div class="infoCard" v-for="(item, index) in Message" :key="index">
-                <span class="headImg"><img :src="item.imgUrl"></span>
-                <div class="infoCard-main">
-                  <div class="infoTop">
-                    <span class="headName">{{item.name}}</span>
-                    <span class="headMap">
+            <div class="conts-mains" v-if="info === 1 ">
+              <div v-if="Message.length !== 0 && Message !== null">
+                <div class="infoCard" v-for="(item, index) in Message" :key="index">
+                  <span class="headImg"><img :src="item.imgUrl"></span>
+                  <div class="infoCard-main">
+                    <div class="infoTop">
+                      <span class="headName">{{item.name}}</span>
+                      <span class="headMap">
                     <s class="headMaps" v-if="item.address ">{{ item.address }}&nbsp;</s><s v-if="item.address ">·</s><s>&nbsp;{{ item.browseCount }}次浏览</s>
                   </span>
-                    <span class="headTitle">
+                      <span class="headTitle">
                   {{ item.title }}
                   </span>
-                    <span class="headImage" v-if="item.imgUrlList != 0">
+                      <span class="headImage" v-if="item.imgUrlList != 0">
                     <a  v-for="(itemA, index_) in item.imgUrlList" :key="index_">
                        <i :data-index='index_' :data-id="item.id"><img :src="itemA" @click="previewImg(item.imgUrlList,index_)" lazy-load /> </i>
                     </a>
                   </span>
-                    <span class="headVideo"  v-if="item.video !== '' && item.video !== null">
+                      <span class="headVideo"  v-if="item.video !== '' && item.video !== null">
                      <video
                        id="myVideo"
                        :src="item.video"
@@ -185,43 +185,44 @@
                        controls
                      ></video>
                   </span>
-                    <span class="headFotter">
+                      <span class="headFotter">
                     <span class="headTime">{{ item.createDate }}</span>
                     <span v-if="item.isLike == 0" class="headZan" @click="thumbsUp(item.id,0,index)"><img src="../../../static/images/zan.png"/> </span>
                     <span v-else class="headZan" @click="thumbsUp(item.id,1,index)"><img src="../../../static/images/zan-se.png"/> </span>
                   </span>
+                    </div>
                   </div>
                 </div>
               </div>
+              <div v-else class="no">
+                <p class="title">暂无推荐信息</p>
+              </div>
             </div>
-            <div v-else class="no">
-              <p class="title">暂无推荐信息</p>
-            </div>
-          </div>
 
-          <div class="conts-mains"  v-else>
-            <div v-if="card !== 1">
-            <div class="infoCard">
-                <span class="headImg"><img src="../../../static/images/gongzhonghao.jpg"></span>
-                <div class="infoCard-main">
-                  <div class="infoTop">
-                    <span class="headName">李颂扬</span>
-                    <span class="headMap">
+            <div class="conts-mains"  v-else>
+              <div v-if="card !== 1">
+                <div class="infoCard">
+                  <span class="headImg"><img src="../../../static/images/gongzhonghao.jpg"></span>
+                  <div class="infoCard-main">
+                    <div class="infoTop">
+                      <span class="headName">李颂扬</span>
+                      <span class="headMap">
                   <s class="headMaps">浙江温岭</s>·<s>100次浏览</s>
                   </span>
-                    <span class="headTitle">
+                      <span class="headTitle">
                   空间看垃圾堆了卡记录的借口啦来到了卡就绿卡就对了卡机看了多久啊离开卡里克多久啦大家垃圾堆了阿姐了解垃圾堆了阿克苏垃圾啊卡里克多久啦大家垃圾堆了阿姐了解垃圾堆了阿
                   </span>
-                    <span class="headFotter">
+                      <span class="headFotter">
                   <span class="headTime">昨天14：00</span>
                   <span class="headZan"><img src="../../../static/images/zan.png"/> </span>
                   </span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div v-else class="no">
-              <p class="title">暂无附近信息</p>
+              <div v-else class="no">
+                <p class="title">暂无附近信息</p>
+              </div>
             </div>
           </div>
         </div>
@@ -335,15 +336,18 @@
           eye: 10,
           star: 10,
           Companyname: '浙江万仟科技有限公司'
-        }]
+        }],
+        tradeStatus: 1
       }
     },
     onShow () {
       // this.doLogin()
       // this.getSalesmanId()
+      this.tradeStatus = wx.getStorageSync('tradeStatus')
+      console.log('tradeStatus', this.tradeStatus)
     },
     onLoad () {
-      wx.hideTabBar()
+      // wx.hideTabBar()
       this.trade()
       this.tradeA()
       this.cards = []
@@ -381,7 +385,7 @@
     },
     methods: {
       bindA (e) {
-        wx.hideTabBar()
+        // wx.hideTabBar()
       },
       // 预览图片
       previewImg (e, A) {
@@ -399,11 +403,14 @@
       trade () {
         this.$fly.request({
           method: 'get', // post/get 请求方式
-          url: '/trade/selectAll',
+          url: '/trade/selectAllByTradeId',
           body: {
-            'pageNum': 1, 'pageSize': 10
+            'pageNum': 1,
+            'pageSize': 10,
+            'tradeId': 0
           }
         }).then(res => {
+          console.log('res', res)
           this.Types = res.data.list
         }).catch(err => {
           console.log(err.status, err.message)
@@ -413,9 +420,11 @@
       tradeA () {
         this.$fly.request({
           method: 'get', // post/get 请求方式
-          url: '/trade/selectAll',
+          url: '/trade/selectAllByTradeId',
           body: {
-            'pageNum': 2, 'pageSize': 10
+            'pageNum': 2,
+            'pageSize': 10,
+            'tradeId': 0
           }
         }).then(res => {
           this.Types1 = res.data.list
@@ -434,7 +443,8 @@
             'pageNum': this.pageNumA,
             'pageSize': 10,
             'businessId': businessId,
-            'userId': userId
+            'userId': userId,
+            'tradeId': 0
           }
         }).then(res => {
           if (res.code === 200) {
@@ -442,8 +452,7 @@
             data.map(item => {
               this.Message.push(item)
             })
-            // this.Message = res.data.list
-            console.log('444', res)
+            // this.Message = res.data.lists
             this.lastPageA = res.data.lastPage
             this.pageNumA = res.data.pageNum
             this.nextPageA = res.data.nextPage

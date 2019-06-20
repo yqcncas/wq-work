@@ -67,42 +67,38 @@
             ]
           }
         ],
-        cards: [{
-          headImg: '../../static/images/gongzhonghao.jpg',
-          name: '李松阳',
-          job: '技术总监',
-          status: '已认证',
-          eye: 10,
-          star: 10,
-          Companyname: '浙江万仟科技有限公司'
-        }, {
-          headImg: '../../static/images/gongzhonghao.jpg',
-          name: '李松阳',
-          job: '技术总监',
-          status: '已认证',
-          eye: 10,
-          star: 10,
-          Companyname: '浙江万仟科技有限公司'
-        }, {
-          headImg: '../../static/images/gongzhonghao.jpg',
-          name: '李松阳1',
-          job: '技术总监',
-          status: '已认证',
-          eye: 10,
-          star: 10,
-          Companyname: '浙江万仟科技有限公司'
-        }, {
-          headImg: '../../static/images/gongzhonghao.jpg',
-          name: '李松阳',
-          job: '技术总监',
-          status: '已认证',
-          eye: 10,
-          star: 10,
-          Companyname: '浙江万仟科技有限公司'
-        }]
+        cards: [],
+        optionsId: ''
       }
     },
+    onLoad (options) {
+      console.log('a', options)
+      this.optionsId = options.id
+    },
+    onShow () {
+      this.tradeA()
+    },
     methods: {
+      // 人脉集市
+      tradeA () {
+        const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
+        const userId = wx.getStorageSync('userId') // 获取本地userId
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/platformSalesman/getByCode',
+          body: {
+            'pageNum': 1,
+            'pageSize': 10,
+            'tradeId': this.optionsId,
+            'businessId': businessId,
+            'userId': userId
+          }
+        }).then(res => {
+          this.cards = res.data.list
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      }
     }
   }
 </script>

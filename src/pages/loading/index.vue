@@ -83,6 +83,21 @@ export default {
     // },
     onMessage (res) {
       this.eatinCart(res)
+    }, // 查询salesmanId
+    getSalesmanId () {
+      const userId = wx.getStorageSync('userId') // 获取本地userId
+      this.$fly.request({
+        method: 'get',
+        url: '/platformSalesman/selectSelfInfo',
+        body: {
+          'userId': userId
+        }
+      }).then(res => {
+        const salesmanId = res.data.id
+        wx.setStorageSync('salesmanId', salesmanId)
+      }).catch(err => {
+        console.log(err)
+      })
     },
     // 处理返回数据
     eatinCart (res) {
@@ -94,6 +109,7 @@ export default {
       wx.setStorageSync('businessId', businessId)
       setIsSalesMan(isSalesman)
       wx.setStorageSync('userId', id)
+      this.getSalesmanId()
       const updateManager = wx.getUpdateManager()
       updateManager.onCheckForUpdate((res) => {
         if (!res.hasUpdate) {
