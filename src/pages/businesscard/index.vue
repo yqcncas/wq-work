@@ -343,6 +343,15 @@
       this.CardId = options.id
       this.getOpA()
     },
+    async onPullDownRefresh () {
+      this.getInfo()
+      this.getLogo()
+      this.getSun()
+      this.getOpA()
+      this.showpop = false
+      this.selectNavIndex = 0
+      wx.stopPullDownRefresh()
+    },
     onShow () {
       // wx.hideTabBar()
       this.getInfo()
@@ -372,7 +381,6 @@
             'pageSize': 0
           }
         }).then(res => {
-          console.log('res', res)
           this.infoMation = res.data.list
           let today = this.moment().format('YYYY/MM/DD')
           let yesterday = this.moment(new Date()).add(-1, 'days').format('YYYY/MM/DD')

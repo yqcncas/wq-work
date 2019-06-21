@@ -3,19 +3,19 @@
     <div class="IfyTop">
       <div class="IfyTop-input">
         <p>
-          <input placeholder="搜索关键词" v-model="tradeName" placeholder-style="color: #cccccc;"/>
-          <span class="IfyTop--button" @click="getBySearch(tradeName,pageNum)"><img src="../../../static/images/search.png"></span>
+          <input placeholder="搜索关键词" v-model="search" placeholder-style="color: #cccccc;"/>
+          <span class="IfyTop--button" @click="getInfo(search)"><img src="../../../static/images/search.png"></span>
         </p>
       </div>
     </div>
-    <div class="Ify-Middle">
-      <div class="area">
-        <Vselect :data="select" align="center" fix  @change="getSelectResult($event)"></Vselect>
-      </div>
-    </div>
+    <!--<div class="Ify-Middle">-->
+    <!--<div class="area">-->
+    <!--<Vselect :data="select" align="center" fix  @change="getSelectResult($event)"></Vselect>-->
+    <!--</div>-->
+    <!--</div>-->
     <div class="Ify-Main">
       <div class="card" v-for="(item,index) in cards" :key="index">
-        <div  @click="goToCard(item.id)">
+        <div  @click="goToCard(item.salesmanId)">
           <div class="cardImg"><img :src="item.imgUrl"/></div>
           <div class="card-main">
             <span class="qiye">企</span>
@@ -29,7 +29,7 @@
           <div class="card-right">
             <p class="eye"><img src="../../../static/images/eye.png"/><span>{{ item.browseCount }}</span> </p>
             <p class="star"><img src="../../../static/images/star.png"/><span>{{ item.praiseCount }}</span> </p>
-            <i v-if="item.isCollect === 0" @click="getCollect(item.id, index)"><img src="../../../static/images/addpersonal.png"/></i>
+            <i v-if="item.isCollect === 0" @click="getCollect(item.salesmanId, index)"><img src="../../../static/images/addpersonal.png"/></i>
             <i v-else></i>
           </div>
         </div>
@@ -44,48 +44,14 @@
     components: { Vselect },
     data () {
       return {
-        select: [
-          {
-            label: '分类',
-            option: [
-              { name: '全部', value: '' }
-            ]
-          },
-          {
-            label: '排序',
-            option: [
-              { name: '最新', value: '1' },
-              { name: '最热', value: '0' }
-            ]
-          }
-        ],
+        select: [],
         cards: [],
         optionsId: '',
         tradeName: '',
+        search: '',
         pageNum: 1,
-        pageSize: 50,
-        TradeId: '',
-        sercod: '',
-        sortingType: 0
+        pageSize: 50
       }
-    },
-    onLoad (options) {
-      console.log(options)
-      if (options.id) {
-        // console.log('id', options.id)
-        this.TradeId = options.id
-        this.lookUp(options.id)
-      }
-      if (options.name) {
-        this.tradeName = options.name
-        this.getBySearch(options.name, 1)
-      } else {
-        this.optionsId = options.id
-        this.getBySearch('', 1)
-      }
-    },
-    onUnload () {
-      this.tradeName = ''
     },
     async onPullDownRefresh () {
       if (this.pageNum < this.lastPage) {
@@ -100,50 +66,22 @@
       }
       wx.stopPullDownRefresh()
     },
+    onLoad (options) {
+      if (options.name) {
+        this.search = options.name
+        this.getInfo(this.search)
+      }
+    },
     onShow () {
     },
+    onUnload () {
+      this.search = ''
+    },
     methods: {
-      // 筛选条件
-      getSelectResult (e) {
-        if (e[0] !== null) {
-          this.optionsId = e[0]
-          this.sortingType = 0
-          this.getBySearch('', this.pageNum)
-        } else if (e[1] !== null) {
-          this.optionsId = ''
-          this.sortingType = e[1]
-          this.getBySearch('', this.pageNum)
-        } else {
-          this.optionsId = e[0]
-          this.sortingType = e[1]
-          console.log('条件', e[0], e[1])
-          this.getBySearch('', this.pageNum)
-        }
-      },
       // 点击跳转进入名片页
       goToCard (id) {
         wx.navigateTo({
           url: `../OthersCard/main?id=` + id
-        })
-      },
-      // 查找类型
-      lookUp (id) {
-        this.$fly.request({
-          method: 'get',
-          url: '/trade/selectAllByTradeId',
-          body: {
-            'tradeId': id
-          }
-        }).then(res => {
-          this.sercod = res.data.list
-          this.select[0].option = [{ name: '全部', value: '' }]
-          const dataA = res.data.list
-          dataA.map(res => {
-            this.select[0].option.push({ name: res.tradeName, value: res.id })
-          })
-          // console.log(this.sercod)
-        }).catch(err => {
-          console.log(err)
         })
       },
       // 获取收藏
@@ -173,23 +111,16 @@
           console.log(err.status, err.message)
         })
       },
-      // 人脉集市点入加载
-      getBySearch (name, num) {
-        const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
+      // 获取自己所关注卡片 名片夹
+      getInfo (name) {
         const userId = wx.getStorageSync('userId') // 获取本地userId
-        console.log('optionsId', this.optionsId)
         this.cards = []
         this.$fly.request({
           method: 'get', // post/get 请求方式
-          url: '/platformSalesman/getByCode',
+          url: '/platformUserSalesman/getByName',
           body: {
-            'name': name,
-            'pageNum': num,
-            'pageSize': 50,
-            'sortingType': this.sortingType,
-            'tradeId': this.optionsId,
-            'businessId': businessId,
-            'userId': userId
+            'userId': userId,
+            'name': name
           }
         }).then(res => {
           console.log('res', res)
@@ -205,10 +136,31 @@
           console.log(err.status, err.message)
         })
       }
+      // 人脉集市
+      // tradeA () {
+      //   const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
+      //   const userId = wx.getStorageSync('userId') // 获取本地userId
+      //   this.$fly.request({
+      //     method: 'get', // post/get 请求方式
+      //     url: '/platformSalesman/getByCode',
+      //     body: {
+      //       'pageNum': 1,
+      //       'pageSize': 10,
+      //       'tradeId': this.optionsId,
+      //       'businessId': businessId,
+      //       'userId': userId
+      //     }
+      //   }).then(res => {
+      //     console.log('res', res)
+      //     this.cards = res.data.list
+      //   }).catch(err => {
+      //     console.log(err.status, err.message)
+      //   })
+      // }
     }
   }
 </script>
 
 <style lang="less" scoped>
-@import "./style";
+  @import "./style";
 </style>

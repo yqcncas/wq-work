@@ -19,8 +19,8 @@
         </section>
         <div class="search">
           <p>
-            <input placeholder="搜索客户资源" placeholder-style="color: #cccccc;"/>
-            <span class="sbutton"><img src="../../../static/images/search.png"></span>
+            <input placeholder="搜索客户资源" v-model="searchKe" placeholder-style="color: #cccccc;"/>
+            <span class="sbutton" @click="goToKe(searchKe)"><img src="../../../static/images/search.png"></span>
           </p>
         </div>
       </div>
@@ -41,7 +41,7 @@
             <div v-if="tab===1">
               <swiper class="swiper" :indicator-dots="indicatorDots" :autoplay="autoplay" :circular= 'circular' :interval="interval" :duration="duration">
                 <swiper-item>
-                      <span class="lf-main" v-for="(item, index) in Types" :key="index" @click="routerTo(item.pid)">
+                      <span class="lf-main" v-for="(item, index) in Types" :key="index" @click="routerTo(item.id)">
                         <span class="Typesrc"><img :src="item.imgUrl"></span>
                         <span class="title">{{ item.tradeName }}</span>
                       </span>
@@ -337,10 +337,13 @@
           star: 10,
           Companyname: '浙江万仟科技有限公司'
         }],
-        tradeStatus: 1
+        tradeStatus: 1,
+        searchKe: '',
+        TradeIda: ''
       }
     },
     onShow () {
+      this.searchKe = ''
       // this.doLogin()
       // this.getSalesmanId()
       this.tradeStatus = wx.getStorageSync('tradeStatus')
@@ -384,6 +387,15 @@
       }
     },
     methods: {
+      // 搜索
+      goToKe (name) {
+        console.log('name', name)
+        if (name) {
+          wx.navigateTo({
+            url: '../classify/main?name=' + name
+          })
+        }
+      },
       bindA (e) {
         // wx.hideTabBar()
       },
@@ -412,6 +424,7 @@
         }).then(res => {
           console.log('res', res)
           this.Types = res.data.list
+          this.TradeIda = res.data.id
         }).catch(err => {
           console.log(err.status, err.message)
         })

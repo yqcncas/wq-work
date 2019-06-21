@@ -37,6 +37,7 @@
     "pages/custom/chooseTag/main",
     "pages/custom/detail/main",
     "pages/custom/selfTag/main",
+    "pages/logClassify/main",
     "pages/custom/main",
     "pages/productA/main",
     "pages/productA/detail/buyHis/main",

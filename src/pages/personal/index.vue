@@ -134,8 +134,8 @@
             'userId': userId
           }
         }).then(res => {
-          console.log('resaaa', res)
-          if (res.data && res.data !== null) {
+          console.log('resaaa', res.data)
+          if (res.data && res.data.name !== null) {
             this.postForm = res.data
           } else {
             this.choose.map((item) => {

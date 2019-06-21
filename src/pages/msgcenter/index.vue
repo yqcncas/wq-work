@@ -348,8 +348,6 @@
       }
     },
     async onPullDownRefresh () {
-      console.log('11', this.pageNum)
-      console.log('22', this.lastPage)
       if (this.pageNum < this.lastPage) {
         this.pageNum = this.nextPage
         this.selectMsgForUser({ type: 1 })

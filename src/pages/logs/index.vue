@@ -38,8 +38,8 @@
         </div>
         <div class="cardHold-top-input">
           <p>
-             <input placeholder="搜索关键词" placeholder-style="color: #cccccc;"/>
-             <span class="cardHold-top-button"><img src="../../../static/images/search.png"></span>
+             <input placeholder="搜索关键词" v-model="searchName" placeholder-style="color: #cccccc;"/>
+             <span @click="Search(searchName)" class="cardHold-top-button"><img src="../../../static/images/search.png"></span>
           </p>
         </div>
         <div class="cardHold-top-I">
@@ -223,6 +223,7 @@ export default {
       indexy: '',
       qrCodeUrl: '',
       postForm: '',
+      searchName: '',
       y: 0,
       toView: '',
       scrollTop: 0,
@@ -241,6 +242,7 @@ export default {
     }
   },
   onShow () {
+    this.searchName = ''
     this.getLogo()
     this.getMy()
     // wx.hideTabBar()
@@ -277,6 +279,13 @@ export default {
     // console.log(this.toView)
   },
   methods: {
+    Search (title) {
+      if (title) {
+        wx.navigateTo({
+          url: '../logClassify/main?name=' + title
+        })
+      }
+    },
     // 呼叫电话
     makePhoneCall (phone) {
       wx.makePhoneCall({
