@@ -11,7 +11,7 @@
       <section class="options">
         <section class="option-area" v-for="(select,index) in data" :key="index">
           <section class="option" :data-value="option.value" ref="dataValue" v-for="(option,key) in select.option" :key="key" v-show="showOptions[index].show" @click="getChange($event,index,key)">
-            <!--<img class="optionImg" v-show="index==active&&key==active2[index].choose" src="../../static/images/tack.png" mode="aspectFit">-->
+            <img class="optionImg" v-show="index==active&&key==active2[index].choose" src="../../static/images/trak.png" mode="aspectFit">
             <span class="option-text">{{option.name}}</span>
           </section>
         </section>

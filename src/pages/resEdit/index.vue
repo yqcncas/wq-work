@@ -161,6 +161,7 @@ export default {
       // console.log(id)
       const salesmanId = wx.getStorageSync('salesmanId')
       const businessId = wx.getStorageSync('businessId')
+      const tradeId = wx.getStorageSync('tradeId')
       if (this.location === '定位') {
         this.address = ''
       } else {
@@ -179,7 +180,7 @@ export default {
             'address': this.address,
             'longitude': this.longitude,
             'latitude': this.latitude,
-            'trade': 0
+            'tradeId': tradeId
           }
         }).then(res => {
           if (res.code === 200) {
@@ -210,7 +211,7 @@ export default {
             'address': this.address,
             'longitude': this.longitude,
             'latitude': this.latitude,
-            'trade': 0
+            'tradeId': tradeId
           }
         }).then(res => {
           if (res.code === 200) {
@@ -234,6 +235,7 @@ export default {
     save () {
       const salesmanId = wx.getStorageSync('salesmanId')
       const businessId = wx.getStorageSync('businessId')
+      const tradeId = wx.getStorageSync('tradeId')
       if (this.location === '定位') {
         this.address = ''
       } else {
@@ -250,7 +252,8 @@ export default {
           'video': this.video,
           'address': this.address,
           'longitude': this.longitude,
-          'latitude': this.latitude
+          'latitude': this.latitude,
+          'tradeId': tradeId
         }
       }).then(res => {
         if (res.code === 200) {

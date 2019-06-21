@@ -66,6 +66,7 @@
     methods: {
       // 获取消息
       getInfo (id) {
+        this.commitInfo = []
         this.$fly.request({
           method: 'get',
           url: '/platformMessage/findListByUserId',
@@ -74,7 +75,11 @@
             'pageSize': 10
           }
         }).then(res => {
-          this.commitInfo = res.data.list
+          const data = res.data.list
+          data.map(item => {
+            this.commitInfo.push(item)
+          })
+          // this.commitInfo = res.data.list
           this.Message = res.data.list
           this.lastPage = res.data.lastPage
           this.pageNum = res.data.pageNum

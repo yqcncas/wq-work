@@ -25,8 +25,8 @@ export default {
   },
   onLoad (options) {
     this.fromWay = 0
+    this.getInfo()
     this.goodsId = null
-    console.log('21', options)
     if (options.fromWay) {
       this.fromWay = options.fromWay
     }
@@ -75,6 +75,26 @@ export default {
           const result = await homeApi.doLogin(data)
           this.eatinCart(result)
         }
+      })
+    },
+    // 页面加载获取信息
+    getInfo () {
+      const userId = wx.getStorageSync('userId') // 获取本地userId
+      this.$fly.request({
+        method: 'get', // post/get 请求方式
+        url: '/platformSalesman/selectSelfInfo',
+        body: {
+          'userId': userId
+        }
+      }).then(res => {
+        if (res.data !== null) {
+          if (res.data.tradeId) {
+            const tradeId = res.data.tradeId
+            wx.setStorageSync('tradeId', tradeId)
+          }
+        }
+      }).catch(err => {
+        console.log(err.status, err.message)
       })
     },
     // // 插入雷达

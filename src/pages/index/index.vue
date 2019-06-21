@@ -40,13 +40,17 @@
                   <label>公司</label>
                   <input v-model="salesCompanyName" placeholder="请输入公司"/>
                 </div>
-                <!--<div>-->
-                  <!--<label>行业</label>-->
-                  <!--<picker mode="multiSelector" class="pick-region" @change="bindcolumnchange" :range="TradeData" :range-key = 'pid' :value="Trade">-->
-                    <!--<view type="text" placeholder="行业、类型" class="pick-item-s">{{TradeA}}</view>-->
+                <div class="pak">
+                  <label>行业</label>
+                  <!--<picker mode="multiSelector" class="pick-region" @columnchange="bindchange"  @change="bindcolumnchange" :range="TradeData" :range-key = 'pid' :value="multiIndex">-->
+                  <div class="pick"  @click="showMulLinkageTwoPicker">
+                    <text type="text" @click="showMulLinkageTwoPicker"  placeholder="请输入行业行业" class="picker">{{pickerText}}</text>
                     <!--<i class="iconfont iconyouce"></i>-->
+                  </div>
+                  <mpvue-picker ref="mpvuePicker" :mode="mode" :deepLength="deepLength" :pickerValueDefault="pickerValueDefault" :themeColor="themeColor" @onChange="onChange" @onConfirm="onConfirm" @onCancel="onCancel" :pickerValueArray="pickerValueArray"></mpvue-picker>
+
                   <!--</picker>-->
-                <!--</div>-->
+                </div>
                 <div>
                   <label>职位</label>
                   <input v-model="job" placeholder="请输入职位"/>
@@ -78,7 +82,7 @@
                   <p @click="chooseLocation()">
                     <img src="../../../static/images/map.png">
                   </p>
-                  <input v-model="addDetailed" placeholder=""/>
+                  <input v-model="addDetailed"/>
                 </div>
               </div>
               <div class="Basics-footer">
@@ -198,12 +202,67 @@
 <script>
 import personApi from '@/api/person'
 import card from '@/components/card'
+import mpvuePicker from 'mpvue-picker'
 import { UPLOAD_FILE, UPLOAD_API } from '@/api/uploadFile'
 const innerAudioContext = wx.createInnerAudioContext()
 const recorderManager = wx.getRecorderManager()
 export default {
   data () {
     return {
+      mode: 'selector',
+      deepLength: 0, // 几级联动
+      pickerValueDefault: [], // 初始化值
+      pickerValueArray: [], // picker 数组值
+      pickerText: '',
+      themeColor: '', // 颜色主题
+      mulLinkageTwoPicker: [
+        {
+          label: '飞机票',
+          value: 0,
+          children: [
+            {
+              label: '经济舱',
+              value: 1
+            },
+            {
+              label: '商务舱',
+              value: 2
+            }
+          ]
+        },
+        {
+          label: '火车票',
+          value: 1,
+          children: [
+            {
+              label: '卧铺',
+              value: 1
+            },
+            {
+              label: '坐票',
+              value: 2
+            },
+            {
+              label: '站票',
+              value: 3
+            }
+          ]
+        },
+        {
+          label: '汽车票',
+          value: 3,
+          children: [
+            {
+              label: '快班',
+              value: 1
+            },
+            {
+              label: '普通',
+              value: 2
+            }
+          ]
+        }
+      ],
       tab: 1,
       info: '',
       personApi: personApi,
@@ -221,6 +280,7 @@ export default {
       salesCompanyName: '',
       salesAddress: '',
       TradeData: [[], []],
+      Data: [],
       multiArray: [],
       Trade: [],
       job: '',
@@ -241,18 +301,22 @@ export default {
       animal: '',
       region: [],
       regionA: [],
+      multiIndex: [0, 0],
       voiceUrl: '',
       pan: false,
       video: '',
       voice: '',
       voiceTxt: '录音',
       salesManId: null,
-      tagList: []
+      tagList: [],
+      column: 0,
+      tradeId: 0
     }
   },
 
   components: {
-    card
+    card,
+    mpvuePicker
   },
   onShow () {
     this.videoFlag = false
@@ -480,7 +544,6 @@ export default {
           'userId': userId
         }
       }).then(res => {
-        console.log('res', res.data)
         if (res.data !== null) {
           this.postForm = res.data
           this.voice = res.data.voice
@@ -496,6 +559,10 @@ export default {
           this.job = res.data.job
           this.phone = res.data.phone
           this.imgUrl = res.data.imgUrl
+          if (res.data.tradeName) {
+            this.pickerText = res.data.tradeName
+          }
+          this.tradeId = res.data.tradeId
           this.fixedPhone = res.data.fixedPhone
           this.email = res.data.email
           this.salesCompanyName = res.data.salesCompanyName
@@ -552,6 +619,7 @@ export default {
     getSalesmanUpdate () {
       if (this.judgeNull(this.name, '姓名')) return
       if (this.judgeNull(this.salesCompanyName, '公司')) return
+      if (this.judgeNull(this.pickerText, '行业')) return
       if (this.judgeNull(this.job, '职位')) return
       if (this.judgeNull(this.phone, '手机')) return
       // 检测手机号
@@ -604,7 +672,6 @@ export default {
           url: UPLOAD_API + '/platformSalesman/add',
           data: {
             businessId: businessId,
-            tradeId: 0,
             userId: userId,
             imgUrl: this.imgUrl,
             video: this.video,
@@ -622,7 +689,8 @@ export default {
             email: this.email,
             weChat: this.weChat,
             job: this.job,
-            info: this.info
+            info: this.info,
+            tradeId: this.tradeId
           },
           header: {
             'token': token
@@ -669,7 +737,8 @@ export default {
             job: this.job,
             longitude: this.longitude,
             latitude: this.latitude,
-            info: this.info
+            info: this.info,
+            tradeId: this.tradeId
           },
           header: {
             'token': token
@@ -943,49 +1012,50 @@ export default {
     //     console.log(err.status, err.message)
     //   })
     // },
-    // 查找类型
-    lookUp (id) {
-      this.$fly.request({
-        method: 'get',
-        url: '/trade/selectAllByTradeId',
-        body: {
-          'tradeId': id
-        }
-      }).then(res => {
-        const TradeA = res.data.list
-        TradeA.map(item => {
-          this.TradeData[0].push(item.tradeName)
-        })
-        // this.valueA = res.data.list
-        // this.secTradeId = ''
-      }).catch(err => {
-        console.log(err)
-      })
-    },
     getTrade () {
       this.$fly.request({
         method: 'get', // post/get 请求方式
-        url: '/trade/selectAll',
+        url: '/trade/selectAllByGroup',
         body: {
         }
       }).then(res => {
-        console.log('ara', res)
-        const TradeA = res.data.list
-        TradeA.map(item => {
-          this.TradeData[0].push(item.tradeName)
-        })
-        console.log('ara', this.TradeData)
-        // this.TradeData[0] = res.data.list.tradeName
+        this.mulLinkageTwoPicker = res.data
+        // console.log('ara', this.mulLinkageTwoPicker)
       }).catch(err => {
         console.log(err)
       })
     },
+    bindchange (e) {
+      console.log('aaa', e)
+      var value = e.mp.detail.value
+      this.column = value - 1
+    },
     // 选择的是行业类型
     bindcolumnchange (e) {
-      console.log('e', e)
       var value = e.mp.detail.value
       this.TradeA = value[0] + '' + value[1]
-      this.Trade = value
+    },
+    // 二级联动选择
+    showMulLinkageTwoPicker () {
+      this.pickerValueArray = this.mulLinkageTwoPicker
+      this.mode = 'multiLinkageSelector'
+      this.deepLength = 2
+      this.pickerValueDefault = [0, 0]
+      this.themeColor = ''
+      this.$refs.mpvuePicker.show()
+    },
+    onConfirm (e) {
+      if (this.mode === 'multiLinkageSelector') {
+        this.pickerText = e.label.split('-')[1]
+        this.tradeId = e.value[1]
+        // console.log(',', this.tradeId)
+      }
+    },
+    onChange (e) {
+      console.log('a  ', e.value[1])
+    },
+    onCancel (e) {
+      console.log('c', e)
     },
     // 选择的是地址插件
     bindRegionChange (e) {
