@@ -3,13 +3,16 @@
       <div class="choose">
         <div class="auto">
           <span class="moOne"  @click="choose(1)">
-            <img src="https://oss.wq1516.com/salesInfo/201906241544401561362280530.png"/>
+            <img class="img" src="https://oss.wq1516.com/salesInfo/201906241544401561362280530.png"/>
+            <img v-if="CardId == 1" class="choose" src="../../../static/images/chooseActive.png"/>
           </span>
           <span class="moTwo" @click="choose(2)">
-            <img src="https://oss.wq1516.com/salesInfo/201906241544411561362281129.png"/>
+            <img class="img" src="https://oss.wq1516.com/salesInfo/201906241544411561362281129.png"/>
+            <img v-if="CardId == 2" class="choose" src="../../../static/images/chooseActive.png"/>
           </span>
           <span class="moThere" @click="choose(3)">
-            <img src="https://oss.wq1516.com/salesInfo/201906241544411561362281681.png"/>
+            <img class="img" src="https://oss.wq1516.com/salesInfo/201906241544411561362281681.png"/>
+            <img v-if="CardId == 3" class="choose" src="../../../static/images/chooseActive.png"/>
           </span>
         </div>
       </div>
@@ -24,6 +27,7 @@
     name: 'index',
     data () {
       return {
+        CardId: 0
       }
     },
     methods: {
@@ -34,6 +38,13 @@
           icon: 'none',
           duration: 2000
         })
+      },
+      choose (id) {
+        if (this.CardId !== id) {
+          this.CardId = id
+        } else {
+          this.CardId = 0
+        }
       }
     }
   }
