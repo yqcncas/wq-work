@@ -42,7 +42,9 @@
     "pages/productA/main",
     "pages/productA/detail/buyHis/main",
     "pages/productA/detail/buydetail/main",
-    "pages/productA/detail/main"
+    "pages/productA/detail/main",
+    "pages/stats/main",
+    "pages/skin/main"
   ],
   "permission": {
     "scope.userLocation": {

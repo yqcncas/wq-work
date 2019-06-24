@@ -1,0 +1,99 @@
+.stats{
+  width: 100%;
+  height: 100%;
+  .test{
+    //position: absolute;
+    //top: ~'120rpx';
+    width: 100%;
+    font-size: ~'35rpx';
+    height: 100%!important;
+    //background: #ffffff;
+    .testNav {
+      margin:  0;
+      padding: 0 ~'20rpx';
+      height: ~'68rpx';
+      line-height: ~'68rpx';
+      background: #ffffff;
+      display: flex;
+      color: #9EABBE;
+      border-bottom: ~'1px' solid #eeeeee;
+      font-size: ~'28rpx';
+      div{
+        padding: 0;
+        margin: 0 ~'30rpx';
+        color: #9EABBE;
+      }
+      .testTitle {
+        flex: 1;
+        text-align: center;
+      }
+      .selected {
+        color: #2A94EC;
+        border-bottom: 1px solid #2A94EC;
+      }
+    }
+
+    .cont{
+      width: 100%;
+      display: inline-block;
+      //height: 100%;
+      background: #ffffff;
+      .cont-main:first-child{
+        margin: ~'10rpx' ~'10rpx';
+        height: ~'144rpx' ;
+        background: #ffffff;
+        border-top: none;
+      }
+      .cont-main{
+        margin: ~'10rpx' ~'10rpx';
+        height: ~'144rpx' ;
+        background: #ffffff;
+        border-top: ~'1rpx' solid #e9e9e9;
+        .card{
+          background: #ffffff!important;
+          .main{
+            height: 100%;
+            position: relative;
+            .imgUrl{
+              width: ~'104rpx';
+              height: ~'104rpx';
+              .img{
+                width: ~'104rpx';
+                height: ~'104rpx';
+                display: inline-block;
+              }
+            }
+            .name{
+              position: absolute;
+              top: ~'5rpx';
+              left: ~'120rpx';
+              color: #2A94EC;
+              font-size: ~'28rpx';
+            }
+            .job{
+              position: absolute;
+              top: ~'4rpx';
+              left: ~'220rpx';
+              color: #828282;
+              font-size: ~'24rpx';
+            }
+            .company{
+              position: absolute;
+              top: ~'65rpx';
+              left: ~'120rpx';
+              color: #828282;
+              font-size: ~'26rpx';
+            }
+            .date{
+              position: absolute;
+              bottom: ~'20rpx';
+              right: 0;
+              color: #828282;
+              font-size: ~'22rpx';
+            }
+          }
+        }
+      }
+    }
+  }
+}

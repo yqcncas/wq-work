@@ -26,7 +26,7 @@
           </div>
         </el-form>
       </div>
-    <div class="look">
+    <div class="look" @click="goStats()">
       <el-form ref="resForm" :model="resForm">
         <div class="look-main">
           <p class="num">{{resForm.lookMeNum}}</p>
@@ -109,6 +109,39 @@
           title: '消息中心',
           url: '../message/main'
         }, {
+          src: '../../static/images/pifu.png',
+          title: '名片模板',
+          url: '../skin/main'
+        }, {
+          src: '../../static/images/Member.png',
+          title: '会员中心',
+          url: '../Member/main'
+        }],
+        chooseA: [{
+          src: '../../static/images/compny.png',
+          title: '企业认证',
+          url: '../attestation/main'
+        }, {
+          src: '../../static/images/jieshao.png',
+          title: '公司介绍',
+          url: '../introduce/main'
+        }, {
+          src: '../../static/images/chanpin.png',
+          title: '产品管理',
+          url: '../product/main'
+        }, {
+          src: '../../static/images/release.png',
+          title: '我的发布',
+          url: '../release/main'
+        }, {
+          src: '../../static/images/message.png',
+          title: '消息中心',
+          url: '../message/main'
+        }, {
+          src: '../../static/images/pifu.png',
+          title: '名片模板',
+          url: '../skin/main'
+        }, {
           src: '../../static/images/Member.png',
           title: '会员中心',
           url: '../Member/main'
@@ -124,6 +157,12 @@
       this.getRecord()
     },
     methods: {
+      // 进入数据统计
+      goStats () {
+        wx.navigateTo({
+          url: '../stats/main'
+        })
+      },
       // 页面加载信息
       getInfo () {
         const userId = wx.getStorageSync('userId') // 获取本地userId
@@ -134,13 +173,17 @@
             'userId': userId
           }
         }).then(res => {
-          console.log('resaaa', res.data)
-          if (res.data && res.data.name !== null) {
+          const data = wx.getStorageSync('Card')
+          if (res.data !== null) {
             this.postForm = res.data
-          } else {
+          }
+          console.log('resaaa', data)
+          if (data !== true) {
             this.choose.map((item) => {
               item.url = '../businesscard/main'
             })
+          } else {
+            this.choose = this.chooseA
           }
         }).catch(err => {
           console.log(err.status, err.message)

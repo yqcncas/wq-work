@@ -74,6 +74,7 @@ export default {
           let data = { code: res.code, id: shopId, userId: this.userId, fromWay: this.fromWay, salesmanId, param }
           const result = await homeApi.doLogin(data)
           this.eatinCart(result)
+          wx.setStorageSync('Card', false)
         }
       })
     },

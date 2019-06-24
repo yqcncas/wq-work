@@ -105,6 +105,7 @@
     methods: {
       // 筛选条件
       getSelectResult (e) {
+        // console.log('eeee', e)
         if (e[0] !== null) {
           this.optionsId = e[0]
           this.sortingType = 0
