@@ -591,6 +591,12 @@
               this.modalFlag = true
             }
             this.postForm = res.data
+            if (this.postForm.length === 0 || this.postForm === null) {
+              wx.setStorageSync('Card', false)
+            } else {
+              wx.setStorageSync('Card', true)
+            }
+            console.log('a', wx.getStorageSync('Card'))
             this.name = res.data.name
             this.job = res.data.job
             this.phone = res.data.phone

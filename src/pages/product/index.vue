@@ -51,13 +51,13 @@
       // 加载产品列表
       getInfo (e) {
         const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
-        const userId = wx.getStorageSync('userId') // 获取本地userId
+        const salesmanId = wx.getStorageSync('salesmanId') // 获取本地userId
         this.$fly.request({
           method: 'get', // post/get 请求方式
           url: '/platformGoods/getAllGoodsByUserId',
           body: {
             'businessId': businessId,
-            'userId': userId
+            'salesmanId': salesmanId
           }
         }).then(res => {
           if (res.code === 200) {

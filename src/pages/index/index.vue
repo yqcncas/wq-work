@@ -699,6 +699,8 @@ export default {
             if (res.data.code === 200) {
               this.pan = true
               console.log('pana', this.pan)// this.isDisable = false // 执行请求后就不能点击了
+              wx.setStorageSync('Card', true)
+              console.log(wx.getStorageSync('Card'))
               wx.showToast({
                 title: '保存成功',
                 icon: 'none',
