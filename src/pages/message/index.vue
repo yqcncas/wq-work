@@ -75,6 +75,7 @@
             'pageSize': 10
           }
         }).then(res => {
+          console.log('res', res)
           const data = res.data.list
           data.map(item => {
             this.commitInfo.push(item)

@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="bottom-btn">
-      <p class="add-new" @click="routeTo(`../addComLanguage/index?userId=${userId}`,'add')">新增</p>
+      <p class="add-new" @click="routeTo(`../addComLanguage/main?userId=${userId}`,'add')">新增</p>
     </div>
   </div>
 </template>

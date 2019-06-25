@@ -282,6 +282,58 @@
               </div>
             </div>
           </div>
+
+          <!--我的照片-->
+          <div class="product" v-if="imgUrlList.length !== 0 && imgUrlList[0] !== ''">
+            <div class="product-top">
+                <span class="product-icont">
+                <img src="../../../static/images/imgUrl.png">
+                </span>
+              <span class="product-title">照片</span>
+              <span class="product-right">
+                  更多<img src="../../../static/images/right-cc.png">
+                </span>
+            </div>
+            <div class="product-main">
+              <div class="product-details" v-for="(item,index) in imgUrlList" :key="index">
+                <div class="product-details-imgA">
+                  <img :src="item" @click="previewImg(imgUrlList,index)"/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+          <!--我的视频 v-if="videoList !== ''"-->
+          <div class="product" v-if="video !== ''">
+            <div class="product-top">
+                <span class="product-icont">
+                <img src="../../../static/images/video.png">
+                </span>
+              <span class="product-title">视频</span>
+              <!--<span class="product-right">-->
+                  <!--更多<img src="../../../static/images/right-cc.png">-->
+                <!--</span>-->
+            </div>
+            <div class="product-main">
+                <div class="product-details-video">
+                  <div class="up-video">
+                    <video id="myVideo" v-if="videoFlag" :src="video" @play="playA()"  @ended=" end()" autoplay objectFit="fill" class="cover-hw"></video>
+                    <div v-else class="cover-view" >
+                      <div @click="videoPlay">
+                        <!--<i class="delete-img iconfont iconshanchu-copy" @click="deleteVideo"></i>-->
+                        <img class="FMimg" :src="videoImg" mode="scaleToFill" />
+                        <div class="model-btn">
+                          <div class="play-icon">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </el-form>
     </div>
@@ -304,6 +356,9 @@
         circular: true,
         autoplay: true,
         interval: 5000,
+        videoFlag: false,
+        video: '',
+        videoImg: '',
         vertical: true,
         easeInOutCubic: 'easeInOutCubic',
         personApi: personApi,
@@ -336,7 +391,8 @@
         num: 0,
         headImgList: [],
         details: [],
-        infoMation: []
+        infoMation: [],
+        imgUrlList: []
       }
     },
     onLoad: function (options) {
@@ -368,6 +424,37 @@
       }
     },
     methods: {
+      // 预览图片
+      previewImg (e, A) {
+        var imgs = e
+        var temp = []
+        imgs.map(res => {
+          temp.push(res)
+        })
+        wx.previewImage({
+          current: temp[A],
+          urls: temp
+        })
+      },
+      // 播放开始
+      playA () {
+        this.videoFlag = true
+        // const videoContext = wx.createVideoContext('myVideo')
+        // videoContext.play()
+      },
+      // 播放结束
+      end () {
+        this.videoFlag = false
+        // const videoContext = wx.createVideoContext('myVideo')
+        // videoContext.seek(0)
+        // videoContext.stop()
+      },
+      // 播放视频
+      videoPlay () {
+        this.videoFlag = true
+        // const videoContext = wx.createVideoContext('myVideo')
+        // videoContext.play()
+      },
       // 获取操作动态
       getOpA () {
         const salesmanId = wx.getStorageSync('salesmanId')
@@ -586,17 +673,30 @@
             'userId': this.userId
           }
         }).then(res => {
+          console.log('res', res.data)
           if (res.data) {
             if (res.data.nickName === '' || res.data.nickName == null) {
               this.modalFlag = true
             }
+            if (res.data.phone !== '') {
+              const phone = res.data.phone
+              wx.setStorageSync('myPhone', phone)
+            }
             this.postForm = res.data
+            if (res.data.richText !== null) {
+              this.imgUrlList = res.data.richText.split(',')
+            }
+            // console.log('imgUrl', this.imgUrlList)
+            if (res.data.video !== '') {
+              this.video = res.data.video
+              this.videoImg = this.video + '?x-oss-process=video/snapshot,t_0,f_jpg,w_750,m_fast'
+            }
             if (this.postForm.length === 0 || this.postForm === null) {
               wx.setStorageSync('Card', false)
             } else {
               wx.setStorageSync('Card', true)
             }
-            console.log('a', wx.getStorageSync('Card'))
+            // console.log('a', wx.getStorageSync('Card'))
             this.name = res.data.name
             this.job = res.data.job
             this.phone = res.data.phone

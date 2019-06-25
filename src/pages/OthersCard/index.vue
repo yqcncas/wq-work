@@ -243,9 +243,65 @@
                 </div>
               </div>
             </div>
+
+            <!--我的照片-->
+            <div class="product" v-if="imgUrlList.length !== 0 && imgUrlList[0] !== ''">
+              <div class="product-top">
+                <span class="product-icont">
+                <img src="../../../static/images/imgUrl.png">
+                </span>
+                <span class="product-title">照片</span>
+                <span class="product-right">
+                  更多<img src="../../../static/images/right-cc.png">
+                </span>
+              </div>
+              <div class="product-main">
+                <div class="product-details" v-for="(item,index) in imgUrlList" :key="index">
+                  <div class="product-details-imgA">
+                    <img :src="item" @click="previewImg(imgUrlList,index)"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+            <!--我的视频 v-if="videoList !== ''"-->
+            <div class="product" v-if="video !== ''">
+              <div class="product-top">
+                <span class="product-icont">
+                <img src="../../../static/images/video.png">
+                </span>
+                <span class="product-title">视频</span>
+                <!--<span class="product-right">-->
+                <!--更多<img src="../../../static/images/right-cc.png">-->
+                <!--</span>-->
+              </div>
+              <div class="product-main">
+                <div class="product-details-video">
+                  <div class="up-video">
+                    <video id="myVideo" v-if="videoFlag" :src="video" @play="playA()"  @ended=" end()" autoplay objectFit="fill" class="cover-hw"></video>
+                    <div v-else class="cover-view" >
+                      <div @click="videoPlay">
+                        <!--<i class="delete-img iconfont iconshanchu-copy" @click="deleteVideo"></i>-->
+                        <img class="FMimg" :src="videoImg" mode="scaleToFill" />
+                        <div class="model-btn">
+                          <div class="play-icon">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
           <div class="found" @click="goInto()">
             <span>我要<br />创建</span>
+          </div>
+          <div class="foundA" @click="goMsg()">
+            <span>我要<br />咨询</span>
           </div>
         </el-form>
       </div>
@@ -270,6 +326,9 @@
         companyName: '',
         id: '',
         list: '',
+        videoFlag: false,
+        video: '',
+        imgUrlList: [],
         imgHeight: null,
         modalflag: false,
         modalFlag: false,
@@ -290,7 +349,8 @@
         praiseNum: 888,
         num: 0,
         headImgList: [],
-        details: []
+        details: [],
+        user: ''
       }
     },
     onLoad: function (options) {
@@ -317,6 +377,37 @@
       }
     },
     methods: {
+      // 预览图片
+      previewImg (e, A) {
+        var imgs = e
+        var temp = []
+        imgs.map(res => {
+          temp.push(res)
+        })
+        wx.previewImage({
+          current: temp[A],
+          urls: temp
+        })
+      },
+      // 播放开始
+      playA () {
+        this.videoFlag = true
+        // const videoContext = wx.createVideoContext('myVideo')
+        // videoContext.play()
+      },
+      // 播放结束
+      end () {
+        this.videoFlag = false
+        // const videoContext = wx.createVideoContext('myVideo')
+        // videoContext.seek(0)
+        // videoContext.stop()
+      },
+      // 播放视频
+      videoPlay () {
+        this.videoFlag = true
+        // const videoContext = wx.createVideoContext('myVideo')
+        // videoContext.play()
+      },
       // 插入雷达
       async insertOperaA (info, recordType, id) {
         await personApi.OperationInsert({businessId: this.businessId, goodsId: id, info, recordType, salesmanId: this.salesmanId, userId: this.userId})
@@ -479,9 +570,13 @@
       },
       // 跳转
       goInto () {
-        console.log('11')
         wx.navigateTo({
           url: '../index/main'
+        })
+      },
+      goMsg (id) {
+        wx.navigateTo({
+          url: '../msgcenter/main?id=' + this.user
         })
       },
       // 跳转
@@ -520,6 +615,16 @@
             'salesmanId': this.CardId, 'userId': userId
           }
         }).then(res => {
+          console.log('aa', res)
+          if (res.data.richText !== null) {
+            this.imgUrlList = res.data.richText.split(',')
+          }
+          // console.log('imgUrl', this.imgUrlList)
+          if (res.data.video !== '') {
+            this.video = res.data.video
+            this.videoImg = this.video + '?x-oss-process=video/snapshot,t_0,f_jpg,w_750,m_fast'
+          }
+          this.user = res.data.userId
           this.postForm = res.data
           this.name = res.data.name
           this.job = res.data.job
