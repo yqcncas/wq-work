@@ -30,6 +30,7 @@
     "pages/msgcenter/main",
     "pages/msgList/main",
     "pages/comLangage/main",
+    "pages/addComLanguage/main",
     "pages/OthersCard/main",
     "pages/Member/main",
     "pages/cardPoster/main",

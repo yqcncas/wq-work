@@ -91,12 +91,15 @@
     onLoad () {
       setInterval(() => {
         const that = this
-        console.log('获取消息数量')
-        that.getMsgNum()
+        const num = wx.setStorageSync('msgNum')
+        if (num !== undefined) {
+          that.num = num
+        }
+        // console.log('获取消息数量', that.num)
       }, 3000)
     },
     onShow () {
-      this.getMsgNum()
+      // this.getMsgNum()
     },
     methods: {
       // 获取未读消息数量

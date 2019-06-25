@@ -127,6 +127,25 @@
       }
     },
     methods: {
+      // 获取用户手机号
+      getUserPhone () {
+        // const userId = wx.getStorageSync('userId') // 获取本地userId
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/platformSalesman/selectSelfInfo',
+          body: {
+            'userId': this.userId
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            if (res.data.phone !== '') {
+              this.userPhone = res.data.phone
+            }
+          }
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      },
       // 插入雷达
       async insertOpera (info, recordType) {
         let businessId = wx.getStorageSync('businessId')
@@ -154,7 +173,7 @@
       },
       toManage () {
         wx.navigateTo({
-          url: `../comLangage/index?userId=${this.selfId}`
+          url: `../comLangage/main?userId=${this.selfId}`
         })
       },
       //   常用语
@@ -250,6 +269,7 @@
         } else {
           phoneNumber = this.userPhone
         }
+        console.log('phoneNumber', this.userPhone)
         wx.showModal({
           content: '发送消息（您好！我的联系方式是' + phoneNumber + '）',
           confirmColor: '#2a94ec',
@@ -306,7 +326,8 @@
         const data = result.data.list
         // this.userHeadImg = data.userHeadImg
         // // this.salesManHeadImg = data.salesManHeadImg
-        // this.userPhone = data.userPhone
+        // const phone = wx.getStorageSync('myPhone')
+        // this.userPhone = phone
         // this.salesPhone = data.salesPhone
         // this.weChat = data.salesWeChat
         let today = this.moment().format('YYYY/MM/DD')
@@ -362,6 +383,7 @@
     },
     onLoad (options) {
       this.userId = +options.id
+      this.getUserPhone()
       if (options.id) {
         this.type = 'sale'
         this.pageNum = 1
@@ -375,6 +397,7 @@
     },
     onShow () {
       this.getList()
+      this.salesPhone = wx.getStorageSync('myPhone')
     }
   }
 </script>

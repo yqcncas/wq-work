@@ -116,7 +116,7 @@
       this.getProduct({ type: 0 })
     },
     onShow () {
-      wx.hideTabBar()
+      // wx.hideTabBar()
     },
     // onShareAppMessage () {
     //   let companyName = wx.getStorageSync('companyName')

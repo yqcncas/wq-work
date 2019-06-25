@@ -174,7 +174,7 @@
             <div class="videos">
               <div class="videos-main">
                 <div class="up-video">
-                  <video id="myVideo" v-if="videoFlag" :src="video" @play="playA()" @ended=" end()" objectFit="fill" class="cover-hw"></video>
+                  <video id="myVideo" v-if="videoFlag" :src="video" @play="playA()" @ended=" end()" autoplay objectFit="fill" class="cover-hw"></video>
                   <div v-else class="cover-view" >
                     <div v-if="video!== '' && video!== null" @click="videoPlay">
                       <i class="delete-img iconfont iconshanchu-copy" @click="deleteVideo"></i>
@@ -319,7 +319,7 @@ export default {
     mpvuePicker
   },
   onShow () {
-    this.videoFlag = false
+    // this.videoFlag = false
   },
   onLoad () {
     this.getInfo()
@@ -436,7 +436,7 @@ export default {
       })
     },
     playA () {
-      // this.videoFlag = true
+      this.videoFlag = true
     },
     // 播放结束
     end () {
@@ -497,6 +497,9 @@ export default {
     },
     // 上传视频
     chooseVideo (e) {
+      const videoContext = wx.createVideoContext('myVideo')
+      videoContext.stop()
+      this.videoFlag = false
       wx.chooseVideo({
         sourceType: ['album', 'camera'],
         camera: ['front', 'back'],
@@ -997,8 +1000,8 @@ export default {
     // 播放视频
     videoPlay () {
       this.videoFlag = true
-      const videoContext = wx.createVideoContext('myVideo')
-      videoContext.play()
+      // const videoContext = wx.createVideoContext('myVideo')
+      // videoContext.play()
     },
     // getTrade () {
     //   this.$fly.request({

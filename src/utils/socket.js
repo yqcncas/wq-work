@@ -1,4 +1,5 @@
 import Shop from '../../config/shop'
+import { UPLOAD_API } from '@/api/uploadFile'
 let url = Shop.WSS_URL
 let loginData = {}
 export function initSocket (websocketData) {
@@ -17,6 +18,7 @@ export function initSocket (websocketData) {
       data: JSON.stringify(websocketData),
       success: res => {
         console.log(res)
+        // 获取未读消息数量
       },
       fail: res => {
         console.log(res)
@@ -26,12 +28,38 @@ export function initSocket (websocketData) {
   // 接收推送
   return socketTask
 }
+export function msgNum () {
+  const token = wx.getStorageSync('token')
+  const salesmanId = wx.getStorageSync('salesmanId')
+  wx.request({
+    method: 'get',
+    url: UPLOAD_API + '/platformMessage/selectUnReadCount',
+    data: {
+      'salesmanId': salesmanId
+    },
+    header: {
+      'token': token
+    },
+    success: function (res) {
+      this.num = res.data
+      wx.setStorageSync('msgNum', this.num)
+      console.log('msgNum', this.num)
+    },
+    fail: function () {
+      // fail
+    },
+    complete: function () {
+      // complete
+    }
+  })
+}
 
 export function resiverMessage (context) {
   wx.onSocketClose(res => {
     console.log('1登录')
     console.log(res)
     initSocket(loginData)
+    msgNum()
   })
   wx.onSocketError(function (res) {
     console.log(res)
@@ -58,6 +86,7 @@ export function resiverMsg (context, websocketData) {
     console.log('消息')
     console.log(res)
     initSocket(loginData)
+    msgNum()
   })
   wx.onSocketError(function (res) {
     console.log(res)
