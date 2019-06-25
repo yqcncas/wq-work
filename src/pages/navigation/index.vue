@@ -15,7 +15,7 @@
             :home-path="'/pages/index/main'"></navigation-bar>
         </section>
         <section class="content">
-          <img class="bj" src="../../../static/images/indexbj.png"/>
+          <img class="bj" src="https://oss.wq1516.com/companyProduce/201906251611191561450279942.png"/>
         </section>
         <div class="search">
           <p>
