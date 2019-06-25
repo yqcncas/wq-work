@@ -93,7 +93,7 @@
         const that = this
         const num = wx.setStorageSync('msgNum')
         if (num !== undefined) {
-          this.num = num
+          that.num = num
         }
         // console.log('获取消息数量', that.num)
       }, 3000)
