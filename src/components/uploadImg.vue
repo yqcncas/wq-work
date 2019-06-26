@@ -40,7 +40,7 @@
     data () {
       return {
         urls: [],
-        tabA: '',
+        tabA: 0,
         title: '',
         chooseStyle: 'chooseImg'
       }
@@ -114,7 +114,7 @@
                 success: (res) => {
                   // 上传成功之后再把图片的地址更新到个人信息接口
                   that.urls.push({imgUrl: JSON.parse(res.data).data[0], title: '设为封面'})
-                  that.$emit('choosed', { all: that.urls })
+                  that.$emit('choosed', {all: that.urls, num: that.tabA})
                 }
               })
             }
@@ -141,7 +141,7 @@
               })
             } else {
               that.urls.splice(index, 1)
-              that.$emit('choosed', { all: that.urls, currentUpload: res.tempFilePaths })
+              that.$emit('choosed', { all: that.urls, currentUpload: res.tempFilePaths, num: this.tabA })
             }
           }
         })

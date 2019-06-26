@@ -13,22 +13,22 @@
               <input  v-model="price" type="number" placeholder="填写价格"/>
             </span>
           </div>
-          <div class="studs">
-            <span class="title">产品分类</span>
-            <picker class="choose" mode="selector" :value="index" :range="valueA" range-key="tradeName" @change="bindRegionChange( valueA[index].id)">
-              <span class="picker">{{ valueA}}<i class="iconfont iconyouce Down"></i></span>
-            </picker>
-          </div>
-          <div class="industry" @click="model()">
-            <span class="title">产品型号</span>
-            <span class="choose" @click="goToTrade()" >{{ choose }}<i class="iconfont iconyouce"></i></span>
-          </div>
-          <div class="studs">
-            <span class="title">产品属性</span>
-            <picker class="choose" mode="selector" :value="index" :range="valueA" range-key="tradeName" @change="bindRegionChange( valueA[index].id)">
-              <span class="picker">{{ valueA}}<i class="iconfont iconyouce Down"></i></span>
-            </picker>
-          </div>
+          <!--<div class="studs">-->
+            <!--<span class="title">产品分类</span>-->
+            <!--<picker class="choose" mode="selector" :value="indexA" :range="valueA" range-key="typeName" @change="bindRegionChangeA(indexA)">-->
+              <!--<span class="picker">{{ valueA[indexA].typeName}}<i class="iconfont Down iconyouce"></i></span>-->
+            <!--</picker>-->
+          <!--</div>-->
+          <!--<div class="studs">-->
+            <!--<span class="title">规格模板</span>-->
+            <!--<picker class="choose" mode="selector" :value="indexB" :range="valueB" range-key="type" @change="bindRegionChangeB(indexB)" >-->
+              <!--<span class="picker">{{ valueB[indexB].type }}<i class="iconfont iconyouce Down"></i></span>-->
+            <!--</picker>-->
+          <!--</div>-->
+          <!--<div class="industry" @click="model()">-->
+            <!--<span class="title">产品规格</span>-->
+            <!--<span class="choose" >{{ choose }}<i class="iconfont iconyouce"></i></span>-->
+          <!--</div>-->
           <div class="textArea">
             <!--<textarea v-model="info" placeholder="填写产品介绍"></textarea>-->
             <div class="upload">
@@ -63,11 +63,17 @@
     data () {
       return {
         productId: '',
+        typeName: '',
+        type: '',
         valueA: [{
-          tradeName: ''
+          typeName: ''
+        }],
+        valueB: [{
+          type: ''
         }],
         MoreList: [],
         choose: '',
+        imgUrl: '',
         goodsImgUrlListA: [{
           imgUrl: ''
         },
@@ -80,10 +86,14 @@
         goodsImgUrlList: [],
         price: '',
         name: '',
-        info: ''
+        info: '',
+        secTradeIdA: '',
+        secTradeIdB: ''
       }
     },
     onShow () {
+      // this.getGoodA()
+      // this.getGoodB()
     },
     onLoad: function (options) {
       console.log(options)
@@ -102,6 +112,46 @@
     onHide () {
     },
     methods: {
+      bindRegionChangeA (id) {
+        this.secTradeIdA = this.valueA[id].id
+        console.log('this.secTradeIdA', this.secTradeIdA)
+      },
+      bindRegionChangeB (id) {
+        this.secTradeIdB = id
+        console.log('this.secTradeIdB', this.secTradeIdB)
+      },
+      // 获取产品分类
+      getGoodA () {
+        const businessId = wx.getStorageSync('businessId')
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/goodsType/all',
+          body: {
+            'businessId': businessId
+          }
+        }).then(res => {
+          console.log('res', res)
+          this.valueA = res.data
+        }).catch(err => {
+          console.log(err)
+        })
+      },
+      // 获取产品模板
+      getGoodB () {
+        const businessId = wx.getStorageSync('businessId')
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/goodsStyleType/selectAllForUser',
+          body: {
+            'businessId': businessId
+          }
+        }).then(res => {
+          console.log('resB', res)
+          this.valueB = res.data
+        }).catch(err => {
+          console.log(err)
+        })
+      },
       // 编辑产品型号
       model (id) {
         wx.navigateTo({
@@ -118,7 +168,7 @@
           }
         }).then(res => {
           this.name = res.data.goods.name
-          this.info = res.data.goods.info
+          this.info = JSON.parse(res.data.goods.info)
           this.price = res.data.goods.price
           this.goodsImgUrlList = res.data.goodsImgList
         }).catch(err => {
@@ -145,12 +195,6 @@
               icon: 'none',
               duration: 1000
             })
-          } else if (this.info === '') {
-            wx.showToast({
-              title: '请填入产品介绍',
-              icon: 'none',
-              duration: 1000
-            })
           } else if (this.goodsImgUrlList.length === 0) {
             wx.showToast({
               title: '请上传产品展示图',
@@ -170,6 +214,7 @@
                 'name': this.name,
                 'price': this.price,
                 'info': this.info,
+                'imgUrl': this.imgUrl,
                 'goodsStyleTypeId': 0
               }
             }).then(res => {
@@ -211,7 +256,8 @@
               'goodsImgUrlList': this.goodsImgUrlList,
               'name': this.name,
               'price': this.price,
-              'info': this.info
+              'info': this.info,
+              'imgUrl': this.imgUrl
             }
           }).then(res => {
             if (res.code === 200) {
@@ -240,7 +286,8 @@
         // 监听产品展示图片并添加到数组
         if (val.all) {
           this.goodsImgUrlList = val.all
-          console.log('val', val.all)
+          this.imgUrl = this.goodsImgUrlList[val.num].imgUrl
+          console.log('valA', this.imgUrl)
         }
       },
       choosedMore (val) {
@@ -248,6 +295,8 @@
         if (val.all) {
           this.MoreList = val.all
           console.log('valA', val.all)
+          this.info = JSON.stringify(this.MoreList)
+          console.log('info', this.info)
         }
       }
     }

@@ -54,9 +54,11 @@
       }
     },
     methods: {
+      // 添加规格
       addModel () {
         this.modelList.push({ modelOne: '', modelTow: '' })
       },
+      // sha
       deleteModel (index) {
         this.modelList.splice(index, 1)
       },
