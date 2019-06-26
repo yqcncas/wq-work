@@ -1,7 +1,7 @@
 <template>
   <div class="action">
       <div class="action-main">
-        <p class="action-img"><img src="../../../static/images/renzheng.png"/> </p>
+        <p class="action-img"><img src="https://oss.wq1516.com/companyProduce/201906251611441561450304322.png"/> </p>
         <div class="message">
           <p class="action-name"><input v-model="companyName" :disabled="disabled" placeholder="企业名称"/></p>
           <p class="action-FdName"><input v-model="legalPersonaName" :disabled="disabled" placeholder="法定代表人姓名" /></p>
