@@ -50,7 +50,8 @@
       "root": "pages/prod/",
       "pages": [
         "product/main",
-        "addProduct/main"
+        "addProduct/main",
+        "productModel/main"
       ]
     }
   ],

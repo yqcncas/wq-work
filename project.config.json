@@ -34,7 +34,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 19,
+			"current": 13,
 			"list": [
 				{
 					"id": 1,
@@ -128,9 +128,9 @@
 					"scene": null
 				},
 				{
-					"id": -1,
+					"id": 13,
 					"name": "产品管理",
-					"pathName": "pages/product/main",
+					"pathName": "pages/prod/product/main",
 					"query": "",
 					"scene": null
 				},

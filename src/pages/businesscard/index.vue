@@ -306,7 +306,7 @@
 
 
           <!--我的视频 v-if="videoList !== ''"-->
-          <div class="product" v-if="video !== ''">
+          <div class="product" v-if="video !== null || video !== ''">
             <div class="product-top">
                 <span class="product-icont">
                 <img src="../../../static/images/video.png">

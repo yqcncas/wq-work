@@ -13,15 +13,35 @@
               <input  v-model="price" type="number" placeholder="填写价格"/>
             </span>
           </div>
+          <div class="studs">
+            <span class="title">产品分类</span>
+            <picker class="choose" mode="selector" :value="index" :range="valueA" range-key="tradeName" @change="bindRegionChange( valueA[index].id)">
+              <span class="picker">{{ valueA}}<i class="iconfont iconyouce Down"></i></span>
+            </picker>
+          </div>
+          <div class="industry" @click="model()">
+            <span class="title">产品型号</span>
+            <span class="choose" @click="goToTrade()" >{{ choose }}<i class="iconfont iconyouce"></i></span>
+          </div>
+          <div class="studs">
+            <span class="title">产品属性</span>
+            <picker class="choose" mode="selector" :value="index" :range="valueA" range-key="tradeName" @change="bindRegionChange( valueA[index].id)">
+              <span class="picker">{{ valueA}}<i class="iconfont iconyouce Down"></i></span>
+            </picker>
+          </div>
           <div class="textArea">
-            <textarea v-model="info" placeholder="填写产品介绍"></textarea>
+            <!--<textarea v-model="info" placeholder="填写产品介绍"></textarea>-->
             <div class="upload">
               <div class="title">
                 <span class="product">产品展示</span>
-                <span class="tips">最多展示三张，第一张为封面</span>
+                <!--<span class="tips">最多展示三张，第一张为封面</span>-->
+                <span class="tips"><uploadImg ref="goodsImgUrlList" width="120rpx" height="120rpx" max="3" @choosed="choosed" :srcs="goodsImgUrlList" ></uploadImg></span>
               </div>
             </div>
-            <uploadImg ref="goodsImgUrlList" width="116rpx" height="116rpx" max="3" @choosed="choosed" :srcs="goodsImgUrlList" ></uploadImg>
+          </div>
+
+          <div class="details">
+            <span class="title">产品详情</span>
           </div>
         </div>
         <div class="footer">
@@ -40,6 +60,10 @@
     data () {
       return {
         productId: '',
+        valueA: [{
+          tradeName: ''
+        }],
+        choose: '',
         goodsImgUrlListA: [{
           imgUrl: ''
         },
@@ -74,6 +98,12 @@
     onHide () {
     },
     methods: {
+      // 编辑产品型号
+      model (id) {
+        wx.navigateTo({
+          url: `../productModel/main`
+        })
+      },
       // 编辑产品获取单个内容
       editInfo (id) {
         this.$fly.request({

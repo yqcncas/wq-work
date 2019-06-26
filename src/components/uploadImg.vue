@@ -1,9 +1,13 @@
 <template>
   <div class="j-pic-upload">
-    <div class="j-upload-btn" @click="uploadImg()" :style="{'width':width || '120rpx','height':height || '120rpx'}">
+    <div :class="{'active':tabA === index,'chooseImg':true}" v-for="(src,index) in urls" :key="index" @click="choose(index)">
+       <img :src="src.imgUrl" :style="{'width':width || '120rpx','height':height || '120rpx'}" class="img" >
+      <span class="delete" @click="deleteImg(index)"><i class="iconfont iconshanchu-copy"></i></span>
+      <span class="title" :key="index">{{src.title}}</span>
+    </div>
+    <div v-if="urls.length < 3" class="j-upload-btn" @click="uploadImg()" :style="{'width':width || '120rpx','height':height || '120rpx'}">
       <span class="j-upload-add iconaddgrey iconfont"></span>
     </div>
-    <img @click="previewImg(index)" v-for="(src,index) in urls" :key="src" :src="src.imgUrl" :style="{'width':width || '120rpx','height':height || '120rpx'}" class="img" >
   </div>
 </template>
 
@@ -35,7 +39,10 @@
     },
     data () {
       return {
-        urls: []
+        urls: [],
+        tabA: '',
+        title: '',
+        chooseStyle: 'chooseImg'
       }
     },
     watch: {
@@ -43,7 +50,7 @@
         this.urls = []
         if (newValue.length <= 3) {
           newValue.map((item) => {
-            this.urls.push({ imgUrl: item.imgUrl })
+            this.urls.push({ imgUrl: item.imgUrl, title: '设为封面' })
           })
         }
       }
@@ -51,6 +58,39 @@
     onShow () {
     },
     methods: {
+      // 删除
+      deleteImg (index) {
+        this.urls.splice(index, 1)
+      },
+      // 选择封面
+      choose (index) {
+        // 选择会员
+        if (this.tabA === index) {
+          this.tabA = ''
+          this.urls[index].title = '设为封面'
+        } else {
+          this.tabA = index
+          this.urls[index].title = '封面'
+          if (this.urls.length === 2) {
+            if (this.tabA === 0) {
+              this.urls[1].title = '设为封面'
+            } else if (this.tabA === 1) {
+              this.urls[0].title = '设为封面'
+            }
+          } else if (this.urls.length === 3) {
+            if (this.tabA === 0) {
+              this.urls[1].title = '设为封面'
+              this.urls[2].title = '设为封面'
+            } else if (this.tabA === 1) {
+              this.urls[0].title = '设为封面'
+              this.urls[2].title = '设为封面'
+            } else if (this.tabA === 2) {
+              this.urls[1].title = '设为封面'
+              this.urls[0].title = '设为封面'
+            }
+          }
+        }
+      },
       uploadImg () {
         let that = this
         if (this.urls.length < 3) {
@@ -73,7 +113,7 @@
                 methods: 'POST',
                 success: (res) => {
                   // 上传成功之后再把图片的地址更新到个人信息接口
-                  that.urls.push({imgUrl: JSON.parse(res.data).data[0]})
+                  that.urls.push({imgUrl: JSON.parse(res.data).data[0], title: '设为封面'})
                   that.$emit('choosed', { all: that.urls })
                 }
               })
@@ -90,7 +130,7 @@
       previewImg (index) {
         let that = this
         wx.showActionSheet({
-          itemList: ['预览', '删除'],
+          itemList: [],
           success: function (res) {
             console.log('res', that.urls[index].imgUrl)
             const urlA = that.urls[index].imgUrl.split('')
@@ -112,25 +152,83 @@
 
 <style lang="less" scoped>
   .j-pic-upload{
-    padding: ~'10rpx'  ~'10rpx'  ~'10rpx' 0;
+    /*padding: ~'10rpx'  ~'10rpx'  ~'10rpx' 0;*/
     display: flex;
     flex-direction: row;
     align-items: center;
     flex-wrap: wrap;
   }
+  .active{
+    width: ~'122rpx';
+    height: ~'122rpx';
+    display: inline-block;
+    position: relative;
+    border: ~'1rpx' solid #2a94ec!important;
+    margin-left: ~'10rpx';
+    img{
+    }
+    .delete{
+      position: absolute;
+      right: ~'-10rpx';
+      top: ~'-10rpx';
+      z-index: 9999;
+    }
+    .title{
+      position: absolute;
+      bottom: ~'0rpx';
+      height: ~'40rpx';
+      right: ~'2rpx';
+      color: #ffffff;
+      width: ~'120rpx';
+      text-align: center;
+      line-height: ~'40rpx';
+      font-size: ~'24rpx';
+      z-index: 9999;
+      background: rgba(0,0,0,0.3);
+    }
+  }
+  .chooseImg{
+    width: ~'122rpx';
+    height: ~'122rpx';
+    border: ~'1rpx' solid #ffffff;
+    display: inline-block;
+    position: relative;
+    margin-left: ~'10rpx';
+    .delete{
+      position: absolute;
+      right: ~'-10rpx';
+      top: ~'-10rpx';
+      z-index: 9999;
+    }
+    .title{
+      position: absolute;
+      bottom: ~'0rpx';
+      height: ~'40rpx';
+      right: ~'2rpx';
+      color: #ffffff;
+      width: ~'120rpx';
+      text-align: center;
+      line-height: ~'40rpx';
+      font-size: ~'24rpx';
+      z-index: 9999;
+      background: rgba(0,0,0,0.3);
+    }
+  }
   .j-upload-btn{
-    border: 1px solid #ddd;
+    border: ~'1rpx' solid #ddd;
+    width: ~'118rpx'!important;
+    height: ~'118rpx'!important;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    margin-right: ~'20rpx';
+    margin-left: ~'10rpx';
   }
   .j-upload-add{
     font-weight: 500;
     color:#C9C9C9;
   }
   .img{
-    margin:~'0rpx' ~'20rpx' ~'0rpx' 0;
+    margin:~'3rpx' ~'10rpx' ~'0rpx' 0;
   }
 </style>

@@ -264,8 +264,6 @@
               </div>
             </div>
 
-
-
             <!--我的视频 v-if="videoList !== ''"-->
             <div class="product" v-if="video !== ''">
               <div class="product-top">
@@ -321,6 +319,7 @@
         personApi: personApi,
         postForm: [],
         voiceUrl: '',
+        videoImg: '',
         currentAudio: '',
         imgWidth: null,
         companyName: '',
@@ -368,6 +367,10 @@
       this.getSun()
       this.getLogo()
       this.getInfoA()
+    },
+    onUnload () {
+      this.video = ''
+      this.videoFlag = false
     },
     onShareAppMessage () {
       this.insertOpera('分享了名片', 21)
@@ -619,10 +622,11 @@
           if (res.data.richText !== null) {
             this.imgUrlList = res.data.richText.split(',')
           }
-          // console.log('imgUrl', this.imgUrlList)
-          if (res.data.video !== '') {
+          if (res.data.video !== null && res.data.video) {
             this.video = res.data.video
             this.videoImg = this.video + '?x-oss-process=video/snapshot,t_0,f_jpg,w_750,m_fast'
+            console.log('video', this.videoImg)
+            console.log('aaaaa', this.video)
           }
           this.user = res.data.userId
           this.postForm = res.data
