@@ -15,7 +15,7 @@
               <img :src="item.goodsImgUrlList[id].imgUrl">
             </span>
               <p class="text">{{ item.name }}</p>
-              <p class="introduce">{{ item.info }}</p>
+              <p class="introduce">{{ item.price }}</p>
             </div>
           </div>
         </div>
