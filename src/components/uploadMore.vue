@@ -1,12 +1,12 @@
 <template>
   <div class="j-pic-upload">
-    <div :class="{'active':tabA === index,'chooseImg':true}" v-for="(src,index) in urls" :key="index" @click="choose(index)">
-      <img :src="src.imgUrl" :style="{'width':width || '120rpx','height':height || '120rpx'}" class="img" >
-      <span class="delete" @click="deleteImg(index)"><i class="iconfont iconshanchu-copy"></i></span>
-      <span class="title" :key="index">{{src.title}}</span>
+    <div class="j-upload-btn" @click="uploadImg()" :style="{'width': '150rpx','height': '103rpx'}">
+      <p class="j-upload-add iconaddgrey iconfont"></p>
+      <p class="">插入图片</p>
     </div>
-    <div v-if="urls.length < 3" class="j-upload-btn" @click="uploadImg()" :style="{'width':width || '120rpx','height':height || '120rpx'}">
-      <span class="j-upload-add iconaddgrey iconfont"></span>
+    <div class="imgList" v-for="(src,index) in urls" :key="src">
+      <img @click="previewImg(index)" :src="src" class="img" >
+      <i v-if="urls.length!== 0" @click="deleteA(index)" class="iconfont iconshanchu-copy delete"></i>
     </div>
   </div>
 </template>
@@ -14,134 +14,107 @@
 <script>
   import { UPLOAD_FILE } from '@/api/uploadFile'
   export default {
-    // props: ['width', 'height', 'max', 'srcs', 'value'],
-    props: {
-      width: {
-        type: Object,
-        default: {}
-      },
-      height: {
-        type: String,
-        default: ''
-      },
-      max: {
-        type: Object,
-        default: {}
-      },
-      srcs: {
-        type: Array,
-        default: []
-      },
-      value: {
-        type: Object,
-        default: {}
-      }
-    },
+    props: ['width', 'height', 'max', 'srcs'],
     data () {
       return {
         urls: [],
-        tabA: '',
-        title: '',
-        chooseStyle: 'chooseImg'
+        urlsA: [],
+        imgUrl: null,
+        richTextList: []
       }
     },
     watch: {
       srcs (newValue, oldValue) {
-        this.urls = []
-        if (newValue.length <= 3) {
-          newValue.map((item) => {
-            this.urls.push({ imgUrl: item.imgUrl, title: '设为封面' })
-          })
+        console.log('newValue', newValue)
+        if (newValue.length > 0) {
+          this.urls = newValue
+        } else {
+          this.urls = newValue || []
         }
       }
     },
-    onShow () {
-    },
     methods: {
       // 删除
-      deleteImg (index) {
+      deleteA (index) {
         this.urls.splice(index, 1)
-      },
-      // 选择封面
-      choose (index) {
-        // 选择会员
-        if (this.tabA === index) {
-          this.tabA = ''
-          this.urls[index].title = '设为封面'
-        } else {
-          this.tabA = index
-          this.urls[index].title = '封面'
-          if (this.urls.length === 2) {
-            if (this.tabA === 0) {
-              this.urls[1].title = '设为封面'
-            } else if (this.tabA === 1) {
-              this.urls[0].title = '设为封面'
-            }
-          } else if (this.urls.length === 3) {
-            if (this.tabA === 0) {
-              this.urls[1].title = '设为封面'
-              this.urls[2].title = '设为封面'
-            } else if (this.tabA === 1) {
-              this.urls[0].title = '设为封面'
-              this.urls[2].title = '设为封面'
-            } else if (this.tabA === 2) {
-              this.urls[1].title = '设为封面'
-              this.urls[0].title = '设为封面'
-            }
-          }
-        }
       },
       uploadImg () {
         let that = this
-        if (this.urls.length < 3) {
-          wx.chooseImage({
-            count: that.max,
-            sizeType: ['original', 'compressed'],
-            sourceType: ['album', 'camera'],
-            success: function (res) {
-              // this.imgUrl = res.tempFilePaths[0]
-              /** 上传完成后把文件上传到服务器 */
-              const token = wx.getStorageSync('token')
-              wx.uploadFile({
-                url: UPLOAD_FILE + '?filedir=companyProduce',
-                filePath: res.tempFilePaths[0],
-                name: 'file',
-                header: {
-                  'Content-Type': 'image/jpeg',
-                  token: token
-                },
-                methods: 'POST',
-                success: (res) => {
-                  // 上传成功之后再把图片的地址更新到个人信息接口
-                  that.urls.push({imgUrl: JSON.parse(res.data).data[0], title: '设为封面'})
-                  that.$emit('choosed', { all: that.urls })
-                }
+        wx.chooseImage({
+          count: that.max || 9,
+          sizeType: ['original', 'compressed'],
+          sourceType: ['album', 'camera'],
+          success: function (res) {
+            // res.tempFilePaths.forEach(v => {
+            //   that.urls.push(v)
+            // })
+            that.imgUrl = null
+            let successUp = 0 // 成功
+            let failUp = 0 // 失败
+            let length = res.tempFilePaths.length // 总数
+            let count = 0 // 第几张
+            that.uploadOneByOne(res.tempFilePaths, successUp, failUp, count, length)
+          }
+        })
+      },
+      // 上传到oss
+      uploadOneByOne (imgPaths, successUp, failUp, count, length) {
+        const token = wx.getStorageSync('token')
+        let that = this
+        wx.showLoading({
+          title: '正在上传第' + count + '张'
+        })
+        wx.uploadFile({
+          url: UPLOAD_FILE + '?filedir=dynamic',
+          filePath: imgPaths[count],
+          name: 'file',
+          header: {
+            'Content-Type': 'image/jpeg',
+            token: token
+          },
+          methods: 'POST',
+          success: (res) => {
+            console.log('成功', JSON.parse(res.data).data[0])
+            successUp++ // 成功+1
+            // 上传成功之后再把照片的图片列表更新到个人信息接口
+            that.urls.push(JSON.parse(res.data).data[0])
+            // that.urls = that.urlsA
+            that.$emit('choosedMore', { all: that.urls })
+          },
+          fail: (res) => {
+            failUp++ // 失败+1
+          },
+          complete: (res) => {
+            count++ // 下一张
+            if (count === length) {
+              // 上传完毕，作一下提示
+              console.log('上传成功' + successUp + ',' + '失败' + failUp)
+              wx.showToast({
+                title: '上传成功' + successUp,
+                icon: 'none',
+                duration: 2000
               })
+            } else {
+              // 递归调用，上传下一张
+              this.uploadOneByOne(imgPaths, successUp, failUp, count, length)
+              console.log('正在上传第' + count + '张')
             }
-          })
-        } else {
-          wx.showToast({
-            title: '只能上传三张图片',
-            icon: 'none',
-            duration: 2000
-          })
-        }
+          }
+        })
       },
       previewImg (index) {
         let that = this
         wx.showActionSheet({
-          itemList: [],
+          itemList: ['预览', '删除'],
           success: function (res) {
-            console.log('res', that.urls[index].imgUrl)
-            const urlA = that.urls[index].imgUrl.split('')
             if (res.tapIndex === 0) {
               wx.previewImage({
-                current: '',
-                urls: urlA
+                current: that.urls[index],
+                urls: that.urls
               })
             } else {
               that.urls.splice(index, 1)
-              that.$emit('choosed', { all: that.urls, currentUpload: res.tempFilePaths })
+              that.$emit('choosedMore', that.urls)
             }
           }
         })
@@ -152,83 +125,62 @@
 
 <style lang="less" scoped>
   .j-pic-upload{
-    /*padding: ~'10rpx'  ~'10rpx'  ~'10rpx' 0;*/
+    padding: ~'20rpx' 0;
     display: flex;
     flex-direction: row;
     align-items: center;
     flex-wrap: wrap;
   }
-  .active{
-    width: ~'122rpx';
-    height: ~'122rpx';
-    display: inline-block;
-    position: relative;
-    border: ~'1rpx' solid #2a94ec!important;
-    margin-left: ~'10rpx';
-    img{
-    }
-    .delete{
-      position: absolute;
-      right: ~'-10rpx';
-      top: ~'-10rpx';
-      z-index: 9999;
-    }
-    .title{
-      position: absolute;
-      bottom: ~'0rpx';
-      height: ~'40rpx';
-      right: ~'2rpx';
-      color: #ffffff;
-      width: ~'120rpx';
-      text-align: center;
-      line-height: ~'40rpx';
-      font-size: ~'24rpx';
-      z-index: 9999;
-      background: rgba(0,0,0,0.3);
-    }
-  }
-  .chooseImg{
-    width: ~'122rpx';
-    height: ~'122rpx';
-    border: ~'1rpx' solid #ffffff;
-    display: inline-block;
-    position: relative;
-    margin-left: ~'10rpx';
-    .delete{
-      position: absolute;
-      right: ~'-10rpx';
-      top: ~'-10rpx';
-      z-index: 9999;
-    }
-    .title{
-      position: absolute;
-      bottom: ~'0rpx';
-      height: ~'40rpx';
-      right: ~'2rpx';
-      color: #ffffff;
-      width: ~'120rpx';
-      text-align: center;
-      line-height: ~'40rpx';
-      font-size: ~'24rpx';
-      z-index: 9999;
-      background: rgba(0,0,0,0.3);
-    }
-  }
   .j-upload-btn{
-    border: ~'1rpx' solid #ddd;
-    width: ~'118rpx'!important;
-    height: ~'118rpx'!important;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    margin-left: ~'10rpx';
+    /*border: 1px solid #ddd;*/
+    display: inline-block;
+    /*flex-direction: ;*/
+    /*justify-content: center;*/
+    /*align-items: center;*/
+    background: #ffffff;
+    border: ~'1rpx' solid #d8d8d8;
+    text-align: center;
+    .iconaddgrey{
+      color: #999999;
+      margin-top: ~'20rpx';
+      font-size: ~'28rpx'!important;
+    }
+    p{
+      width: ~'150rpx';
+      display: inline-block;
+      font-size: ~'24rpx';
+    }
   }
   .j-upload-add{
     font-weight: 500;
     color:#C9C9C9;
   }
-  .img{
-    margin:~'3rpx' ~'10rpx' ~'0rpx' 0;
+  .imgList{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    .iconshanchu-copy{
+      font-size: ~'50rpx';
+      display: inline-block;
+      color: #999999;
+    }
+    .img{
+      /*padding:~'10rpx' ~'17rpx' ~'10rpx' 0;*/
+      width: ~'670rpx';
+      padding: ~'40rpx' 0 0;
+      display: block;
+    }
+    .delete{
+      font-size: ~'36rpx';
+      position: absolute;
+      top:~'0rpx';
+      right: ~'-10rpx';
+    }
+  }
+  /*.img:nth-child(3n){*/
+    /*margin: 0;*/
+  /*}*/
+  .iconaddgrey{
+    color: #ffffff;
   }
 </style>

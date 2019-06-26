@@ -42,6 +42,7 @@
 
           <div class="details">
             <span class="title">产品详情</span>
+            <span class=""><uploadMore ref="MoreList" width="" height="100%" max="" @choosedMore="choosedMore" :srcs="MoreList" ></uploadMore></span>
           </div>
         </div>
         <div class="footer">
@@ -52,10 +53,12 @@
 
 <script>
   import uploadImg from '@/components/uploadImg'
+  import uploadMore from '@/components/uploadMore'
   export default {
     name: 'index',
     components: {
-      uploadImg
+      uploadImg,
+      uploadMore
     },
     data () {
       return {
@@ -63,6 +66,7 @@
         valueA: [{
           tradeName: ''
         }],
+        MoreList: [],
         choose: '',
         goodsImgUrlListA: [{
           imgUrl: ''
@@ -237,6 +241,13 @@
         if (val.all) {
           this.goodsImgUrlList = val.all
           console.log('val', val.all)
+        }
+      },
+      choosedMore (val) {
+        // 监听产品展示图片并添加到数组
+        if (val.all) {
+          this.MoreList = val.all
+          console.log('valA', val.all)
         }
       }
     }

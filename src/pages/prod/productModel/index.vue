@@ -24,8 +24,8 @@
         </div>
       </div>
       <div class="delete">
-        <span class="save" @click="saveModel(index)"><img src="../../../../static/images/down.png">保存</span>
         <span v-if="modelList.length !== 1"  @click="deleteModel(index)" class="icont"><img src="../../../../static/images/delete.png">删除</span>
+        <span class="save" @click="saveModel(index)"><img src="../../../../static/images/down.png">保存</span>
       </div>
     </div>
     <div class="footer">
