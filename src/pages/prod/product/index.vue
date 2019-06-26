@@ -2,7 +2,7 @@
     <div class="Group">
       <div class="Top" @click = "getInto">
         <div class="main" >
-          <span class="add"><img src="../../../static/images/add.png"/></span>
+          <span class="add"><img src="../../../../static/images/add.png"/></span>
           <span class="title">添加产品</span>
         </div>
       </div>
@@ -74,5 +74,5 @@
 </script>
 
 <style lang="less" scoped>
-@import "./style";
+@import "style";
 </style>

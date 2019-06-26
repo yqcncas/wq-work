@@ -128,7 +128,7 @@
         }, {
           src: '../../static/images/chanpin.png',
           title: '产品管理',
-          url: '../product/main'
+          url: '../prod/product/main'
         }, {
           src: '../../static/images/release.png',
           title: '我的发布',

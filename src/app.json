@@ -21,8 +21,6 @@
     "pages/logs/showQrcode/main",
     "pages/message/main",
     "pages/introduce/main",
-    "pages/product/main",
-    "pages/addProduct/main",
     "pages/GroupCard/main",
     "pages/release/main",
     "pages/resEdit/main",
@@ -46,6 +44,15 @@
     "pages/productA/detail/main",
     "pages/stats/main",
     "pages/skin/main"
+  ],
+  "subPackages": [
+    {
+      "root": "pages/prod/",
+      "pages": [
+        "product/main",
+        "addProduct/main"
+      ]
+    }
   ],
   "permission": {
     "scope.userLocation": {
