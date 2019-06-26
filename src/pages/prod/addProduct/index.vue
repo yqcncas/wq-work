@@ -40,9 +40,9 @@
             </div>
           </div>
 
-          <div class="details">
+          <div class="details" v-model="info">
             <span class="title">产品详情</span>
-            <span class=""><uploadMore ref="MoreList" width="" height="100%" max="" @choosedMore="choosedMore" :srcs="MoreList" ></uploadMore></span>
+            <span class=""><uploadMore ref="MoreList" width="" height="100%" max="" v-model="info" @choosedMore="choosedMore" :srcs="MoreList" ></uploadMore></span>
           </div>
         </div>
         <div class="footer">
@@ -94,6 +94,9 @@
     onShow () {
       // this.getGoodA()
       // this.getGoodB()
+    },
+    onUnload () {
+      this.MoreList = ''
     },
     onLoad: function (options) {
       console.log(options)
@@ -169,6 +172,8 @@
         }).then(res => {
           this.name = res.data.goods.name
           this.info = JSON.parse(res.data.goods.info)
+          this.MoreList = JSON.parse(res.data.goods.info)
+          console.log('546545', this.MoreList)
           this.price = res.data.goods.price
           this.goodsImgUrlList = res.data.goodsImgList
         }).catch(err => {
