@@ -49,9 +49,11 @@
       srcs (newValue, oldValue) {
         this.urls = []
         if (newValue.length <= 3) {
+          console.log('newValue', newValue)
           newValue.map((item) => {
             this.urls.push({ imgUrl: item.imgUrl, title: '设为封面' })
           })
+          this.urls[0].title = '封面'
         }
       }
     },

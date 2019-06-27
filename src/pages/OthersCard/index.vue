@@ -228,7 +228,7 @@
               <div class="product-main">
                 <div class="product-details" v-for="(item,index) in postForm.goodsList" :key="index" @click="goToProduct(postForm.goodsList[index].id)">
                     <div class="product-details-img">
-                      <img :src="item.goodsImgUrlList[0].imgUrl"/>
+                      <img :src="item.imgUrl"/>
                     </div>
                   <div class="product-details-title">
                     {{ item.name }}

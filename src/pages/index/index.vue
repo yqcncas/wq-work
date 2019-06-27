@@ -44,7 +44,7 @@
                   <label>行业</label>
                   <!--<picker mode="multiSelector" class="pick-region" @columnchange="bindchange"  @change="bindcolumnchange" :range="TradeData" :range-key = 'pid' :value="multiIndex">-->
                   <div class="pick"  @click="showMulLinkageTwoPicker">
-                    <text type="text" @click="showMulLinkageTwoPicker"  placeholder="请输入行业行业" class="picker">{{pickerText}}</text>
+                    <text type="text" @click="showMulLinkageTwoPicker"  placeholder="请输入行业" class="picker">{{pickerText}}</text>
                     <!--<i class="iconfont iconyouce"></i>-->
                   </div>
                   <mpvue-picker ref="mpvuePicker" :mode="mode" :deepLength="deepLength" :pickerValueDefault="pickerValueDefault" :themeColor="themeColor" @onChange="onChange" @onConfirm="onConfirm" @onCancel="onCancel" :pickerValueArray="pickerValueArray"></mpvue-picker>

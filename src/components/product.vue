@@ -66,7 +66,7 @@
       },
       routeTo (id) {
         wx.navigateTo({
-          url: `../product/detail/index?id=${id}`
+          url: '../productA/detail/main?id=' + id
         })
       },
       // 得到商品的列表

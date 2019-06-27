@@ -268,7 +268,7 @@
             <div class="product-main">
               <div class="product-details" v-for="(item,index) in postForm.goodsList" :key="index" @click="goToProduct(postForm.goodsList[index].id)">
                 <div class="product-details-img">
-                  <img :src="item.goodsImgUrlList[0].imgUrl"/>
+                  <img :src="item.imgUrl"/>
                 </div>
                 <div class="product-details-title">
                   {{ item.name }}
@@ -306,7 +306,7 @@
 
 
           <!--我的视频 v-if="videoList !== ''"-->
-          <div class="product" v-if="video !== null || video !== ''">
+          <div class="product" v-if=" video !== ''">
             <div class="product-top">
                 <span class="product-icont">
                 <img src="../../../static/images/video.png">

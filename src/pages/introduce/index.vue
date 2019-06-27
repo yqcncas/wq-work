@@ -7,7 +7,7 @@
       </div>
       <div class="studs">
         <span class="title">类型</span>
-        <picker class="choose" mode="selector" :value="index" :range="valueA" range-key="tradeName" @change="bindRegionChange( valueA[index].id)">
+        <picker class="choose" mode="selector" :value="index" :range="valueA" range-key="tradeName" @change="bindRegionChange">
           <span class="picker">{{ valueA[index].tradeName}}<i class="iconfont iconyouce"></i></span>
         </picker>
       </div>
@@ -82,6 +82,8 @@
         success: function () {
         }
       })
+      this.choose = ''
+      this.valueA = ''
     },
     onLoad: function (options) {
       console.log('aaaa', this.dataA)
@@ -164,7 +166,9 @@
       },
       // Change
       bindRegionChange (e) {
-        this.secTradeId = e
+        this.indexA = parseInt(e.mp.detail.value)
+        this.secTradeId = this.indexA
+        console.log('this.secTradeIdA', e.mp.detail)
       },
       // 图片选择
       choosed (val) {

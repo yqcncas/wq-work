@@ -130,10 +130,10 @@ export default {
       wx.setStorageSync('businessId', businessId)
       setIsSalesMan(isSalesman)
       wx.setStorageSync('userId', id)
-      this.getSalesmanId()
       const updateManager = wx.getUpdateManager()
       updateManager.onCheckForUpdate((res) => {
         if (!res.hasUpdate) {
+          this.getSalesmanId()
           // this.insertOpera('用户登陆', 0)
           // wx.switchTab({
           //   url: '../businesscard/main?id=' + this.goodsId
