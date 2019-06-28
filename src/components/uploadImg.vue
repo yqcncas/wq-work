@@ -40,7 +40,7 @@
     data () {
       return {
         urls: [],
-        tabA: 0,
+        tabA: '',
         title: '',
         chooseStyle: 'chooseImg'
       }
@@ -53,11 +53,14 @@
           newValue.map((item) => {
             this.urls.push({ imgUrl: item.imgUrl, title: '设为封面' })
           })
-          this.urls[0].title = '封面'
+          if (this.tabA !== '') {
+            this.urls[this.tabA].title = '封面'
+          }
         }
       }
     },
     onShow () {
+      this.tabA = ''
     },
     methods: {
       // 删除
@@ -67,30 +70,41 @@
       // 选择封面
       choose (index) {
         // 选择会员
+        let that = this
+        // console.log('index', index)
+        // const coverImg = this.urls[index].imgUrl
+        // wx.setStorageSync('coverImg', coverImg)
         if (this.tabA === index) {
           this.tabA = ''
           this.urls[index].title = '设为封面'
+          that.$emit('choosed', {all: that.urls, num: that.tabA})
         } else {
           this.tabA = index
           this.urls[index].title = '封面'
           if (this.urls.length === 2) {
             if (this.tabA === 0) {
               this.urls[1].title = '设为封面'
+              this.urls[0].title = '封面'
             } else if (this.tabA === 1) {
               this.urls[0].title = '设为封面'
+              this.urls[1].title = '封面'
             }
           } else if (this.urls.length === 3) {
             if (this.tabA === 0) {
+              this.urls[0].title = '封面'
               this.urls[1].title = '设为封面'
               this.urls[2].title = '设为封面'
             } else if (this.tabA === 1) {
+              this.urls[1].title = '封面'
               this.urls[0].title = '设为封面'
               this.urls[2].title = '设为封面'
             } else if (this.tabA === 2) {
+              this.urls[2].title = '封面'
               this.urls[1].title = '设为封面'
               this.urls[0].title = '设为封面'
             }
           }
+          that.$emit('choosed', {all: that.urls, num: that.tabA})
         }
       },
       uploadImg () {

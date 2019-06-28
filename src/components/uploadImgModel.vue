@@ -41,8 +41,10 @@
     watch: {
       srcs (newValue, oldValue) {
         this.urls = ''
+        console.log('newValueaaaa', newValue)
         if (newValue) {
           this.urls = newValue
+          console.log('this.urls', this.urls)
           // newValue.map((item) => {
           //   this.urls.push({ imgUrl: item.imgUrl })
           // })

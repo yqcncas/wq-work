@@ -12,7 +12,7 @@
             <div class="manage" v-for="(item, index) in products" :key="index">
             <div @click="modify(item.id)">
             <span class="img">
-              <img :src="item.goodsImgUrlList[id].imgUrl">
+              <img :src="item.imgUrl">
             </span>
               <p class="text">{{ item.name }}</p>
               <p class="introduce">{{ item.price }}</p>
