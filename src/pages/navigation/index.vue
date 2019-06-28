@@ -8,23 +8,23 @@
         <!--:handButton="handButton"-->
         <!--:btnText="btnText">-->
       <!--</vue-tab-bar>-->
-      <div class="top">
-        <section class="sec-nav" @click="getInto">
-          <navigation-bar
-            :back-visible="true"
-            :home-path="'/pages/index/main'"></navigation-bar>
-        </section>
-        <section class="content">
-          <img class="bj" src="https://oss.wq1516.com/companyProduce/201906251611191561450279942.png"/>
-        </section>
-        <div class="search">
-          <p>
-            <input placeholder="搜索客户资源" v-model="searchKe" placeholder-style="color: #cccccc;"/>
-            <span class="sbutton" @click="goToKe(searchKe)"><img src="../../../static/images/search.png"></span>
-          </p>
+      <div v-if="tradeStatus ==1">
+        <div class="top">
+          <section class="sec-nav" @click="getInto">
+            <navigation-bar
+              :back-visible="true"
+              :home-path="'/pages/index/main'"></navigation-bar>
+          </section>
+          <section class="content">
+            <img class="bj" src="https://oss.wq1516.com/companyProduce/201906251611191561450279942.png"/>
+          </section>
+          <div class="search">
+            <p>
+              <input placeholder="搜索客户资源" v-model="searchKe" placeholder-style="color: #cccccc;"/>
+              <span class="sbutton" @click="goToKe(searchKe)"><img src="../../../static/images/search.png"></span>
+            </p>
+          </div>
         </div>
-      </div>
-      <div v-if="tradeStatus == 0">
         <div class="main">
           <div class="test">
             <div class="testNav">
