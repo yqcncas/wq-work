@@ -88,7 +88,7 @@
               <div class="Basics-footer">
                 <submit class="back" @click="back()">返回</submit>
                 <button v-if="isBuy === 0" class="save" @click="getSalesmanUpdate()">保存</button>
-                <button v-else-if="isBuy === 1" class="save" @click="getBuyCard()">保存</button>
+                <button v-else class="save" @click="getBuyCard()">保存</button>
               </div>
             </div>
           </div>
