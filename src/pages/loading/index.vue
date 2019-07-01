@@ -20,12 +20,14 @@ export default {
       userId: null,
       fromWay: 0, // 搜索0 朋友圈1 海报2
       salesmanId: 0,
-      newsId: null
+      newsId: null,
+      isBuy: ''
     }
   },
   onLoad (options) {
     this.fromWay = 0
     this.getInfo()
+    this.getBuy()
     this.goodsId = null
     if (options.fromWay) {
       this.fromWay = options.fromWay
@@ -76,6 +78,23 @@ export default {
           this.eatinCart(result)
           wx.setStorageSync('Card', false)
         }
+      })
+    },
+    // 获取logo
+    getBuy () {
+      const businessId = wx.getStorageSync('businessId') // 获取本地userId
+      this.$fly.request({
+        method: 'get', // post/get 请求方式
+        url: '/business/findById',
+        body: {
+          'businessId': businessId
+        }
+      }).then(res => {
+        this.isBuy = res.data.isBuy
+        wx.setStorageSync('isBuy', this.isBuy)
+        console.log('isBuy', this.isBuy)
+      }).catch(err => {
+        console.log(err)
       })
     },
     // 页面加载获取信息

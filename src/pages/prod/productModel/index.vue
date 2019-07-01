@@ -27,7 +27,8 @@
         </div>
       </div>
       <div class="delete">
-        <span class="save" :disabled="true" @click="saveModel(item.id,item.goodsId,item.imgUrl,item.modelMapList,item.name,item.price,index)"><img src="../../../../static/images/down.png">保存</span>
+        <span class="save" v-if="disabled === true" @click="saveModel(item.id,item.goodsId,item.imgUrl,item.modelMapList,item.name,item.price,index)"><img src="../../../../static/images/down.png">保存</span>
+        <span class="save" v-else @click="saveModel(item.id,item.goodsId,item.imgUrl,item.modelMapList,item.name,item.price,index)"><img src="../../../../static/images/down.png">保存</span>
         <span @click="deleteModel(item.id, index)" class="icont"><img src="../../../../static/images/delete.png">删除</span>
       </div>
     </div>
@@ -68,15 +69,15 @@
       }
     },
     onLoad (options) {
-      console.log(options)
+      if (options.goodsId) {
+        this.goodsId = options.goodsId
+      }
       if (options.id) {
         this.goodsStyleTypeId = options.id
         this.getModelAll(this.goodsStyleTypeId)
         this.getGoodStyle(this.goodsStyleTypeId)
       }
-      if (options.goodsId) {
-        this.goodsId = options.goodsId
-      }
+      console.log('11', this.goodsId)
     },
     methods: {
       uploadImg (url, index) {
@@ -194,7 +195,7 @@
             success: function (res) {
               if (res.data.code === 200) {
                 wx.showToast({
-                  title: '保存成功',
+                  title: '更新成功',
                   duration: 2000,
                   icon: 'none'
                 })
@@ -231,10 +232,12 @@
                 })
                 let that = this
                 that.modelList[index].id = this.goodsStyleId
+                // this.disabled = false
+                console.log('11', that.modelList[index].id)
+                that.onLoad()
                 // let that = this
                 // let that = this
               }
-              console.log('11', res)
             }
           })
         }
@@ -245,7 +248,8 @@
           method: 'get', // post/get 请求方式
           url: '/goodsStyle/selectAll',
           body: {
-            'goodsStyleTypeId': this.goodsStyleTypeId
+            'goodsStyleTypeId': this.goodsStyleTypeId,
+            'goodsId': this.goodsId
           }
         }).then(res => {
           this.modelMapList = res.data
@@ -260,7 +264,8 @@
           method: 'get', // post/get 请求方式
           url: '/goodsModel/selectAll',
           body: {
-            'goodsStyleTypeId': id
+            'goodsStyleTypeId': id,
+            'goodsId': this.goodsId
           }
         }).then(res => {
           this.modelList = res.data
