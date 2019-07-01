@@ -114,10 +114,10 @@
                   <text class="txt">{{ postForm.weChat }}</text>
                 </div>
               </div>
-              <div class="col-1" @click="getAddress" v-if="postForm.address">
+              <div class="col-1" @click="getAddress" v-if="postForm.salesAddDetailed">
                 <div class="desc-wrap">
                   <span class="icon-wrap"><img class="icon-4" src="../../../static/images/dingwei.png"></span>
-                  <text class="txt">{{ postForm.address }}</text>
+                  <text class="txt">{{ postForm.salesAddDetailed }}</text>
                 </div>
               </div>
               <div class="col-1" @click="textPasteEmail" v-if="postForm.email">
@@ -349,7 +349,9 @@
         num: 0,
         headImgList: [],
         details: [],
-        user: ''
+        user: '',
+        latitude: '',
+        longitude: ''
       }
     },
     onLoad: function (options) {
@@ -619,6 +621,8 @@
           }
         }).then(res => {
           console.log('aa', res)
+          this.latitude = res.data.latitude
+          this.longitude = res.data.longitude
           if (res.data.richText !== null) {
             this.imgUrlList = res.data.richText.split(',')
           }

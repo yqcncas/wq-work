@@ -87,7 +87,8 @@
               </div>
               <div class="Basics-footer">
                 <submit class="back" @click="back()">返回</submit>
-                <button class="save" @click="getSalesmanUpdate()">保存</button>
+                <button v-if="isBuy === 0" class="save" @click="getSalesmanUpdate()">保存</button>
+                <button v-else-if="isBuy === 1" class="save" @click="getBuyCard()">保存</button>
               </div>
             </div>
           </div>
@@ -215,6 +216,7 @@ export default {
       pickerValueArray: [], // picker 数组值
       pickerText: '',
       themeColor: '', // 颜色主题
+      isBuy: '', // 控制是否支付
       mulLinkageTwoPicker: [
         {
           label: '飞机票',
@@ -266,6 +268,7 @@ export default {
       tab: 1,
       info: '',
       personApi: personApi,
+      nickName: '',
       infoA: '还没有简介吧？快去填写，让更多人认识你，了解你',
       num: 0,
       richTextList: [],
@@ -310,7 +313,8 @@ export default {
       salesManId: null,
       tagList: [],
       column: 0,
-      tradeId: 0
+      tradeId: 0,
+      phoneIp: ''
     }
   },
 
@@ -320,12 +324,108 @@ export default {
   },
   onShow () {
     // this.videoFlag = false
+    this.isBuy = wx.getStorageSync('isBuy')
   },
   onLoad () {
     this.getInfo()
     this.getTrade()
+    this.getIp()
   },
   methods: {
+    // 查询是否购买mingp
+    getBuyCard () {
+      this.$fly.request({
+        method: 'get', // post/get 请求方式
+        url: '/platformOrder/selectIsBuyCard',
+        body: {
+          'name': '9.9元名片创建费用'
+        }
+      }).then(res => {
+        if (res.data === 1) {
+          this.getSalesmanUpdate()
+          this.isBuy = 0
+        } else {
+          this.getPlay()
+        }
+        console.log('544', res)
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    // 获取logo
+    getBuy () {
+      const businessId = wx.getStorageSync('businessId') // 获取本地userId
+      this.$fly.request({
+        method: 'get', // post/get 请求方式
+        url: '/business/findById',
+        body: {
+          'businessId': businessId
+        }
+      }).then(res => {
+        this.isBuy = 0
+        wx.setStorageSync('isBuy', this.isBuy)
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    // 获取Ip地址
+    getIp () {
+      wx.request({
+        url: 'http://ip-api.com/json',
+        success: function (e) {
+          let that = this
+          that.phoneIp = e.data.query
+          wx.setStorageSync('phoneIp', that.phoneIp)
+        }
+      })
+    },
+    // 订单支付接口
+    pay (payInfo) {
+      wx.requestPayment(
+        {
+          'timeStamp': payInfo.timeStamp,
+          'nonceStr': payInfo.nonceStr,
+          'package': payInfo.packageValue,
+          'signType': 'MD5',
+          'paySign': payInfo.paySign,
+          'success': (res) => {
+            this.getSalesmanUpdate()
+            this.isBuy = 0
+            this.getBuy()
+            // this.insertOpera('支付了产品', 6)
+            // wx.redirectTo({ url: `../payfinish/index?price=${this.allprice}&status=success` })
+          },
+          'fail': (res) => {
+            // wx.redirectTo({ url: `../payfinish/index?price=${this.allprice}&status=fail` })
+          },
+          'complete': function (res) {
+          }
+        })
+    },
+    getPlay (ip) {
+      const phoneIp = wx.getStorageSync('phoneIp')
+      this.$fly.request({
+        method: 'post', // post/get 请求方式
+        url: '/platformOrder/unifiedForCreateCard',
+        body: {
+          'goodsList': [],
+          'name': '9.9元名片创建费用',
+          'getWay': '自取',
+          'unifiedOrderRequest': {
+            'spbillCreateIp': phoneIp,
+            'body': '9.9元名片创建费用'
+          },
+          'userName': this.nickName
+        }
+      }).then(res => {
+        console.log('jajj ', res)
+        if (res.code === 200) {
+          this.pay(res.data.payInfo)
+        }
+      }).catch(err => {
+        console.log(err.status, err.message)
+      })
+    },
     // 切换
     changTab (index) {
       if (index === 1) {
@@ -547,8 +647,10 @@ export default {
           'userId': userId
         }
       }).then(res => {
+        console.log('res', res)
         if (res.data !== null) {
           this.postForm = res.data
+          this.nickName = res.data.nickName
           this.voice = res.data.voice
           this.userId = userId
           this.pan = true
@@ -625,30 +727,30 @@ export default {
       if (this.judgeNull(this.pickerText, '行业')) return
       if (this.judgeNull(this.job, '职位')) return
       if (this.judgeNull(this.phone, '手机')) return
-      // 检测手机号
-      if (this.phone.length !== 0) {
-        var reg = /^1(3|4|5|7|8)\d{9}$/
-        if (!reg.test(this.phone)) {
-          wx.showToast({
-            title: '请输入有效的手机号',
-            icon: 'none',
-            duration: 2000
-          })
-          return false
-        }
-      }
+      // // 检测手机号
+      // if (this.phone.length !== 0) {
+      //   // var reg = /^1(3|4|5|7|8)\d{9}$/
+      //   // if (!reg.test(this.phone)) {
+      //   //   wx.showToast({
+      //   //     title: '请输入有效的手机号',
+      //   //     icon: 'none',
+      //   //     duration: 2000
+      //   //   })
+      //   //   return false
+      //   // }
+      // }
       // if (this.judgeNull(this.fixedPhone, '固话')) return
-      if (this.fixedPhone) {
-        var regF = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/
-        if (!regF.test(this.fixedPhone)) {
-          wx.showToast({
-            title: '请输入有效的固话，格式为0000-00000000',
-            icon: 'none',
-            duration: 2000
-          })
-          return false
-        }
-      }
+      // if (this.fixedPhone) {
+      //   var regF = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/
+      //   if (!regF.test(this.fixedPhone)) {
+      //     wx.showToast({
+      //       title: '请输入有效的固话，格式为0000-00000000',
+      //       icon: 'none',
+      //       duration: 2000
+      //     })
+      //     return false
+      //   }
+      // }
       if (this.judgeNull(this.email, '邮箱')) return
       // 检测邮箱
       if (this.email) {
@@ -662,9 +764,9 @@ export default {
           return false
         }
       }
-      if (this.judgeNull(this.weChat, '微信')) return
-      if (this.judgeNull(this.region, '区域')) return
-      if (this.judgeNull(this.addDetailed, '详细地址')) return
+      // if (this.judgeNull(this.weChat, '微信')) return
+      // if (this.judgeNull(this.region, '区域')) return
+      // if (this.judgeNull(this.addDetailed, '详细地址')) return
       console.log('pan', this.pan)
       if (this.pan === false) {
         const token = wx.getStorageSync('token')

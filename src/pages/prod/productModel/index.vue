@@ -14,11 +14,21 @@
             <span class="product">型号图片</span>
             <span class="tips"></span>
           </div>
-          <uploadImgModel ref="goodsImgUrlList" width="116rpx" height="116rpx" max="1" @choosed="choosed" :srcs="item.imgUrl" :key="index"></uploadImgModel>
+          <!--<uploadImgModel ref="goodsImgUrlList" width="116rpx" height="116rpx" max="1" @choosed="choosed" :srcs="item.imgUrl" ></uploadImgModel>-->
+          <div class="j-pic-upload">
+          <div class="j-upload-btn" @click="uploadImg(item.imgUrl,index)" :style="{'width':width || '120rpx','height':height || '120rpx'}">
+            <span class="j-upload-add iconaddgrey iconfont"></span>
+          </div>
+            <div class="model">
+              <img @click="previewImg(index,item.imgUrl)" :key="index" :src="item.imgUrl" :style="{'width':width || '120rpx','height':height || '120rpx'}" class="img"  alt="">
+              <span v-if="item.imgUrl!== ''" class="deleteA" @click="deleteImg(index)"><i class="iconfont iconshanchu-copy"></i></span>
+            </div>
+        </div>
         </div>
       </div>
       <div class="delete">
-        <span class="save" @click="saveModel(item.id,item.goodsId,item.imgUrl,item.modelMapList,item.name,item.price)"><img src="../../../../static/images/down.png">保存</span>
+        <span class="save" v-if="disabled === true" @click="saveModel(item.id,item.goodsId,item.imgUrl,item.modelMapList,item.name,item.price,index)"><img src="../../../../static/images/down.png">保存</span>
+        <span class="save" v-else @click="saveModel(item.id,item.goodsId,item.imgUrl,item.modelMapList,item.name,item.price,index)"><img src="../../../../static/images/down.png">保存</span>
         <span @click="deleteModel(item.id, index)" class="icont"><img src="../../../../static/images/delete.png">删除</span>
       </div>
     </div>
@@ -30,18 +40,22 @@
 </template>
 
 <script>
-  import { UPLOAD_API } from '@/api/uploadFile'
-  import uploadImgModel from '@/components/uploadImgModel'
+  import { UPLOAD_API, UPLOAD_FILE } from '@/api/uploadFile'
+  // import uploadImgModel from '@/components/uploadImgModel'
   export default {
     name: 'index',
     components: {
-      uploadImgModel
+      // uploadImgModel
     },
     data () {
       return {
+        urls: '',
         name: '',
         price: '',
+        disabled: true,
+        goodsStyleId: '',
         goodsImgUrlList: [],
+        goodsImg: [],
         // modelList: [{
         //   modelMapList: '',
         //   name: '',
@@ -55,17 +69,79 @@
       }
     },
     onLoad (options) {
-      console.log(options)
+      if (options.goodsId) {
+        this.goodsId = options.goodsId
+      }
       if (options.id) {
         this.goodsStyleTypeId = options.id
         this.getModelAll(this.goodsStyleTypeId)
         this.getGoodStyle(this.goodsStyleTypeId)
       }
-      if (options.goodsId) {
-        this.goodsId = options.goodsId
-      }
+      console.log('11', this.goodsId)
     },
     methods: {
+      uploadImg (url, index) {
+        let that = this
+        if (url === '') {
+          wx.chooseImage({
+            count: that.max || 1,
+            sizeType: ['original', 'compressed'],
+            sourceType: ['album', 'camera'],
+            success: function (res) {
+              // res.tempFilePaths.forEach(v => {
+              //   that.urls.push({ imgUrl: v })
+              // })
+              const token = wx.getStorageSync('token')
+              wx.uploadFile({
+                url: UPLOAD_FILE + '?filedir=companyInfo',
+                filePath: res.tempFilePaths[0],
+                name: 'file',
+                header: {
+                  'Content-Type': 'image/jpeg',
+                  token: token
+                },
+                methods: 'POST',
+                success: (res) => {
+                  // 上传成功之后再把图片的地址更新到个人信息接口
+                  // that.urls.push({imgUrl: JSON.parse(res.data).data[0]})
+                  // that.$emit('choosed', { all: that.urls })
+                  // that.urls = JSON.parse(res.data).data[0]
+                  that.modelList[index].imgUrl = JSON.parse(res.data).data[0]
+                  console.log('aaa', that.urls)
+                  // that.$emit('choosed', { all: that.urls, currentUpload: res.tempFilePaths })
+                }
+              })
+            }
+          })
+        } else {
+          wx.showToast({
+            title: '只能上传一张图片',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      },
+      previewImg (index, url) {
+        // let that = this
+        wx.showActionSheet({
+          itemList: ['预览'],
+          success: function (res) {
+            // console.log('55', res)
+            const urlA = url.split()
+            if (res.tapIndex === 0) {
+              wx.previewImage({
+                current: urlA[0],
+                urls: urlA
+              })
+            }
+          }
+        })
+      },
+      // 删除型号图片
+      deleteImg (id) {
+        let that = this
+        that.modelList[id].imgUrl = ''
+      },
       // 删除规格
       deleteModel (id, index) {
         if (id) {
@@ -82,7 +158,7 @@
                 duration: 2000,
                 icon: 'none'
               })
-              this.getModelAll()
+              this.getModelAll(this.goodsStyleTypeId)
             }
             console.log('delete', res)
           }).catch(err => {
@@ -93,8 +169,8 @@
         }
       },
       // 保存类型
-      saveModel (id, goodsId, imgUrl, list, name, price) {
-        console.log('IDDD', id)
+      saveModel (id, goodsId, imgUrl, list, name, price, index) {
+        this.goodsStyleId = id
         if (id !== undefined) {
           // console.log('list', JSON.parse(JSON.stringify(list).replace(/id/g, 'goodsModelId')))
           const listA = JSON.parse(JSON.stringify(list).replace(/id/g, 'goodsModelId'))
@@ -106,7 +182,7 @@
             url: UPLOAD_API + '/goodsModel/saveModel',
             data: {
               'id': id,
-              'imgUrl': this.goodsImgUrlList || imgUrl,
+              'imgUrl': imgUrl,
               'goodsId': goodsId,
               'goodsStyleTypeId': this.goodsStyleTypeId,
               'list': listB,
@@ -117,15 +193,15 @@
               'token': token
             },
             success: function (res) {
-              if (res.code === 200) {
+              if (res.data.code === 200) {
                 wx.showToast({
-                  title: '保存成功',
+                  title: '更新成功',
                   duration: 2000,
                   icon: 'none'
                 })
-                this.getModelAll()
+                // that.getModelAll(this.goodsStyleTypeId)
               }
-              console.log(res.data)
+              console.log('65', res)
             }
           })
         } else {
@@ -137,7 +213,7 @@
             method: 'POST', // post/get 请求方式
             url: UPLOAD_API + '/goodsModel/saveModel',
             data: {
-              'imgUrl': this.goodsImgUrlList || imgUrl,
+              'imgUrl': imgUrl,
               'goodsId': goodsId,
               'goodsStyleTypeId': this.goodsStyleTypeId,
               'list': listA,
@@ -148,7 +224,20 @@
               'token': token
             },
             success: function (res) {
-              console.log(res.data)
+              if (res.data.code === 200) {
+                wx.showToast({
+                  title: '保存成功',
+                  duration: 2000,
+                  icon: 'none'
+                })
+                let that = this
+                that.modelList[index].id = this.goodsStyleId
+                // this.disabled = false
+                console.log('11', that.modelList[index].id)
+                that.onLoad()
+                // let that = this
+                // let that = this
+              }
             }
           })
         }
@@ -159,11 +248,12 @@
           method: 'get', // post/get 请求方式
           url: '/goodsStyle/selectAll',
           body: {
-            'goodsStyleTypeId': this.goodsStyleTypeId
+            'goodsStyleTypeId': this.goodsStyleTypeId,
+            'goodsId': this.goodsId
           }
         }).then(res => {
           this.modelMapList = res.data
-          console.log('this.modelMapList', this.modelMapList)
+          // console.log('this.modelMapList', this.modelMapList)
         }).catch(err => {
           console.log(err)
         })
@@ -174,12 +264,18 @@
           method: 'get', // post/get 请求方式
           url: '/goodsModel/selectAll',
           body: {
-            'goodsStyleTypeId': id
+            'goodsStyleTypeId': id,
+            'goodsId': this.goodsId
           }
         }).then(res => {
           this.modelList = res.data
-          this.goodsImgUrlList = res.data.imgUrl
-          console.log(' this.valueA', res.data)
+          // this.goodsImgUrlList = res.data.imgUrl
+          this.goodsImgUrlList = []
+          const newData = res.data
+          newData.map((item) => {
+            this.goodsImgUrlList.push(item.imgUrl)
+          })
+          console.log(' this.valueA', this.goodsImgUrlList)
         }).catch(err => {
           console.log(err)
         })
@@ -187,6 +283,7 @@
       // 添加规格
       addModel () {
         this.modelList.push({ modelMapList: this.modelMapList, imgUrl: '', name: '', price: '', goodsId: this.goodsId })
+        this.goodsStyleId = ''
       },
       // sha
       // deleteModel (index) {
@@ -205,4 +302,37 @@
 
 <style lang="less" scoped>
 @import "./style";
+.j-pic-upload{
+  padding: ~'10rpx'  ~'10rpx'  ~'10rpx' 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.j-upload-btn{
+  border: 1px solid #ddd;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-right: ~'20rpx';
+}
+.j-upload-add{
+  font-weight: 500;
+  color:#C9C9C9;
+}
+.model{
+  position: relative;
+  .img{
+    margin:~'0rpx' ~'20rpx' ~'0rpx' 0;
+  }
+  .deleteA{
+    position: absolute;
+    right: ~'5rpx';
+    top: ~'-10rpx';
+  }
+}
+  .iconshanchu-copy{
+    color: #999999;
+  }
 </style>

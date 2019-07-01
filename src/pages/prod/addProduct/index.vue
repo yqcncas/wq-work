@@ -106,7 +106,8 @@
         typeId: 0,
         goodsStyleTypeId: '',
         edit: '',
-        goodsId: ''
+        goodsId: '',
+        coverImg: ''
       }
     },
     onShow () {
@@ -122,9 +123,13 @@
       this.guiName = ''
       this.stylesName = ''
       this.productId = ''
+      this.coverImg = ''
+      this.imgUrl = ''
       this.status = true
     },
     onLoad: function (options) {
+      // this.coverImg = wx.getStorageSync('coverImg')
+      // console.log('this.imgUrl', this.coverImg)
       console.log(options)
       if (options.id) {
         this.edit = options.edit
@@ -252,7 +257,7 @@
             'id': id
           }
         }).then(res => {
-          console.log('21212', res)
+          // console.log('21212', res)
           this.name = res.data.goods.name
           this.info = JSON.parse(res.data.goods.info)
           this.MoreList = JSON.parse(res.data.goods.info)
@@ -330,94 +335,51 @@
       },
       // 保存商品请求
       getGoods () {
-        if (this.productId === '') {
-          const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
-          const userId = wx.getStorageSync('userId') // 获取本地userId
-          const token = wx.getStorageSync('token') // 获取本地bussiness
-          if (this.name === '') {
-            wx.showToast({
-              title: '请填入产品标题',
-              icon: 'none',
-              duration: 1000
-            })
-          } else if (this.price === '') {
-            wx.showToast({
-              title: '请填入产品价格',
-              icon: 'none',
-              duration: 1000
-            })
-          } else if (this.goodsImgUrlList.length === 0) {
-            wx.showToast({
-              title: '请上传产品展示图',
-              icon: 'none',
-              duration: 1000
-            })
-          } else {
-            this.$fly.request({
-              method: 'post', // post/get 请求方式
-              url: '/platformGoods/add',
-              body: {
-                'token': token,
-                'type': this.typeId,
-                'businessId': businessId,
-                'userId': userId,
-                'goodsImgUrlList': this.goodsImgUrlList,
-                'name': this.name,
-                'price': this.price,
-                'info': this.info,
-                'imgUrl': this.imgUrl,
-                'goodsStyleTypeId': this.goodsStyleTypeId
-              }
-            }).then(res => {
-              if (res.code === 200) {
-                wx.showToast({
-                  title: '添加成功',
-                  icon: 'none',
-                  duration: 2000
-                })
-                this.status = false
-                setTimeout(function () {
-                  wx.navigateBack(-1)
-                }, 2000)
-              }
-            }).catch(err => {
-              console.log(err)
-              if (err === '请求失败') {
-                wx.showToast({
-                  title: '请稍后',
-                  icon: 'none',
-                  duration: 1000
-                })
-              }
-            })
-          }
-        } else { // 保存编辑商品
-          this.info = JSON.stringify(this.MoreList)
-          const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
-          const userId = wx.getStorageSync('userId') // 获取本地userId
-          const token = wx.getStorageSync('token') // 获取本地bussiness
+        const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
+        const userId = wx.getStorageSync('userId') // 获取本地userId
+        const token = wx.getStorageSync('token') // 获取本地bussiness
+        if (this.name === '') {
+          wx.showToast({
+            title: '请填入产品标题',
+            icon: 'none',
+            duration: 1000
+          })
+        } else if (this.price === '') {
+          wx.showToast({
+            title: '请填入产品价格',
+            icon: 'none',
+            duration: 1000
+          })
+        } else if (this.goodsImgUrlList.length === 0) {
+          wx.showToast({
+            title: '请上传产品展示图',
+            icon: 'none',
+            duration: 1000
+          })
+        } else {
           this.$fly.request({
             method: 'post', // post/get 请求方式
-            url: '/platformGoods/update',
+            url: '/platformGoods/add',
             body: {
               'token': token,
+              'type': this.typeId,
               'businessId': businessId,
               'userId': userId,
-              'goodsStyleTypeId': 0,
-              'id': this.productId,
               'goodsImgUrlList': this.goodsImgUrlList,
               'name': this.name,
               'price': this.price,
               'info': this.info,
-              'imgUrl': this.imgUrl
+              'imgUrl': this.imgUrl,
+              'goodsStyleTypeId': this.goodsStyleTypeId
             }
           }).then(res => {
             if (res.code === 200) {
               wx.showToast({
-                title: '修改成功',
+                title: '添加成功',
                 icon: 'none',
                 duration: 2000
               })
+              this.status = false
               setTimeout(function () {
                 wx.navigateBack(-1)
               }, 2000)
@@ -436,19 +398,26 @@
       },
       choosed (val) {
         // 监听产品展示图片并添加到数组
+        this.goodsImgUrlList = []
         if (val.all) {
           this.goodsImgUrlList = val.all
           this.imgUrl = this.goodsImgUrlList[val.num].imgUrl
-          console.log('valA', this.imgUrl)
+          // console.log('valA', this.imgUrl)
         }
+        // const coverNum = wx.getStorageSync('coverNum')
+        // console.log('coverNum', coverNum)
+        // if (coverNum) {
+        //   this.imgUrl = this.goodsImgUrlList[coverNum].imgUrl
+        //   console.log('this.imgUrl', this.imgUrl)
+        // }
       },
       choosedMore (val) {
         // 监听产品展示图片并添加到数组
         if (val.all) {
           this.MoreList = val.all
-          console.log('valA', val.all)
+          // console.log('valA', val.all)
           this.info = JSON.stringify(this.MoreList)
-          console.log('info', this.info)
+          // console.log('info', this.info)
         }
       }
     }
