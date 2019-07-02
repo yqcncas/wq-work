@@ -94,18 +94,7 @@
   export default {
     data () {
       return {
-        statsA: [{
-          name: '李松阳',
-          job: '1技术总监',
-          company: '万仟科技集团',
-          date: '2019-06-28 13:00'
-        }, {
-          name: '李松阳',
-          job: '技术总监',
-          company: '万仟科技集团',
-          date: '2019-06-28 13:00'
-        }
-        ],
+        statsA: [],
         statsB: [],
         statsC: [],
         statsD: [],
