@@ -295,7 +295,7 @@
             </div>
 
           </div>
-          <div class="found" @click="goInto()">
+          <div v-if="setUp === 0" class="found" @click="goInto()">
             <span>我要<br />创建</span>
           </div>
           <div class="foundA" @click="goMsg()">
@@ -351,7 +351,9 @@
         details: [],
         user: '',
         latitude: '',
-        longitude: ''
+        longitude: '',
+        isBuy: '',
+        setUp: ''
       }
     },
     onLoad: function (options) {
@@ -369,6 +371,7 @@
       this.getSun()
       this.getLogo()
       this.getInfoA()
+      this.isBuy = wx.getStorageSync('isBuy')
     },
     onUnload () {
       this.video = ''
@@ -605,6 +608,9 @@
             if (res.data.nickName === '' || res.data.nickName == null) {
               this.modalFlag = true
             }
+            this.setUp = 1
+          } else {
+            this.setUp = 0
           }
         }).catch(err => {
           console.log(err.status, err.message)
