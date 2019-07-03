@@ -5,66 +5,66 @@
         <i @click="back()" class="iconfont iconE leftA"></i>
         <span>成为会员</span>
         <span class="imgUrl">
-          <img src="../../../static/images/tiangou.jpg">
+          <img :src="imgUrl">
         </span>
-        <span class="name">李松阳</span>
-        <span class="member">会员未开通</span>
+        <span class="name">{{name}}</span>
+        <span class="member">{{Member}}</span>
       </div>
       <div class="test">
-        <div class="testNav">
-          <div
-            :class="{'selected':tab === 1,'testTitle':true}"
-            @click="changTab(1)"
-          >白银会员</div>
-          <div
-            :class="{'selected':tab === 2,'testTitle':true}"
-            @click="changTab(2)"
-          >白金会员</div>
-          <div
-            :class="{'selected':tab === 3,'testTitle':true}"
-            @click="changTab(3)"
-          >钻石会员</div>
-        </div>
+        <!--<div class="testNav">-->
+          <!--<div-->
+            <!--:class="{'selected':tab === 1,'testTitle':true}"-->
+            <!--@click="changTab(1)"-->
+          <!--&gt;白银会员</div>-->
+          <!--<div-->
+            <!--:class="{'selected':tab === 2,'testTitle':true}"-->
+            <!--@click="changTab(2)"-->
+          <!--&gt;白金会员</div>-->
+          <!--<div-->
+            <!--:class="{'selected':tab === 3,'testTitle':true}"-->
+            <!--@click="changTab(3)"-->
+          <!--&gt;钻石会员</div>-->
+        <!--</div>-->
         <div class="cont">
-          <div v-if="tab===1" class="cont-main">
+          <div class="cont-main">
               <div class="silver">
                   <span v-for="(item,index) in silver" :key="index" :class="{'selected':tabA === item.id,'testTitle':true}" @click="changTabMeberA(item.id)">
-                    <p class="date">{{ item.date }}</p>
-                    <p class="money">￥{{ item.money }}</p>
+                    <p class="date">{{ item.levelName }}</p>
+                    <p class="money">￥{{ item.fee }}</p>
                     <p class="title">{{ item.title }}</p>
-                    <p class="info">{{ item.info }}</p>
+                    <p class="info">无折扣</p>
                   </span>
               </div>
             <div class="footer">
-              <button class="bt" @click="Opening">立即开通</button>
+              <button :class="classA" @click="Opening(tabA,num)">{{title}}</button>
             </div>
           </div>
-          <div  v-else-if="tab===2" class="cont-main">
-            <div class="silver">
-                  <span v-for="(item,index) in gold" :key="index" :class="{'selected':tabB === item.id,'testTitle':true}" @click="changTabMeberB(item.id)">
-                    <p class="date">{{ item.date }}</p>
-                    <p class="money">￥{{ item.money }}</p>
-                    <p class="title">{{ item.title }}</p>
-                    <p class="info">{{ item.info }}</p>
-                  </span>
-            </div>
-            <div class="footer">
-              <button class="bt" @click="Opening">立即开通</button>
-            </div>
-          </div>
-          <div  v-else-if="tab===3" class="cont-main">
-            <div class="silver">
-                  <span v-for="(item,index) in Diamonds" :key="index" :class="{'selected':tabC === item.id,'testTitle':true}" @click="changTabMeberC(item.id)">
-                    <p class="date">{{ item.date }}</p>
-                    <p class="money">￥{{ item.money }}</p>
-                    <p class="title">{{ item.title }}</p>
-                    <p class="info">{{ item.info }}</p>
-                  </span>
-            </div>
-            <div class="footer">
-              <button class="bt" @click="Opening">立即开通</button>
-            </div>
-          </div>
+          <!--<div  v-else-if="tab===2" class="cont-main">-->
+            <!--<div class="silver">-->
+                  <!--<span v-for="(item,index) in gold" :key="index" :class="{'selected':tabB === item.id,'testTitle':true}" @click="changTabMeberB(item.id)">-->
+                    <!--<p class="date">{{ item.date }}</p>-->
+                    <!--<p class="money">￥{{ item.money }}</p>-->
+                    <!--<p class="title">{{ item.title }}</p>-->
+                    <!--<p class="info">{{ item.info }}</p>-->
+                  <!--</span>-->
+            <!--</div>-->
+            <!--<div class="footer">-->
+              <!--<button class="bt" @click="Opening">立即开通</button>-->
+            <!--</div>-->
+          <!--</div>-->
+          <!--<div  v-else-if="tab===3" class="cont-main">-->
+            <!--<div class="silver">-->
+                  <!--<span v-for="(item,index) in Diamonds" :key="index" :class="{'selected':tabC === item.id,'testTitle':true}" @click="changTabMeberC(item.id)">-->
+                    <!--<p class="date">{{ item.date }}</p>-->
+                    <!--<p class="money">￥{{ item.money }}</p>-->
+                    <!--<p class="title">{{ item.title }}</p>-->
+                    <!--<p class="info">{{ item.info }}</p>-->
+                  <!--</span>-->
+            <!--</div>-->
+            <!--<div class="footer">-->
+              <!--<button class="bt" @click="Opening">立即开通</button>-->
+            <!--</div>-->
+          <!--</div>-->
         </div>
         <div class="MeberTitle">
           <p class="top">会员特权</p>
@@ -106,12 +106,15 @@ import card from '@/components/card'
 export default {
   data () {
     return {
+      imgUrl: '',
+      name: '',
+      title: '立即开通',
       Table: [{
         meber: '非会员',
         dateNum: '10个',
         style: '无折扣',
         person: 10,
-        auto: '无折扣',
+        auto: '*',
         group: 1,
         number: 1,
         company: '无',
@@ -151,69 +154,16 @@ export default {
       }
       ],
       tab: 1,
-      tabA: 0,
-      tabB: 0,
-      tabC: 0,
+      tabA: 4,
       postForm: '',
       tagList: [],
-      silver: [{
-        id: 1,
-        date: '1个月',
-        money: 10,
-        title: '折合￥10/月',
-        info: '无折扣'
-      }, {
-        id: 2,
-        date: '3个月',
-        money: 20,
-        title: '折合￥6.6/月',
-        info: '立省9.99元'
-      }, {
-        id: 3,
-        date: '12个月',
-        money: 60,
-        title: '折合￥50/月',
-        info: '立省60元'
-      }
-      ],
-      gold: [{
-        id: 1,
-        date: '1个月',
-        money: 15,
-        title: '折合￥15/月',
-        info: '无折扣'
-      }, {
-        id: 2,
-        date: '3个月',
-        money: 20,
-        title: '折合￥9.9/月',
-        info: '立省18.88元'
-      }, {
-        id: 3,
-        date: '12个月',
-        money: 90,
-        title: '折合￥8.88/月',
-        info: '立省99元'
-      }],
-      Diamonds: [{
-        id: 1,
-        date: '1个月',
-        money: 20,
-        title: '折合￥20/月',
-        info: '无折扣'
-      }, {
-        id: 2,
-        date: '3个月',
-        money: 30,
-        title: '折合￥12.88/月',
-        info: '立省28.88元'
-      }, {
-        id: 3,
-        date: '12个月',
-        money: 12,
-        title: '折合￥8.88/月',
-        info: '立省120元'
-      }]
+      silver: [],
+      Member: '',
+      levelNum: '',
+      id: '',
+      classA: 'bt',
+      num: 0,
+      buy: 1
     }
   },
 
@@ -221,48 +171,204 @@ export default {
     card
   },
   onShow () {
-
+    this.id = this.tabA
+    this.getIp()
+    this.getMerber()
+    this.getInfo()
+    const Member = wx.getStorageSync('vipId')
+    this.changTabMeberA(Member)
+    if (Member === 0 || Member === null) {
+      this.Member = '会员未开通'
+      this.title = '立即开通'
+      this.classA = 'bt'
+      this.buy = 0
+    } else {
+      this.MemberNum(Member)
+      this.buy = 1
+    }
   },
   onLoad () {
   },
   methods: {
+    // 查询等级
+    MemberNum (id) {
+      this.$fly.request({
+        method: 'get',
+        url: 'vip/findOne',
+        body: {
+          'id': id
+        }
+      }).then(res => {
+        // console.log('ajhdad', res)
+        this.Member = res.data.levelName
+        // this.levelNum = res.data.levelNum
+        // wx.setStorageSync('vipId', this.levelNum)
+      }).catch(err => {
+        console.log('err', err)
+      })
+    },
+    // 查询会员等级信息
+    getMerber () {
+      const businessId = wx.getStorageSync('businessId')
+      this.$fly.request({
+        method: 'get',
+        url: 'vip/findList',
+        body: {
+          'businessId': businessId
+        }
+      }).then(res => {
+        console.log('res', res)
+        this.silver = res.data
+      }).catch(err => {
+        console.log('err', err)
+      })
+    },
+    // 更新会员等级
+    updateMerber (id) {
+      this.$fly.request({
+        method: 'post',
+        url: 'platformUser/updateVip',
+        body: {
+          'id': id
+        }
+      }).then(res => {
+        // console.log('vipIdres', res)
+      }).catch(err => {
+        console.log('err', err)
+      })
+    },
+    // 订单支付接口
+    pay (payInfo) {
+      wx.requestPayment(
+        {
+          'timeStamp': payInfo.timeStamp,
+          'nonceStr': payInfo.nonceStr,
+          'package': payInfo.packageValue,
+          'signType': 'MD5',
+          'paySign': payInfo.paySign,
+          'success': (res) => {
+            this.updateMerber(this.tabA)
+            wx.setStorageSync('vipId', this.tabA)
+            this.levelNum = this.tabA
+            this.MemberNum(this.tabA)
+            this.changTabMeberA(this.tabA)
+            // this.getSalesmanUpdate()
+            // this.insertOpera('支付了产品', 6)
+            // wx.redirectTo({ url: `../payfinish/index?price=${this.allprice}&status=success` })
+          },
+          'fail': (res) => {
+            // wx.redirectTo({ url: `../payfinish/index?price=${this.allprice}&status=fail` })
+          },
+          'complete': function (res) {
+          }
+        })
+    },
+    // 获取Ip地址
+    getIp () {
+      wx.request({
+        url: 'http://ip-api.com/json',
+        success: function (e) {
+          let that = this
+          that.phoneIp = e.data.query
+          wx.setStorageSync('phoneIp', that.phoneIp)
+        }
+      })
+    },
     // 立即开通
-    Opening () {
-      wx.showToast({
-        title: '功能还在开发中哦',
-        icon: 'none',
-        duration: 2000
+    Opening (id, num) {
+      if (num === 2) {
+        const phoneIp = wx.getStorageSync('phoneIp')
+        this.$fly.request({
+          method: 'post',
+          url: 'platformOrder/unifiedForVip',
+          body: {
+            'vipId': id,
+            'goodsList': [],
+            'name': '驿站会员费用',
+            'getWay': '自取',
+            'unifiedOrderRequest': {
+              'spbillCreateIp': phoneIp,
+              'body': '驿站会员费用'
+            },
+            'userName': this.nickName
+          }
+        }).then(res => {
+          this.pay(res.data.payInfo)
+        }).catch(err => {
+          console.log('err', err)
+        })
+      } else if (num === 1) {
+        wx.showToast({
+          title: '已开通',
+          icon: 'none',
+          duration: 2000
+        })
+      } else {
+        wx.showToast({
+          title: '已开通更高权限',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    },
+    // 页面加载获取信息
+    getInfo () {
+      const userId = wx.getStorageSync('userId') // 获取本地userId
+      this.$fly.request({
+        method: 'get', // post/get 请求方式
+        url: '/platformSalesman/selectSelfInfo',
+        body: {
+          'userId': userId
+        }
+      }).then(res => {
+        if (res.data !== null) {
+          this.nickName = res.data.nickName
+          this.imgUrl = res.data.imgUrl
+          this.name = res.data.name
+        }
+      }).catch(err => {
+        console.log(err.status, err.message)
       })
     },
     // 选择会员
-    changTabMeberA (index) {
-      this.tabA = index
-      this.tabB = 0
-      this.tabC = 0
-    },
-    changTabMeberB (index) {
-      this.tabB = index
-      this.tabA = 0
-      this.tabC = 0
-    },
-    changTabMeberC (index) {
-      this.tabC = index
-      this.tabB = 0
-      this.tabA = 0
-    },
-    // 选择
-    changTab (index) {
-      if (index === 1) {
-        this.tab = index
-        this.status = index
-      } else if (index === 2) {
-        this.tab = index
-        this.status = index
-      } else {
-        this.tab = index
-        this.status = index
+    changTabMeberA (id) {
+      if (this.buy === 1) {
+        this.tabA = id
+        this.id = this.tabA
+        const levelNum = wx.getStorageSync('vipId')
+        if (levelNum > id) {
+          this.title = '已开通更高等级'
+          this.classA = 'btA'
+          this.num = 0
+        } else if (levelNum === id) {
+          this.title = '已开通'
+          this.classA = 'btA'
+          this.num = 1
+        } else if (levelNum < id) {
+          this.title = '立即升级'
+          this.classA = 'bt'
+          this.num = 2
+        }
+      } else if (this.buy === 0) {
+        this.tabA = id
+        this.title = '立即开通'
+        this.classA = 'bt'
+        this.num = 2
       }
     },
+    // // 选择
+    // changTab (index) {
+    //   if (index === 1) {
+    //     this.tab = index
+    //     this.status = index
+    //   } else if (index === 2) {
+    //     this.tab = index
+    //     this.status = index
+    //   } else {
+    //     this.tab = index
+    //     this.status = index
+    //   }
+    // },
     // 返回上一页
     back () {
       wx.navigateBack(-1)

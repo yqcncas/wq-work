@@ -77,6 +77,7 @@ export default {
           const result = await homeApi.doLogin(data)
           this.eatinCart(result)
           wx.setStorageSync('Card', false)
+          // console.log('login', res)
         }
       })
     },
@@ -141,6 +142,8 @@ export default {
     },
     // 处理返回数据
     eatinCart (res) {
+      console.log('login', res)
+      wx.setStorageSync('vipId', res.data.vipId)
       const { data: { token, isSalesman, id, businessId } } = res
       this.wesocket({ cmd: 'login', userId: id })
       this.userId = wx.getStorageSync('userId', id)
