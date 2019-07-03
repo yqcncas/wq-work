@@ -131,7 +131,8 @@
               </div>
               <div class="cardHold-ftMain">
                 <div class="cardHold-ftMain-ct" v-for="(item,index) in items" :key="index">
-                  <div class="center" @touchstart="touchStart($event)" @touchend="touchEnd($event,index,items)" :data-type="item.type"  >
+                  <div class="center" :data-type="item.type"  >
+                    <!--<div class="center" @touchstart="touchStart($event)" @touchend="touchEnd($event,index,items)" :data-type="item.type"  >-->
                     <div>
                     <div class="cardHold-ftMain-ct-img" @click="goToCard(item.salesmanId)" >
                       <img :src="item.imgUrl"/>
@@ -408,25 +409,25 @@ export default {
         console.log(err.status, err.message)
       })
     },
-    touchStart (e) {
-      // 获取移动距离，可以通过打印出e，然后分析e的值得出
-      this.startX = e.mp.changedTouches[0].clientX
-    },
-    // 获取移动距离，可以通过打印出e，然后分析e的值得出
-    touchEnd (e, index, items) {
-      // 获取移动距离
-      this.endX = e.mp.changedTouches[0].clientX
-      if (this.startX - this.endX > 10) {
-        for (let i = 0; i < items.length; i++) {
-          items[i].type = 0
-        }
-        items[index].type = 1
-      } else if (this.startX - this.endX < -10) {
-        for (let i = 0; i < items.length; i++) {
-          items[i].type = 0
-        }
-      }
-    },
+    // touchStart (e) {
+    //   // 获取移动距离，可以通过打印出e，然后分析e的值得出
+    //   this.startX = e.mp.changedTouches[0].clientX
+    // },
+    // // 获取移动距离，可以通过打印出e，然后分析e的值得出
+    // touchEnd (e, index, items) {
+    //   // 获取移动距离
+    //   this.endX = e.mp.changedTouches[0].clientX
+    //   if (this.startX - this.endX > 10) {
+    //     for (let i = 0; i < items.length; i++) {
+    //       items[i].type = 0
+    //     }
+    //     items[index].type = 1
+    //   } else if (this.startX - this.endX < -10) {
+    //     for (let i = 0; i < items.length; i++) {
+    //       items[i].type = 0
+    //     }
+    //   }
+    // },
     // 点击跳转进入名片页
     goToCard (id) {
       wx.navigateTo({
