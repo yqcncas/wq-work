@@ -91,40 +91,11 @@
         choose: [{
           src: '../../static/images/compny.png',
           title: '企业认证',
-          url: '../attestation/main'
+          url: '../pageA/attestation/main'
         }, {
           src: '../../static/images/jieshao.png',
           title: '公司介绍',
-          url: '../introduce/main'
-        }, {
-          src: '../../static/images/chanpin.png',
-          title: '产品管理',
-          url: '../product/main'
-        }, {
-          src: '../../static/images/release.png',
-          title: '我的发布',
-          url: '../release/main'
-        }, {
-          src: '../../static/images/message.png',
-          title: '消息中心',
-          url: '../message/main'
-        }, {
-          src: '../../static/images/pifu.png',
-          title: '名片模板',
-          url: '../skin/main'
-        }, {
-          src: '../../static/images/Member.png',
-          title: '会员中心',
-          url: '../Member/main'
-        }],
-        chooseA: [{
-          src: '../../static/images/compny.png',
-          title: '企业认证',
-          url: '../attestation/main'
-        }, {
-          src: '../../static/images/jieshao.png',
-          title: '公司介绍',
-          url: '../introduce/main'
+          url: '../pageA/introduce/main'
         }, {
           src: '../../static/images/chanpin.png',
           title: '产品管理',
@@ -132,7 +103,7 @@
         }, {
           src: '../../static/images/release.png',
           title: '我的发布',
-          url: '../release/main'
+          url: '../pageA/release/main'
         }, {
           src: '../../static/images/message.png',
           title: '消息中心',
@@ -140,11 +111,40 @@
         }, {
           src: '../../static/images/pifu.png',
           title: '名片模板',
-          url: '../skin/main'
+          url: '../pageA/skin/main'
         }, {
           src: '../../static/images/Member.png',
           title: '会员中心',
-          url: '../Member/main'
+          url: '../pageA/Member/main'
+        }],
+        chooseA: [{
+          src: '../../static/images/compny.png',
+          title: '企业认证',
+          url: '../pageA/attestation/main'
+        }, {
+          src: '../../static/images/jieshao.png',
+          title: '公司介绍',
+          url: '../pageA/introduce/main'
+        }, {
+          src: '../../static/images/chanpin.png',
+          title: '产品管理',
+          url: '../prod/product/main'
+        }, {
+          src: '../../static/images/release.png',
+          title: '我的发布',
+          url: '../pageA/release/main'
+        }, {
+          src: '../../static/images/message.png',
+          title: '消息中心',
+          url: '../message/main'
+        }, {
+          src: '../../static/images/pifu.png',
+          title: '名片模板',
+          url: '../pageA/skin/main'
+        }, {
+          src: '../../static/images/Member.png',
+          title: '会员中心',
+          url: '../pageA/Member/main'
         }]
       }
     },
@@ -160,7 +160,7 @@
       // 进入数据统计
       goStats () {
         wx.navigateTo({
-          url: '../stats/main'
+          url: '../pageA/stats/main'
         })
       },
       // 页面加载信息

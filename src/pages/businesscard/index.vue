@@ -97,7 +97,7 @@
       <div class="business-main">
       <el-form ref="postForm" :model="postForm" >
         <div class="cards">
-          <div class="cards-radar">
+          <div class="cards-radar" @click="goRadar">
             <div class="main">
               <swiper class="swiper" :autoplay="autoplay" :circular= 'circular' :vertical="vertical" :interval="interval" :duration="duration" :easing-function="easeInOutCubic">
                 <block v-for="(item, index) in infoMation" :key="index" @click="routerTo(item.id)">
@@ -662,6 +662,12 @@
       goToCard () {
         wx.navigateTo({
           url: '../index/main'
+        })
+      },
+      // 跳转雷达
+      goRadar () {
+        wx.navigateTo({
+          url: '../pageA/radar/main'
         })
       },
       // 页面加载信息
