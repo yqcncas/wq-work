@@ -130,7 +130,7 @@
 				{
 					"id": 13,
 					"name": "产品管理",
-					"pathName": "pages/prod/product/main",
+					"pathName": "pages/classify/main",
 					"query": "",
 					"scene": null
 				},

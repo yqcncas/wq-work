@@ -14,28 +14,36 @@
             </span>
           </div>
           <div class="studs" v-if="edit !== '1'">
+            <div v-if="valueA !== ''">
             <span class="title">产品分类</span>
             <picker class="choose" mode="selector" :value="indexA" :range="valueA" range-key="typeName" @change="bindPickerChangeA">
               <span class="picker">{{ valueA[indexA].typeName}}<i class="iconfont Down iconyouce"></i></span>
             </picker>
+            </div>
           </div>
           <div class="studs" v-else @click="DonT()">
+            <div v-if="valueA !== ''">
             <span class="title">产品分类</span>
               <span class="pickerA">{{ stylesName }}<i class="iconfont Down right iconyouce"></i></span>
+            </div>
           </div>
           <div class="studs" v-if="edit !== '1'">
-            <span class="title">规格模板</span>
-            <picker class="choose" mode="selector" :value="indexB" :range="valueB" range-key="type" @change="bindPickerChangeB" >
-              <span class="picker">{{valueB[indexB].type}}<i class="iconfont  iconyouce Down"></i></span>
-            </picker>
+            <div v-if="valueB !== ''">
+              <span class="title">规格模板</span>
+              <picker class="choose" mode="selector" :value="indexB" :range="valueB" range-key="type" @change="bindPickerChangeB" >
+                <span class="picker">{{valueB[indexB].type}}<i class="iconfont  iconyouce Down"></i></span>
+              </picker>
+            </div>
           </div>
           <div class="studs" v-else @click="DonT()">
             <span class="title">规格模板</span>
             <span class="pickerA">{{guiName}}<i class="iconfont iconyouce right Down"></i></span>
           </div>
           <div class="industry" @click="model()" v-if="edit == '1'">
+            <div v-if="valueB !== ''">
             <span class="title">产品规格</span>
             <span class="choose" ><i class="iconfont iconyouce"></i></span>
+            </div>
           </div>
           <div class="textArea">
             <!--<textarea v-model="info" placeholder="填写产品介绍"></textarea>-->
@@ -214,7 +222,9 @@
             'businessId': businessId
           }
         }).then(res => {
-          this.valueA = res.data
+          if (res.data) {
+            this.valueA = res.data
+          }
         }).catch(err => {
           console.log(err)
         })
@@ -229,7 +239,9 @@
             'businessId': businessId
           }
         }).then(res => {
-          this.valueB = res.data
+          if (res.data) {
+            this.valueB = res.data
+          }
         }).catch(err => {
           console.log(err)
         })

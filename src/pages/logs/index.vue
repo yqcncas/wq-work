@@ -507,7 +507,7 @@ export default {
     // 跳转雷达
     goRadar () {
       wx.navigateTo({
-        url: '../radar/main'
+        url: '../pageA/radar/main'
       })
     },
     // 查询salesmanId
@@ -534,7 +534,7 @@ export default {
         icon: 'none'
       })
       // wx.navigateTo({
-      //   url: '../GroupCard/main'
+      //   url: '../pageA/GroupCard/main'
       // })
     },
     // 挑战
