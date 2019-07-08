@@ -34,7 +34,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 13,
+			"current": 3,
 			"list": [
 				{
 					"id": 1,
@@ -58,9 +58,9 @@
 					"scene": null
 				},
 				{
-					"id": 4,
+					"id": 3,
 					"name": "雷达",
-					"pathName": "pages/radar/main",
+					"pathName": "pages/pageA/radar/main",
 					"query": "",
 					"scene": null
 				},

@@ -447,7 +447,7 @@ export default {
       this.businessId = wx.getStorageSync('businessId')
       this.salesmanId = wx.getStorageSync('salesManId')
       this.userId = wx.getStorageSync('userId')
-      this.insertOpera('查看了产品', 3)
+      // this.insertOpera('查看了产品', 3)
       this.info = JSON.parse(JSON.parse(gooddetail.info).info)
       console.log('445', JSON.parse(JSON.parse(gooddetail.info).info))
     },

@@ -367,6 +367,7 @@
         currentAudio: '',
         imgWidth: null,
         companyName: '',
+        salesManId: '',
         id: '',
         list: '',
         imgHeight: null,
@@ -528,7 +529,7 @@
         this.businessId = wx.getStorageSync('businessId')
         this.salesmanId = wx.getStorageSync('salesManId')
         this.userId = wx.getStorageSync('userId')
-        this.insertOperaA('查看了产品', 3, id)
+        // this.insertOperaA('查看了产品', 3, id)
         wx.navigateTo({
           url: '../productA/detail/main?id=' + id
         })

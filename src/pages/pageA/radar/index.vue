@@ -104,8 +104,12 @@
             </div>
             <div class="box-double" v-show="m.visible">
               <div class="flexRow ma-top" v-for="(item,i) in m.OperationRecordDetail" :key="i">
-                <span>{{item.recordType===1?'浏览名片':'点赞名片'}}</span>
-                <span class="common-line praise-line" :class="{'praise-line':item.recordType===24,'watch-line':item.recordType===1}"></span>
+                <span v-if="item.recordType===21">分享名片</span>
+                <span v-else-if="item.recordType===22">收藏名片</span>
+                <span v-else-if="item.recordType===23">浏览名片</span>
+                <span v-else-if="item.recordType===3">浏览商品</span>
+                <!--<span>{{item.recordType===23?'浏览名片':'点赞名片'}}</span>-->
+                <span class="common-line praise-line" :class="{'praise-line':item.recordType===21,'sc-line':item.recordType===22,'watch-line':item.recordType===23,'look-line': item.recordType ===3}"></span>
                 <span>{{item.browseTime}}</span>
               </div>
             </div>
@@ -130,7 +134,8 @@
         timeActive: 1,
         salesmanId: '',
         behaviorArr: [],
-        behaviorArrTwo: []
+        behaviorArrTwo: [],
+        recordTypeList: [22, 23, 21, 24, 3]
       }
     },
     methods: {
@@ -142,15 +147,14 @@
       },
       //   查询记录足迹
       async searchOp () {
-        // wx.showLoading({
-        //   mask: true
-        // })
+        wx.showLoading({
+          mask: true
+        })
         const userId = wx.getStorageSync('userId')
         const { data: { list, lastPage, pageNum, nextPage } } = await personApi.selectOperationByUserId({ userId, pageNum: this.pageNum, pageSize: this.pageSize })
         wx.hideLoading()
         let today = this.moment().format('YYYY/MM/DD')
         let yesterday = this.moment(new Date()).add(-1, 'days').format('YYYY/MM/DD')
-        console.log('11', list)
         list.map(item => {
           item.nickName = (item.nickName ? item.nickName : '无')
           let temp = this.moment(item.browseDate)
@@ -186,9 +190,9 @@
       },
       // 查询雷达时间分类
       async radarTime () {
-        // wx.showLoading({
-        //   mask: true
-        // })
+        wx.showLoading({
+          mask: true
+        })
         const { data: { list, lastPage, pageNum, nextPage } } = await personApi.OperationSearch({ salesmanId: this.salesmanId, pageNum: this.pageNum, pageSize: this.pageSize })
         wx.hideLoading()
         list.map(item => {
@@ -199,9 +203,9 @@
       },
       // 查询雷达行为分类
       async radarBehavior () {
-        // wx.showLoading({
-        //   mask: true
-        // })
+        wx.showLoading({
+          mask: true
+        })
         const { data } = await personApi.BehaviorOpSearch({ salesmanId: this.salesmanId, timeType: this.timeActive })
         wx.hideLoading()
         let temp = []
@@ -246,12 +250,12 @@
       },
       // 查询雷达互动分类
       async radarInteraction () {
-        // wx.showLoading({
-        //   mask: true
-        // })
-        const { data: { list, lastPage, pageNum, nextPage } } = await personApi.InteractionOpSearch({ salesmanId: this.salesmanId, pageNum: this.pageNum, pageSize: this.pageSize, timeType: this.timeActive })
-        // wx.hideLoading()
-        console.log('1嗄', list)
+        wx.showLoading({
+          mask: true
+        })
+        const { data: { list, lastPage, pageNum, nextPage } } = await personApi.InteractionOpSearch({ salesmanId: this.salesmanId, pageNum: this.pageNum, pageSize: this.pageSize, timeType: this.timeActive, recordTypeList: this.recordTypeList })
+        wx.hideLoading()
+        console.log('嘎嘎', list)
         list.map(item => {
           item.visible = false
           item.dataTime = this.moment(item.browseDate).format('YYYY.MM.DD')
