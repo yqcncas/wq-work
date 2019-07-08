@@ -333,7 +333,7 @@ const person = {
     salesmanId,
     pageSize = 0,
     pageNum = 0
-  }) => request.get('/operationRecord/selectAllOperation', {
+  }) => request.get('/platformOperationRecord/selectAllOperation', {
     salesmanId,
     pageSize,
     pageNum
@@ -344,11 +344,13 @@ const person = {
   InteractionOpSearch: ({
     timeType,
     salesmanId,
+    recordTypeList,
     pageSize = 0,
     pageNum = 0
-  }) => request.get('/operationRecord/getInteractionByTimeType', {
+  }) => request.get('/platformOperationRecord/getInteractionByTimeType', {
     timeType,
     salesmanId,
+    recordTypeList,
     pageSize,
     pageNum
   }, {
@@ -358,7 +360,7 @@ const person = {
   BehaviorOpSearch: ({
     timeType,
     salesmanId
-  }) => request.get('/operationRecord/selectCountByTimeType', {
+  }) => request.get('/platformOperationRecord/selectCountByTimeType', {
     timeType,
     salesmanId
   }, {
@@ -369,7 +371,7 @@ const person = {
     userId,
     pageSize = 0,
     pageNum = 0
-  }) => request.get('/operationRecord/selectOperationByUserId', {
+  }) => request.get('/platformOperationRecord/selectOperationByUserId', {
     userId,
     pageSize,
     pageNum

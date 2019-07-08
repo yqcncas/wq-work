@@ -353,7 +353,8 @@
         latitude: '',
         longitude: '',
         isBuy: '',
-        setUp: ''
+        setUp: '',
+        salesManId: ''
       }
     },
     onLoad: function (options) {
@@ -418,7 +419,7 @@
       },
       // 插入雷达
       async insertOperaA (info, recordType, id) {
-        await personApi.OperationInsert({businessId: this.businessId, goodsId: id, info, recordType, salesmanId: this.salesmanId, userId: this.userId})
+        await personApi.OperationInsert({businessId: this.businessId, goodsId: id, info, recordType, salesmanId: this.salesManId, userId: this.userId})
       },
       // 传id 跳入产品信息
       goToProduct (id) {
@@ -431,11 +432,11 @@
         })
       },
       // 插入雷达
-      async insertOpera (info, recordType, id) {
+      async insertOpera (info, recordType) {
         this.businessId = wx.getStorageSync('businessId')
         this.id = wx.getStorageSync('userId')
         // this.salesManIdA = this.cardId
-        await personApi.OperationInsert({ businessId: this.businessId, info, recordType, salesmanId: id, userId: this.id })
+        await personApi.OperationInsert({ businessId: this.businessId, info, recordType, salesmanId: this.salesManId, userId: this.id })
       },
       // 微信复制
       textPaste () {
