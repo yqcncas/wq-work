@@ -224,6 +224,10 @@
         }).then(res => {
           if (res.data) {
             this.valueA = res.data
+          } else {
+            this.valueA = [{
+              typeName: '无'
+            }]
           }
         }).catch(err => {
           console.log(err)
@@ -241,6 +245,10 @@
         }).then(res => {
           if (res.data) {
             this.valueB = res.data
+          } else {
+            this.valueB = [{
+              type: '无'
+            }]
           }
         }).catch(err => {
           console.log(err)

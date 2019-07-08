@@ -2,7 +2,7 @@
   <div class="big-content-page">
     <div class="product-page">
       <div class="nav-control">
-        <!--<Searchbar :value="searchContent" :isFocus="isFocus" @cancel="cancel" @confirm="confirm" confirmType="search"></Searchbar>-->
+        <Searchbar :value="searchContent" :isFocus="isFocus" @cancel="cancel" @confirm="confirm" confirmType="search"></Searchbar>
         <wan-tabs @change='tabChange' :tabs="category"></wan-tabs>
       </div>
       <div class="product-list">
