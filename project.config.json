@@ -34,7 +34,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 3,
+			"current": 2,
 			"list": [
 				{
 					"id": 1,
@@ -53,7 +53,7 @@
 				{
 					"id": 2,
 					"name": "名片",
-					"pathName": "pages/businesscard/main",
+					"pathName": "pages/loading/main",
 					"query": "",
 					"scene": null
 				},

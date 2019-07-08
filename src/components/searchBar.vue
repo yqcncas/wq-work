@@ -83,5 +83,29 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" scoped>
+  .weui-search-bar{
+    width: 100%;
+    height: ~'100rpx';
+   .weui-search-bar__box{
+     width: 94%;
+     display: inline-block;
+     border-radius: ~'40rpx';
+     margin: ~'20rpx' 3%;
+     height: ~'60rpx';
+     .weui-icon-search_in-box{
+       float: left;
+       margin: ~'18rpx' 0 0 ~'15rpx';
+     }
+     .weui-search-bar__input{
+       float: left;
+       width: 80%;
+       font-size: ~'24rpx';
+       margin: ~'5rpx' 0 0 ~'20rpx';
+     }
+   }
+    .weui-search-bar__label{
+
+    }
+  }
 </style>
