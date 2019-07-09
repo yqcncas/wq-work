@@ -1,5 +1,6 @@
 <template>
   <div>
+    <scroll-view :scroll-y="isScroll">
     <!--<vue-tab-bar-->
     <!--@fetch-index="clickIndexNav"-->
     <!--:selectNavIndex=selectNavIndex-->
@@ -197,6 +198,7 @@
     </div>
     <!--检索显示字母-->
     <div v-if="indexShow" class="index-name" >{{indexEnglish}}</div>
+    </scroll-view>
   </div>
 </template>
 
@@ -218,6 +220,7 @@
         job: '',
         name: '',
         imgUrl: '',
+        isScroll: false,
         selectNavIndex: 1,
         needButton: true,
         handButton: true,
@@ -415,6 +418,7 @@
         })
       },
       touchStart (e) {
+        this.isScroll = true
         // 获取移动距离，可以通过打印出e，然后分析e的值得出
         this.startX = e.mp.changedTouches[0].clientX
       },
@@ -432,6 +436,7 @@
             items[i].type = 0
           }
         }
+        this.isScroll = false
       },
       // 点击跳转进入名片页
       goToCard (id) {
