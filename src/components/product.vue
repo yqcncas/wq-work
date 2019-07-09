@@ -230,6 +230,8 @@
   .nav-control {
     width: 100%;
     z-index: 1000;
+    position: fixed;
+    top:0;
     .weui-search-bar {
       border-color: #eee;
       background-color: #fff;
@@ -277,6 +279,7 @@
   }
   // 商品详情
   .product-listC {
+    margin-top: 180rpx;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     font-size: 0;
@@ -431,6 +434,7 @@
 
   // 商品详情
   .product-listB {
+    margin-top: 180rpx;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     padding: 20 rpx 8 rpx 0;
