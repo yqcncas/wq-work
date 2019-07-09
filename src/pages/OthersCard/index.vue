@@ -96,7 +96,8 @@
               </div>
               <div class="card-footer">
                 <submit class="share"  @click="showType">分享名片</submit>
-                <submit class="save" @click="getCollect(postForm.id)">保存名片</submit>
+                <submit class="save" v-if="postForm.isCollect !== 1" @click="getCollect(postForm.id)">保存名片</submit>
+                <submit class="save" v-else @click="cancelCollect(postForm.id)">取消关注</submit>
               </div>
           </div>
           <!-- 标签 -->
