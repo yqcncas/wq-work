@@ -88,7 +88,7 @@
               <div class="Basics-footer">
                 <submit class="back" @click="back()">返回</submit>
                 <button v-if="isBuy === 0" class="save" @click="getSalesmanUpdate()">保存</button>
-                <button v-else class="save" @click="getBuyCard()">保存</button>
+                <button v-else class="save" :disabled="disabled" @click="getBuyCard()">保存</button>
               </div>
             </div>
           </div>
@@ -217,6 +217,7 @@ export default {
       pickerText: '',
       themeColor: '', // 颜色主题
       isBuy: '', // 控制是否支付
+      disabled: false,
       mulLinkageTwoPicker: [
         {
           label: '飞机票',
@@ -334,6 +335,7 @@ export default {
   methods: {
     // 查询是否购买mingp
     getBuyCard () {
+      this.disabled = true
       this.$fly.request({
         method: 'get', // post/get 请求方式
         url: '/platformOrder/selectIsBuyCard',
@@ -344,11 +346,14 @@ export default {
         if (res.data === 1) {
           this.getSalesmanUpdate()
           this.isBuy = 0
+          this.disabled = false
         } else {
+          this.disabled = true
           this.getPlay()
         }
         console.log('544', res)
       }).catch(err => {
+        this.disabled = false
         console.log(err)
       })
     },
@@ -362,6 +367,7 @@ export default {
           'businessId': businessId
         }
       }).then(res => {
+        this.disabled = false
         this.isBuy = 0
         wx.setStorageSync('isBuy', this.isBuy)
       }).catch(err => {
@@ -464,7 +470,9 @@ export default {
     },
     // 返回上一页
     back () {
-      wx.navigateBack(-1)
+      wx.switchTab({
+        url: '../personal/main'
+      })
       innerAudioContext.pause()
     },
     // 预览图片
@@ -768,6 +776,7 @@ export default {
       // if (this.judgeNull(this.region, '区域')) return
       // if (this.judgeNull(this.addDetailed, '详细地址')) return
       console.log('pan', this.pan)
+      this.disabled = false
       if (this.pan === false) {
         const token = wx.getStorageSync('token')
         const businessId = wx.getStorageSync('businessId') // 获取本地bussiness

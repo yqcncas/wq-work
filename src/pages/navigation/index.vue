@@ -394,6 +394,16 @@
         }
       }
     },
+    onShareAppMessage (options) {
+      console.log('a', options)
+      const salesmanId = wx.getStorageSync('salesmanId')
+      const name = options.target.dataset.item.name
+      const id = options.target.dataset.item.id
+      return {
+        title: name,
+        path: 'pages/loading/main?goodsId=' + id + '&id=' + salesmanId + '&fromWay=1&prams=product'
+      }
+    },
     methods: {
       // 搜索
       goToKe (name) {
