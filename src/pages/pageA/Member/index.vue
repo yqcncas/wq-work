@@ -120,7 +120,7 @@ export default {
         company: '无',
         goodNum: 1
       }, {
-        meber: '../../static/images/v1.png',
+        meber: '../../../static/images/v1.png',
         dateNum: '50个',
         style: '8.00折',
         person: 100,
@@ -131,7 +131,7 @@ export default {
         goodNum: 4
       },
       {
-        meber: '../../static/images/v2.png',
+        meber: '../../../static/images/v2.png',
         dateNum: '200个',
         style: '6.00折',
         person: 500,
@@ -142,7 +142,7 @@ export default {
         goodNum: 10
       },
       {
-        meber: '../../static/images/v3.png',
+        meber: '../../../static/images/v3.png',
         dateNum: '10个',
         style: '5.00折',
         person: '无限制',

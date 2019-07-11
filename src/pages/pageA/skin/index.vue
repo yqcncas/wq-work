@@ -14,6 +14,10 @@
             <img class="img" src="https://oss.wq1516.com/salesInfo/201906241544411561362281681.png"/>
             <img v-if="CardId == 3" class="choose" src="../../../../static/images/chooseActive.png"/>
           </span>
+          <span class="moThere" @click="choose(4)">
+            <img class="img" src="https://oss.tzyizan.com/salesInfo/201907110927291562808449037.png"/>
+            <img v-if="CardId == 4" class="choose" src="../../../../static/images/chooseActive.png"/>
+          </span>
         </div>
       </div>
       <div class="fotter" @click="goMai">

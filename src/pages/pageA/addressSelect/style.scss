@@ -1,0 +1,124 @@
+%flexRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+}
+
+.address-page {
+  width: 100%;
+  height: 100%;
+
+  .top-box {
+    padding-bottom: 100rpx;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+
+  }
+
+  .item-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 30rpx;
+    box-sizing: border-box;
+    width: 100%;
+    height: 200rpx;
+    margin-bottom: 30rpx;
+    background: url('../../../../static/images/address-bg.png') -36rpx bottom repeat-x #fff;
+    background-size: 190rpx 6rpx;
+    padding-top: 28rpx;
+  }
+
+  .name-phone {
+    @extend %flexRow;
+    font-size: 30rpx;
+    color: #2b2b2b;
+  }
+
+  .address-s {
+    padding: 10rpx 0 12rpx 0;
+    font-size: 26rpx;
+    color: #7a7a7a;
+    @extend %flexRow;
+    justify-content: flex-start;
+
+    .icon-location {
+      line-height: 1;
+      font-size: 32rpx;
+      margin-right: 12rpx;
+    }
+  }
+
+  //   设为默认
+  .bottom-set {
+    font-size: 24rpx;
+    color: #8c8c8c;
+    @extend %flexRow;
+
+    i {
+      line-height: 1;
+    }
+
+    .right-icon-txt {
+      @extend %flexRow;
+    }
+
+    .iconchoose {
+      color: #979797;
+
+    }
+
+    .iconxianshi_xuanzetianchong {
+      color: #2A94EC;
+    }
+    p {
+      @extend %flexRow;
+      justify-content: center;
+    }
+
+
+    .delete-box {
+      margin-right: 56rpx;
+    }
+
+    .icon-choose {
+      font-size: 32rpx;
+      margin-right: 12rpx;
+    }
+
+    .icon-shanchu2,
+    .icon-bianji2 {
+      font-size: 38rpx;
+      margin-right: 12rpx;
+      line-height: 1;
+    }
+
+  }
+
+  //   底部按钮
+  .bottom-btn {
+    width: 100%;
+    height: 90rpx;
+    position: fixed;
+    bottom: 0;
+    background-color: #fff;
+    color: #2A94EC;
+    line-height: 90rpx;
+    font-size: 36rpx;
+    z-index: 1000;
+    box-shadow: 0 0 10rpx 0 rgba(188, 188, 188, 0.35);
+
+    p {
+      display: inline-block;
+      height: 100%;
+      text-align: center;
+      width: 50%;
+    }
+
+    .add-new {
+      background-color: #2A94EC;
+      color: #fff;
+    }
+  }
+}

@@ -1,0 +1,94 @@
+%flexRow {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: row;
+}
+
+.add-address {
+  width: 100%;
+  padding-bottom: 100rpx;
+
+  .item-box {
+    width: 100%;
+    background-color: #fff;
+    height: 100rpx;
+    @extend %flexRow;
+    padding: 0 42rpx;
+    box-sizing: border-box;
+    border-bottom: 2rpx solid #eee;
+
+    span {
+      font-size: 32rpx;
+      color: #000;
+      margin-right: 54rpx;
+    }
+
+    .input-text {
+      font-size: 30rpx;
+      color: #4a4a4a;
+      flex: 1;
+    }
+  }
+
+  .right-area {
+    @extend %flexRow;
+    justify-content: space-between;
+
+    .area-pick {
+      @extend %flexRow;
+      text-align: right;
+
+      .picks-i {
+        line-height: 1;
+      }
+    }
+
+    .icon-arrow-right {
+      color: #4a4a4a;
+      font-size: 36rpx;
+    }
+  }
+
+  //   设为默认
+  .set-default {
+    justify-content: space-between;
+    color: #9b9b9b;
+    font-size: 30rpx;
+    margin-top: 40rpx;
+    .iconchoose {
+      color: #979797;
+
+    }
+
+    .iconxianshi_xuanzetianchong {
+      color: #2A94EC;
+    }
+  }
+
+  //   底部按钮
+  .bottom-btn {
+    width: 100%;
+    height: 90rpx;
+    position: fixed;
+    bottom: 0;
+    background-color: #fff;
+    color: #2A94EC;
+    line-height: 90rpx;
+    font-size: 36rpx;
+    z-index: 1000;
+    box-shadow: 0 0 10rpx 0 rgba(188, 188, 188, 0.35);
+
+    p {
+      display: inline-block;
+      height: 100%;
+      text-align: center;
+      width: 50%;
+    }
+
+    .add-new {
+      background-color: #2A94EC;
+      color: #fff;
+    }
+  }
+}

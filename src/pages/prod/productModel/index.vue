@@ -1,11 +1,19 @@
 <template>
   <div class="introduce">
     <div class="top" v-for="(item,index) in modelList" :key="index">
+      <div class="industry">
+        <span class="title">名称</span>
+        <input v-model="item.name" class="choose" placeholder="请填写名称"/>
+      </div>
+      <div class="industry">
+        <span class="title">价格</span>
+        <input v-model="item.price" class="choose" placeholder="请填写价格"/>
+      </div>
       <div class="industry" v-for="(itemA,_index) in item.modelMapList" :key="_index">
         <span class="title">{{ itemA.property }}</span>
         <span class="choose">
-              <input v-model="itemA.propertyValue" placeholder="填写规格"/>
-            </span>
+          <input v-model="itemA.propertyValue"  :placeholder="'请填写'+itemA.property" />
+        </span>
       </div>
       <div class="textArea">
         <!--<textarea v-model="info" placeholder="填写产品介绍"></textarea>-->
@@ -17,7 +25,8 @@
           <!--<uploadImgModel ref="goodsImgUrlList" width="116rpx" height="116rpx" max="1" @choosed="choosed" :srcs="item.imgUrl" ></uploadImgModel>-->
           <div class="j-pic-upload">
           <div class="j-upload-btn" @click="uploadImg(item.imgUrl,index)" :style="{'width':width || '120rpx','height':height || '120rpx'}">
-            <span class="j-upload-add iconaddgrey iconfont"></span>
+            <i class="j-upload-add iconaddgrey iconfont"></i>
+            <!--<p>插入图片</p>-->
           </div>
             <div class="model">
               <img @click="previewImg(index,item.imgUrl)" :key="index" :src="item.imgUrl" :style="{'width':width || '120rpx','height':height || '120rpx'}" class="img"  alt="">
@@ -56,13 +65,13 @@
         goodsStyleId: '',
         goodsImgUrlList: [],
         goodsImg: [],
-        // modelList: [{
-        //   modelMapList: '',
-        //   name: '',
-        //   price: '',
-        //   imgUrl: ''
-        // }],
-        modelList: [],
+        modelList: [{
+          modelMapList: [],
+          name: '',
+          price: '',
+          imgUrl: ''
+        }],
+        // modelList: [],
         goodsStyleTypeId: '',
         imgUrl: '',
         goodsId: ''
@@ -201,7 +210,7 @@
                 })
                 // that.getModelAll(this.goodsStyleTypeId)
               }
-              console.log('65', res)
+              // console.log('65', res)
             }
           })
         } else {
@@ -233,7 +242,7 @@
                 let that = this
                 that.modelList[index].id = this.goodsStyleId
                 // this.disabled = false
-                console.log('11', that.modelList[index].id)
+                // console.log('11', that.modelList[index].id)
                 that.onLoad()
                 // let that = this
                 // let that = this
@@ -293,7 +302,7 @@
         // 监听产品展示图片并添加到数组
         if (val.all) {
           this.goodsImgUrlList = val.all
-          console.log('val', val.all)
+          // console.log('val', val.all)
         }
       }
     }

@@ -118,7 +118,7 @@
             <img src="https://oss.wq1516.com/salesInfo/201906181125191560828319376.jpg" />
             <div class="cards-M">
               <div class="cards-main">
-                <p class="cards-img"><img :src="postForm.imgUrl" /></p>
+                <p class="cards-img"><img :src="postForm.imgUrl || 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png' + '?x-oss-process=style/c400'" /></p>
                 <p class="cards-name">
                   <span v-if="postForm.name">{{ postForm.name }}</span>
                   <span v-else>无姓名</span>
@@ -362,7 +362,9 @@
         vertical: true,
         easeInOutCubic: 'easeInOutCubic',
         personApi: personApi,
-        postForm: [],
+        postForm: [{
+          imgUrl: 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png'
+        }],
         voiceUrl: '',
         currentAudio: '',
         imgWidth: null,
@@ -379,7 +381,7 @@
         userId: '',
         logo: '',
         apply: '',
-        imgUrl: '',
+        imgUrl: 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png',
         showpop: false,
         changeVoiceFlag: false,
         fixedPhone: '15988993797',
@@ -674,7 +676,7 @@
       // 页面加载信息
       getInfo () {
         this.userId = wx.getStorageSync('userId') // 获取本地userId
-        console.log('userId', this.userId)
+        // console.log('userId', this.userId)
         this.$fly.request({
           method: 'get', // post/get 请求方式
           url: '/platformSalesman/selectSelfInfo',
@@ -682,7 +684,7 @@
             'userId': this.userId
           }
         }).then(res => {
-          console.log('res', res.data)
+          // console.log('res', res.data)
           this.latitude = res.data.latitude
           this.longitude = res.data.longitude
           if (res.data) {

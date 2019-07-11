@@ -80,6 +80,7 @@
   import tabs from '@/components/wan/tabs'
   import Searchbar from '@/components/searchBar'
   import product from '@/api/product'
+  import personApi from '@/api/person'
   export default {
     data () {
       return {
@@ -94,7 +95,8 @@
         isFocus: false,
         apply: '',
         id: '',
-        name: '大家好吖'
+        name: '',
+        personApi: personApi
       }
     },
 
@@ -163,9 +165,17 @@
         this.getProduct(0)
       },
       routeTo (id) {
+        this.insertOperaA('查看了产品', 3, id)
         wx.navigateTo({
           url: '../productA/detail/main?id=' + id
         })
+      },
+      // 插入雷达
+      async insertOperaA (info, recordType, id) {
+        const businessId = wx.getStorageSync('businessId')
+        const salesmanId = wx.getStorageSync('salesmanId')
+        const userId = wx.getStorageSync('userId')
+        await personApi.OperationInsert({businessId: businessId, goodsId: id, info, recordType, salesmanId: salesmanId, userId: userId})
       },
       // 得到商品的列表
       async getProduct ({ type = 0, name = '' }) {

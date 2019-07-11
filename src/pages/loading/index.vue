@@ -77,6 +77,7 @@ export default {
           const result = await homeApi.doLogin(data)
           this.eatinCart(result)
           wx.setStorageSync('Card', false)
+          this.getUnReadCount()
           // console.log('login', res)
         }
       })
@@ -118,6 +119,15 @@ export default {
         console.log(err.status, err.message)
       })
     },
+    async getUnReadCount () {
+      let salesManId = wx.getStorageSync('salesManId')
+      const result = await personApi.selectUnReadCount({
+        salesManId
+      })
+      this.num = result.data
+      wx.setStorageSync('msgNum', this.num)
+      console.log('获取消息数量1', this.num)
+    },
     // // 插入雷达
     // async insertOpera (info, recordType) {
     //   await personApi.OperationInsert({ businessId: this.businessId, info, recordType, salesmanId: this.salesManId, userId: this.userId })
@@ -143,7 +153,12 @@ export default {
     // 处理返回数据
     eatinCart (res) {
       console.log('login', res)
-      wx.setStorageSync('vipId', res.data.vipId)
+      if (res.msg) {
+        this.getUnReadCount()
+      }
+      if (res.data.vipId) {
+        wx.setStorageSync('vipId', res.data.vipId)
+      }
       const { data: { token, isSalesman, id, businessId } } = res
       this.wesocket({ cmd: 'login', userId: id })
       this.userId = wx.getStorageSync('userId', id)

@@ -11,7 +11,7 @@
                 <!-- home及后退键 -->
                 <cover-view class="bar-options" @click="backClick()">
                     <cover-view class="opt opt-back">
-                      <cover-image class="back-image" src="https://oss.wq1516.com/default-avatar.png"></cover-image>
+                      <cover-image class="back-image" :src="headImg"></cover-image>
                     </cover-view>
                     <cover-view class="opt opt-home">
                       <cover-view style="font-size: 20rpx">消息中心</cover-view><cover-view v-if="num !== 0" style="width: 22rpx;height: 22rpx;background:red;border-radius: 50rpx;color: #fff;font-size: 18rpx;padding: 4rpx;" ><cover-view style="text-align: center">{{num}}</cover-view></cover-view>
@@ -25,6 +25,7 @@
 </template>
 
 <script>
+  import personApi from '@/api/person'
   export default {
     props: {
       // 导航栏背景色
@@ -60,7 +61,8 @@
         model: '',
         brand: '',
         system: '',
-        num: 0
+        num: 0,
+        headImg: 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png'
       }
     },
     beforeMount () {
@@ -91,17 +93,47 @@
     onLoad () {
       setInterval(() => {
         const that = this
-        const num = wx.setStorageSync('msgNum')
-        if (num !== undefined) {
-          that.num = num
-        }
+        const num = wx.getStorageSync('msgNum')
+        that.num = num
         // console.log('获取消息数量', that.num)
-      }, 3000)
+      }, 1000)
+      this.getUnReadCount()
+      this.getInfo()
     },
     onShow () {
-      // this.getMsgNum()
+      this.getUnReadCount()
     },
     methods: {
+      // 页面加载信息
+      getInfo () {
+        this.userId = wx.getStorageSync('userId') // 获取本地userId
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/platformSalesman/selectSelfInfo',
+          body: {
+            'userId': this.userId
+          }
+        }).then(res => {
+          console.log('resa a a a ', res.data)
+          if (res.data) {
+            this.headImg = res.data.imgUrl
+          } else {
+            this.headImg = 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png'
+          }
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      },
+      // 获取未读消息
+      async getUnReadCount () {
+        let salesManId = wx.getStorageSync('salesManId')
+        const result = await personApi.selectUnReadCount({
+          salesManId
+        })
+        this.num = result.data
+        wx.setStorageSync('msgNum', this.num)
+        // console.log('获取消息数量1', this.num)
+      },
       // 获取未读消息数量
       getMsgNum () {
         const salesmanId = wx.getStorageSync('salesmanId')

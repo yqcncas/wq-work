@@ -89,7 +89,7 @@
                   <div v-if="cards !== ''|| cards !== null">
                     <div class="card" v-for="(item,index) in cards" :key="index">
                       <div @click="goToCard(item.id)">
-                        <span><img :src="item.imgUrl"></span>
+                        <span><img :src="item.imgUrl || 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png'+'?x-oss-process=style/c400'"></span>
                         <div class="card-main">
                           <div class="qiye">
                             <span class="img"><s>企</s></span>
@@ -119,7 +119,7 @@
                 <div class="conts-main" v-else>
                   <div v-if="card!== 1">
                     <div class="card" v-for="(item,index) in enclosure" :key="index">
-                      <span><img :src="item.headImg"></span>
+                      <span><img :src="item.headImg || 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png'+'?x-oss-process=style/c400'"></span>
                       <div class="card-main">
                         <div class="qiye">
                           <span class="img"><s>企</s></span>
@@ -162,7 +162,7 @@
               <div class="conts-mains" v-if="info === 1 ">
                 <div v-if="Message.length !== 0 && Message !== null">
                   <div class="infoCard" v-for="(item, index) in Message" :key="index">
-                    <span class="headImg"><img :src="item.imgUrl"></span>
+                    <span class="headImg"><img :src="item.imgUrl || 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png' +'?x-oss-process=style/c400'"></span>
                     <div class="infoCard-main">
                       <div class="infoTop">
                         <span class="headName">{{item.name}}</span>

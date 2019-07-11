@@ -314,14 +314,14 @@
         resiverMsg(this, data)
       },
       async selectMsgForUser ({ type = 0, mode }) {
-        console.log('1', this.pageNum)
+        // console.log('1', this.pageNum)
         let result = {}
         if (this.type === 'sale') {
           result = await apicustom.selectMsgForSales({ id: this.userId, pageNum: this.pageNum, pageSize: this.pageSize })
         } else {
           result = await apicustom.selectMsgForUser({ id: this.userId, pageNum: this.pageNum, pageSize: this.pageSize })
         }
-        console.log('userId', result)
+        // console.log('userId', result)
         const code = result.code
         const data = result.data.list
         // this.userHeadImg = data.userHeadImg

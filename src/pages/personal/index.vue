@@ -101,6 +101,10 @@
           title: '产品管理',
           url: '../prod/product/main'
         }, {
+          src: '../../static/images/product.png',
+          title: '我的订单',
+          url: '/pages/pageA/orderlist/main?typeId=0'
+        }, {
           src: '../../static/images/release.png',
           title: '我的发布',
           url: '../pageA/release/main'
@@ -129,6 +133,10 @@
           src: '../../static/images/chanpin.png',
           title: '产品管理',
           url: '../prod/product/main'
+        }, {
+          src: '../../static/images/product.png',
+          title: '我的订单',
+          url: '/pages/pageA/orderlist/main?typeId=0'
         }, {
           src: '../../static/images/release.png',
           title: '我的发布',

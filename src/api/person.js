@@ -102,11 +102,11 @@ const person = {
   }),
   // 查询未读数量
   selectUnReadCount: ({
-    salesManId,
-    sendDir
-  }) => request.get('/msg/selectUnReadCount', {
-    salesManId,
-    sendDir
+    salesManId
+    // sendDir
+  }) => request.get('/platformMessage/selectUnReadCount', {
+    salesManId
+    // sendDir
   }, {
     baseURL: baseUrlApi
   }),
