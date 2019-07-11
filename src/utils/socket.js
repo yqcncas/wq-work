@@ -41,9 +41,11 @@ export function msgNum () {
       'token': token
     },
     success: function (res) {
-      this.num = res.data
-      wx.setStorageSync('msgNum', this.num)
-      console.log('msgNum', this.num)
+      if (res.data) {
+        this.num = res.data
+        wx.setStorageSync('msgNum', this.num)
+        console.log('msgNum', this.num)
+      }
     },
     fail: function () {
       // fail
@@ -56,10 +58,9 @@ export function msgNum () {
 
 export function resiverMessage (context) {
   wx.onSocketClose(res => {
-    console.log('1登录')
+    console.log('登录')
     console.log(res)
     initSocket(loginData)
-    msgNum()
   })
   wx.onSocketError(function (res) {
     console.log(res)
@@ -72,9 +73,10 @@ export function resiverMessage (context) {
   wx.onSocketMessage(function (data) {
     try {
       console.log('收到服务器内容：' + data.data)
+      msgNum()
       context.onMessage(JSON.parse(data.data)) // 这里定义一个onMessage方法，用于每个页面的回调
     } catch (e) {
-      console.log(e)
+      // console.log(e)
     }
   })
 }
@@ -83,8 +85,8 @@ export function resiverMsg (context, websocketData) {
     data: JSON.stringify(websocketData)
   })
   wx.onSocketClose(res => {
-    console.log('消息')
-    console.log(res)
+    // console.log('消息')
+    // console.log(res)
     initSocket(loginData)
     msgNum()
   })

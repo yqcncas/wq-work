@@ -44,12 +44,13 @@
     </div>
     <!-- 富文本 -->
     <div class="rich-content">
-      <!-- <wx-parse :content="info" :imageProp="{mode:'widthFix'}" /> -->
+       <!--<wx-parse :content="info" :imageProp="{mode:'widthFix'}" /> -->
       <div v-for="(item,index) in info" :key="index" :style="{'background':(item.name==='wText'?'#fff':'')}">
         <!-- 文字 -->
         <textWan :data="item.data" v-if="item.name==='wText'"></textWan>
-        <!-- 图片单个 -->
+         <!--图片单个-->
         <imgWan :data="item.data" v-if="item.name==='wImg'"></imgWan>
+        <!--<imgWan :data="item" ></imgWan>-->
         <!-- 视频 -->
         <videoWan :data="item.data" v-if="item.name==='wVideo'"></videoWan>
         <!-- 最近购买 -->
@@ -111,24 +112,24 @@
       </div>
     </div>
     <!-- 加入购物车 -->
-    <!--<div class="add-cart">-->
-      <!--<div class="icon-box">-->
-        <!--<div class="icon-btn" @click="routerTo('../../../packageA/pages/cart/main')">-->
-          <!--<i class="iconfont iconshop-cart"><span class="tip-num" v-if="allnumber>0">{{allnumber}}</span></i>-->
-          <!--<p>购物车</p>-->
-        <!--</div>-->
-        <!--<div class="icon-btn" @click="routerTo(url)">-->
-          <!--<i class="iconfont iconpinglun"><span class="tip-num" v-if="msgNum>0">{{msgNum}}</span></i>-->
-          <!--<p>客服</p>-->
-        <!--</div>-->
-      <!--</div>-->
-      <!--<div class="add-btn common-btn" :class="{'disabled-bg':buyStatus===0}" @click="addCart">加入购物车</div>-->
-      <!--<div class="buy-now common-btn" :class="{'disabled-bg':buyStatus===0}" @click="buy">立即购买</div>-->
-    <!--</div>-->
+    <div class="add-cart">
+      <div class="icon-box">
+        <div class="icon-btn" @click="routerTo('../../pageA/cart/main')">
+          <i class="iconfont iconshop-cart"><span class="tip-num" v-if="allnumber>0">{{allnumber}}</span></i>
+          <p>购物车</p>
+        </div>
+        <div class="icon-btn" @click="routerTo(url)">
+          <i class="iconfont iconpinglun"><span class="tip-num" v-if="msgNum>0">{{msgNum}}</span></i>
+          <p>客服</p>
+        </div>
+      </div>
+      <div class="add-btn common-btn" :class="{'disabled-bg':buyStatus===0}" @click="addCart">加入购物车</div>
+      <div class="buy-now common-btn" :class="{'disabled-bg':buyStatus===0}" @click="buy">立即购买</div>
+    </div>
   </div>
 </template>
 <script>
-// import addressApi from '@/api/address'
+import addressApi from '@/api/address'
 import productApi from '@/api/product'
 import cartApi from '@/api/cart'
 import personApi from '@/api/person'
@@ -209,17 +210,18 @@ export default {
     imgWan,
     videoWan,
     navBtn,
-    buyJust
+    buyJust,
+    addressApi
   },
   methods: {
     getJumpWay (data) {
       if (data[1] === 1) {
         wx.navigateTo({
-          url: '../detail/index?id=' + data[0]
+          url: '../detail/main?id=' + data[0]
         })
       } else if (data[1] === 2) {
         wx.navigateTo({
-          url: `../../../packageA/pages/customPage/index?id=${data[0]}`
+          url: `../../../pagesA/customPage/main?id=${data[0]}`
         })
       }
     },
@@ -353,7 +355,7 @@ export default {
           wx.setStorageSync('goodsList', JSON.stringify(data.goodsList))
           wx.setStorageSync('payInfo', JSON.stringify(data.payInfo))
           wx.navigateTo({
-            url: '../../../packageA/pages/order/main?buyWay=0&id=' + this.id
+            url: '/pages/pageA/order/main?buyWay=0&id=' + this.id
           })
         } else {
           wx.showToast({
@@ -423,7 +425,8 @@ export default {
       const gooddetail = result.data.goods
       this.goodmodel = result.data.goodsModels
       this.name = gooddetail.name
-      //   this.info = gooddetail.info
+      console.log('goodmodel', this.goodmodel)
+      // this.info = gooddetail.info
       this.price = gooddetail.price.toFixed(2)
       this.promotionPrice = gooddetail.promotionPrice
       this.imgurl = gooddetail.imgUrl
@@ -449,7 +452,7 @@ export default {
       this.userId = wx.getStorageSync('userId')
       // this.insertOpera('查看了产品', 3)
       this.info = JSON.parse(JSON.parse(gooddetail.info).info)
-      console.log('445', JSON.parse(JSON.parse(gooddetail.info).info))
+      // console.log('445', JSON.parse(JSON.parse(gooddetail.info).info))
     },
     // 获取所有的购物车里的数量
     async getCartCount () {

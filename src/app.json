@@ -38,6 +38,12 @@
       "root": "pages/pageA/",
       "pages": [
         "stats/main",
+        "payfinish/main",
+        "addaddress/main",
+        "orderlist/main",
+        "addressSelect/main",
+        "cart/main",
+        "order/main",
         "skin/main",
         "Member/main",
         "attestation/main",
@@ -75,12 +81,11 @@
   "tabBar": {
     "color": "#999",
     "backgroundColor": "#fafafa",
-    "selectedColor": "#333",
+    "selectedColor": "#2A94EC",
     "borderStyle": "white",
-
     "list": [
       {
-        "text": "我的名片",
+        "text": "主页",
         "pagePath": "pages/businesscard/main",
         "iconPath": "static/images/my.png",
         "selectedIconPath": "static/images/my-se.png"

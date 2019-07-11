@@ -10,7 +10,7 @@
           <div class="studs">
             <span class="title">产品价格</span>
             <span class="choose">
-              <input  v-model="price" type="number" placeholder="填写价格"/>
+              <input  v-model="price" placeholder="填写价格"/>
             </span>
           </div>
           <div class="studs" v-if="edit !== '1'">
@@ -55,11 +55,23 @@
               </div>
             </div>
           </div>
-
-          <div class="details" v-model="info">
+          <div class="goods-detail">
             <span class="title">产品详情</span>
-            <span class=""><uploadMore ref="MoreList" width="" height="100%" max="" v-model="info" @choosedMore="choosedMore" :srcs="MoreList" ></uploadMore></span>
+            <div class="flexRow bottom-wrap">
+              <div class="add-same flexColumn" @click="chooseImageList">
+                <i class="iconfont icontupian"></i>
+                <p>插入图片</p>
+              </div>
+            </div>
+            <div v-for="(item,i) in infoImgList" :key="i" class="info-wrap" v-if="item.name==='wImg'">
+              <image class="info-img" mode="widthFix" :src="item.data.pictureUrl"></image>
+              <i class="iconfont iconshanchu-copy" @click="deleteImg(infoImgList,i)"></i>
+            </div>
           </div>
+          <!--<div class="details" v-model="info">-->
+            <!--<span class="title">产品详情</span>-->
+            <!--<span class=""><uploadMore ref="MoreList" width="" height="100%" max="" v-model="info" @choosedMore="choosedMore" :srcs="MoreList" ></uploadMore></span>-->
+          <!--</div>-->
         </div>
         <div class="footer" v-if="status == true">
           <button class="save" @click="getGoods()">保存</button>
@@ -73,6 +85,7 @@
 <script>
   import uploadImg from '@/components/uploadImg'
   import uploadMore from '@/components/uploadMore'
+  import { UPLOAD_FILE } from '@/api/uploadFile'
   export default {
     name: 'index',
     components: {
@@ -86,18 +99,28 @@
         // type: '',
         valueA: [{
           typeName: ''
-        }],
+        }], // 分类
         guiName: '',
         stylesName: '',
         valueB: [{
           type: ''
-        }],
+        }], // 分类,
         indexB: 0,
         indexA: 0,
         status: true,
         MoreList: [],
         choose: '',
         imgUrl: '',
+        params: {
+          name: '',
+          price: null,
+          type: null,
+          goodsStyleTypeId: null,
+          goodsImgUrlList: [], // 产品展示
+          imgUrl: '',
+          info: '',
+          businessId: null
+        },
         goodsImgUrlListA: [{
           imgUrl: ''
         },
@@ -115,7 +138,8 @@
         goodsStyleTypeId: '',
         edit: '',
         goodsId: '',
-        coverImg: ''
+        coverImg: '',
+        infoImgList: []
       }
     },
     onShow () {
@@ -134,6 +158,7 @@
       this.coverImg = ''
       this.imgUrl = ''
       this.status = true
+      this.infoImgList = []
     },
     onLoad: function (options) {
       // this.coverImg = wx.getStorageSync('coverImg')
@@ -204,6 +229,84 @@
           console.log(err)
         })
       },
+      chooseImageList () {
+        wx.chooseImage({
+          count: 9, // 一次最多可以选择的图片张数
+          sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+          sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+          success: (res) => {
+            let successUp = 0 // 成功
+            let failUp = 0 // 失败
+            let length = res.tempFilePaths.length // 总数
+            let count = 0 // 第几张
+            this.uploadOneByOne(res.tempFilePaths, successUp, failUp, count, length)
+          },
+          fail: function () {
+          },
+          complete: function () {
+          }
+        })
+      },
+      uploadOneByOne (imgPaths, successUp, failUp, count, length) {
+        const token = wx.getStorageSync('token')
+        wx.showLoading({
+          title: '正在上传第' + count + '张'
+        })
+        wx.uploadFile({
+          url: UPLOAD_FILE + '?filedir=bannerImage',
+          filePath: imgPaths[count],
+          name: 'file',
+          header: {
+            'Content-Type': 'image/jpeg',
+            token: token
+          },
+          methods: 'POST',
+          success: (res) => {
+            successUp++ // 成功+1
+            // 上传成功
+            this.infoImgList.push({
+              data: {
+                pictureUrl: JSON.parse(res.data).data[0]
+              },
+              name: 'wImg',
+              type: 'img'
+            })
+          },
+          fail: (res) => {
+            failUp++ // 失败+1
+          },
+          complete: (res) => {
+            count++ // 下一张
+            if (count === length) {
+              // 上传完毕，作一下提示
+              console.log('上传成功' + successUp + ',' + '失败' + failUp)
+              let info = {
+                id: '',
+                cardType: '',
+                businessId: this.businessId,
+                type: 7,
+                name: 'goodEdit',
+                status: 0,
+                info: JSON.stringify(this.infoImgList)
+              }
+              this.info = JSON.stringify(info)
+              wx.showToast({
+                title: '上传成功' + successUp,
+                icon: 'none',
+                duration: 2000
+              })
+            } else {
+              // 递归调用，上传下一张
+              this.uploadOneByOne(imgPaths, successUp, failUp, count, length)
+              console.log('正在上传第' + count + '张')
+            }
+          }
+        })
+      },
+      // 删除图片
+      deleteImg (arr, i) {
+        arr.splice(i, 1)
+      },
       bindPickerChangeA (e) {
         this.indexA = parseInt(e.mp.detail.value)
         this.typeId = this.valueA[this.indexA].id
@@ -224,10 +327,7 @@
         }).then(res => {
           if (res.data) {
             this.valueA = res.data
-          } else {
-            this.valueA = [{
-              typeName: '无'
-            }]
+            this.typeId = this.valueA[0].id
           }
         }).catch(err => {
           console.log(err)
@@ -245,10 +345,7 @@
         }).then(res => {
           if (res.data) {
             this.valueB = res.data
-          } else {
-            this.valueB = [{
-              type: '无'
-            }]
+            this.goodsStyleTypeId = this.valueB[0].id
           }
         }).catch(err => {
           console.log(err)
@@ -277,7 +374,6 @@
             'id': id
           }
         }).then(res => {
-          // console.log('21212', res)
           this.name = res.data.goods.name
           this.info = JSON.parse(res.data.goods.info)
           this.MoreList = JSON.parse(res.data.goods.info)
@@ -285,6 +381,7 @@
           this.getMu(res.data.goods.goodsStyleTypeId)
           this.price = res.data.goods.price
           this.goodsImgUrlList = res.data.goodsImgList
+          this.infoImgList = JSON.parse(JSON.parse(res.data.goods.info).info)
         }).catch(err => {
           console.log(err)
           if (err === '请求失败') {
@@ -408,7 +505,7 @@
             console.log(err)
             if (err === '请求失败') {
               wx.showToast({
-                title: '请稍后',
+                title: '请求失败',
                 icon: 'none',
                 duration: 1000
               })

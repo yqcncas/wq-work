@@ -24,7 +24,7 @@
           <div class="cont-main"  v-for="(item,index) in statsA" :key="index">
           <div class="card">
             <div class="main">
-              <span class="imgUrl"><img class="img" :src="item.imgUrl"></span>
+              <span class="imgUrl" @click="goToCard(item.salesmanId)"><img class="img" :src="item.imgUrl"></span>
               <span class="name" v-if="item.name">{{item.name}}</span>
               <span class="name" v-else>无姓名</span>
               <span class="job" v-if="item.job">{{item.job}}</span>
@@ -40,7 +40,7 @@
           <div class="cont-main"  v-for="(item,index) in statsB" :key="index">
             <div class="card">
               <div class="main">
-                <span class="imgUrl"><img class="img" :src="item.imgUrl"></span>
+                <span class="imgUrl"  @click="goToCard(item.salesmanId)"><img class="img" :src="item.imgUrl"></span>
                 <span class="name" v-if="item.name">{{item.name}}</span>
                 <span class="name" v-else>无姓名</span>
                 <span class="job" v-if="item.job">{{item.job}}</span>
@@ -56,7 +56,7 @@
           <div class="cont-main" v-for="(item,index) in statsC" :key="index">
             <div class="card">
               <div class="main">
-                <span class="imgUrl"><img class="img" :src="item.imgUrl"></span>
+                <span class="imgUrl"  @click="goToCard(item.salesmanId)"><img class="img" :src="item.imgUrl"></span>
                 <span class="name" v-if="item.name">{{item.name}}</span>
                 <span class="name" v-else>无姓名</span>
                 <span class="job" v-if="item.job">{{item.job}}</span>
@@ -72,7 +72,7 @@
           <div class="cont-main" v-for="(item,index) in statsD" :key="index">
             <div class="card">
               <div class="main">
-                <span class="imgUrl"><img class="img" :src="item.imgUrl"></span>
+                <span class="imgUrl"  @click="goToCard(item.salesmanId)"><img class="img" :src="item.imgUrl"></span>
                 <span class="name" v-if="item.name">{{item.name}}</span>
                 <span class="name" v-else>无姓名</span>
                 <span class="job" v-if="item.job">{{item.job}}</span>
@@ -175,6 +175,20 @@
       }
     },
     methods: {
+      // 点击跳转进入名片页
+      goToCard (id) {
+        if (id) {
+          wx.navigateTo({
+            url: `../../OthersCard/main?id=` + id
+          })
+        } else {
+          wx.showToast({
+            title: '该用户没有创建名片',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      },
       // 获取数据
       getInfoA (id) {
         this.$fly.request({
@@ -187,6 +201,7 @@
             status: 0
           }
         }).then(res => {
+          console.log('res', res)
           this.statsA = res.data.list
           // 时间戳转换成特定日期格式
           let today = this.moment().format('YYYY/MM/DD')

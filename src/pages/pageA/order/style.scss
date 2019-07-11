@@ -1,0 +1,241 @@
+%flexDisplay {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  align-items: center;
+}
+
+%widthBg {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+page {
+  background-color: #F0EFF5;
+}
+
+.order-page {
+  width: 100%;
+  min-width: 100%;
+  background-color: #F0EFF5;
+  padding-bottom: 90rpx;
+}
+
+// 地址
+.address-per {
+  border-top: 2rpx solid #eee;
+  @extend %widthBg;
+  height: 150rpx;
+  background: url('../../../../static/images/address-bg.png') -36rpx bottom repeat-x #fff;
+  background-size: 190rpx 6rpx;
+  color: #2b2b2b;
+  font-size: 28rpx;
+  padding: 0 30rpx 0 33rpx;
+  @extend %flexDisplay;
+
+  .none-add {
+    text-align: center;
+    width: 100%;
+  }
+
+  .iconfont {
+    font-size: 30rpx;
+  }
+
+  .icon-location {
+    color: #9b9b9b;
+  }
+
+  .icon-arrow-right {
+    color: #9d9d9d;
+  }
+
+  .center-address {
+    flex: 1;
+    padding: 0 26rpx;
+  }
+
+  .name-phone {
+    @extend %flexDisplay;
+    justify-content: space-between;
+  }
+
+  .detail-box {
+    height: 60rpx;
+    line-height: 60rpx;
+  }
+
+  .address-detail {
+    font-size: 24rpx;
+    color: #7a7a7a;
+    line-height: 1;
+    display: inline-block;
+    vertical-align: middle;
+  }
+}
+
+// 商品列表
+.good-s-list {
+  margin: 30rpx 0;
+  @extend %widthBg;
+
+  .list-item {
+    width: 100%;
+    height: 280rpx;
+    @extend %flexDisplay;
+    padding: 0 30rpx;
+    box-sizing: border-box;
+  }
+
+  .list-item+.list-item {
+    border-top: 2rpx solid #eee;
+  }
+
+  .img-h {
+    width: 180rpx;
+    height: 180rpx;
+    border-radius: 6rpx;
+    border: 2rpx solid #eee;
+  }
+
+  .center-good {
+    font-size: 26rpx;
+    color: #4a4a4a;
+    flex: 1;
+    padding: 0 30rpx;
+
+    .name {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      height: 76rpx;
+    }
+
+    .model {
+      padding: 10rpx 0;
+      min-height: 40rpx;
+      box-sizing: border-box;
+    }
+
+    .num {
+      color: #999;
+    }
+  }
+
+  .price {
+    font-size: 28rpx;
+    color: #000;
+    padding-top: 126rpx;
+  }
+}
+
+// 运费合计
+.total-money {
+  @extend %widthBg;
+  padding: 0 30rpx;
+  font-size: 28rpx;
+  color: #676767;
+  margin-bottom: 30rpx;
+
+  p {
+    height: 98rpx;
+    width: 100%;
+    @extend %flexDisplay;
+    justify-content: space-between;
+
+    .des-color {
+      color: #4a4a4a;
+    }
+
+    .money-color {
+      color: #000;
+    }
+  }
+
+  p+p {
+    border-top: 2rpx solid #eee;
+  }
+}
+
+// 余额
+.balance {
+  @extend %widthBg;
+  height: 100rpx;
+  @extend %flexDisplay;
+  justify-content: space-between;
+  font-size: 28rpx;
+  color: #676767;
+  padding: 0 30rpx;
+  margin-bottom: 30rpx;
+
+  .money {
+    color: #9b9b9b;
+    margin-left: 20rpx;
+  }
+
+  switch {
+    zoom: .7;
+  }
+}
+
+// 备注
+.remark-box {
+  @extend %widthBg;
+  height: 100rpx;
+  font-size: 28rpx;
+  padding: 0 30rpx;
+  @extend %flexDisplay;
+  color: #676767;
+
+  .remark-input {
+    color: #9b9b9b;
+    margin-left: 18rpx;
+    flex: 1;
+    height: 100rpx;
+    line-height: 100rpx;
+  }
+}
+
+// 说明
+.explain {
+  margin-top: 30rpx;
+  @extend %widthBg;
+  height: 266rpx;
+  font-size: 24rpx;
+  color: #b2b2b2;
+  padding: 34rpx 30rpx 0
+}
+
+// 确认订单
+.sure-order-bottom {
+  position: fixed;
+  bottom: 0;
+  @extend %widthBg;
+  @extend %flexDisplay;
+  justify-content: space-between;
+  height: 90rpx;
+  box-shadow: 0 0 10rpx 0 rgba(188, 188, 188, 0.35);
+  font-size: 32rpx;
+  color: #4a4a4a;
+  padding-left: 52rpx;
+  z-index: 1000;
+
+  cover-view {
+    display: inline-block;
+  }
+
+  .red-money {
+    color: #FE5250;
+  }
+
+  .btn-sure {
+    color: #fff;
+    background: #2A94EC;
+    width: 240rpx;
+    height: 90rpx;
+    line-height: 90rpx;
+    text-align: center;
+  }
+}

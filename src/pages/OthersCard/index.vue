@@ -78,7 +78,7 @@
                 <img src="https://oss.wq1516.com/salesInfo/201906181125191560828319376.jpg" />
                 <div class="cards-M">
                   <div class="cards-main">
-                    <p class="cards-img"><img :src="postForm.imgUrl" /></p>
+                    <p class="cards-img"><img :src="postForm.imgUrl || 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png' + '?x-oss-process=style/c400'" /></p>
                     <p class="cards-name">
                       <span v-if="postForm.name">{{ postForm.name }}</span>
                       <span v-else>无姓名</span>
@@ -337,7 +337,7 @@
         phone: '',
         logo: '',
         apply: '',
-        imgUrl: '',
+        imgUrl: 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png',
         showpop: false,
         changeVoiceFlag: false,
         fixedPhone: '15988993797',
@@ -637,8 +637,8 @@
           if (res.data.video !== null && res.data.video) {
             this.video = res.data.video
             this.videoImg = this.video + '?x-oss-process=video/snapshot,t_0,f_jpg,w_750,m_fast'
-            console.log('video', this.videoImg)
-            console.log('aaaaa', this.video)
+            // console.log('video', this.videoImg)
+            // console.log('aaaaa', this.video)
           }
           this.user = res.data.userId
           this.postForm = res.data

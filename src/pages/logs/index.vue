@@ -37,12 +37,12 @@
           <div class="cardHold-top-text">
             <span>名片夹</span>
           </div>
-          <div class="cardHold-top-input">
-            <p>
-              <input placeholder="搜索关键词" v-model="searchName" placeholder-style="color: #cccccc;"/>
-              <span @click="Search(searchName)" class="cardHold-top-button"><img src="../../../static/images/search.png"></span>
-            </p>
-          </div>
+          <!--<div class="cardHold-top-input">-->
+            <!--<p>-->
+              <!--<input placeholder="搜索关键词" v-model="searchName" placeholder-style="color: #cccccc;"/>-->
+              <!--<span @click="Search(searchName)" class="cardHold-top-button"><img src="../../../static/images/search.png"></span>-->
+            <!--</p>-->
+          <!--</div>-->
           <div class="cardHold-top-I">
             <div class="cardHold-top-me">
               <div class="cardHold-top-main">
@@ -136,7 +136,7 @@
                     <div class="center" @touchstart="touchStart($event)" @touchend="touchEnd($event,index,items)" :data-type="item.type"  >
                     <div>
                       <div class="cardHold-ftMain-ct-img" @click="goToCard(item.salesmanId)" >
-                        <img :src="item.imgUrl"/>
+                        <img :src="item.imgUrl +'?x-oss-process=style/c400'"/>
                       </div>
                       <div v-if="item.grade === 'V1' && item.grade === null "  class="cardHold-ftMain-rt" @click="recover(index,items)">
                         <div @click="goToCard(item.salesmanId)">
@@ -194,7 +194,7 @@
     </div>
     <!--右侧检索字母-->
     <div class="index-english">
-      <div v-for="(itemA,index) in commitInfo"  :key="index"  @touchstart="touchstartL($event)" :id="index" @touchmove="touchmoveL" @touchend="touchendL">{{ index }}</div>
+      <div v-for="(itemA,index) in commitInfo"  class="index-zi" :key="index"  @touchstart="touchstartL($event)" :id="index" @touchmove="touchmoveL" @touchend="touchendL">{{ index }}</div>
     </div>
     <!--检索显示字母-->
     <div v-if="indexShow" class="index-name" >{{indexEnglish}}</div>
@@ -242,7 +242,7 @@
         windowHeight: '',
         searchLetter: [],
         startX: 0,
-        endX: '',
+        endX: 0,
         letter: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
         letterA: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
         arrId: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],
@@ -412,31 +412,30 @@
           }
         }).then(res => {
           this.commitInfo = res.data
-          console.log('长度', this.commitInfo)
+          // console.log('长度', this.commitInfo)
         }).catch(err => {
           console.log(err.status, err.message)
         })
       },
       touchStart (e) {
-        this.isScroll = true
         // 获取移动距离，可以通过打印出e，然后分析e的值得出
         this.startX = e.mp.changedTouches[0].clientX
       },
       // 获取移动距离，可以通过打印出e，然后分析e的值得出
       touchEnd (e, index, items) {
         // 获取移动距离
+        this.isScroll = false
         this.endX = e.mp.changedTouches[0].clientX
-        if (this.startX - this.endX > 10) {
+        if (this.startX - this.endX > 20) {
           for (let i = 0; i < items.length; i++) {
             items[i].type = 0
           }
           items[index].type = 1
-        } else if (this.startX - this.endX < -10) {
+        } else if (this.startX - this.endX < -20) {
           for (let i = 0; i < items.length; i++) {
             items[i].type = 0
           }
         }
-        this.isScroll = false
       },
       // 点击跳转进入名片页
       goToCard (id) {

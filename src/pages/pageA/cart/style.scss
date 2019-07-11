@@ -1,0 +1,198 @@
+.cart {
+  overflow-x: hidden;
+  width: 100%;
+  height: 100%;
+  background-color: #F0EFF5;
+
+
+  .iconfont {
+    font-size: 32rpx;
+    display: inline-block;
+    height: 180rpx;
+    line-height: 180rpx;
+    padding: 0 24rpx 0 30rpx;
+  }
+
+  .small {
+    font-size: 22rpx;
+  }
+
+  .iconchoose {
+    color: #979797;
+
+  }
+
+  .iconxianshi_xuanzetianchong {
+    color: #2A94EC;
+  }
+
+  .cartlist {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 10rpx 25rpx 100rpx;
+    box-sizing: border-box;
+    height: 100%;
+
+    .item {
+      width: 700rpx;
+      box-sizing: border-box;
+      border-radius: 8rpx;
+      height: 240rpx;
+      position: relative;
+      background: #fff;
+      overflow-x: hidden;
+
+      .con {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: all 300ms ease-in-out;
+        height: 240rpx;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        background-color: #fff;
+
+
+        .left {
+          display: flex;
+          align-items: center;
+
+          .img {
+            height: 180rpx;
+            width: 180rpx;
+            border-radius: 6rpx;
+            border: 2rpx solid #eee;
+            background: #f4f4f4;
+          }
+
+          .good-name {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            font-size: 26rpx;
+            color: #4a4a4a;
+            width: 324rpx;
+            height: 88rpx;
+          }
+
+          .model-name {
+            color: #9b9b9b;
+            font-size: 24rpx;
+            flex: 1;
+          }
+
+          .price {
+            color: #333;
+            font-size: 28rpx
+          }
+        }
+
+        .info {
+          margin-left: 16rpx;
+          width: 324rpx;
+          height: 180rpx;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+
+        .right {
+          padding-right: 30rpx;
+          font-size: 28rpx;
+          color: #4a4a4a;
+        }
+
+        .num {
+          margin-left: 8rpx;
+        }
+      }
+
+      .delete {
+        position: absolute;
+        width: 160rpx;
+        top: 0;
+        right: 0;
+        text-align: center;
+        height: 100%;
+        background: #1E90FF;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30rpx;
+
+        div {
+          color: #fff;
+        }
+      }
+    }
+
+    .item+.item {
+      margin-top: 10rpx;
+    }
+  }
+
+  .fixed {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 90rpx;
+    line-height: 90rpx;
+    width: 100%;
+    background: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+
+    .iconfont {
+      vertical-align: middle;
+      height: 90rpx;
+      line-height: 90rpx;
+      margin-right: 0;
+    }
+
+    .text-all {
+      margin-left: 10rpx;
+      font-size: 28rpx;
+      color: #666;
+    }
+
+    .right {
+      display: flex;
+
+      div:nth-child(1) {
+        color: #333;
+        padding-right: 30rpx;
+        font-size: 28rpx;
+      }
+
+
+
+      div:nth-child(2) {
+        width: 220rpx;
+        height: 90rpx;
+        text-align: center;
+        line-height: 90rpx;
+        font-size: 32rpx;
+        background: #2A94EC;
+        color: #fff;
+      }
+    }
+  }
+
+  .nogoods {
+    margin-top: 200rpx;
+
+    img {
+      margin: 0 auto;
+      display: block;
+      width: 258rpx;
+      height: 258rpx;
+    }
+  }
+}
