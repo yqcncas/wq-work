@@ -32,7 +32,8 @@
                     <p class="date">{{ item.levelName }}</p>
                     <p class="money">￥{{ item.fee }}</p>
                     <p class="title">{{ item.title }}</p>
-                    <p class="info">无折扣</p>
+                    <p class="info" v-if="item.discount === 0 ">无折扣</p>
+                      <p class="info" v-else>{{item.discount}}折</p>
                   </span>
               </div>
             <div class="footer">
