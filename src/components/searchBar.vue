@@ -91,7 +91,7 @@ export default {
      width: 94%;
      display: inline-block;
      border-radius: ~'40rpx';
-     margin: ~'20rpx' 3%;
+     margin: ~'40rpx' 3% ~'20rpx';
      height: ~'60rpx';
      .weui-icon-search_in-box{
        float: left;
