@@ -120,6 +120,10 @@
           src: '../../static/images/Member.png',
           title: '会员中心',
           url: '../pageA/Member/main'
+        }, {
+          src: '../../static/images/tuike.png',
+          title: '推客中心',
+          url: '../pageA/Pusher/main'
         }],
         chooseA: [{
           src: '../../static/images/compny.png',
@@ -153,6 +157,10 @@
           src: '../../static/images/Member.png',
           title: '会员中心',
           url: '../pageA/Member/main'
+        }, {
+          src: '../../static/images/tuike.png',
+          title: '推客中心',
+          url: '../pageA/Pusher/main'
         }]
       }
     },

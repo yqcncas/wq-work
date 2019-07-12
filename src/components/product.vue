@@ -69,10 +69,12 @@
         </div>
       </div>
       <!--<FloatBox :home="false" phone="value"></FloatBox>-->
+      <!--<CustomTabbar url="/pages/product/index"></CustomTabbar>-->
     </div>
   </div>
 </template>
 <script>
+  import CustomTabbar from '@/components/customTabbar'
   import { getExt } from '@/utils/index'
   import FloatBox from '@/components/floatBox'
   import tabs from '@/components/wan/tabs'
@@ -101,7 +103,8 @@
     components: {
       Searchbar,
       FloatBox,
-      'wan-tabs': tabs
+      'wan-tabs': tabs,
+      CustomTabbar
     },
     onLoad () {
       this.getCategory()
@@ -239,8 +242,6 @@
     z-index: 1000;
     position: fixed;
     top:0;
-    background-color: #fff;
-    padding-top: 60rpx;
     .weui-search-bar {
       border-color: #eee;
       background-color: #fff;
@@ -288,7 +289,7 @@
   }
   // 商品详情
   .product-listC {
-    margin-top: 240rpx;
+    margin-top: 180rpx;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     font-size: 0;

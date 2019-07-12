@@ -62,7 +62,8 @@
         "custom/chooseTag/main",
         "custom/detail/main",
         "custom/selfTag/main",
-        "radar/main"
+        "radar/main",
+        "Pusher/main"
       ]
     }
   ],
