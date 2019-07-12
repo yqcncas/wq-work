@@ -28,9 +28,9 @@
         <div class="cont">
           <div class="cont-main">
               <div class="silver">
-                  <span v-for="(item,index) in silver" :key="index" :class="{'selected':tabA === item.id,'testTitle':true}" @click="changTabMeberA(item.id)">
+                  <span v-for="(item,index) in silver" :key="index" :class="{'selected':tabA === item.id,'testTitle':true}" @click="changTabMeberA(item.id,item.upType)">
                     <p class="date">{{ item.levelName }}</p>
-                    <p class="money">￥{{ item.fee }}</p>
+                    <p class="money">￥{{ item.upCondition }}</p>
                     <p class="title">{{ item.title }}</p>
                     <p class="info" v-if="item.discount === 0 ">无折扣</p>
                       <p class="info" v-else>{{item.discount}}折</p>
@@ -162,6 +162,7 @@ export default {
       Member: '',
       levelNum: '',
       id: '',
+      upType: 0,
       classA: 'bt',
       num: 0,
       buy: 1
@@ -277,36 +278,45 @@ export default {
     },
     // 立即开通
     Opening (id, num) {
-      if (num === 2) {
-        const phoneIp = wx.getStorageSync('phoneIp')
-        this.$fly.request({
-          method: 'post',
-          url: 'platformOrder/unifiedForVip',
-          body: {
-            'vipId': id,
-            'goodsList': [],
-            'name': '驿站会员费用',
-            'getWay': '自取',
-            'unifiedOrderRequest': {
-              'spbillCreateIp': phoneIp,
-              'body': '驿站会员费用'
-            },
-            'userName': this.nickName
-          }
-        }).then(res => {
-          this.pay(res.data.payInfo)
-        }).catch(err => {
-          console.log('err', err)
-        })
-      } else if (num === 1) {
-        wx.showToast({
-          title: '已开通',
-          icon: 'none',
-          duration: 2000
-        })
+      // console.log('upType', this.upType)
+      if (this.upType === 2) {
+        if (num === 2) {
+          const phoneIp = wx.getStorageSync('phoneIp')
+          this.$fly.request({
+            method: 'post',
+            url: 'platformOrder/unifiedForVip',
+            body: {
+              'vipId': id,
+              'goodsList': [],
+              'name': '驿站会员费用',
+              'getWay': '自取',
+              'unifiedOrderRequest': {
+                'spbillCreateIp': phoneIp,
+                'body': '驿站会员费用'
+              },
+              'userName': this.nickName
+            }
+          }).then(res => {
+            this.pay(res.data.payInfo)
+          }).catch(err => {
+            console.log('err', err)
+          })
+        } else if (num === 1) {
+          wx.showToast({
+            title: '已开通',
+            icon: 'none',
+            duration: 2000
+          })
+        } else {
+          wx.showToast({
+            title: '已开通更高权限',
+            icon: 'none',
+            duration: 2000
+          })
+        }
       } else {
         wx.showToast({
-          title: '已开通更高权限',
+          title: '暂不能升级',
           icon: 'none',
           duration: 2000
         })
@@ -332,29 +342,56 @@ export default {
       })
     },
     // 选择会员
-    changTabMeberA (id) {
-      if (this.buy === 1) {
-        this.tabA = id
-        this.id = this.tabA
-        const levelNum = wx.getStorageSync('vipId')
-        if (levelNum > id) {
-          this.title = '已开通更高等级'
-          this.classA = 'btA'
-          this.num = 0
-        } else if (levelNum === id) {
-          this.title = '已开通'
-          this.classA = 'btA'
-          this.num = 1
-        } else if (levelNum < id) {
-          this.title = '立即升级'
+    changTabMeberA (id, type) {
+      this.upType = type
+      if (type === 2) {
+        if (this.buy === 1) {
+          this.tabA = id
+          this.id = this.tabA
+          const levelNum = wx.getStorageSync('vipId')
+          if (levelNum > id) {
+            this.title = '已开通更高等级'
+            this.classA = 'btA'
+            this.num = 0
+          } else if (levelNum === id) {
+            this.title = '已开通'
+            this.classA = 'btA'
+            this.num = 1
+          } else if (levelNum < id) {
+            this.title = '立即升级'
+            this.classA = 'bt'
+            this.num = 2
+          }
+        } else if (this.buy === 0) {
+          this.tabA = id
+          this.title = '立即开通'
           this.classA = 'bt'
           this.num = 2
         }
-      } else if (this.buy === 0) {
-        this.tabA = id
-        this.title = '立即开通'
-        this.classA = 'bt'
-        this.num = 2
+      } else {
+        if (this.buy === 1) {
+          this.tabA = id
+          this.id = this.tabA
+          const levelNum = wx.getStorageSync('vipId')
+          if (levelNum > id) {
+            this.title = '已开通更高等级'
+            this.classA = 'btA'
+            this.num = 0
+          } else if (levelNum === id) {
+            this.title = '已开通'
+            this.classA = 'btA'
+            this.num = 1
+          } else if (levelNum < id) {
+            this.title = '立即升级'
+            this.classA = 'btA'
+            this.num = 2
+          }
+        } else if (this.buy === 0) {
+          this.tabA = id
+          this.title = '立即开通'
+          this.classA = 'bt'
+          this.num = 2
+        }
       }
     },
     // // 选择

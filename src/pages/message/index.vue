@@ -20,6 +20,29 @@
             </div>
           </div>
         </div>
+          <div class="footTabar">
+            <section class="tabBar-wrap">
+              <article class="tabBar-box">
+                <ul class="tabBar-nav">
+                  <li class="item" v-for="(item, index) in navList"
+                      @click="selectNavItem(index,item.pagePath)"
+                      :key="index">
+                    <div>
+                      <p class="item-images">
+                        <img :src="selectNavIndex === index ? item.selectedIconPath : item.iconPath" alt="iconPath">
+                      </p>
+                      <p :class="selectNavIndex === index ? 'item-text item-text-active' : 'item-text' ">
+                        {{item.text}}
+                      </p>
+                    </div>
+                  </li>
+                </ul>
+              </article>
+            </section>
+          </div>
+          <div class="foundA" @click="goIndex()">
+            <span>回到<br />首页</span>
+          </div>
         </div>
         <div v-else class="fotter">
           <div>暂无任何消息通知</div>
@@ -33,6 +56,37 @@
     name: 'index',
     data () {
       return {
+        navList: [
+          {
+            selectNavIndex: 0,
+            pagePath: '/pages/pageA/radar/main',
+            iconPath: '/static/images/radar.png',
+            selectedIconPath: '/static/images/radar-se.png',
+            text: '雷达'
+          },
+          {
+            selectNavIndex: 1,
+            pagePath: '/pages/message/main',
+            iconPath: '/static/images/messgae.png',
+            selectedIconPath: '/static/images/message-se.png',
+            text: '消息'
+          },
+          {
+            selectNavIndex: 2,
+            pagePath: '/pages/pageA/custom/main',
+            iconPath: '/static/images/personcard.png',
+            selectedIconPath: '/static/images/personcard-se.png',
+            text: '客户'
+          },
+          {
+            selectNavIndex: 3,
+            pagePath: '/pages/personal/main',
+            iconPath: '/static/images/my.png',
+            selectedIconPath: '/static/images/my-se.png',
+            text: '我的'
+          }
+        ],
+        selectNavIndex: 1,
         startX: 0,
         endX: 0,
         indexId: '',
@@ -49,6 +103,7 @@
     },
     onShow () {
       this.getInfo(1)
+      this.selectNavIndex = 1
     },
     async onPullDownRefresh () {
       if (this.pageNum < this.lastPage) {
@@ -64,6 +119,47 @@
       wx.stopPullDownRefresh()
     },
     methods: {
+      // tarbar 选择
+      selectNavItem (index, pagePath) {
+        console.log(index)
+        this.selectNavIndex = index
+        if (index === this.selectNavIndex) {
+          this.bindViewTap(index, pagePath)
+          return false
+        }
+
+        // if (index === 0 && this.selectNavIndex === -1) {
+        //   this.$emit('fetch-index')
+        // }
+      },
+      // 返回首页
+      goIndex () {
+        wx.switchTab({
+          url: '/pages/businesscard/main'
+        })
+      },
+      /**
+       * tabBar路由跳转
+       */
+      bindViewTap (index, url) {
+        // if (url === '../index/main') {
+        //   store.commit('setGroupsID', '');
+        // }
+        if (index === 1) {
+        } else if (index === 3) {
+          wx.switchTab({
+            url
+          })
+        } else if (index === 0) {
+          wx.reLaunch({
+            url
+          })
+        } else {
+          wx.reLaunch({
+            url
+          })
+        }
+      },
       // 获取消息
       getInfo (id) {
         this.commitInfo = []

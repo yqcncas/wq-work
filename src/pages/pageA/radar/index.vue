@@ -116,6 +116,29 @@
           </div>
         </div>
       </div>
+      <div class="footTabar">
+        <section class="tabBar-wrap">
+          <article class="tabBar-box">
+            <ul class="tabBar-nav">
+              <li class="item" v-for="(item, index) in navList"
+                  @click="selectNavItem(index,item.pagePath)"
+                  :key="index">
+                <div>
+                  <p class="item-images">
+                    <img :src="selectNavIndex === index ? item.selectedIconPath : item.iconPath" alt="iconPath">
+                  </p>
+                  <p :class="selectNavIndex === index ? 'item-text item-text-active' : 'item-text' ">
+                    {{item.text}}
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </article>
+        </section>
+      </div>
+      <div class="foundA" @click="goIndex()">
+        <span>回到<br />首页</span>
+      </div>
     </div>
   </div>
 </template>
@@ -125,6 +148,36 @@
     data () {
       return {
         list: [],
+        navList: [
+          {
+            selectNavIndex: 0,
+            pagePath: '/pages/pageA/radar/main',
+            iconPath: '/static/images/radar.png',
+            selectedIconPath: '/static/images/radar-se.png',
+            text: '雷达'
+          },
+          {
+            selectNavIndex: 1,
+            pagePath: '/pages/message/main',
+            iconPath: '/static/images/messgae.png',
+            selectedIconPath: '/static/images/message-se.png',
+            text: '消息'
+          },
+          {
+            selectNavIndex: 2,
+            pagePath: '/pages/pageA/custom/main',
+            iconPath: '/static/images/personcard.png',
+            selectedIconPath: '/static/images/personcard-se.png',
+            text: '客户'
+          },
+          {
+            selectNavIndex: 3,
+            pagePath: '/pages/personal/main',
+            iconPath: '/static/images/my.png',
+            selectedIconPath: '/static/images/my-se.png',
+            text: '我的'
+          }
+        ],
         pageNum: 1,
         lastPage: 100,
         nextPage: 1,
@@ -133,12 +186,19 @@
         active: 0,
         timeActive: 1,
         salesmanId: '',
+        selectNavIndex: 0,
         behaviorArr: [],
         behaviorArrTwo: [],
         recordTypeList: [22, 23, 21, 24, 3]
       }
     },
     methods: {
+      // 返回首页
+      goIndex () {
+        wx.switchTab({
+          url: '/pages/businesscard/main'
+        })
+      },
       routeTo (url) {
         if (this.self) return
         wx.navigateTo({
@@ -255,7 +315,7 @@
         })
         const { data: { list, lastPage, pageNum, nextPage } } = await personApi.InteractionOpSearch({ salesmanId: this.salesmanId, pageNum: this.pageNum, pageSize: this.pageSize, timeType: this.timeActive, recordTypeList: this.recordTypeList })
         wx.hideLoading()
-        console.log('嘎嘎', list)
+        // console.log('嘎嘎', list)
         list.map(item => {
           item.visible = false
           item.dataTime = this.moment(item.browseDate).format('YYYY.MM.DD')
@@ -271,6 +331,44 @@
           this.radarBehavior()
         } else {
           this.radarInteraction()
+        }
+      },
+      tarbar (i) {
+        this.selectNavIndex = i
+        // this.timeActive = 0
+      },
+      selectNavItem (index, pagePath) {
+        console.log(index)
+        this.selectNavIndex = index
+        if (index === this.selectNavIndex) {
+          this.bindViewTap(index, pagePath)
+          return false
+        }
+
+        // if (index === 0 && this.selectNavIndex === -1) {
+        //   this.$emit('fetch-index')
+        // }
+      },
+      /**
+       * tabBar路由跳转
+       */
+      bindViewTap (index, url) {
+        // if (url === '../index/main') {
+        //   store.commit('setGroupsID', '');
+        // }
+        if (index === 0) {
+        } else if (index === 3) {
+          wx.switchTab({
+            url
+          })
+        } else if (index === 1) {
+          wx.reLaunch({
+            url
+          })
+        } else {
+          wx.reLaunch({
+            url
+          })
         }
       },
       timeTab (i) {
@@ -322,6 +420,7 @@
     },
     onShow () {
       this.getSalesmanId()
+      this.selectNavIndex = 0
     },
     onReady () {
       let title = ''

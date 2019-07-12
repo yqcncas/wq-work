@@ -10,11 +10,11 @@
     <div class="list-wrap">
       <div v-for="(item,i) in persons" :key="i" class="item-per flexRow">
         <image mode="aspectFill" class="img-header" :src="item.avatarUrl" @click="routerTo(`./detail/mian?id=${item.userId}`)"></image>
-        <div class="right-per" @click="routerTo(`../msgcenter/index?id=${item.userId}`)">
-          <div class="flexRow">
-            <p class="flexRow">
+        <div class="right-per" @click="routerTo(`/pages/msgcenter/main?id=${item.userId}`)">
+          <div class="space">
+            <p class="main">
               <span class="inline-block name over-hidden">{{item.remarks}}</span>
-              <i class="iconfont icon-dianhua5 inline-block" :class="{'icon-blue':item.phone}"></i>
+              <i class="iconfont icondianhua5 inline-block" :class="{'icon-blue':item.phone}"></i>
             </p>
             <p class="right-tag over-hidden">
               <span v-for="(child,index) in item.tagList" :key="index" class="tag-style">{{child.tag}}</span>
@@ -33,6 +33,29 @@
         <span v-for="(item,index) in tagList" :key="index" class="tag" @click="chooseTag(item)" :class="item.class">{{item.tag}}</span>
       </div>
     </div>
+    <div class="footTabar">
+      <section class="tabBar-wrap">
+        <article class="tabBar-box">
+          <ul class="tabBar-nav">
+            <li class="item" v-for="(item, index) in navList"
+                @click="selectNavItem(index,item.pagePath)"
+                :key="index">
+              <div>
+                <p class="item-images">
+                  <img :src="selectNavIndex === index ? item.selectedIconPath : item.iconPath" alt="iconPath">
+                </p>
+                <p :class="selectNavIndex === index ? 'item-text item-text-active' : 'item-text' ">
+                  {{item.text}}
+                </p>
+              </div>
+            </li>
+          </ul>
+        </article>
+      </section>
+    </div>
+    <div class="foundA" @click="goIndex()">
+      <span>回到<br />首页</span>
+    </div>
   </div>
 </template>
 <script>
@@ -48,7 +71,64 @@ export default {
       searchContent: '',
       isFocus: false,
       index: 0,
-      persons: [],
+      persons: [{
+        avatarUrl: 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png?x-oss-process=style/c400',
+        remarks: '李松阳',
+        message: '李总考虑的如何',
+        phone: '15988993797',
+        sendTime: '2016-08-09',
+        tagList: [{
+          tag: '未婚'
+        }, {
+          tag: '90后'
+        }, {
+          tag: '哈哈'
+        }]
+      }, {
+        avatarUrl: 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png?x-oss-process=style/c400',
+        remarks: '李松阳 a',
+        message: '李总考虑的如何',
+        phone: '15988993797',
+        sendTime: '2016-08-09',
+        tagList: [{
+          tag: '未婚'
+        }, {
+          tag: '90后'
+        }, {
+          tag: '哈哈'
+        }]
+      }],
+      navList: [
+        {
+          selectNavIndex: 0,
+          pagePath: '/pages/pageA/radar/main',
+          iconPath: '/static/images/radar.png',
+          selectedIconPath: '/static/images/radar-se.png',
+          text: '雷达'
+        },
+        {
+          selectNavIndex: 1,
+          pagePath: '/pages/message/main',
+          iconPath: '/static/images/messgae.png',
+          selectedIconPath: '/static/images/message-se.png',
+          text: '消息'
+        },
+        {
+          selectNavIndex: 2,
+          pagePath: '/pages/pageA/custom/main',
+          iconPath: '/static/images/personcard.png',
+          selectedIconPath: '/static/images/personcard-se.png',
+          text: '客户'
+        },
+        {
+          selectNavIndex: 3,
+          pagePath: '/pages/personal/main',
+          iconPath: '/static/images/my.png',
+          selectedIconPath: '/static/images/my-se.png',
+          text: '我的'
+        }
+      ],
+      selectNavIndex: 2,
       id: '',
       tagList: [],
       tagType: null,
@@ -59,6 +139,47 @@ export default {
     Searchbar
   },
   methods: {
+    // 返回首页
+    goIndex () {
+      wx.switchTab({
+        url: '/pages/businesscard/main'
+      })
+    },
+    selectNavItem (index, pagePath) {
+      console.log(index)
+      this.selectNavIndex = index
+      if (index === this.selectNavIndex) {
+        this.bindViewTap(index, pagePath)
+        return false
+      }
+
+      // if (index === 0 && this.selectNavIndex === -1) {
+      //   this.$emit('fetch-index')
+      // }
+    },
+    /**
+     * tabBar路由跳转
+     */
+    bindViewTap (index, url) {
+      // console.log('aaa')
+      // if (url === '../index/main') {
+      //   store.commit('setGroupsID', '');
+      // }
+      if (index === 2) {
+      } else if (index === 3) {
+        wx.switchTab({
+          url
+        })
+      } else if (index === 1) {
+        wx.reLaunch({
+          url
+        })
+      } else {
+        wx.reLaunch({
+          url
+        })
+      }
+    },
     chooseTag (item) {
       if (!item.class || item.class === '') {
         this.tagList.map(child => {
@@ -182,9 +303,13 @@ export default {
   onShow () {
     this.getCustom()
     this.allTagGet()
+    this.selectNavIndex = 2
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 @import "style";
+</style>
+<style lang="less" scoped>
+  @import "less";
 </style>

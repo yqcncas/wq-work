@@ -235,7 +235,7 @@
     min-height: 100%;
     background-color: #f0eff5;
     box-sizing: border-box;
-    padding-bottom: 48px;
+    padding-bottom: 96rpx;
   }
   .nav-control {
     width: 100%;
@@ -246,6 +246,7 @@
       border-color: #eee;
       background-color: #fff;
       border: none;
+      padding-top:120rpx;
     }
     .weui-search-bar__label {
       font-size: 0;
@@ -289,7 +290,7 @@
   }
   // 商品详情
   .product-listC {
-    margin-top: 180rpx;
+    margin-top: 280rpx;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     font-size: 0;
@@ -444,7 +445,7 @@
 
   // 商品详情
   .product-listB {
-    margin-top: 180rpx;
+    margin-top: 280rpx;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     padding: 20 rpx 8 rpx 0;
@@ -590,7 +591,7 @@
   }
   // 商品列表
   .product-listA {
-    margin-top: 180rpx;
+    margin-top: 280rpx;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     padding: 20rpx 8rpx 0;
