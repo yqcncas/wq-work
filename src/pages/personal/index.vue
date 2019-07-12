@@ -89,14 +89,6 @@
         btnText: '个人中心',
         indicatorDots: true,
         choose: [{
-          src: '../../static/images/compny.png',
-          title: '企业认证',
-          url: '../pageA/attestation/main'
-        }, {
-          src: '../../static/images/jieshao.png',
-          title: '公司介绍',
-          url: '../pageA/introduce/main'
-        }, {
           src: '../../static/images/chanpin.png',
           title: '产品管理',
           url: '../prod/product/main'
@@ -124,16 +116,16 @@
           src: '../../static/images/tuike.png',
           title: '推客中心',
           url: '../pageA/Pusher/main'
+        }, {
+          src: '../../static/images/compny.png',
+          title: '企业认证',
+          url: '../pageA/attestation/main'
+        }, {
+          src: '../../static/images/jieshao.png',
+          title: '公司介绍',
+          url: '../pageA/introduce/main'
         }],
-        chooseA: [{
-          src: '../../static/images/compny.png',
-          title: '企业认证',
-          url: '../pageA/attestation/main'
-        }, {
-          src: '../../static/images/jieshao.png',
-          title: '公司介绍',
-          url: '../pageA/introduce/main'
-        }, {
+        chooseA: [ {
           src: '../../static/images/chanpin.png',
           title: '产品管理',
           url: '../prod/product/main'
@@ -161,6 +153,14 @@
           src: '../../static/images/tuike.png',
           title: '推客中心',
           url: '../pageA/Pusher/main'
+        }, {
+          src: '../../static/images/compny.png',
+          title: '企业认证',
+          url: '../pageA/attestation/main'
+        }, {
+          src: '../../static/images/jieshao.png',
+          title: '公司介绍',
+          url: '../pageA/introduce/main'
         }]
       }
     },
