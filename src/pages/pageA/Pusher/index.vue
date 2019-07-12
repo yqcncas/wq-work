@@ -1,10 +1,10 @@
 <template>
-    <div class="pusher">
+    <div :class="pusherA">
       <div class="TopImg">
         <i @click="back()" class="iconfont iconE leftA"></i>
         <span>推客中心</span>
       </div>
-      <div class="mian">
+      <div :class="Active">
         <div class="choose">
           <div v-for="(item,index) in pusher" :key="index"  :class="{'selected':tabA === item.id,'block':true}" @click="changTabMeberA(item.id)">
             <div class="flex">
@@ -51,7 +51,29 @@
           price: '100.00'
         }
         ],
-        tabA: 0
+        tabA: 0,
+        Active: 'main',
+        pusherA: 'pusher'
+      }
+    },
+    onShow () {
+      this.height = wx.getSystemInfoSync().windowHeight
+      console.log('height', this.height)
+      if (this.height > 800 && this.height < 1000) {
+        this.Active = 'mainA'
+        this.pusherA = 'pusher'
+      } else if (this.height > 1000 && this.height < 1025) {
+        this.pusherA = 'pusherA'
+        this.Active = 'mainB'
+      } else if (this.height > 1025 && this.height < 1113) {
+        this.pusherA = 'pusherA'
+        this.Active = 'mainC'
+      } else if (this.height > 1113 && this.height < 1367) {
+        this.pusherA = 'pusherA'
+        this.Active = 'mainD'
+      } else {
+        this.pusherA = 'pusher'
+        this.Active = 'main'
       }
     },
     methods: {
