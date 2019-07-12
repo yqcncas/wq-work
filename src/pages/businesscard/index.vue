@@ -268,7 +268,7 @@
             <div class="product-main">
               <div class="product-details" v-for="(item,index) in postForm.goodsList" :key="index" @click="goToProduct(postForm.goodsList[index].id)">
                 <div class="product-details-img">
-                  <img :src="item.imgUrl"/>
+                  <img :src="item.imgUrl + '?x-oss-process=style/c400'"/>
                 </div>
                 <div class="product-details-title">
                   {{ item.name }}
@@ -297,7 +297,7 @@
             <div class="product-main">
               <div class="product-details" v-for="(item,index) in imgUrlList" :key="index">
                 <div class="product-details-imgA">
-                  <img :src="item" @click="previewImg(imgUrlList,index)"/>
+                  <img :src="item + '?x-oss-process=style/c400'" @click="previewImg(imgUrlList,index)"/>
                 </div>
               </div>
             </div>
