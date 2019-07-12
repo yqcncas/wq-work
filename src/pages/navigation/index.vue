@@ -24,7 +24,7 @@
           <!--</p>-->
         <!--</div>-->
       <!--</div>-->
-      <div v-if="tradeStatus == 0">
+      <div v-if="tradeStatus !== 0">
         <div class="main">
           <div class="test">
             <div class="testNav">
