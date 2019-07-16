@@ -38,6 +38,13 @@
       "root": "pages/pageA/",
       "pages": [
         "stats/main",
+        "agencyCenter/main",
+        "agCommission/main",
+        "agCash/main",
+        "agCashDetail/main",
+        "agExtend/main",
+        "agMyTeam/main",
+        "agOrder/main",
         "payfinish/main",
         "addaddress/main",
         "orderlist/main",

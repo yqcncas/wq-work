@@ -184,9 +184,9 @@
 					"scene": null
 				},
 				{
-					"id": -1,
+					"id": 21,
 					"name": "推客中心",
-					"pathName": "pages/pageA/Pusher/main",
+					"pathName": "pages/pageA/agencyCenter/main",
 					"query": "",
 					"scene": null
 				}

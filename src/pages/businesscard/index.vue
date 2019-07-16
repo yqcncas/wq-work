@@ -362,9 +362,7 @@
         vertical: true,
         easeInOutCubic: 'easeInOutCubic',
         personApi: personApi,
-        postForm: [{
-          imgUrl: 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png'
-        }],
+        postForm: [],
         voiceUrl: '',
         currentAudio: '',
         imgWidth: null,

@@ -1,0 +1,149 @@
+.ag-order-page {
+  width: 100%;
+  min-height: 100%;
+  background-color: #f2f2f2;
+  %flexRow {
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:flex-start;
+
+  }
+
+  .top-order-wrap {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #f2f2f2;
+  }
+
+  .top-total-wrap {
+    width: 100%;
+    height: 158rpx;
+    background-color: #fff;
+    margin-bottom: 18rpx;
+    justify-content: center;
+    align-items: center;
+    font-size: 32rpx;
+    color: #5B5B5B;
+
+    .iconqianbao {
+      display: inline-block;
+      color: #2A94EC;
+      font-size: 32rpx;
+    }
+
+    .txt {
+      font-size: 30rpx;
+      color: #2A94EC;
+      margin-left: 8rpx;
+      font-weight: bold;
+    }
+
+    .box-wrap {
+      justify-content: center;
+    }
+  }
+
+  //   pay-list
+  .pay-list {
+    background-color: #fff;
+    margin-bottom: 12rpx;
+    font-size: 28rpx;
+    color: #9EABBE;
+    display: flex;
+    justify-content: space-around;
+
+    li {
+      height: 70rpx;
+      line-height: 70rpx;
+      padding: 0 12rpx;
+      box-sizing: border-box;
+    }
+
+    .active {
+      color: #2A94EC;
+      border-bottom: 2rpx solid #2A94EC;
+    }
+  }
+
+  .bottom-list {
+    padding-top: 246rpx;
+  }
+
+  //   list
+  .list-one {
+    height: 150rpx;
+    background-color: #fff;
+    font-size: 24rpx;
+    color: #828282;
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding: 10rpx 30rpx 0;
+    align-items:center;
+    line-height: 2;
+    %flexRow {
+      display:flex;
+      flex-direction:row;
+      align-items:center;
+      justify-content:flex-start;
+    }
+
+    .name {
+      font-size: 26rpx;
+      color: #2A94EC;
+      margin-right: 26rpx;
+      max-width: 108rpx;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: inline-block;
+    }
+    .listA{
+      display: inline-block;
+      p:first-child{
+        display:flex;
+        flex-direction:row;
+        align-items:center;
+        justify-content:flex-start;
+      }
+    }
+    .header-img {
+      width: 80rpx;
+      height: 80rpx;
+      border-radius: 8rpx;
+      margin-right: 16rpx;
+    }
+    .small-txt {
+      font-size: 22rpx;
+      width: 300rpx;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: inline-block;
+    }
+
+    .radius-blue {
+      font-size: 22rpx;
+      width: 70rpx;
+      height: 30rpx;
+      border-radius: 100rpx;
+      background-color: #2A94EC;
+      display: inline-block;
+      color: #fff;
+      text-align: center;
+      line-height: 30rpx;
+      margin-left: 8rpx;
+    }
+
+    .weight-p {
+      font-weight: bold;
+    }
+  }
+
+  .list-one+.list-one {
+    border-top: 2rpx solid #F2F2F2;
+  }
+}

@@ -335,6 +335,7 @@ export default {
   methods: {
     // 查询是否购买mingp
     getBuyCard () {
+      console.log('11111')
       this.disabled = true
       this.$fly.request({
         method: 'get', // post/get 请求方式
@@ -351,7 +352,6 @@ export default {
           this.disabled = true
           this.getPlay()
         }
-        console.log('544', res)
       }).catch(err => {
         this.disabled = false
         console.log(err)
@@ -402,6 +402,8 @@ export default {
             // wx.redirectTo({ url: `../payfinish/index?price=${this.allprice}&status=success` })
           },
           'fail': (res) => {
+            this.isBuy = 1
+            this.disabled = false
             // wx.redirectTo({ url: `../payfinish/index?price=${this.allprice}&status=fail` })
           },
           'complete': function (res) {
@@ -424,7 +426,6 @@ export default {
           'userName': this.nickName
         }
       }).then(res => {
-        console.log('jajj ', res)
         if (res.code === 200) {
           this.pay(res.data.payInfo)
         }
@@ -704,7 +705,28 @@ export default {
             }, 1000)
           }
         } else {
+          this.region = []
+          this.address = ''
           this.pan = false
+          this.postForm = ''
+          this.nickName = ''
+          this.voice = ''
+          this.userId = ''
+          this.addDetailed = ''
+          this.Yid = ''
+          this.richImg = ''
+          this.video = ''
+          this.richTextList = ''
+          this.name = ''
+          this.weChat = ''
+          this.job = ''
+          this.phone = ''
+          this.pickerText = ''
+          this.tradeId = ''
+          this.fixedPhone = ''
+          this.email = ''
+          this.salesCompanyName = ''
+          this.info = ''
         }
       }).catch(err => {
         console.log(err.status, err.message)
