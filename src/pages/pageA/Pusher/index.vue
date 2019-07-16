@@ -58,7 +58,6 @@
     },
     onShow () {
       this.height = wx.getSystemInfoSync().windowHeight
-      console.log('height', this.height)
       if (this.height > 800 && this.height < 1000) {
         this.Active = 'mainA'
         this.pusherA = 'pusher'

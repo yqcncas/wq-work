@@ -49,7 +49,7 @@
           <p class="bot-des" @click="routeTo(item.id)">{{item.name}}</p>
           <div class="look-Num" @click="routeTo(item.id)">
             <p class="browseCount"><i class="iconfont iconyanjing"></i><span class="num">浏览{{ item.browseCount}}次</span></p>
-            <p class="pushCount"><i class="iconfont iconfeiji1"></i><span class="num">已推299次</span></p>
+            <!--<p class="pushCount"><i class="iconfont iconfeiji1"></i><span class="num">已推 0 次</span></p>-->
           </div>
           <div class="price-brow" @click="routeTo(item.id)">
             <p v-if="item.priceStatus!==0" class="price-brow-main"><span class="yang">￥</span><span class="price">{{item.price}}</span></p>
