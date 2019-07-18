@@ -79,11 +79,18 @@
                   </picker>
                 </div>
                 <div class="address">
+                  <label>定位</label>
+                  <input v-model="addDetailed"/>
                   <p @click="chooseLocation()">
                     <img src="../../../static/images/map.png">
                   </p>
-                  <input v-model="addDetailed"/>
                 </div>
+                <!--<div class="address">-->
+                  <!--<p @click="chooseLocation()">-->
+                    <!--<img src="../../../static/images/map.png">-->
+                  <!--</p>-->
+                  <!--<input v-model="addDetailed"/>-->
+                <!--</div>-->
               </div>
               <div class="Basics-footer">
                 <submit class="back" @click="back()">返回</submit>
@@ -211,8 +218,8 @@ export default {
   data () {
     return {
       mode: 'selector',
-      deepLength: 0, // 几级联动
-      pickerValueDefault: [], // 初始化值
+      deepLength: 2, // 几级联动
+      pickerValueDefault: [0, 0], // 初始化值
       pickerValueArray: [], // picker 数组值
       pickerText: '',
       themeColor: '', // 颜色主题
@@ -279,7 +286,7 @@ export default {
       longitude: '',
       latitude: '',
       time: '',
-      address: '',
+      address: ['北京市', '北京市', '东城区'],
       name: '',
       salesCompanyName: '',
       salesAddress: '',
@@ -303,7 +310,7 @@ export default {
       voiceTime: '00:00',
       Yid: '', // 业务员id
       animal: '',
-      region: [],
+      region: '北京市北京市东城区',
       regionA: [],
       multiIndex: [0, 0],
       voiceUrl: '',
@@ -705,8 +712,8 @@ export default {
             }, 1000)
           }
         } else {
-          this.region = []
-          this.address = ''
+          this.region = '北京市北京市东城区'
+          this.address = ['北京市', '北京市', '东城区']
           this.pan = false
           this.postForm = ''
           this.nickName = ''
@@ -754,7 +761,7 @@ export default {
     getSalesmanUpdate () {
       if (this.judgeNull(this.name, '姓名')) return
       if (this.judgeNull(this.salesCompanyName, '公司')) return
-      if (this.judgeNull(this.pickerText, '行业')) return
+      // if (this.judgeNull(this.pickerText, '行业')) return
       if (this.judgeNull(this.job, '职位')) return
       if (this.judgeNull(this.phone, '手机')) return
       // // 检测手机号
@@ -1158,7 +1165,8 @@ export default {
         }
       }).then(res => {
         this.mulLinkageTwoPicker = res.data
-        // console.log('ara', this.mulLinkageTwoPicker)
+        this.pickerText = this.mulLinkageTwoPicker[0].children[0].label
+        this.tradeId = this.mulLinkageTwoPicker[0].children[0].value
       }).catch(err => {
         console.log(err)
       })
@@ -1186,7 +1194,7 @@ export default {
       if (this.mode === 'multiLinkageSelector') {
         this.pickerText = e.label.split('-')[1]
         this.tradeId = e.value[1]
-        // console.log(',', this.tradeId)
+        console.log(',', this.tradeId)
       }
     },
     onChange (e) {
@@ -1198,8 +1206,8 @@ export default {
     // 选择的是地址插件
     bindRegionChange (e) {
       var value = e.mp.detail.value
-      console.log('value', value)
       this.address = value[0] + '' + value[1] + '' + value[2]
+      console.log('value', value)
       this.region = value
     }
   },

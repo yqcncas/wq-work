@@ -51,7 +51,7 @@
               <div class="title">
                 <span class="product">产品展示</span>
                 <!--<span class="tips">最多展示三张，第一张为封面</span>-->
-                <span class="tips"><uploadImg ref="goodsImgUrlList" width="120rpx" height="120rpx" max="3" @choosed="choosed" :srcs="goodsImgUrlList" ></uploadImg></span>
+                <span class="tips"><uploadImg ref="goodsImgUrlList" width="120rpx" height="120rpx" max="3" @choosed="choosed" :srcs="goodsImgUrlList" :tabA="tabB" ></uploadImg></span>
               </div>
             </div>
           </div>
@@ -111,6 +111,7 @@
         MoreList: [],
         choose: '',
         imgUrl: '',
+        tabB: '',
         params: {
           name: '',
           price: null,
@@ -166,12 +167,11 @@
       console.log(options)
       if (options.id) {
         this.edit = options.edit
-        this.editInfo(options.id)
+        // this.editInfo(options.id)
         this.productId = options.id
         this.goodsId = options.id
       }
       if (options.edit === '1') {
-        console.log('aaa')
         this.edit = options.edit
         this.editInfo(options.id)
         this.productId = options.id
@@ -306,6 +306,7 @@
       // 删除图片
       deleteImg (arr, i) {
         arr.splice(i, 1)
+        console.log('infoImgList', arr)
       },
       bindPickerChangeA (e) {
         this.indexA = parseInt(e.mp.detail.value)
@@ -374,6 +375,7 @@
             'id': id
           }
         }).then(res => {
+          console.log('res', res.data)
           this.name = res.data.goods.name
           this.info = JSON.parse(res.data.goods.info)
           this.MoreList = JSON.parse(res.data.goods.info)
@@ -381,7 +383,20 @@
           this.getMu(res.data.goods.goodsStyleTypeId)
           this.price = res.data.goods.price
           this.goodsImgUrlList = res.data.goodsImgList
+          this.imgUrl = res.data.goods.imgUrl
           this.infoImgList = JSON.parse(JSON.parse(res.data.goods.info).info)
+          // if (this.goodsImgUrlList.length > 0) {
+          //   // const num = this.infoImgList.length
+          //   this.goodsImgUrlList.map((item, index) => {
+          //     const pictureUrl = item.imgUrl
+          //     // console.log('1112', this.imgUrl)
+          //     // console.log('2112', pictureUrl)
+          //     if (this.imgUrl === pictureUrl) {
+          //       console.log('index', index)
+          //       this.tabB = index
+          //     }
+          //   })
+          // }
         }).catch(err => {
           console.log(err)
           if (err === '请求失败') {
@@ -408,7 +423,16 @@
             duration: 1000
           })
         } else {
-          this.info = JSON.stringify(this.MoreList)
+          let info = {
+            id: '',
+            cardType: '',
+            businessId: this.businessId,
+            type: 7,
+            name: 'goodEdit',
+            status: 0,
+            info: JSON.stringify(this.infoImgList)
+          }
+          this.info = JSON.stringify(info)
           const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
           const userId = wx.getStorageSync('userId') // 获取本地userId
           const token = wx.getStorageSync('token') // 获取本地bussiness
@@ -428,6 +452,7 @@
               'imgUrl': this.imgUrl
             }
           }).then(res => {
+            console.log('resb', res)
             if (res.code === 200) {
               wx.showToast({
                 title: '修改成功',
@@ -491,6 +516,7 @@
             }
           }).then(res => {
             if (res.code === 200) {
+              console.log('resA', res)
               wx.showToast({
                 title: '添加成功',
                 icon: 'none',

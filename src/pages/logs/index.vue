@@ -242,6 +242,7 @@
         windowHeight: '',
         searchLetter: [],
         startX: 0,
+        main: [],
         endX: 0,
         letter: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
         letterA: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
@@ -258,6 +259,7 @@
       this.getInfo()
       this.getSun()
       this.getSalesmanId()
+      this.getCard()
     },
     onLoad (options) {
       if (options.goodsId) {
@@ -287,6 +289,29 @@
       // console.log(this.toView)
     },
     methods: {
+      // 页面加载信息
+      getCard () {
+        this.userId = wx.getStorageSync('userId') // 获取本地userId
+        // console.log('userId', this.userId)
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/platformSalesman/selectSelfInfo',
+          body: {
+            'userId': this.userId
+          }
+        }).then(res => {
+          if (res.data) {
+            this.main = res.data
+            if (this.main.length === 0 || this.main === null) {
+              wx.setStorageSync('Card', false)
+            } else {
+              wx.setStorageSync('Card', true)
+            }
+          }
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      },
       Search (title) {
         if (title) {
           wx.navigateTo({

@@ -13,7 +13,7 @@
                     <cover-view class="opt opt-back">
                       <cover-image class="back-image" :src="headImg"></cover-image>
                     </cover-view>
-                    <cover-view class="opt opt-home">
+                    <cover-view class="opt opt-home" @click="homeClick()">
                       <cover-view style="font-size: 20rpx">消息中心</cover-view><cover-view v-if="num !== 0" style="width: 22rpx;height: 22rpx;background:red;border-radius: 50rpx;color: #fff;font-size: 18rpx;padding: 4rpx;" ><cover-view style="text-align: center">{{num}}</cover-view></cover-view>
                     </cover-view>
                 </cover-view>
@@ -114,7 +114,7 @@
             'userId': this.userId
           }
         }).then(res => {
-          console.log('resa a a a ', res.data)
+          // console.log('resa a a a ', res.data)
           if (res.data) {
             this.headImg = res.data.imgUrl
           } else {
@@ -152,7 +152,7 @@
       backClick () {
       },
       homeClick () {
-        wx.redirectTo({
+        wx.navigateTo({
           url: this.homePath
         })
       }
@@ -185,14 +185,12 @@
           display: flex;
           z-index: 102;
           // border: 1px solid hsla(0, 0%, 100%, .25);
-          // border: 1px solid #ededed;
+          border: 1px solid #ededed;
           box-sizing: border-box;
           align-items: center;
           justify-content: space-around;
           position: absolute;
           left: 7px;
-          display: flex;
-          align-items: center;
           background: hsla(0, 0%, 100%, 0.6);
           border-radius: 54rpx;
           padding-right: 5rpx;
@@ -216,7 +214,7 @@
             background-color: gray;
           }
           .opt-home {
-            color: #ffffff;
+            color: #4A4A4A;
             font-size: 14rpx;
             .home-image {
               height: 34rpx;

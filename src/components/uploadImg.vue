@@ -35,14 +35,20 @@
       value: {
         type: Object,
         default: {}
+      },
+      tabB: {
+        type: Object,
+        default: {}
       }
     },
     data () {
       return {
         urls: [],
-        tabA: '',
+        tabA: 0,
         title: '',
-        chooseStyle: 'chooseImg'
+        chooseStyle: 'chooseImg',
+        goodsImgUrlList: [],
+        imgUrl: ''
       }
     },
     watch: {
@@ -60,9 +66,40 @@
       }
     },
     onShow () {
-      this.tabA = ''
+    },
+    onLoad (options) {
+      this.editInfo(options.id)
     },
     methods: {
+      // 编辑产品获取单个内容
+      editInfo (id) {
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/platformGoods/findOneForUser',
+          body: {
+            'id': id
+          }
+        }).then(res => {
+          this.goodsImgUrlList = res.data.goodsImgList
+          this.imgUrl = res.data.goods.imgUrl
+          if (this.goodsImgUrlList.length > 0) {
+            // const num = this.infoImgList.length
+            this.goodsImgUrlList.map((item, index) => {
+              const pictureUrl = item.imgUrl
+              // console.log('1112', this.imgUrl)
+              // console.log('2112', pictureUrl)
+              if (this.imgUrl === pictureUrl) {
+                console.log('index', index)
+                this.tabA = index
+              }
+            })
+          }
+        }).catch(err => {
+          console.log(err)
+          if (err === '请求失败') {
+          }
+        })
+      },
       // 删除
       deleteImg (index) {
         this.urls.splice(index, 1)
@@ -179,7 +216,7 @@
     height: ~'122rpx';
     display: inline-block;
     position: relative;
-    border: ~'1rpx' solid #2a94ec!important;
+    border: ~'2rpx' solid #2a94ec!important;
     margin-left: ~'10rpx';
     img{
     }

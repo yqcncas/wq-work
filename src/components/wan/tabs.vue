@@ -1,7 +1,7 @@
 <template>
   <div class="van-tabs van-tabs--line" :class="tabClass">
     <div class="tabs-wrap tabs-wrap--scrollable van-hairline--top-bottom">
-      <scroll-view scroll-x="true" scroll-with-animation :scroll-left="scrollLeft">
+      <scroll-view class="scorll" scroll-x="true" scroll-with-animation :scroll-left="scrollLeft">
         <!--:scroll-into-view=""-->
         <div ref="tabs" class="van-tabs__nav van-tabs__nav--line">
           <div class="van-tabs__line" :style="lineStyle" style="transition-duration: 0.2s;" />
@@ -13,6 +13,9 @@
           </div>
         </div>
       </scroll-view>
+    </div>
+    <div class="Catalog">
+      <i class="iconfont iconmulu"></i>
     </div>
     <div class="tabs-content">
       <slot />
@@ -83,7 +86,7 @@ export default {
       }, (res) => {
         const width = res.width
         if (active >= 2) {
-          this.scrollLeft = (active - 2) * width
+          this.scrollLeft = (active - 2) * width + 50
         } else {
           this.scrollLeft = 0
         }
@@ -125,7 +128,9 @@ export default {
   box-sizing: border-box;
   border: 0 solid #eee;
 }
-
+.scorll{
+  width: 90%;
+}
 .van-hairline--top::after {
   border-top-width: 2rpx;
 }
@@ -154,7 +159,19 @@ export default {
   position: relative;
   -webkit-tap-highlight-color: transparent;
 }
-
+.Catalog{
+  position: absolute;
+  right: 0;
+  top: 20rpx;
+  width: 70rpx;
+  height: 48rpx ;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border-left: 1rpx solid #cccccc;
+  z-index: 100;
+}
 .tabs-wrap {
   top: 0;
   left: 0;
@@ -187,6 +204,7 @@ export default {
   user-select: none;
   position: relative;
   background-color: #fff;
+
 }
 
 .van-tabs__nav--line {

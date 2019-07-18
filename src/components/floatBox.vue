@@ -1,13 +1,13 @@
 <template>
   <div class="float-box">
-    <div class="shop-cart common-bg" @click="routerTo('../../packageA/pages/cart/index')" v-show="shopCar">
-      <i class="iconfont icon-shop-cart"></i>
+    <div class="shop-cart common-bg" @click="routerTo('/pages/pageA/cart/main')" v-show="shopCar">
+      <i class="iconfont iconshop-cart"></i>
       <span>购物车</span>
       <span class="red-point" v-if="allnumber>0">{{allnumber}}</span>
     </div>
     <form name="msg" report-submit='true' @submit='getFormID'>
       <button class="concat common-bg" form-type="submit" @click="routerTo(url,phone)" v-show="concat">
-        <i class="iconfont icon-pinglun"></i>
+        <i class="iconfont iconpinglun"></i>
         <span>咨询</span>
         <span class="red-point" v-if="msgNum>0">{{msgNum}}</span>
       </button>
@@ -94,9 +94,9 @@ export default {
     this.getCartCount()
     this.getUnReadCount()
     if (this.isSalesMan === 1) {
-      this.url = '../../packageA/pages/msgList/index'
+      this.url = '/pages/message/main'
     } else {
-      this.url = '../../packageA/pages/msgcenter/index'
+      this.url = '/pages/msgcenter/main'
     }
     resiverMessage(this)
   },
