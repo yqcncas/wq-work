@@ -191,12 +191,12 @@
       }
       // 判断浏览器滚动条上下滚动
       if (ev.scrollTop > this.scrollTop || ev.scrollTop === wx.getSystemInfoSync().windowHeight) {
-        if (ev.scrollTop > 70) {
+        if (ev.scrollTop > 69) {
           this.show = true
         }
         // console.log('向下滚动')
       } else {
-        if (ev.scrollTop < 70) {
+        if (ev.scrollTop < 69) {
           this.show = false
         }
         // console.log('向上滚动')
@@ -880,7 +880,7 @@
   }
   // 商品列表
   .product-listA {
-    margin-top: 180rpx;
+    /*margin-top: 180rpx;*/
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     padding: 20rpx 8rpx 0;
