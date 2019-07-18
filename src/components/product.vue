@@ -29,7 +29,7 @@
         <div :class="[show === true ? 'fade':'fadedown']">
           <div v-show="show === true" :class="[show === true ? 'fadeup':'fadedown']">
             <div class="product">
-              产品
+              集市
             </div>
             <Searchbaa :value="searchContent" :isFocus="isFocus" @cancel="cancel" @confirm="confirm" confirmType="search"></Searchbaa>
           </div>
