@@ -5,7 +5,7 @@
     </ul>
     <div class="order-list">
       <div class="order-item" v-for="(item, index) of orderList" :key="item.id" :data-index="index">
-        <div @click="routeTo(`../orderdetail/index?id=${item.id}`)">
+        <div @click="routeTo(`../orderdetail/main?id=${item.id}`)">
           <p class="top-text">
             <span>{{item.buyDate}}</span>
             <span class="order-status">{{item.orderStatus}}</span>
@@ -78,7 +78,7 @@ export default {
       pageNum: 1,
       lastPage: 100,
       nextPage: 1,
-      pageSize: 6
+      pageSize: 10
     }
   },
   onShow () {
@@ -152,7 +152,7 @@ export default {
       } else {
         this.orderList = this.orderList.concat(res.data.list)
       }
-
+      console.log('orderList', this.orderList)
       this.lastPage = res.data.lastPage
       this.pageNum = res.data.pageNum
       this.nextPage = res.data.nextPage

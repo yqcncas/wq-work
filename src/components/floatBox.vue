@@ -5,13 +5,13 @@
       <span>购物车</span>
       <span class="red-point" v-if="allnumber>0">{{allnumber}}</span>
     </div>
-    <form name="msg" report-submit='true' @submit='getFormID'>
-      <button class="concat common-bg" form-type="submit" @click="routerTo(url,phone)" v-show="concat">
-        <i class="iconfont iconpinglun"></i>
-        <span>咨询</span>
-        <span class="red-point" v-if="msgNum>0">{{msgNum}}</span>
-      </button>
-    </form>
+    <!--<form name="msg" report-submit='true' @submit='getFormID'>-->
+      <!--<button class="concat common-bg" form-type="submit" @click="routerTo(url,phone)" v-show="concat">-->
+        <!--<i class="iconfont iconpinglun"></i>-->
+        <!--<span>咨询</span>-->
+        <!--<span class="red-point" v-if="msgNum>0">{{msgNum}}</span>-->
+      <!--</button>-->
+    <!--</form>-->
     <div class="concat common-bg" @click="routerTo('getUrl')" v-show="home">
       <i class="iconfont icon-shouye"></i>
       <span>首页</span>

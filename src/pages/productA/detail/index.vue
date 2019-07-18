@@ -468,7 +468,7 @@ export default {
       this.status = 0
     }
   },
-  onShareAppMessage () {
+  onShareAppMessage (options) {
     const salesmanId = wx.getStorageSync('salesmanId')
     // console.log('a', salesmanId)
     return {

@@ -212,8 +212,8 @@
     flex-wrap: wrap;
   }
   .active{
-    width: ~'122rpx';
-    height: ~'122rpx';
+    width: ~'120rpx';
+    height: ~'120rpx';
     display: inline-block;
     position: relative;
     border: ~'2rpx' solid #2a94ec!important;
@@ -241,8 +241,8 @@
     }
   }
   .chooseImg{
-    width: ~'122rpx';
-    height: ~'122rpx';
+    width: ~'120rpx';
+    height: ~'120rpx';
     border: ~'1rpx' solid #ffffff;
     display: inline-block;
     position: relative;
@@ -257,7 +257,7 @@
       position: absolute;
       bottom: ~'0rpx';
       height: ~'40rpx';
-      right: ~'2rpx';
+      right: ~'0rpx';
       color: #ffffff;
       width: ~'120rpx';
       text-align: center;
@@ -282,6 +282,6 @@
     color:#C9C9C9;
   }
   .img{
-    margin:~'3rpx' ~'10rpx' ~'0rpx' 0;
+    /*margin:~'3rpx' ~'10rpx' ~'0rpx' 0;*/
   }
 </style>

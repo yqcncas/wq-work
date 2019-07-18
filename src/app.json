@@ -38,6 +38,7 @@
       "root": "pages/pageA/",
       "pages": [
         "stats/main",
+        "orderdetail/main",
         "agencyCenter/main",
         "agCommission/main",
         "agCash/main",

@@ -168,8 +168,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-right: 6rpx;
   background: #ffffff;
-  border-left: 1rpx solid #cccccc;
+  /*border-left: 1rpx solid #cccccc;*/
   z-index: 100;
 }
 .tabs-wrap {

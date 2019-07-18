@@ -27,53 +27,37 @@
         </div>
         </scroll-view>
         <div :class="[show === true ? 'fade':'fadedown']">
-          <div v-show="show === true" :class="[show === true ? 'fadeup':'fadedown']">
+          <transition name="bounce">
+          <div v-show="show === true"  :step="20" :class="[show === true ? 'fadeup':'fadedown']">
             <div class="product">
               产品
             </div>
             <Searchbaa :value="searchContent" :isFocus="isFocus" @cancel="cancel" @confirm="confirm" confirmType="search"></Searchbaa>
           </div>
+          </transition>
         <wan-tabs @change='tabChange' :tabs="category"></wan-tabs>
         </div>
       </div>
-      <!--<div class="product-listA">-->
-        <!--<div class="item-pro" v-for="(item,index) in productList" :key="index" @click="routeTo(item.id)">-->
-          <!--<image class="pro-img" :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"-->
-                 <!--mode="aspectFill"></image>-->
-          <!--<p class="bot-des">{{item.name}}</p>-->
-          <!--<div class="price-brow">-->
-            <!--<p v-if="item.priceStatus!==0"><span>￥</span><span class="price">{{item.price}}</span></p>-->
-            <!--<p class="box-brow"><i class="iconfont icon-view"></i><span>{{item.browseCount}}</span></p>-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</div>-->
-      <!--<div class="product-listB">-->
-        <!--<div class="item-pro" v-for="(item,index) in productList" :key="index">-->
-          <!--<button open-type="share" :data-item="item" class="share-btn">-->
-              <!--<i @click="shareGoods" class="iconfont icon31zhuanfa"></i>-->
-          <!--</button>-->
-          <!--<p  @click="routeTo(item.id)">-->
-            <!--<image class="pro-img" :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"-->
-                   <!--mode="aspectFill"></image>-->
-          <!--</p>-->
-          <!--<p class="bot-des">{{item.name}}</p>-->
-          <!--<div class="price-brow">-->
-            <!--<p v-if="item.priceStatus!==0" class="price-brow-main"><span class="yang">￥</span><span class="price">{{item.price}}</span></p>-->
-            <!--<p class="box-brow" v-if="item.getMoney">-->
-              <!--<span class="getMoney">赚</span>-->
-              <!--<span class="Money">￥ {{item.getMoney}}</span>-->
-            <!--</p>-->
-          <!--</div>-->
-          <!--<div class="look-Num">-->
-            <!--<p class="browseCount"><i class="iconfont iconyanjing"></i><span class="num">浏览{{ item.browseCount}}次</span></p>-->
-            <!--<p class="pushCount"><i class="iconfont iconfeiji1"></i><span class="num">已推{{item.forwardCount}}次</span></p>-->
-          <!--</div>-->
-          <!--<div class="purchase" @click="routeTo(item.id)">-->
-            <!--<span>抢购</span>-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</div>-->
-      <div class="product-listC">
+
+
+
+      <!--样式一-->
+      <div class="product-listA" v-if="goodsType === 0">
+        <div class="item-pro" v-for="(item,index) in productList" :key="index" @click="routeTo(item.id)">
+          <image class="pro-img" :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
+                 mode="aspectFill"></image>
+          <p class="bot-des">{{item.name}}</p>
+          <div class="price-brow">
+            <p v-if="item.priceStatus!==0"><span>￥</span><span class="price">{{item.price}}</span></p>
+            <p class="box-brow"><i class="iconfont icon-view"></i><span>{{item.browseCount}}</span></p>
+          </div>
+        </div>
+      </div>
+
+
+
+      <!--样式二-->
+      <div class="product-listC" v-if="goodsType === 1">
         <div class="item-pro" v-for="(item,index) in productList" :key="index">
           <div class="topA">
             <span class="info">
@@ -96,9 +80,39 @@
             </p>
           </div>
           <div class="Forward">
-            <button open-type="share" :data-item="item" class="share-btn">
-            <i class="iconfont icon31zhuanfa"></i>
+            <button open-type="share" :data-item="item" class="share-btn" @click="openInfo">
+              <i class="iconfont icon31zhuanfa"></i>
             </button>
+          </div>
+          <div class="purchase" @click="routeTo(item.id)">
+            <span>抢购</span>
+          </div>
+        </div>
+      </div>
+
+
+
+      <!--样式三-->
+      <div class="product-listB" v-if="goodsType === 2">
+        <div class="item-pro" v-for="(item,index) in productList" :key="index">
+          <button open-type="share" :data-item="item" class="share-btn" @click="openInfo">
+              <i @click="shareGoods" class="iconfont icon31zhuanfa"></i>
+          </button>
+          <p  @click="routeTo(item.id)">
+            <image class="pro-img" :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
+                   mode="aspectFill"></image>
+          </p>
+          <p class="bot-des">{{item.name}}</p>
+          <div class="price-brow">
+            <p v-if="item.priceStatus!==0" class="price-brow-main"><span class="yang">￥</span><span class="price">{{item.price}}</span></p>
+            <p class="box-brow" v-if="item.getMoney>= 0">
+              <span class="getMoney">赚</span>
+              <span class="Money">￥ {{item.getMoney}}</span>
+            </p>
+          </div>
+          <div class="look-Num">
+            <p class="browseCount"><i class="iconfont iconyanjing"></i><span class="num">浏览{{ item.browseCount}}次</span></p>
+            <p class="pushCount"><i class="iconfont iconfeiji1"></i><span class="num">已推{{item.forwardCount}}次</span></p>
           </div>
           <div class="purchase" @click="routeTo(item.id)">
             <span>抢购</span>
@@ -120,6 +134,12 @@
   import product from '@/api/product'
   import personApi from '@/api/person'
   export default {
+    props: {
+      info: {
+        type: Number,
+        default: {}
+      }
+    },
     data () {
       return {
         scrollTop: 0,
@@ -139,7 +159,8 @@
         personApi: personApi,
         companyName: '',
         logo: '',
-        imgUrl: ''
+        imgUrl: '',
+        goodsType: 0
       }
     },
 
@@ -153,6 +174,10 @@
     onLoad () {
       this.getLogo()
       this.getCategory()
+      this.getProduct({ type: 0 })
+      this.getType()
+    },
+    onShow () {
       this.getProduct({ type: 0 })
     },
     onPageScroll: function (ev) {
@@ -206,9 +231,9 @@
     //   this.getCategory()
     //   this.getProduct({ type: 0 })
     // },
-    onShow () {
-      // wx.hideTabBar()
-    },
+    // onShow () {
+    //   // wx.hideTabBar()
+    // },
     // onShareAppMessage () {
     //   let companyName = wx.getStorageSync('companyName')
     //   return {
@@ -218,6 +243,29 @@
     //   }
     // },
     methods: {
+      openInfo () {
+        // this.getProduct({ type: 0 })
+        // console.log('info', this.info)
+      },
+      getType () {
+        const businessId = wx.getStorageSync('businessId') // 获取本地userId
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/selfPageInfo/selectAllForUser',
+          body: {
+            'businessId': businessId,
+            'type': 4
+          }
+        }).then(res => {
+          if (res.data) {
+            this.goodsType = res.data[0].cardType
+          }
+          // const tradeStatus = res.data.tradeStatus
+          // wx.setStorageSync('tradeStatus', tradeStatus)
+        }).catch(err => {
+          console.log(err)
+        })
+      },
       getLogo () {
         const businessId = wx.getStorageSync('businessId') // 获取本地userId
         this.$fly.request({
@@ -326,6 +374,23 @@
 </script>
 
 <style lang="scss">
+  .bounce-enter-active {
+    animation: bounce-in .5s;
+  }
+  .bounce-leave-active {
+    animation: bounce-in .5s reverse;
+  }
+  @keyframes bounce-in {
+    0% {
+      transform: scale(0);
+    }
+    50% {
+      transform: scale(1.5);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
   .fadeup{
     transition: all 3s ease-in-out;
   }
@@ -671,7 +736,7 @@
 
   // 商品详情
   .product-listB {
-    margin-top: 180rpx;
+    /*margin-top: 180rpx;*/
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     padding: 20 rpx 8 rpx 0;

@@ -231,7 +231,7 @@
 
       <!--商品详情-->
       <div v-else>
-        <product></product>
+        <product :info="infoMain"></product>
       </div>
     </div>
   </scroll-view>
@@ -241,6 +241,7 @@
   import navigationBar from '../../components/navigationBar.vue'
   import vueTabBar from '../../components/vueTabBar'
   import product from '../../components/product'
+  import personApi from '@/api/person'
   export default {
     components: {
       navigationBar,
@@ -249,6 +250,7 @@
     },
     data () {
       return {
+        infoMain: 0,
         data: '',
         card: 1,
         imgUrl: '',
@@ -395,16 +397,26 @@
       }
     },
     onShareAppMessage (options) {
-      // console.log('a', options)
+      console.log('options', options)
       const salesmanId = wx.getStorageSync('salesmanId')
       const name = options.target.dataset.item.name
       const id = options.target.dataset.item.id
+      const imgUrl = options.target.dataset.item.imgUrl
+      this.insertOpera('分享商品', 30, id)
       return {
         title: name,
+        imageUrl: imgUrl,
         path: 'pages/loading/main?goodsId=' + id + '&id=' + salesmanId + '&fromWay=1&prams=product'
       }
     },
     methods: {
+      // 插入雷达
+      async insertOpera (info, recordType, goodsId) {
+        let businessId = wx.getStorageSync('businessId')
+        this.salesmanId = wx.getStorageSync('salesManId')
+        let userId = wx.getStorageSync('userId')
+        await personApi.OperationInsert({ businessId, goodsId, info, recordType, salesmanId: this.salesmanId, userId })
+      },
       // 搜索
       goToKe (name) {
         console.log('name', name)
