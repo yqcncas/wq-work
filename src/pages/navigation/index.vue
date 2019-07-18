@@ -24,7 +24,7 @@
           <!--</p>-->
         <!--</div>-->
       <!--</div>-->
-      <div v-if="tradeStatus == 0">
+      <div v-if="tradeStatus != 0">
         <div class="main">
           <div class="test">
             <div class="testNav">
@@ -70,8 +70,6 @@
             </div>
           </div>
         </div>
-
-
         <div>
           <div class="fotter" v-if="status === 1">
             <div class="test1">

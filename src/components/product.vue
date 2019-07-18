@@ -30,7 +30,7 @@
           <transition name="bounce">
           <div v-show="show === true"  :step="20" :class="[show === true ? 'fadeup':'fadedown']">
             <div class="product">
-              产品
+              集市
             </div>
             <Searchbaa :value="searchContent" :isFocus="isFocus" @cancel="cancel" @confirm="confirm" confirmType="search"></Searchbaa>
           </div>
