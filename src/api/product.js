@@ -17,7 +17,7 @@ const product = {
     pageNum,
     pageSize,
     name
-  }) => request.get('goods/allForUser?status=1', {
+  }) => request.get('platformGoods/allForUser?status=1', {
     businessId,
     type,
     pageNum,
@@ -30,7 +30,7 @@ const product = {
   getProductByName: ({
     name,
     businessId
-  }) => request.get('goods/allForUser', {
+  }) => request.get('platformGoods/allForUser', {
     businessId: businessId,
     name: name
   }, {

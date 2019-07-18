@@ -103,7 +103,7 @@
       "iconPath": "static/images/personcard.png",
       "selectedIconPath": "static/images/personcard-se.png"
     },{
-      "text": "附近",
+      "text": "集市",
       "pagePath": "pages/navigation/main",
       "iconPath": "static/images/more.png",
       "selectedIconPath": "static/images/more-se.png"

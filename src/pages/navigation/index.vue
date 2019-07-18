@@ -24,7 +24,7 @@
           <!--</p>-->
         <!--</div>-->
       <!--</div>-->
-      <div v-if="tradeStatus !== 0">
+      <div v-if="tradeStatus == 0">
         <div class="main">
           <div class="test">
             <div class="testNav">
@@ -355,7 +355,7 @@
       // this.doLogin()
       // this.getSalesmanId()
       this.tradeStatus = wx.getStorageSync('tradeStatus')
-      console.log('tradeStatus', this.tradeStatus)
+      // console.log('tradeStatus', this.tradeStatus)
     },
     onLoad () {
       // wx.hideTabBar()
@@ -395,7 +395,7 @@
       }
     },
     onShareAppMessage (options) {
-      console.log('a', options)
+      // console.log('a', options)
       const salesmanId = wx.getStorageSync('salesmanId')
       const name = options.target.dataset.item.name
       const id = options.target.dataset.item.id
@@ -440,7 +440,7 @@
             'tradeId': 0
           }
         }).then(res => {
-          console.log('res', res)
+          // console.log('res', res)
           this.Types = res.data.list
           this.TradeIda = res.data.id
         }).catch(err => {

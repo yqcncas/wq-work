@@ -1,9 +1,40 @@
 <template>
   <div class="big-content-page">
     <div class="product-page">
-      <div class="nav-control">
-        <Searchbar :value="searchContent" :isFocus="isFocus" @cancel="cancel" @confirm="confirm" confirmType="search"></Searchbar>
+      <section class="sec-nav">
+        <navigation-bar
+          :back-visible="true"
+          :home-path="'/pages/message/main'"></navigation-bar>
+      </section>
+      <div class="nav-control fadeup">
+        <scroll-view :scroll-y="scrollTop">
+        <div class="top">
+            <div class="bgImg">
+              <img :src="imgUrl">
+            </div>
+            <div class="info">
+              <div class="infoMain">
+                <span class="img">
+                  <img :src="logo">
+                </span>
+                <span class="name">{{companyName}}</span>
+                <span class="status">
+                  <i class="iconfont iconrenzheng"></i>
+                  <a>认证企业</a>
+                </span>
+              </div>
+            </div>
+        </div>
+        </scroll-view>
+        <div :class="[show === true ? 'fade':'fadedown']">
+          <div v-show="show === true" :class="[show === true ? 'fadeup':'fadedown']">
+            <div class="product">
+              产品
+            </div>
+            <Searchbaa :value="searchContent" :isFocus="isFocus" @cancel="cancel" @confirm="confirm" confirmType="search"></Searchbaa>
+          </div>
         <wan-tabs @change='tabChange' :tabs="category"></wan-tabs>
+        </div>
       </div>
       <!--<div class="product-listA">-->
         <!--<div class="item-pro" v-for="(item,index) in productList" :key="index" @click="routeTo(item.id)">-->
@@ -28,14 +59,14 @@
           <!--<p class="bot-des">{{item.name}}</p>-->
           <!--<div class="price-brow">-->
             <!--<p v-if="item.priceStatus!==0" class="price-brow-main"><span class="yang">￥</span><span class="price">{{item.price}}</span></p>-->
-            <!--<p class="box-brow">-->
+            <!--<p class="box-brow" v-if="item.getMoney">-->
               <!--<span class="getMoney">赚</span>-->
-              <!--<span class="Money">￥ 0.00</span>-->
+              <!--<span class="Money">￥ {{item.getMoney}}</span>-->
             <!--</p>-->
           <!--</div>-->
           <!--<div class="look-Num">-->
             <!--<p class="browseCount"><i class="iconfont iconyanjing"></i><span class="num">浏览{{ item.browseCount}}次</span></p>-->
-            <!--<p class="pushCount"><i class="iconfont iconfeiji1"></i><span class="num">已推299次</span></p>-->
+            <!--<p class="pushCount"><i class="iconfont iconfeiji1"></i><span class="num">已推{{item.forwardCount}}次</span></p>-->
           <!--</div>-->
           <!--<div class="purchase" @click="routeTo(item.id)">-->
             <!--<span>抢购</span>-->
@@ -44,18 +75,24 @@
       <!--</div>-->
       <div class="product-listC">
         <div class="item-pro" v-for="(item,index) in productList" :key="index">
+          <div class="topA">
+            <span class="info">
+              <i class="HeadImg" v-if="item.headUrl"><img :src="item.headUrl"></i>
+              <i class="name" v-if="item.salesmanName !== null">{{item.salesmanName}}</i>
+            </span>
+          </div>
           <image @click="routeTo(item.id)" class="pro-img" :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
                  mode="aspectFill"></image>
           <p class="bot-des" @click="routeTo(item.id)">{{item.name}}</p>
           <div class="look-Num" @click="routeTo(item.id)">
             <p class="browseCount"><i class="iconfont iconyanjing"></i><span class="num">浏览{{ item.browseCount}}次</span></p>
-            <!--<p class="pushCount"><i class="iconfont iconfeiji1"></i><span class="num">已推 0 次</span></p>-->
+            <p class="pushCount"><i class="iconfont iconfeiji1"></i><span class="num">已推 {{item.forwardCount}} 次</span></p>
           </div>
           <div class="price-brow" @click="routeTo(item.id)">
             <p v-if="item.priceStatus!==0" class="price-brow-main"><span class="yang">￥</span><span class="price">{{item.price}}</span></p>
-            <p class="box-brow">
-            <span class="getMoney">赚</span>
-            <span class="Money">￥ 0.00</span>
+            <p v-if="item.getMoney >= 0" class="box-brow" >
+              <span class="getMoney">赚</span>
+              <span class="Money">￥ {{item.getMoney}}</span>
             </p>
           </div>
           <div class="Forward">
@@ -68,25 +105,28 @@
           </div>
         </div>
       </div>
-      <!--<FloatBox :home="false" phone="value"></FloatBox>-->
+      <FloatBox :home="false" phone="value"></FloatBox>
       <!--<CustomTabbar url="/pages/product/index"></CustomTabbar>-->
     </div>
   </div>
 </template>
 <script>
   import CustomTabbar from '@/components/customTabbar'
+  import navigationBar from '@/components/navigationBar.vue'
   import { getExt } from '@/utils/index'
   import FloatBox from '@/components/floatBox'
   import tabs from '@/components/wan/tabs'
-  import Searchbar from '@/components/searchBar'
+  import Searchbaa from '@/components/Searchbaa'
   import product from '@/api/product'
   import personApi from '@/api/person'
   export default {
     data () {
       return {
+        scrollTop: 0,
         category: [],
         categoryId: '',
         productList: [],
+        show: false,
         pageNum: 1,
         lastPage: 100,
         nextPage: 1,
@@ -96,20 +136,53 @@
         apply: '',
         id: '',
         name: '',
-        personApi: personApi
+        personApi: personApi,
+        companyName: '',
+        logo: '',
+        imgUrl: ''
       }
     },
 
     components: {
-      Searchbar,
+      Searchbaa,
+      navigationBar,
       FloatBox,
       'wan-tabs': tabs,
       CustomTabbar
     },
     onLoad () {
+      this.getLogo()
       this.getCategory()
       this.getProduct({ type: 0 })
     },
+    onPageScroll: function (ev) {
+      // console.log('ev', ev)
+      // var _this = this
+      /* 当滚动的top值最大或者最小时，为什么要做这一步是由于在手机实测小程序的时候会发生滚动条回弹，所以为了解决回弹，设置默认最大最小值   */
+      if (ev.scrollTop <= 0) {
+        ev.scrollTop = 0
+      } else if (ev.scrollTop > wx.getSystemInfoSync().windowHeight) {
+        ev.scrollTop = wx.getSystemInfoSync().windowHeight
+      }
+      // 判断浏览器滚动条上下滚动
+      if (ev.scrollTop > this.scrollTop || ev.scrollTop === wx.getSystemInfoSync().windowHeight) {
+        if (ev.scrollTop > 70) {
+          this.show = true
+        }
+        // console.log('向下滚动')
+      } else {
+        if (ev.scrollTop < 70) {
+          this.show = false
+        }
+        // console.log('向上滚动')
+      }
+      this.scrollTop = ev.scrollTop
+      // 给scrollTop重新赋值
+      setTimeout(function () {
+        this.scrollTop = ev.scrollTop
+      }, 0)
+    },
+
     // 上拉加载
     async onReachBottom () {
       if (this.pageNum < this.lastPage) {
@@ -145,6 +218,31 @@
     //   }
     // },
     methods: {
+      getLogo () {
+        const businessId = wx.getStorageSync('businessId') // 获取本地userId
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/business/findById',
+          body: {
+            'businessId': businessId
+          }
+        }).then(res => {
+          if (res.data) {
+            this.companyName = res.data.companyName
+            this.logo = res.data.logo
+            this.imgUrl = res.data.imgUrl
+          }
+          // const tradeStatus = res.data.tradeStatus
+          // wx.setStorageSync('tradeStatus', tradeStatus)
+        }).catch(err => {
+          console.log(err)
+        })
+      },
+      getInto (e) {
+        wx.navigateTo({
+          url: `../message/main`
+        })
+      },
       cancel (val) {
         this.$nextTick(() => {
           this.isFocus = false
@@ -160,8 +258,11 @@
       //   })
       // },
       confirm (e) {
+        wx.pageScrollTo({
+          scrollTop: 72
+        })
         this.searchContent = e.mp.detail.value
-        this.isFocus = true
+        this.isFocus = false
         this.getProduct(0)
       },
       routeTo (id) {
@@ -192,7 +293,7 @@
             this.productList.push(e)
           })
         }
-        console.log('productList', this.productList)
+        // console.log('productList', this.productList)
         this.lastPage = productData.lastPage
         this.pageNum = productData.pageNum
         this.nextPage = productData.nextPage
@@ -213,8 +314,9 @@
       // 滚动bar，可以根据类别来查找每一类商品
       tabChange (obj) {
         this.pageNum = 1
+        this.searchContent = ''
         wx.pageScrollTo({
-          scrollTop: 0
+          scrollTop: 72
         })
         this.categoryId = obj.categoryId
         this.getProduct(0)
@@ -224,6 +326,30 @@
 </script>
 
 <style lang="scss">
+  .fadeup{
+    transition: all 3s ease-in-out;
+  }
+  .fadedown{
+    transition: all 3s ease-in-out;
+  }
+  .fade{
+    transition: all 3s ease-in-out;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 9999;
+  }
+  .product{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 170rpx;
+    background: #ffffff;
+    line-height: 170rpx;
+    font-size: 35rpx;
+    font-weight: 700;
+  }
   %flexRow {
     display: flex;
     justify-content: space-between;
@@ -235,18 +361,88 @@
     min-height: 100%;
     background-color: #f0eff5;
     box-sizing: border-box;
-    padding-bottom: 96rpx;
+    padding-bottom: 30rpx;
+    position: relative;
+    .sec-nav{
+      position: absolute;
+      top: 100rpx;
+      z-index: 999999;
+    }
   }
   .nav-control {
     width: 100%;
     z-index: 1000;
-    position: fixed;
-    top:0;
+    /*position: fixed;*/
+    /*top:0;*/
+    .top{
+      width: 100%;
+      height: 450rpx;
+      background: #ffffff;
+      position: relative;
+      transition: all 0.4s ease;
+      .bgImg{
+        width: 100%;
+        height: 350rpx;
+        img{
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .info{
+        position: absolute;
+        top: 250rpx;
+        width: 100%;
+        .infoMain{
+          display: flex;
+          width: 695rpx;
+          height: 196rpx;
+          margin: 0 auto;
+          box-shadow: 2rpx 2rpx 5rpx #cccccc;
+          background: #ffffff;
+          border-radius: 10rpx;
+          position: relative;
+          .img{
+            position: absolute;
+            top: 27rpx;
+            left: 40rpx;
+            width:142rpx;
+            height: 142rpx;
+            img{
+              border-radius: 50%;
+              width: 100%;
+              height: 100%;
+            }
+          }
+          .name{
+            position: absolute;
+            top: 50rpx;
+            left: 225rpx;
+            color: #4A4A4A;
+            font-weight: 500;
+            font-size: 30rpx;
+          }
+          .status{
+            position: absolute;
+            top: 100rpx;
+            left: 220rpx;
+            .iconrenzheng{
+              color: #2a94ec;
+              font-size: 32rpx;
+              display: inline-block;
+            }
+            a{
+              display: inline-block;
+              color: #4A4A4A;
+              font-size: 24rpx;
+            }
+          }
+        }
+      }
+    }
     .weui-search-bar {
       border-color: #eee;
       background-color: #fff;
       border: none;
-      padding-top:120rpx;
     }
     .weui-search-bar__label {
       font-size: 0;
@@ -290,7 +486,7 @@
   }
   // 商品详情
   .product-listC {
-    margin-top: 280rpx;
+    margin-top: 0rpx;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     font-size: 0;
@@ -307,11 +503,43 @@
       margin: 30rpx auto 0;
       box-sizing: border-box;
       position: relative;
-      z-index: 99;
+      /*z-index: 99;*/
       .pro-img {
         width: 200rpx;
         height: 200rpx;
         float: left;
+      }
+      .topA{
+        position: absolute;
+        bottom: 0;
+        width: 200rpx;
+        background-color:rgba(0,0,0,0.5);
+        .info{
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          height: 44rpx;
+          .HeadImg{
+            display: inline-block;
+            vertical-align: bottom;
+            img{
+              width: 35rpx;
+              height: 35rpx;
+              border-radius: 50%;
+            }
+          }
+          .name{
+            display: inline-block;
+            font-size: 22rpx;
+            color: #ffffff!important;
+            margin-left: 10rpx;
+            max-width: 100rpx;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow:ellipsis;
+          }
+        }
       }
     }
     // 文字描述
@@ -322,7 +550,7 @@
       font-weight: 600;
       width: 400rpx;
       height: 60rpx;
-      margin: 15rpx 15rpx;
+      margin: 20rpx 15rpx;
       padding-left: 15rpx;
       display: inline-block;
       display: -webkit-box;
@@ -410,12 +638,10 @@
       position: absolute;
       top: -20rpx;
       right: 0rpx;
-      z-index: 9999;
       .share-btn{
         padding: 0rpx 20rpx;
         .icon31zhuanfa{
           color: #FF424E;
-          z-index: 9999;
           font-size: 40rpx;
         }
       }
@@ -445,7 +671,7 @@
 
   // 商品详情
   .product-listB {
-    margin-top: 280rpx;
+    margin-top: 180rpx;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     padding: 20 rpx 8 rpx 0;
@@ -463,7 +689,7 @@
       margin: 30rpx auto 0;
       box-sizing: border-box;
       position: relative;
-      z-index: 99;
+      /*z-index: 99;*/
       .pro-img {
         width: 645rpx;
         height: 651rpx;
@@ -475,7 +701,6 @@
         top: -10rpx;
         .icon31zhuanfa{
           color: #eeeeee;
-          z-index: 9999;
           padding: 10rpx 20rpx;
           font-size: 40rpx;
         }
@@ -578,7 +803,6 @@
       position: absolute;
       right: 52rpx;
       bottom: 45rpx;
-      z-index: 99999;
       border-radius: 10rpx;
       span{
         font-size:26rpx;
@@ -591,7 +815,7 @@
   }
   // 商品列表
   .product-listA {
-    margin-top: 280rpx;
+    margin-top: 180rpx;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     padding: 20rpx 8rpx 0;
