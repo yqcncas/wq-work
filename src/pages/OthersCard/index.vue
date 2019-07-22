@@ -75,49 +75,88 @@
         <el-form ref="postForm" :model="postForm" >
           <div class="cards">
             <!--名片风格1-->
-              <div class="card-top">
-                <img src="https://oss.wq1516.com/salesInfo/201906181125191560828319376.jpg" />
-                <div class="cards-M">
-                  <div class="cards-main">
-                    <p class="cards-img" ><img :src="postForm.imgUrl || 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png' + '?x-oss-process=style/c400'"  @click="preview(postForm.imgUrl,[postForm.imgUrl])"/></p>
-                    <p class="cards-name">
-                      <span v-if="postForm.name">{{ postForm.name }}</span>
-                      <span v-else>无姓名</span>
-                    </p>
-                    <p class="cards-job">
-                      <span v-if="postForm.job">{{ postForm.job }}</span>
-                      <span v-else>无工作</span>
-                    </p>
-                    <p class="cards-company">
-                      <span v-if="postForm.salesCompanyName">{{ postForm.salesCompanyName }}</span>
-                      <span v-else>无公司名称</span>
-                    </p>
+            <div class="card-top" v-if="cardType ===0">
+              <img src="https://oss.wq1516.com/salesInfo/201906181125191560828319376.jpg" />
+              <div class="cards-M">
+                <div class="cards-main">
+                  <p class="cards-img"><img :src="postForm.imgUrl || 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png' + '?x-oss-process=style/c400'"  @click="preview(postForm.imgUrl,[postForm.imgUrl])"/></p>
+                  <p class="cards-name">
+                    <span v-if="postForm.name">{{ postForm.name }}</span>
+                    <span v-else>无姓名</span>
+                  </p>
+                  <p class="cards-job">
+                    <span v-if="postForm.job">{{ postForm.job }}</span>
+                    <span v-else>无工作</span>
+                  </p>
+                  <p class="cards-company">
+                    <span v-if="postForm.salesCompanyName">{{ postForm.salesCompanyName }}</span>
+                    <span v-else>无公司名称</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!--名片风格2-->
+            <div class="card-topA" v-if="cardType===1">
+              <div class="ordinary-wrap shadow three-card">
+                <image @click="preview(postForm.imgUrl,[postForm.imgUrl])" class="three-img" :src="postForm.imgUrl" mode="aspectFill" @load="imgLoad"></image>
+                <div class="right-three">
+                  <div class="triangle"></div>
+                  <p class="top-club flexRow">
+                    <image :src="logo" mode="aspectFill" class="logo-img"></image>
+                    <span class="club-name">{{postForm.salesCompanyName}}</span>
+                  </p>
+                  <image class="qrcode-bg" src="/static/images/qrcode-bg.png" mode="aspectFill"></image>
+                  <div class="name-job-wrap">
+                    <p class="name">{{postForm.name}}</p>
+                    <p>{{postForm.job}}</p>
+                  </div>
+                  <div class="type-company">
+                    <p class="type">{{postForm.organizeType}}</p>
+                    <p>{{postForm.organizeName}}</p>
                   </div>
                 </div>
               </div>
-            <!--&lt;!&ndash;名片风格2&ndash;&gt;-->
-            <!--<div class="card-topA">-->
-              <!--<div class="ordinary-wrap shadow three-card">-->
-                <!--<image @click="preview(postForm.imgUrl,[postForm.imgUrl])" class="three-img" :src="postForm.imgUrl" mode="aspectFill" @load="imgLoad"></image>-->
-                <!--<div class="right-three">-->
-                  <!--<div class="triangle"></div>-->
-                  <!--<p class="top-club flexRow">-->
-                    <!--<image :src="logo" mode="aspectFill" class="logo-img"></image>-->
-                    <!--<span class="club-name">{{postForm.companyName}}</span>-->
-                  <!--</p>-->
-                  <!--<image class="qrcode-bg" src="/static/images/qrcode-bg.png" mode="aspectFill"></image>-->
-                  <!--<div class="name-job-wrap">-->
-                    <!--<p class="name">{{postForm.name}}</p>-->
-                    <!--<p>{{postForm.job}}</p>-->
-                  <!--</div>-->
-                  <!--<div class="type-company">-->
-                    <!--<p class="type">{{postForm.organizeType}}</p>-->
-                    <!--<p>{{postForm.organizeName}}</p>-->
-                  <!--</div>-->
-                <!--</div>-->
-              <!--</div>-->
-            <!--</div>-->
-              <div class="card-footer">
+            </div>
+            <!-- 名片风格3 -->
+            <div class="card-topC" v-else-if="cardType ===2">
+              <div class="bgImgA">
+                <img :src="postForm.imgUrl"/>
+              </div>
+              <div class="main">
+                <div class="footer">
+                  <div class="top">
+                    <span class="name">{{postForm.name}}</span>
+                    <span class="job">{{postForm.job}}</span>
+                  </div>
+                  <p class="phone">
+                    {{postForm.phone}}
+                  </p>
+                  <p class="Img">
+                    <img :src="postForm.imgUrl"/>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!-- 名片风格4 长名字 -->
+            <div class="card-topB" v-else-if="cardType === 3">
+              <div class="ordinary-wrap shadow four-card">
+                <div class="left-wrap">
+                  <div class="img-wrap">
+                    <image @click="preview(postForm.imgUrl,[postForm.imgUrl])" class="img" :src="postForm.imgUrl" mode="widthFix" @load="imgLoad"></image>
+                  </div>
+                  <p class="company-f">{{postForm.salesCompanyName}}</p>
+                </div>
+                <div class="r-top-w">
+                  <p class="name">{{postForm.name}}</p>
+                  <p class="job">{{postForm.job}}</p>
+                </div>
+                <div class="r-bottom-w">
+                  <p>{{postForm.phone}}</p>
+                  <p>{{postForm.address}}</p>
+                </div>
+              </div>
+            </div>
+              <div :class="fotter">
                 <submit class="share"  @click="showType">分享名片</submit>
                 <submit class="save" v-if="postForm.isCollect !== 1" @click="getCollect(postForm.id)">保存名片</submit>
                 <submit class="save" v-else @click="cancelCollect(postForm.id)">取消关注</submit>
@@ -174,14 +213,14 @@
               </div>
             </div>
             <!-- 名片码 -->
-            <div class="card-ma" @click="routerTo(`./showQrcode/main?companyName=${postForm.salesCompanyName}&logo=${logo}&qrcode=${qrCodeUrl}&name=${postForm.name}&job=${postForm.job}&imgUrl=${postForm.imgUrl}`)">
+            <div :class="cardM" @click="routerTo(`./showQrcode/main?companyName=${postForm.salesCompanyName}&logo=${logo}&qrcode=${qrCodeUrl}&name=${postForm.name}&job=${postForm.job}&imgUrl=${postForm.imgUrl}`)">
               <p class="ma-txt">名片码</p>
               <div class="radius-img">
                 <img :src="qrCodeUrl" mode="aspectFill">
               </div>
             </div>
             <!-- 个人简介 -->
-            <div class="personal">
+            <div class="personal" v-if="postForm.info && postForm.voice">
               <div class="personal-top">
                 <span class="personal-icont">
                   <img src="../../../static/images/personalA.png">
@@ -190,31 +229,37 @@
               </div>
               <div class="personal-main">
                 <div class="personal-maimT">
-                  <div class="personalVoice">
-                   <span class="personal-img">
-                    <img class="personal-img" :src="postForm.imgUrl">
-                   </span>
+                  <div class="personal-text">
+                    <!--<div class="personal-wel">-->
+                    <!--<span>您好！我是{{ postForm.salesCompanyName }}的{{ postForm.name }}</span>-->
+                    <!--</div>-->
+                    <div class="personal-teach">
+                        <span v-if="postForm.info">
+                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{postForm.info}}
+                        </span>
+                    </div>
+                  </div>
+                  <div class="personalVoice" v-if="postForm.voice">
+                    <!--<span class="personal-img">-->
+                    <!--<img class="personal-img" :src="postForm.imgUrl">-->
+                    <!--</span>-->
                     <span class="personal-voice">
                       <!--<img class="personal-voice" src="../../../static/images/voice.png">-->
                       <div class="action-bg" @click="playAudio">
-                        <div class="back iconfont icon-icon-test3"></div>
-                        <span class="playan iconfont iconyihuifu" v-if="!changeVoiceFlag"></span>
-                        <span class="playan iconfont iconicon-test3 animation" v-if="changeVoiceFlag"></span>
+                        <!--<div class="back iconfont icon-icon-test3"></div>-->
+                        <span class="playan iconfont iconbofang" v-if="!changeVoiceFlag"></span>
+                        <span class="playan iconfont iconbofanghover" v-if="changeVoiceFlag"></span>
+                      </div>
+                      <div class="center-re">
+                        <div class="small-wrap" :style="animal" :class="{'animal-point':animal!==''}">
+                          <p class="small-radius"></p>
+                        </div>
+                        <p class="line"></p>
                       </div>
                       <div class="block-10">
-                        <span class="icon-13" />
-                        <text class="txt-2">{{num}}''</text>
+                        <text class="txt-2">00:{{voiceTime}}</text>
                       </div>
                     </span>
-                  </div>
-                  <div class="personal-text">
-                      <div class="personal-wel">
-                        <span>您好！我是{{ postForm.salesCompanyName }}的{{ postForm.name}}</span>
-                      </div>
-                      <div class="personal-teach">
-                        <span v-html="postForm.info">
-                        </span>
-                      </div>
                   </div>
                 </div>
               </div>
@@ -345,9 +390,12 @@
     data () {
       return {
         CardId: '',
+        fotter: 'card-footer',
+        cardM: 'card-ma',
         personApi: personApi,
         postForm: [],
         voiceUrl: '',
+        voiceTime: '00',
         videoImg: '',
         currentAudio: '',
         imgWidth: null,
@@ -360,6 +408,7 @@
         imgHeight: null,
         modalflag: false,
         modalFlag: false,
+        cardType: 0,
         name: '',
         job: '',
         phone: '',
@@ -383,7 +432,8 @@
         longitude: '',
         isBuy: '',
         setUp: '',
-        salesManId: ''
+        salesManId: '',
+        animal: ''
       }
     },
     onLoad: function (options) {
@@ -394,6 +444,7 @@
       } else {
         this.CardId = options.id
       }
+      this.getInfo()
     },
     onShow () {
       this.getInfo()
@@ -401,11 +452,23 @@
       this.getSun()
       this.getLogo()
       this.getInfoA()
+      this.getType()
       this.isBuy = wx.getStorageSync('isBuy')
     },
     onUnload () {
       this.video = ''
       this.videoFlag = false
+      this.imgUrlList = ''
+      this.latitude = ''
+      this.longitude = ''
+      this.voiceUrl = ''
+      this.imgUrl = ''
+      this.job = ''
+      this.name = ''
+      this.job = ''
+      this.postForm = []
+      this.phone = ''
+      this.logo = ''
     },
     onShareAppMessage () {
       this.insertOpera('分享了名片', 21)
@@ -415,6 +478,40 @@
       }
     },
     methods: {
+      getType () {
+        const businessId = wx.getStorageSync('businessId') // 获取本地userId
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/selfPageInfo/selectAllForUser',
+          body: {
+            'businessId': businessId,
+            'type': 3
+          }
+        }).then(res => {
+          if (res.data) {
+            this.cardType = res.data[0].cardType
+            // this.cardType = 3
+            if (this.cardType === 0) {
+              this.fotter = 'card-footer'
+              this.cardM = 'card-ma'
+            } else if (this.cardType === 1) {
+              this.fotter = 'card-footerA'
+              this.cardM = 'card-maA'
+            } else if (this.cardType === 2) {
+              this.fotter = 'card-footerA'
+              this.cardM = 'card-maB'
+            } else if (this.cardType === 3) {
+              this.fotter = 'card-footerA'
+              this.cardM = 'card-maC'
+            }
+            // console.log('cardType', this.cardType)
+          }
+          // const tradeStatus = res.data.tradeStatus
+          // wx.setStorageSync('tradeStatus', tradeStatus)
+        }).catch(err => {
+          console.log(err)
+        })
+      },
       // 预览图片
       previewImg (e, A) {
         var imgs = e
@@ -692,11 +789,42 @@
           })
           setTimeout(() => {
             this.num = Math.round(bgM.duration)
+            this.voiceTime = this.formatSeconds(this.num)
             // console.log(this.num)
-          }, 1000)
+          }, 100)
         }).catch(err => {
           console.log(err.status, err.message)
         })
+      },
+      // 获取语音时长
+      formatSeconds (value) {
+        let theTime = parseInt(value)// 秒
+        let middle = 0// 分
+        let result = ''
+        let temp = ''
+
+        if (theTime > 60) {
+          middle = parseInt(theTime / 60)
+          theTime = parseInt(theTime % 60)
+          if (middle > 60) {
+            middle = parseInt(middle % 60)
+          }
+        }
+        temp = parseInt(theTime)
+        if ((temp + '').length === 1) {
+          temp = '0' + parseInt(theTime)
+          result = temp
+        } else {
+          result = temp
+        }
+        if (middle > 0) {
+          if ((middle + '').length === 1) {
+            result = '0' + parseInt(middle) + ':' + temp
+          } else {
+            result = '' + parseInt(middle) + ':' + temp
+          }
+        }
+        return result
       },
       // 添加收藏
       getCollect (id) {
@@ -765,15 +893,19 @@
             obeyMuteSwitch: false
           })
           backgroundAudioManager.play()
+          let second = this.num + 1
           backgroundAudioManager.onPlay(() => {
             console.log('开始播放')
             this.insertOpera('播放了语音', 16)
+            this.animal = 'animation-duration:' + second + 's'
           })
           backgroundAudioManager.onError((res) => {
             console.log('fail')
+            this.animal = ''
           })
           backgroundAudioManager.onEnded(() => {
             console.log('音乐播放结束')
+            this.animal = ''
             this.currentAudio = ''
             this.changeVoiceFlag = false
           })

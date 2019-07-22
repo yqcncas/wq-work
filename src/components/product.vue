@@ -806,7 +806,7 @@
         }
         .Money {
           width: 108rpx;
-          height: 30rpx;
+          height: 31rpx;
           display: inline-block;
           text-align: center;
           border: 1rpx solid #FF424E;
@@ -939,7 +939,7 @@
         }
         .Money{
           width: 108rpx;
-          height: 30rpx;
+          height: 31rpx;
           display: inline-block;
           text-align: center;
           border:1rpx solid #FF424E;
