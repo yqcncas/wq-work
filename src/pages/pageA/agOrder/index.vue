@@ -50,15 +50,7 @@ export default {
       },
       lastPage: 100,
       nextPage: 1,
-      list: [{
-        avatarUrl: 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png?x-oss-process=style/c400',
-        userName: '陈世伟',
-        outTradeNo: 'CPB10295265623341',
-        distributorLevel: '一级',
-        dataTime: '2019-07-15 13:00',
-        totalFee: 8000,
-        num: 1
-      }],
+      list: [],
       totalMoney: 0.00
     }
   },

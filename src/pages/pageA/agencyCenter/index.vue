@@ -114,8 +114,8 @@ export default {
       })
     },
     backTo () {
-      wx.navigateBack({
-        delta: 1
+      wx.switchTab({
+        url: '/pages/personal/main'
       })
     },
     routeTo (url) {

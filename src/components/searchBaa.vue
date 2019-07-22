@@ -26,6 +26,10 @@
       }
     },
     props: {
+      height: {
+        type: Object,
+        default: {}
+      },
       value: {
         type: [String, Number],
         default: ''
@@ -51,9 +55,11 @@
         this.$emit('input', val)
       }
     },
-    // onShow () {
-    //   this.showInput()
-    // },
+    onLoad () {
+      console.log('height', this.height)
+    },
+    onShow () {
+    },
     methods: {
       showInput () {
         this.isFocus = true
@@ -81,6 +87,10 @@
       /* 点击完成时触发 */
       confirm (e) {
         this.$emit('confirm', e)
+        wx.pageScrollTo({
+          scrollTop: 98
+        })
+        this.inputValue = ''
       }
     }
   }

@@ -21,7 +21,8 @@ export default {
       fromWay: 0, // 搜索0 朋友圈1 海报2
       salesmanId: 0,
       newsId: null,
-      isBuy: ''
+      isBuy: '',
+      FX: null
     }
   },
   onLoad (options) {
@@ -53,12 +54,15 @@ export default {
       this.userId = this.GetQueryString('userId', scene)
       this.fromWay = this.GetQueryString('way', scene)
       this.param = this.GetQueryString('param', scene)
+      this.FX = this.GetQueryString('FX', scene)
       this.salesmanId = this.GetQueryString('id', scene)
-      // console.log(' this.fromWay', this.fromWay)
-      // console.log(' this.param', this.param)
+      // console.log(' this.FX', this.FX)
+      // console.log(' this.param', this. param)
       // console.log(' this.userId', this.userId)
       if (this.salesmanId) {
         this.doLogin(this.salesmanId, this.param)
+      } else if (this.FX) {
+        this.doLogin(null, this.param, this.FX)
       } else {
         this.doLogin()
       }
@@ -68,12 +72,12 @@ export default {
   },
   methods: {
     // 调用登录接口
-    doLogin (salesmanId, param) {
+    doLogin (salesmanId, param, FX) {
       console.log('fromWay:' + this.fromWay)
       wx.login({
         success: async (res) => {
           let shopId = getExt().shopId
-          let data = { code: res.code, id: shopId, userId: this.userId, fromWay: this.fromWay, salesmanId, param }
+          let data = { code: res.code, id: shopId, userId: this.userId, fromWay: this.fromWay, salesmanId, param, FX }
           const result = await homeApi.doLogin(data)
           this.eatinCart(result)
           wx.setStorageSync('Card', false)

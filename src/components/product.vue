@@ -6,7 +6,7 @@
           :back-visible="true"
           :home-path="'/pages/message/main'"></navigation-bar>
       </section>
-      <div class="nav-control fadeup">
+      <div class="nav-control">
         <scroll-view :scroll-y="scrollTop">
         <div class="top">
             <div class="bgImg">
@@ -26,16 +26,22 @@
             </div>
         </div>
         </scroll-view>
-        <div :class="[show === true ? 'fade':'fadedown']">
-          <transition name="bounce">
-          <div v-show="show === true"  :step="20" :class="[show === true ? 'fadeup':'fadedown']">
+        <div :class="[Active === true ? 'fade':'F']">
+          <div style="position: fixed;top: 0;width: 100%;height: 100%;">
+          <div v-if="show === true" :class="[showB === true ? 'fadeup':'fadedown']" >
             <div class="product">
               集市
             </div>
-            <Searchbaa :value="searchContent" :isFocus="isFocus" @cancel="cancel" @confirm="confirm" confirmType="search"></Searchbaa>
+            <Searchbaa :value="searchContent" :isFocus="isFocus" @cancel="cancel" @confirm="confirm" confirmType="search" :height = "height"></Searchbaa>
           </div>
-          </transition>
-        <wan-tabs @change='tabChange' :tabs="category"></wan-tabs>
+          </div>
+          <!--<div v-if="showA=== false" :class="[show === false ? 'fadedownA':'fadeupA'] ">-->
+            <!--<wan-tabs @change='tabChange' :tabs="category"></wan-tabs>-->
+          <!--</div>-->
+          <!--<div v-else-if="showA=== true" :class="[show === true ? 'fadeup':'fadedown'] ">-->
+            <!--<wan-tabs @change='tabChange' :tabs="category"></wan-tabs>-->
+          <!--</div>-->
+            <wan-tabs @change='tabChange' :tabs="category"></wan-tabs>
         </div>
       </div>
 
@@ -144,8 +150,11 @@
       return {
         scrollTop: 0,
         category: [],
+        showA: '',
         categoryId: '',
+        showB: '',
         productList: [],
+        Active: false,
         show: false,
         pageNum: 1,
         lastPage: 100,
@@ -181,7 +190,7 @@
       this.getProduct({ type: 0 })
     },
     onPageScroll: function (ev) {
-      // console.log('ev', ev)
+      console.log('ev', ev)
       // var _this = this
       /* 当滚动的top值最大或者最小时，为什么要做这一步是由于在手机实测小程序的时候会发生滚动条回弹，所以为了解决回弹，设置默认最大最小值   */
       if (ev.scrollTop <= 0) {
@@ -191,13 +200,31 @@
       }
       // 判断浏览器滚动条上下滚动
       if (ev.scrollTop > this.scrollTop || ev.scrollTop === wx.getSystemInfoSync().windowHeight) {
-        if (ev.scrollTop > 69) {
+        // this.showA = true
+        this.showA = true
+        this.showB = true
+        if (ev.scrollTop > 60) {
           this.show = true
+        } else if (ev.scrollTop < 60) {
+          this.show = false
+        }
+        if (ev.scrollTop > 98) {
+          this.Active = true
         }
         // console.log('向下滚动')
       } else {
-        if (ev.scrollTop < 69) {
+        this.showA = false
+        if (ev.scrollTop < 80) {
+          this.showB = false
+        }
+        if (ev.scrollTop < 60) {
           this.show = false
+        } else if (ev.scrollTop > 60) {
+          this.show = true
+        }
+        if (ev.scrollTop < 98) {
+          this.Active = false
+          // this.show = false
         }
         // console.log('向上滚动')
       }
@@ -306,9 +333,6 @@
       //   })
       // },
       confirm (e) {
-        wx.pageScrollTo({
-          scrollTop: 72
-        })
         this.searchContent = e.mp.detail.value
         this.isFocus = false
         this.getProduct(0)
@@ -364,7 +388,7 @@
         this.pageNum = 1
         this.searchContent = ''
         wx.pageScrollTo({
-          scrollTop: 72
+          scrollTop: 98
         })
         this.categoryId = obj.categoryId
         this.getProduct(0)
@@ -374,34 +398,126 @@
 </script>
 
 <style lang="scss">
-  .bounce-enter-active {
-    animation: bounce-in .5s;
+  .fadedownA{
+    animation: spin-downA 0.5s linear normal;
+    animation-delay: 0.2s;
   }
-  .bounce-leave-active {
-    animation: bounce-in .5s reverse;
+  .fadeupA{
+    animation: spin-topA 0.5s linear normal;
+    animation-delay: 0.2s;
   }
-  @keyframes bounce-in {
+  @keyframes spin-topA {
     0% {
-      transform: scale(0);
+      opacity: 0.3
     }
     50% {
-      transform: scale(1.5);
+      opacity: 0.6
     }
     100% {
-      transform: scale(1);
+      opacity: 1
+    }
+  }
+  @keyframes spin-downA {
+    0% {
+      opacity: 1
+    }
+    50% {
+      opacity: 0.5
+    }
+    100% {
+      opacity: 0.3
+    }
+  }
+  .fadedown{
+    width: 100%;
+    height: 100%;
+    z-index: 99999;
+    animation: spin-down 1s linear normal;
+    animation-delay: 0s;
+  }
+  @keyframes spin-down {
+    0% {
+      opacity: 1
+    }
+    10% {
+      opacity: 0.9
+    }
+    20% {
+      opacity: 0.8
+    }
+    30% {
+      opacity: 0.7
+    }
+    40% {
+      opacity: 0.6
+    }
+    50% {
+      opacity: 0.5
+    }
+    60% {
+      opacity: 0.4
+    }
+    70% {
+      opacity: 0.3
+    }
+    80% {
+      opacity: 0.2
+    }
+    90% {
+      opacity: 0.1
+    }
+    100% {
+      opacity: 0
     }
   }
   .fadeup{
-    transition: all 3s ease-in-out;
+    width: 100%;
+    height: 100%;
+    z-index: 99999;
+    animation: spin-top 1s linear normal;
+    animation-delay: 0s;
   }
-  .fadedown{
-    transition: all 3s ease-in-out;
+  @keyframes spin-top {
+    0% {
+      opacity: 0
+    }
+    10% {
+      opacity: 0.1
+    }
+    20% {
+      opacity: 0.2
+    }
+    30% {
+      opacity: 0.3
+    }
+    40% {
+      opacity: 0.4
+    }
+    50% {
+      opacity: 0.5
+    }
+    60% {
+      opacity: 0.6
+    }
+    70% {
+      opacity: 0.7
+    }
+    80% {
+      opacity: 0.8
+    }
+    90% {
+      opacity: 0.9
+    }
+
+    100% {
+      opacity: 1
+    }
   }
   .fade{
-    transition: all 3s ease-in-out;
+    /*animation: spin-top 0.6s linear normal;*/
     width: 100%;
     position: fixed;
-    top: 0;
+    top: 253rpx;
     z-index: 9999;
   }
   .product{
@@ -436,6 +552,7 @@
   }
   .nav-control {
     width: 100%;
+    height: 550rpx;
     z-index: 1000;
     /*position: fixed;*/
     /*top:0;*/
@@ -447,7 +564,7 @@
       transition: all 0.4s ease;
       .bgImg{
         width: 100%;
-        height: 350rpx;
+        height: 340rpx;
         img{
           width: 100%;
           height: 100%;

@@ -161,6 +161,43 @@
           src: '../../static/images/jieshao.png',
           title: '公司介绍',
           url: '../pageA/introduce/main'
+        }],
+        chooseB: [{
+          src: '../../static/images/chanpin.png',
+          title: '产品管理',
+          url: '../prod/product/main'
+        }, {
+          src: '../../static/images/product.png',
+          title: '我的订单',
+          url: '/pages/pageA/orderlist/main?typeId=0'
+        }, {
+          src: '../../static/images/release.png',
+          title: '我的发布',
+          url: '../pageA/release/main'
+        }, {
+          src: '../../static/images/message.png',
+          title: '消息中心',
+          url: '../message/main'
+        }, {
+          src: '../../static/images/pifu.png',
+          title: '名片模板',
+          url: '../pageA/skin/main'
+        }, {
+          src: '../../static/images/Member.png',
+          title: '会员中心',
+          url: '../pageA/Member/main'
+        }, {
+          src: '../../static/images/tuike.png',
+          title: '推客中心',
+          url: '../pageA/agencyCenter/main'
+        }, {
+          src: '../../static/images/compny.png',
+          title: '企业认证',
+          url: '../pageA/attestation/main'
+        }, {
+          src: '../../static/images/jieshao.png',
+          title: '公司介绍',
+          url: '../pageA/introduce/main'
         }]
       }
     },
@@ -168,11 +205,37 @@
     created () {
     },
     onShow () {
-      // wx.hideTabBar()
       this.getInfo()
       this.getRecord()
     },
+    onLoad () {
+      // this.getShop()
+    },
     methods: {
+      // 获取分销商信息
+      getShop () {
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/distributor/selectOne',
+          body: {
+          }
+        }).then(res => {
+          const isDistributor = res.data.isDistributor
+          // console.log('isDistributor', isDistributor)
+          if (isDistributor === 1) {
+            // this.choose[6].url = '/pages/pageA/agencyCenter/main'
+            // wx.redirectTo({
+            //   url: '/pages/pageA/agencyCenter/main'
+            // })
+            this.choose = this.chooseB
+            // console.log('resAAA', this.choose[6].url)
+          } else {
+            this.choose = this.chooseA
+          }
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      },
       // 进入数据统计
       goStats () {
         wx.navigateTo({
@@ -193,13 +256,13 @@
           if (res.data !== null) {
             this.postForm = res.data
           }
-          console.log('resaaa', data)
           if (data !== true) {
             this.choose.map((item) => {
               item.url = '../businesscard/main'
             })
           } else {
             this.choose = this.chooseA
+            this.getShop()
           }
         }).catch(err => {
           console.log(err.status, err.message)

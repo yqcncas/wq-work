@@ -36,7 +36,8 @@ const home = {
     userId: obj.userId,
     fromWay: obj.fromWay,
     salesmanId: obj.salesmanId,
-    param: obj.param
+    param: obj.param,
+    FX: obj.FX
   }, {
     baseURL: baseUrlApi
   }),

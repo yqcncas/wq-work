@@ -645,6 +645,48 @@ const person = {
   //  推送消息
   sendMsgActive: (obj) => request.post('/sendMsgRecord/sendMsg', obj, {
     baseURL: baseUrlApi
+  }),
+  //  查询分销商的信息
+  distributorOne: () => request.get('/distributor/selectOne', {}, {
+    baseURL: baseUrlApi
+  }),
+  //  查询提现明细
+  cashDetail: (obj) => request.get('/orderToUser/selectDetail', obj, {
+    baseURL: baseUrlApi
+  }),
+  //  我的团队
+  distributorTeam: (obj) => request.get('/distributor/selectDistributorForUser', obj, {
+    baseURL: baseUrlApi
+  }),
+  //  我的团队
+  distributorTeamCount: (id) => request.get('/distributor/selectDistributorCount', {
+    id
+  }, {
+    baseURL: baseUrlApi
+  }),
+  //  分销订单
+  distributorOrder: (obj) => request.get('/distributor/selectAllOrder', obj, {
+    baseURL: baseUrlApi
+  }),
+  //  提现
+  applyForMoney: (money) => request.post('/orderToUser/applyForMoney', {
+    money
+  }, {
+    baseURL: baseUrlApi
+  }),
+  //  推广 生成分销推广码
+  agExtend: () => request.post('/distributor/getSaleManACodeForBusiness', {}, {
+    baseURL: baseUrlApi
+  }),
+  //  小程序注册商户 邀请试用
+  insertForMiniCodey: (obj) => request.post('/business/insertForMiniCode', obj, {
+    baseURL: baseUrlApi
+  }),
+  //  查询物流
+  logisticsSearch: (id) => request.get('/kdNiaoLogistics/getPath', {
+    id
+  }, {
+    baseURL: baseUrlApi
   })
 }
 

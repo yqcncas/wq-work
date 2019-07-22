@@ -172,7 +172,7 @@
 				{
 					"id": 19,
 					"name": "aa a ",
-					"pathName": "pages/skin/main",
+					"pathName": "pages/navigation/main",
 					"query": "",
 					"scene": null
 				},
@@ -186,7 +186,7 @@
 				{
 					"id": 21,
 					"name": "推客中心",
-					"pathName": "pages/pageA/agencyCenter/main",
+					"pathName": "pages/pageA/Pusher/main",
 					"query": "",
 					"scene": null
 				}

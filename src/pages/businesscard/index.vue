@@ -114,11 +114,12 @@
             </div>
             <div class="title">寻客雷达</div>
           </div>
+          <!--名片风格1-->
           <div class="card-top">
             <img src="https://oss.wq1516.com/salesInfo/201906181125191560828319376.jpg" />
             <div class="cards-M">
               <div class="cards-main">
-                <p class="cards-img"><img :src="postForm.imgUrl || 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png' + '?x-oss-process=style/c400'" /></p>
+                <p class="cards-img"><img :src="postForm.imgUrl || 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png' + '?x-oss-process=style/c400'"  @click="preview(postForm.imgUrl,[postForm.imgUrl])"/></p>
                 <p class="cards-name">
                   <span v-if="postForm.name">{{ postForm.name }}</span>
                   <span v-else>无姓名</span>
@@ -134,6 +135,67 @@
               </div>
             </div>
           </div>
+          <!--名片风格2-->
+          <!--<div class="card-topA">-->
+            <!--<div class="ordinary-wrap shadow three-card">-->
+              <!--<image @click="preview(postForm.imgUrl,[postForm.imgUrl])" class="three-img" :src="postForm.imgUrl" mode="aspectFill" @load="imgLoad"></image>-->
+              <!--<div class="right-three">-->
+                <!--<div class="triangle"></div>-->
+                <!--<p class="top-club flexRow">-->
+                  <!--<image :src="logo" mode="aspectFill" class="logo-img"></image>-->
+                  <!--<span class="club-name">{{postForm.companyName}}</span>-->
+                <!--</p>-->
+                <!--<image class="qrcode-bg" src="/static/images/qrcode-bg.png" mode="aspectFill"></image>-->
+                <!--<div class="name-job-wrap">-->
+                  <!--<p class="name">{{postForm.name}}</p>-->
+                  <!--<p>{{postForm.job}}</p>-->
+                <!--</div>-->
+                <!--<div class="type-company">-->
+                  <!--<p class="type">{{postForm.organizeType}}</p>-->
+                  <!--<p>{{postForm.organizeName}}</p>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+          <!-- 名片风格3 -->
+          <!--<div class="card-topC">-->
+            <!--<div class="bgImgA">-->
+              <!--<img :src="postForm.imgUrl"/>-->
+            <!--</div>-->
+            <!--<div class="main">-->
+              <!--<div class="footer">-->
+                <!--<div class="top">-->
+                  <!--<span class="name">{{postForm.name}}</span>-->
+                  <!--<span class="job">{{postForm.job}}</span>-->
+                <!--</div>-->
+                <!--<p class="phone">-->
+                  <!--{{postForm.phone}}-->
+                <!--</p>-->
+                <!--<p class="Img">-->
+                  <!--<img :src="postForm.imgUrl"/>-->
+                <!--</p>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+          <!-- 名片风格4 长名字 -->
+          <!--<div class="card-topB">-->
+            <!--<div class="ordinary-wrap shadow four-card">-->
+              <!--<div class="left-wrap">-->
+                <!--<div class="img-wrap">-->
+                  <!--<image @click="preview(postForm.imgUrl,[postForm.imgUrl])" class="img" :src="postForm.imgUrl" mode="widthFix" @load="imgLoad"></image>-->
+                <!--</div>-->
+                <!--<p class="company-f">{{postForm.companyName}}</p>-->
+              <!--</div>-->
+              <!--<div class="r-top-w">-->
+                <!--<p class="name">{{postForm.name}}</p>-->
+                <!--<p class="job">{{postForm.job}}</p>-->
+              <!--</div>-->
+              <!--<div class="r-bottom-w">-->
+                <!--<p>{{postForm.phone}}</p>-->
+                <!--<p>{{postForm.address}}</p>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
           <div class="card-footer">
             <submit class="share" @click="goToCard()">编辑名片</submit>
             <submit class="save"  @click="showType">分享名片</submit>
@@ -395,7 +457,8 @@
         infoMation: [],
         imgUrlList: [],
         latitude: '',
-        longitude: ''
+        longitude: '',
+        cardType: ''
       }
     },
     onLoad: function (options) {
@@ -418,6 +481,7 @@
       this.getSun()
       this.showpop = false
       this.selectNavIndex = 0
+      this.getType()
     },
     onShareAppMessage () {
       this.insertOpera('分享了名片', 21)
@@ -427,6 +491,26 @@
       }
     },
     methods: {
+      getType () {
+        const businessId = wx.getStorageSync('businessId') // 获取本地userId
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/selfPageInfo/selectAllForUser',
+          body: {
+            'businessId': businessId,
+            'type': 3
+          }
+        }).then(res => {
+          if (res.data) {
+            this.cardType = res.data[0].cardType
+            console.log('cardType', this.cardType)
+          }
+          // const tradeStatus = res.data.tradeStatus
+          // wx.setStorageSync('tradeStatus', tradeStatus)
+        }).catch(err => {
+          console.log(err)
+        })
+      },
       // 预览图片
       previewImg (e, A) {
         var imgs = e
@@ -437,6 +521,12 @@
         wx.previewImage({
           current: temp[A],
           urls: temp
+        })
+      },
+      preview (img, arr) {
+        wx.previewImage({
+          current: img,
+          urls: arr
         })
       },
       // 播放开始

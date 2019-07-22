@@ -44,15 +44,7 @@ export default {
       },
       lastPage: 100,
       nextPage: 1,
-      list: [{
-        avatarUrl: 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png?x-oss-process=style/c400',
-        name: '陈世伟',
-        isDistributor: 1,
-        updateTime: '2019-06-28 13:00',
-        dataTime: '2019-06-28 13:00',
-        totalMoney: 8000,
-        levelOneNum: 5
-      }],
+      list: [],
       levelOneNum: null,
       levelTwoNum: null
     }

@@ -31,7 +31,7 @@
             <div class="vbj">
               <span></span>
               <div class="img-wrp">
-                <image mode="widthFix" :src="imgUrl + '?x-oss-process=style/w100'" />
+                <image mode="widthFix" :src="imgUrl || 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png' + '?x-oss-process=style/w100'" />
               </div>
               <div class="Grade">
                 <i v-if="Grade === v1">
@@ -74,11 +74,12 @@
       <div class="business-main" >
         <el-form ref="postForm" :model="postForm" >
           <div class="cards">
+            <!--名片风格1-->
               <div class="card-top">
                 <img src="https://oss.wq1516.com/salesInfo/201906181125191560828319376.jpg" />
                 <div class="cards-M">
                   <div class="cards-main">
-                    <p class="cards-img"><img :src="postForm.imgUrl || 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png' + '?x-oss-process=style/c400'" /></p>
+                    <p class="cards-img" ><img :src="postForm.imgUrl || 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png' + '?x-oss-process=style/c400'"  @click="preview(postForm.imgUrl,[postForm.imgUrl])"/></p>
                     <p class="cards-name">
                       <span v-if="postForm.name">{{ postForm.name }}</span>
                       <span v-else>无姓名</span>
@@ -94,6 +95,28 @@
                   </div>
                 </div>
               </div>
+            <!--&lt;!&ndash;名片风格2&ndash;&gt;-->
+            <!--<div class="card-topA">-->
+              <!--<div class="ordinary-wrap shadow three-card">-->
+                <!--<image @click="preview(postForm.imgUrl,[postForm.imgUrl])" class="three-img" :src="postForm.imgUrl" mode="aspectFill" @load="imgLoad"></image>-->
+                <!--<div class="right-three">-->
+                  <!--<div class="triangle"></div>-->
+                  <!--<p class="top-club flexRow">-->
+                    <!--<image :src="logo" mode="aspectFill" class="logo-img"></image>-->
+                    <!--<span class="club-name">{{postForm.companyName}}</span>-->
+                  <!--</p>-->
+                  <!--<image class="qrcode-bg" src="/static/images/qrcode-bg.png" mode="aspectFill"></image>-->
+                  <!--<div class="name-job-wrap">-->
+                    <!--<p class="name">{{postForm.name}}</p>-->
+                    <!--<p>{{postForm.job}}</p>-->
+                  <!--</div>-->
+                  <!--<div class="type-company">-->
+                    <!--<p class="type">{{postForm.organizeType}}</p>-->
+                    <!--<p>{{postForm.organizeName}}</p>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
               <div class="card-footer">
                 <submit class="share"  @click="showType">分享名片</submit>
                 <submit class="save" v-if="postForm.isCollect !== 1" @click="getCollect(postForm.id)">保存名片</submit>
@@ -300,7 +323,12 @@
             <span>我要<br />创建</span>
           </div>
           <div class="foundA" @click="goMsg()">
-            <span>我要<br />咨询</span>
+            <div class="main">
+                <span class="img">
+              <img :src="imgUrl || 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png' + '?x-oss-process=style/w100'"/>
+            </span>
+              <span class="talk">聊一聊</span>
+            </div>
           </div>
         </el-form>
       </div>
@@ -397,6 +425,12 @@
         wx.previewImage({
           current: temp[A],
           urls: temp
+        })
+      },
+      preview (img, arr) {
+        wx.previewImage({
+          current: img,
+          urls: arr
         })
       },
       // 播放开始

@@ -53,12 +53,7 @@ export default {
       },
       lastPage: 100,
       nextPage: 1,
-      list: [{
-        dataTime: '2019-06-28 13:00',
-        day: '24日',
-        money: '8000',
-        residueMoney: '0.00'
-      }],
+      list: [],
       predictMoney: 0
     }
   },
