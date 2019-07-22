@@ -259,7 +259,7 @@
             </div>
           </div>
           <!-- 个人简介 -->
-          <div class="personal" v-if="postForm.info && postForm.voice">
+          <div class="personal" v-if="postForm.voice || postForm.info">
             <div class="personal-top">
                 <span class="personal-icont">
                   <img src="../../../static/images/personalA.png">
