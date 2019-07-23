@@ -17,7 +17,7 @@
         <div class="Check" v-if="Check===0" @click="check()">
           <button class="check-in"><span>签到</span></button>
         </div>
-        <div class="CheckA" v-if="Check===1" @click="check()">
+        <div class="CheckA" v-if="Check===1" @click="checkA()">
           <button class="check-in"><span>已签</span></button>
         </div>
         <div class="BG-img">
@@ -124,6 +124,13 @@
       check () {
         this.deleteShow = true
         this.Check = 1
+      },
+      checkA () {
+        wx.showToast({
+          title: '已签，明天继续哦',
+          icon: 'none',
+          duration: 2000
+        })
       },
       // 隐藏
       checkDelete () {
