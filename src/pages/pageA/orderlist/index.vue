@@ -11,7 +11,7 @@
             <span class="order-status">{{item.orderStatus}}</span>
           </p>
           <!-- 商品单个列表 -->
-          <div v-for="(n,i) in item.orderDetail" :key="i" class="good-list">
+          <div v-if="item.orderDetail.length !== 0" v-for="(n,i) in item.orderDetail" :key="i" class="good-list">
             <image mode="aspectFill" :src="n.goodsImgUrl" class="img-style"></image>
             <div class="center-text">
               <p class="title-over">{{n.goodsName}}</p>
@@ -21,6 +21,11 @@
             <div class="right-box">
               <p><i class="font-size-22">￥</i>{{n.unitPrice}}</p>
               <p class="num"><span class="right-margin8">x</span><span>{{n.num}}</span></p>
+            </div>
+          </div>
+          <div  v-if="item.orderDetail.length == 0" class="good-list">
+            <div class="center-text">
+              <p class="title-over">{{item.orderName}}</p>
             </div>
           </div>
           <!-- 总计 -->

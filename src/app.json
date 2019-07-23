@@ -2,6 +2,7 @@
   "pages": [
     "pages/loading/main",
     "pages/navigation/main",
+    "pages/Networking/main",
     "pages/index/main",
     "pages/logs/main",
     "pages/personal/main",
@@ -104,6 +105,11 @@
       "iconPath": "static/images/personcard.png",
       "selectedIconPath": "static/images/personcard-se.png"
     },{
+        "text": "人脉",
+        "pagePath": "pages/Networking/main",
+        "iconPath": "static/images/net.png",
+        "selectedIconPath": "static/images/net-se.png"
+      },{
       "text": "集市",
       "pagePath": "pages/navigation/main",
       "iconPath": "static/images/more.png",

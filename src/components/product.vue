@@ -50,7 +50,7 @@
       <!--样式一-->
       <div class="product-listA" v-if="goodsType === 0">
         <div class="item-pro" v-for="(item,index) in productList" :key="index" @click="routeTo(item.id)">
-          <image class="pro-img" :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
+          <image class="pro-img"  :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
                  mode="aspectFill"></image>
           <p class="bot-des">{{item.name}}</p>
           <div class="price-brow">
@@ -338,6 +338,7 @@
         this.getProduct(0)
       },
       routeTo (id) {
+        console.log('aaa')
         this.insertOperaA('查看了产品', 3, id)
         wx.navigateTo({
           url: '../productA/detail/main?id=' + id
@@ -854,6 +855,7 @@
   // 商品详情
   .product-listB {
     /*margin-top: 180rpx;*/
+    z-index: 999;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     padding: 20 rpx 8 rpx 0;

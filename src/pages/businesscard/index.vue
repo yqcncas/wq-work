@@ -517,10 +517,10 @@
             if (this.cardType === 0) {
               this.fotter = 'card-footer'
               this.cardM = 'card-ma'
-            } else if (this.cardType === 1) {
+            } else if (this.cardType === 2) {
               this.fotter = 'card-footerA'
               this.cardM = 'card-maA'
-            } else if (this.cardType === 2) {
+            } else if (this.cardType === 1) {
               this.fotter = 'card-footerA'
               this.cardM = 'card-maB'
             } else if (this.cardType === 3) {

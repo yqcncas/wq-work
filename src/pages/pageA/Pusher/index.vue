@@ -239,14 +239,14 @@
             })
           } else {
             wx.showToast({
-              title: '还在审核中',
+              title: '提交审核中',
               icon: 'none',
               duration: 2000
             })
           }
         } else {
           wx.showToast({
-            title: '还在审核中',
+            title: '提交审核中',
             icon: 'none',
             duration: 2000
           })
@@ -280,26 +280,25 @@
             // console.log('upType', this.upType)
             // console.log('tabA', this.tabA)
             // console.log('levelId', this.levelId)
-            if (this.upType === 2) {
-              if (this.levelId > id) {
-                this.title = '已开通更高级别'
-                this.classA = 'openA'
-                this.num = 0
-              } else if (this.levelId === id) {
-                this.title = '已开通'
-                this.classA = 'openA'
-                this.num = 1
-              } else if (this.levelId < id) {
-                this.title = '立即升级'
-                this.classA = 'open'
-                this.num = 2
-              }
-            } else if (this.upType === 1) {
+            if (this.levelId > id) {
+              this.title = '已开通更高级别'
+              this.classA = 'openA'
+              this.num = 0
+            } else if (this.levelId === id) {
+              this.title = '已开通'
+              this.classA = 'openA'
+              this.num = 1
+            } else if (this.levelId < id) {
+              this.title = '立即升级'
+              this.classA = 'open'
+              this.num = 2
+            }
+            if (this.upType === 1) {
               if (this.status === 0) {
                 this.title = '申请'
                 this.classA = 'open'
               } else if (this.status === 1) {
-                this.title = '申请中'
+                this.title = '提交审核中'
                 this.classA = 'openA'
                 this.upgrade = 1
               }
@@ -323,7 +322,7 @@
               this.title = '申请'
               this.classA = 'open'
             } else if (this.status === 1) {
-              this.title = '申请中'
+              this.title = '提交审核中'
               this.classA = 'openA'
               this.upgrade = 1
             }

@@ -364,8 +364,9 @@
             </div>
 
           </div>
+          <!--v-if="setUp === 0"-->
           <div v-if="setUp === 0" class="found" @click="goInto()">
-            <span>我要<br />创建</span>
+            <i class="iconfont iconbianzu">   <s>+</s></i>
           </div>
           <div class="foundA" @click="goMsg()">
             <div class="main">
@@ -494,10 +495,10 @@
             if (this.cardType === 0) {
               this.fotter = 'card-footer'
               this.cardM = 'card-ma'
-            } else if (this.cardType === 1) {
+            } else if (this.cardType === 2) {
               this.fotter = 'card-footerA'
               this.cardM = 'card-maA'
-            } else if (this.cardType === 2) {
+            } else if (this.cardType === 1) {
               this.fotter = 'card-footerA'
               this.cardM = 'card-maB'
             } else if (this.cardType === 3) {
