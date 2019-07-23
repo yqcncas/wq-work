@@ -32,8 +32,8 @@
             <span class="fire"><i class="iconfont iconremen"></i>我要上热门</span>
         </div>
         <div class="NetCard-main">
-          <scroll-view scroll-y @scrolltolower = "getScroll()">
-          <div class="conts-main">
+          <scroll-view scroll-y @scrolltolower = "getScroll()" :style="'height:' + windowHeight + 'rpx'">
+          <div class="conts-main" :style="'height:' + windowHeightA + 'rpx'">
             <div v-if="cards !== ''|| cards !== null">
               <div class="card" v-for="(item,index) in cards" :key="index">
                 <div @click="goToCard(item.id)">
@@ -98,10 +98,32 @@
         pageNum: 0,
         pageSize: 0,
         Check: 0,
+        windowHeight: '',
+        windowHeightA: '',
         deleteShow: false
       }
     },
     onLoad () {
+      const windowHeight = wx.getSystemInfoSync().screenHeight
+      if (windowHeight < 569) {
+        this.windowHeight = (wx.getSystemInfoSync().screenHeight - 215) * 2
+        this.windowHeightA = (wx.getSystemInfoSync().screenHeight - 215) * 2
+      } else if (windowHeight > 569 && windowHeight < 668) {
+        this.windowHeight = (wx.getSystemInfoSync().screenHeight - 305) * 2
+        this.windowHeightA = (wx.getSystemInfoSync().screenHeight - 305) * 2
+        console.log('height', wx.getSystemInfoSync().screenHeight)
+      } else if (windowHeight > 668 && windowHeight < 737) {
+        this.windowHeight = (wx.getSystemInfoSync().screenHeight - 300) * 2
+        this.windowHeightA = (wx.getSystemInfoSync().screenHeight - 300) * 2
+        console.log('height', wx.getSystemInfoSync().screenHeight)
+      } else if (windowHeight > 738 && windowHeight < 813) {
+        this.windowHeight = (wx.getSystemInfoSync().screenHeight - 335) * 2
+        this.windowHeightA = (wx.getSystemInfoSync().screenHeight - 335) * 2
+        console.log('height', wx.getSystemInfoSync().screenHeight)
+      } else if (windowHeight > 1023 && windowHeight < 1024) {
+        this.windowHeight = (wx.getSystemInfoSync().screenHeight - 600) * 2
+        this.windowHeightA = (wx.getSystemInfoSync().screenHeight - 600) * 2
+      }
     },
     onShow () {
       this.pageNum = 1
