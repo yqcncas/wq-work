@@ -14,8 +14,11 @@
             <p class="size">签到次数</p>
           </div>
         </div>
-        <div class="Check" @click="check()">
+        <div class="Check" v-if="Check===0" @click="check()">
           <button class="check-in"><span>签到</span></button>
+        </div>
+        <div class="CheckA" v-if="Check===1" @click="check()">
+          <button class="check-in"><span>已签</span></button>
         </div>
         <div class="BG-img">
           <img src="../../../static/images/渐变.png">
@@ -34,7 +37,7 @@
             <div v-if="cards !== ''|| cards !== null">
               <div class="card" v-for="(item,index) in cards" :key="index">
                 <div @click="goToCard(item.id)">
-                  <span><img :src="item.imgUrl || 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png'+'?x-oss-process=style/c400'"></span>
+                  <span><img :src="item.imgUrl + '?x-oss-process=style/c400'"></span>
                   <div class="card-main">
                     <div class="qiye">
                       <span class="img"><s>企</s></span>
@@ -94,6 +97,7 @@
         cards: [],
         pageNum: 0,
         pageSize: 0,
+        Check: 0,
         deleteShow: false
       }
     },
@@ -119,10 +123,12 @@
       // 签到
       check () {
         this.deleteShow = true
+        this.Check = 1
       },
       // 隐藏
       checkDelete () {
         this.deleteShow = false
+        this.Check = 1
       },
       // 点击跳转进入名片页
       goToCard (id) {
@@ -161,6 +167,9 @@
             const data = res.data.list
             data.map(item => {
               this.cards.push(item)
+              if (item.imgUrl === '') {
+                item.imgUrl = 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png'
+              }
             })
             console.log('data', this.cards)
             this.lastPage = res.data.lastPage

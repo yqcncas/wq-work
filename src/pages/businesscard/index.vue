@@ -480,6 +480,7 @@
       this.getLogo()
       this.getSun()
       this.getOpA()
+      this.getType()
       this.showpop = false
       this.selectNavIndex = 0
       wx.stopPullDownRefresh()

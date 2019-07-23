@@ -27,7 +27,7 @@
         </div>
         </scroll-view>
         <div :class="[Active === true ? 'fade':'F']">
-          <div style="position: fixed;top: 0;width: 100%;height: 100%;">
+          <div style="position: fixed;top: 0;width: 100%;">
           <div v-if="show === true" :class="[showB === true ? 'fadeup':'fadedown']" >
             <div class="product">
               集市
@@ -187,7 +187,6 @@
       this.getType()
     },
     onShow () {
-      this.getProduct({ type: 0 })
     },
     onPageScroll: function (ev) {
       console.log('ev', ev)
@@ -433,7 +432,7 @@
     width: 100%;
     height: 100%;
     z-index: 99999;
-    animation: spin-down 1s linear normal;
+    animation: spin-down 0.8s linear normal;
     animation-delay: 0s;
   }
   @keyframes spin-down {
@@ -473,9 +472,9 @@
   }
   .fadeup{
     width: 100%;
-    height: 100%;
+    /*height: 100%;*/
     z-index: 99999;
-    animation: spin-top 1s linear normal;
+    animation: spin-top 0.8s linear normal;
     animation-delay: 0s;
   }
   @keyframes spin-top {
@@ -669,6 +668,7 @@
   }
   // 商品详情
   .product-listC {
+    z-index: 9999!important;
     margin-top: 0rpx;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
@@ -732,8 +732,8 @@
       color: #4a4a4a;
       font-weight: 600;
       width: 400rpx;
-      height: 60rpx;
-      margin: 20rpx 15rpx;
+      height: 70rpx;
+      margin: 20rpx 15rpx 10rpx;
       padding-left: 15rpx;
       display: inline-block;
       display: -webkit-box;
@@ -743,7 +743,7 @@
     }
     .look-Num{
       font-size: 22rpx;
-      margin: 10rpx 30rpx 10rpx 28rpx;
+      margin: 0rpx 30rpx 0rpx 28rpx;
       color: #9d9d9d;
       display: block;
       text-align: left;
@@ -771,7 +771,7 @@
     .price-brow {
       font-size: 22rpx;
       display: block;
-      margin: 10rpx 16rpx;
+      margin: 0rpx 16rpx;
       color: #9d9d9d;
       text-align: left;
       .price-brow-main {
@@ -807,7 +807,7 @@
         }
         .Money {
           width: 108rpx;
-          height: 31rpx;
+          height: 32rpx;
           display: inline-block;
           text-align: center;
           border: 1rpx solid #FF424E;
@@ -941,7 +941,7 @@
         }
         .Money{
           width: 108rpx;
-          height: 31rpx;
+          height: 32rpx;
           display: inline-block;
           text-align: center;
           border:1rpx solid #FF424E;

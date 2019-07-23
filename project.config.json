@@ -34,7 +34,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 22,
+			"current": 23,
 			"list": [
 				{
 					"id": 1,
@@ -194,6 +194,13 @@
 					"id": -1,
 					"name": "人脉",
 					"pathName": "pages/Networking/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "集市",
+					"pathName": "pages/navigation/main",
 					"scene": null
 				}
 			]
