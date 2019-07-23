@@ -49,7 +49,9 @@
         levelId: '',
         upgrade: 0,
         isDistributor: '',
-        goTo: 0
+        goTo: 0,
+        isBuy: 0,
+        status: 0
       }
     },
     onShow () {
@@ -83,6 +85,23 @@
       this.upgrade = 0
     },
     onLoad () {
+      const isBuy = wx.getStorageSync('BuyId')
+      // console.log('dklaa', isBuy)
+      if (isBuy !== 0) {
+        this.isBuy = isBuy
+      } else {
+        this.isBuy = 0
+        wx.setStorageSync('BuyId', 0)
+      }
+      const status = wx.getStorageSync('status')
+      // console.log('status', status)
+      if (status !== 0) {
+        this.upType = 1
+        this.status = status
+      } else {
+        this.status = 0
+        wx.setStorageSync('status', 0)
+      }
     },
     methods: {
       // 获取分销商信息
@@ -126,6 +145,8 @@
             'signType': 'MD5',
             'paySign': payInfo.paySign,
             'success': (res) => {
+              this.isBuy = 1
+              wx.setStorageSync('BuyId', 1)
               this.getShop()
               // this.getSalesmanUpdate()
               // this.insertOpera('支付了产品', 6)
@@ -186,7 +207,20 @@
                   'userId': userId
                 }
               }).then(res => {
-                this.pay(res.data.payInfo)
+                console.log('up1', res)
+                if (res.code === 200) {
+                  this.title = '申请中'
+                  this.classA = 'openA'
+                  this.upgrade = 1
+                  this.status = 1
+                  wx.setStorageSync('status', 1)
+                  wx.showToast({
+                    title: '申请成功',
+                    icon: 'none',
+                    duration: 2000
+                  })
+                }
+                // this.pay(res.data.payInfo)
               }).catch(err => {
                 console.log('err', err)
               })
@@ -238,29 +272,65 @@
       },
       // 选择会员
       changTabMeberA (id, upType) {
-        if (this.tabA !== id) {
+        console.log('buy', this.isBuy)
+        if (this.isBuy === 1) {
+          if (this.tabA !== id) {
+            this.tabA = id
+            this.upType = upType
+            // console.log('upType', this.upType)
+            // console.log('tabA', this.tabA)
+            // console.log('levelId', this.levelId)
+            if (this.upType === 2) {
+              if (this.levelId > id) {
+                this.title = '已开通更高级别'
+                this.classA = 'openA'
+                this.num = 0
+              } else if (this.levelId === id) {
+                this.title = '已开通'
+                this.classA = 'openA'
+                this.num = 1
+              } else if (this.levelId < id) {
+                this.title = '立即升级'
+                this.classA = 'open'
+                this.num = 2
+              }
+            } else if (this.upType === 1) {
+              if (this.status === 0) {
+                this.title = '申请'
+                this.classA = 'open'
+              } else if (this.status === 1) {
+                this.title = '申请中'
+                this.classA = 'openA'
+                this.upgrade = 1
+              }
+            }
+            // console.log('upType', this.upType)
+            // console.log('tabA', this.tabA)
+          } else {
+            this.tabA = ''
+          }
+        } else if (this.isBuy === 0) {
+          // this.upgrade = 0
+          this.num = 2
           this.tabA = id
           this.upType = upType
-          // console.log('upType', this.upType)
-          // console.log('tabA', this.tabA)
-          // console.log('levelId', this.levelId)
-          if (this.levelId > id) {
-            this.title = '已开通更高级别'
-            this.classA = 'openA'
-            this.num = 0
-          } else if (this.levelId === id) {
-            this.title = '已开通'
-            this.classA = 'openA'
-            this.num = 1
-          } else if (this.levelId < id) {
-            this.title = '立即升级'
+          console.log('statusAA', this.status)
+          if (this.upType === 2) {
+            this.title = '开通'
             this.classA = 'open'
-            this.num = 2
+          } else if (this.upType === 1) {
+            if (this.status === 0) {
+              this.title = '申请'
+              this.classA = 'open'
+            } else if (this.status === 1) {
+              this.title = '申请中'
+              this.classA = 'openA'
+              this.upgrade = 1
+            }
           }
           // console.log('upType', this.upType)
           // console.log('tabA', this.tabA)
-        } else {
-          this.tabA = ''
+          // console.log('levelId', this.levelId)
         }
         // this.tabA = id
       },

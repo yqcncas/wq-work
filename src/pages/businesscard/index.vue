@@ -136,7 +136,7 @@
             </div>
           </div>
           <!--名片风格2-->
-          <div class="card-topA" v-if="cardType===1">
+          <div class="card-topA" v-if="cardType===2">
             <div class="ordinary-wrap shadow three-card">
               <image @click="preview(postForm.imgUrl,[postForm.imgUrl])" class="three-img" :src="postForm.imgUrl" mode="aspectFill" @load="imgLoad"></image>
               <div class="right-three">
@@ -158,7 +158,7 @@
             </div>
           </div>
           <!-- 名片风格3 -->
-          <div class="card-topC" v-else-if="cardType ===2">
+          <div class="card-topC" v-else-if="cardType ===1">
             <div class="bgImgA">
               <img :src="postForm.imgUrl"/>
             </div>
@@ -467,7 +467,7 @@
         imgUrlList: [],
         latitude: '',
         longitude: '',
-        cardType: '',
+        cardType: 0,
         animal: ''
       }
     },

@@ -27,9 +27,9 @@
             <p>成功提现佣金（元）</p>
             <p class="money-num">{{detailData.getMoneyS}}</p>
           </div>
-          <div>
+          <div class="flexRow">
             <p>可提现佣金（元）</p>
-            <p class="flexRow">
+            <p class="main">
               <span class="money-num">{{detailData.moneyS}}</span>
               <span class="btn-m" @click="routeTo(`../agCash/main?moneyS=${detailData.moneyS}&money=${detailData.money}`)">提现</span>
             </p>

@@ -84,18 +84,28 @@
       margin-top: 20rpx;
     }
 
-    .btn-m {
-      width: 76rpx;
-      height: 36rpx;
-      font-size: 26rpx;
-      line-height: 36rpx;
-      text-align: center;
-      background-color: #fff;
-      color: #2A94EC;
-      display: inline-block;
-      font-weight: bold;
-      border-radius: 100rpx;
-      margin-left: 12rpx;
+    .main{
+      display: flex;
+      align-items: center;
+      .money-num {
+        display: inline-block;
+        font-size: 40rpx;
+        //margin-top: 20rpx;
+      }
+      .btn-m {
+        width: 76rpx;
+        margin-top: 16rpx;
+        height: 36rpx;
+        font-size: 26rpx;
+        line-height: 36rpx;
+        text-align: center;
+        background-color: #fff;
+        color: #2A94EC;
+        display: inline-block;
+        font-weight: bold;
+        border-radius: 100rpx;
+        margin-left: 12rpx;
+      }
     }
   }
 
