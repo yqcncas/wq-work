@@ -117,6 +117,7 @@
     margin-top: ~'-20rpx';
     width: 100%;
     min-height: ~'808rpx';
+    height: 100%;
     background: #ffffff;
     z-index: 99!important;
     border-top-left-radius: ~'25rpx';
@@ -142,123 +143,126 @@
     }
 
 
-
     .NetCard-main{
       //margin-top: ~'75rpx';
       height: 100%;
       padding: 0 ~'40rpx';
-      .conts-main{
-        width: 100%;
-        //min-height: ~'600rpx';
-        padding-bottom: ~'120rpx';
-        .card{
-          //width: ~'656rpx';
-          height: ~'110rpx';
-          padding: ~'10rpx' 0;
-          display: block;
-          margin: 0 auto;
-          margin-top: ~'10rpx';
-          //border-radius: ~'10rpx';
-          border-bottom: ~'1rpx' solid #CCCCCC;
-          //box-shadow: ~'3rpx' ~'3rpx' ~'3rpx' #f1f1f1;
-          position: relative;
-          img{
-            width: ~'100rpx';
-            height: ~'100rpx';
-            border-radius: ~'10rpx';
-          }
+      .scroll-view{
+        height: 100%;
+        .conts-main{
+          width: 100%;
+          height: 100%;
+          //min-height: ~'600rpx';
+          //padding-bottom: ~'120rpx';
+          .card{
+            //width: ~'656rpx';
+            height: ~'110rpx';
+            padding: ~'10rpx' 0;
+            display: block;
+            margin: 0 auto;
+            margin-top: ~'10rpx';
+            //border-radius: ~'10rpx';
+            border-bottom: ~'1rpx' solid #CCCCCC;
+            //box-shadow: ~'3rpx' ~'3rpx' ~'3rpx' #f1f1f1;
+            position: relative;
+            img{
+              width: ~'100rpx';
+              height: ~'100rpx';
+              border-radius: ~'10rpx';
+            }
 
-          .card-main{
-            .qiye {
-              position: absolute;
-              top: ~'20rpx';
-              left: ~'130rpx';
-              .img{
-                width: ~'28rpx';
-                height: ~'28rpx';
-                font-size: ~'20rpx';
-                color: #2A94EC;
-                border: ~'1rpx' solid #2a94ec ;
-                float: left;
-                border-radius: ~'25rpx';
-                s {
-                  text-align: center;
+            .card-main{
+              .qiye {
+                position: absolute;
+                top: ~'20rpx';
+                left: ~'130rpx';
+                .img{
+                  width: ~'28rpx';
+                  height: ~'28rpx';
+                  font-size: ~'20rpx';
+                  color: #2A94EC;
+                  border: ~'1rpx' solid #2a94ec ;
+                  float: left;
+                  border-radius: ~'25rpx';
+                  s {
+                    text-align: center;
+                  }
+                }
+                b{
+                  float: left;
+                  margin-top: ~'-8rpx';
+                  margin-left: ~'10rpx';
+                  font-weight: 600;
+                  max-width: ~'150rpx';
+                  font-size: ~'30rpx';
+                  overflow: hidden;
+                  text-overflow:ellipsis;
+                  white-space: nowrap;
+
+                }
+                .job{
+                  float: left;
+                  max-width: ~'110rpx';
+                  font-size: ~'24rpx';
+                  margin-top: ~'-3rpx';
+                  overflow: hidden;
+                  text-overflow:ellipsis;
+                  white-space: nowrap;
+                  margin-left: ~'20rpx';
+                  color: #c5c5c5;
+                }
+                .status{
+                  color: #2A94EC;
+                  border: 1px solid #2A94EC;
+                  padding: 0 ~'2rpx';
+                  font-size: ~'16rpx';
+                  float: left;
+                  display: flex;
+                  margin-left: ~'15rpx';
+                  border-radius: ~'10rpx';
                 }
               }
-              b{
-                float: left;
-                margin-top: ~'-8rpx';
+              .comyname{
+                position: absolute;
+                bottom: ~'20rpx';
+                left: ~'130rpx';
+                font-size: ~'26rpx';
+                color:#9D9D9D;
+              }
+            }
+
+
+            .card-right{
+              position:absolute ;
+              right: ~'10rpx';
+              top: ~'20rpx';
+              color: #2A94EC;
+              font-size: ~'20rpx';
+              .eye img{
+                width: ~'20rpx';
+                height: ~'20rpx';
+              }
+
+              .star img{
+                width: ~'20rpx';
+                height: ~'20rpx';
+              }
+              p{
+                display: inline-block ;
                 margin-left: ~'10rpx';
-                font-weight: 600;
-                max-width: ~'150rpx';
-                font-size: ~'30rpx';
-                overflow: hidden;
-                text-overflow:ellipsis;
-                white-space: nowrap;
-
+                position: relative;
               }
-              .job{
-                float: left;
-                max-width: ~'110rpx';
-                font-size: ~'24rpx';
-                margin-top: ~'-3rpx';
-                overflow: hidden;
-                text-overflow:ellipsis;
-                white-space: nowrap;
-                margin-left: ~'20rpx';
-                color: #c5c5c5;
+              span{
+                margin-left: ~'10rpx';
               }
-              .status{
-                color: #2A94EC;
-                border: 1px solid #2A94EC;
-                padding: 0 ~'2rpx';
-                font-size: ~'16rpx';
-                float: left;
-                display: flex;
-                margin-left: ~'15rpx';
-                border-radius: ~'10rpx';
-              }
-            }
-            .comyname{
-              position: absolute;
-              bottom: ~'20rpx';
-              left: ~'130rpx';
-              font-size: ~'26rpx';
-              color:#9D9D9D;
-            }
-          }
-
-
-          .card-right{
-            position:absolute ;
-            right: ~'10rpx';
-            top: ~'20rpx';
-            color: #2A94EC;
-            font-size: ~'20rpx';
-            .eye img{
-              width: ~'20rpx';
-              height: ~'20rpx';
-            }
-
-            .star img{
-              width: ~'20rpx';
-              height: ~'20rpx';
-            }
-            p{
-              display: inline-block ;
-              margin-left: ~'10rpx';
-              position: relative;
-            }
-            span{
-              margin-left: ~'10rpx';
-            }
-            i {
-              position: absolute;
-              right: 0;
-              bottom:~'-58rpx';
-              img{
-                width: ~'40rpx';
-                height: ~'40rpx';
+              i {
+                position: absolute;
+                right: 0;
+                bottom:~'-58rpx';
+                img{
+                  width: ~'40rpx';
+                  height: ~'40rpx';
+                }
               }
             }
           }

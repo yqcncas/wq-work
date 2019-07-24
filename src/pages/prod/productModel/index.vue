@@ -102,7 +102,7 @@
               // })
               const token = wx.getStorageSync('token')
               wx.uploadFile({
-                url: UPLOAD_FILE + '?filedir=companyInfo',
+                url: UPLOAD_FILE + '?filedir=goodsModelImg',
                 filePath: res.tempFilePaths[0],
                 name: 'file',
                 header: {

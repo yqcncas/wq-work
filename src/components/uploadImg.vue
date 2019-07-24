@@ -43,7 +43,10 @@
     },
     data () {
       return {
-        urls: [],
+        urls: [{
+          title: '',
+          imgUrl: ''
+        }],
         tabA: 0,
         title: '',
         chooseStyle: 'chooseImg',
@@ -61,14 +64,21 @@
           })
           if (this.tabA !== '') {
             this.urls[this.tabA].title = '封面'
+          } else {
+            this.urls[this.tabA].title = '设为封面'
           }
         }
       }
     },
     onShow () {
+      this.urls = []
     },
     onLoad (options) {
-      this.editInfo(options.id)
+      if (options.edit === '1') {
+        this.editInfo(options.id)
+      }
+    },
+    onUnload () {
     },
     methods: {
       // 编辑产品获取单个内容
@@ -156,7 +166,7 @@
               /** 上传完成后把文件上传到服务器 */
               const token = wx.getStorageSync('token')
               wx.uploadFile({
-                url: UPLOAD_FILE + '?filedir=companyProduce',
+                url: UPLOAD_FILE + '?filedir=commodity',
                 filePath: res.tempFilePaths[0],
                 name: 'file',
                 header: {

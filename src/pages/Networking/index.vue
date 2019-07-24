@@ -31,9 +31,9 @@
             <span class="title">热门名片</span>
             <span class="fire"><i class="iconfont iconremen"></i>我要上热门</span>
         </div>
-        <div class="NetCard-main">
-          <scroll-view scroll-y @scrolltolower = "getScroll()" :style="'height:' + windowHeight + 'rpx'">
-          <div class="conts-main" :style="'height:' + windowHeightA + 'rpx'">
+        <div class="NetCard-main" >
+          <scroll-view class="scroll-view" scroll-y @scrolltolower = "getScroll()" :style="'height:' + windowHeight + 'px'">
+          <div class="conts-main">
             <div v-if="cards !== ''|| cards !== null">
               <div class="card" v-for="(item,index) in cards" :key="index">
                 <div @click="goToCard(item.id)">
@@ -104,26 +104,48 @@
       }
     },
     onLoad () {
-      const windowHeight = wx.getSystemInfoSync().screenHeight
-      if (windowHeight < 569) {
-        this.windowHeight = (wx.getSystemInfoSync().screenHeight - 215) * 2
-        this.windowHeightA = (wx.getSystemInfoSync().screenHeight - 215) * 2
-      } else if (windowHeight > 569 && windowHeight < 668) {
-        this.windowHeight = (wx.getSystemInfoSync().screenHeight - 305) * 2
-        this.windowHeightA = (wx.getSystemInfoSync().screenHeight - 305) * 2
-        console.log('height', wx.getSystemInfoSync().screenHeight)
-      } else if (windowHeight > 668 && windowHeight < 737) {
-        this.windowHeight = (wx.getSystemInfoSync().screenHeight - 300) * 2
-        this.windowHeightA = (wx.getSystemInfoSync().screenHeight - 300) * 2
-        console.log('height', wx.getSystemInfoSync().screenHeight)
-      } else if (windowHeight > 738 && windowHeight < 813) {
-        this.windowHeight = (wx.getSystemInfoSync().screenHeight - 335) * 2
-        this.windowHeightA = (wx.getSystemInfoSync().screenHeight - 335) * 2
-        console.log('height', wx.getSystemInfoSync().screenHeight)
-      } else if (windowHeight > 1023 && windowHeight < 1024) {
-        this.windowHeight = (wx.getSystemInfoSync().screenHeight - 600) * 2
-        this.windowHeightA = (wx.getSystemInfoSync().screenHeight - 600) * 2
+      const screenHeight = wx.getSystemInfoSync().screenHeight
+      const windowHeight = wx.getSystemInfoSync().windowHeight
+      const tarbar = screenHeight - windowHeight
+      // this.windowHeight = screenHeight - 278 - tarbar
+      if (screenHeight < 569) {
+        this.windowHeight = screenHeight - 218 - tarbar
+      } else if (screenHeight > 569 && screenHeight < 668) {
+        this.windowHeight = screenHeight - 258 - tarbar
+      } else if (screenHeight > 668 && screenHeight < 737) {
+        this.windowHeight = screenHeight - 278 - tarbar
+      } else if (screenHeight > 738 && screenHeight < 813) {
+        this.windowHeight = screenHeight - 258 - tarbar
+      } else if (screenHeight > 1023 && screenHeight < 1025) {
+        this.windowHeight = windowHeight - 520
+      } else if (screenHeight > 1025 && screenHeight < 1113) {
+        this.windowHeight = windowHeight - 580
+      } else if (screenHeight > 1113 && screenHeight < 1367) {
+        this.windowHeight = windowHeight - 700
+      } else if (screenHeight > 1367) {
+        this.windowHeight = windowHeight - screenHeight / 2
+      } else {
+        this.windowHeight = windowHeight - screenHeight / 2
       }
+      // if (windowHeight < 569) {
+      //   this.windowHeight = (wx.getSystemInfoSync().screenHeight - 215) * 2
+      //   this.windowHeightA = (wx.getSystemInfoSync().screenHeight - 215) * 2
+      // } else if (windowHeight > 569 && windowHeight < 668) {
+      //   this.windowHeight = (wx.getSystemInfoSync().screenHeight - 305) * 2
+      //   this.windowHeightA = (wx.getSystemInfoSync().screenHeight - 305) * 2
+      //   console.log('height', wx.getSystemInfoSync().screenHeight)
+      // } else if (windowHeight > 668 && windowHeight < 737) {
+      //   this.windowHeight = (wx.getSystemInfoSync().screenHeight - 300) * 2
+      //   this.windowHeightA = (wx.getSystemInfoSync().screenHeight - 300) * 2
+      //   console.log('height', wx.getSystemInfoSync().screenHeight)
+      // } else if (windowHeight > 738 && windowHeight < 813) {
+      //   this.windowHeight = (wx.getSystemInfoSync().screenHeight - 335) * 2
+      //   this.windowHeightA = (wx.getSystemInfoSync().screenHeight - 335) * 2
+      //   console.log('height', wx.getSystemInfoSync().screenHeight)
+      // } else if (windowHeight > 1023 && windowHeight < 1024) {
+      //   this.windowHeight = (wx.getSystemInfoSync().screenHeight - 100) * 2
+      //   this.windowHeightA = (wx.getSystemInfoSync().screenHeight - 100) * 2
+      // }
     },
     onShow () {
       this.pageNum = 1
@@ -200,7 +222,7 @@
                 item.imgUrl = 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png'
               }
             })
-            console.log('data', this.cards)
+            // console.log('data', this.cards)
             this.lastPage = res.data.lastPage
             this.pageNum = res.data.pageNum
             this.nextPage = res.data.nextPage

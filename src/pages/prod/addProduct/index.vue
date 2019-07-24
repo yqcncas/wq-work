@@ -112,6 +112,7 @@
         choose: '',
         imgUrl: '',
         tabB: '',
+        title: '',
         params: {
           name: '',
           price: null,
