@@ -11,14 +11,14 @@
                 <!-- home及后退键 -->
                 <cover-view class="bar-options" @click="backClick()">
                     <cover-view class="opt opt-back">
-                      <cover-image class="back-image" :src="headImg"></cover-image>
+                      <cover-image v-if="headImg" class="back-image" :src="headImg"></cover-image>
                     </cover-view>
                     <cover-view class="opt opt-home" @click="homeClick()">
                       <cover-view style="font-size: 20rpx">消息中心</cover-view><cover-view v-if="num !== 0" style="width: 22rpx;height: 22rpx;background:red;border-radius: 50rpx;color: #fff;font-size: 18rpx;padding: 4rpx;" ><cover-view style="text-align: center">{{num}}</cover-view></cover-view>
                     </cover-view>
                 </cover-view>
                 <!-- 标题 -->
-                <cover-view class="bar-title" :style="[{color:titleColor}]">{{title}}</cover-view>
+                <cover-view v-if="title"class="bar-title" :style="[{color:titleColor}]">{{title}}</cover-view>
             </cover-view>
         </cover-view>
     </div>

@@ -37,14 +37,28 @@
             <div v-if="cards !== ''|| cards !== null">
               <div class="card" v-for="(item,index) in cards" :key="index">
                 <div @click="goToCard(item.id)">
-                  <span><img :src="item.imgUrl + '?x-oss-process=style/c400'"></span>
+                  <span>
+                    <img class="imga" :src="item.imgUrl + '?x-oss-process=style/c400'">
+                    <div class="grade">
+                       <i v-if="item.leavelNum === 1">
+                          <img src="../../../static/images/v1.png">
+                       </i>
+                       <i v-else-if="Grade === 2">
+                          <img src="../../../static/images/v2.png">
+                       </i>
+                       <i v-else-if="Grade === 3">
+                          <img src="../../../static/images/v3.png">
+                       </i>
+                      <i v-else></i>
+                    </div>
+                  </span>
                   <div class="card-main">
                     <div class="qiye">
                       <span class="img"><s>企</s></span>
                       <b>{{ item.name }}</b>
                       <span class="job">{{ item.job }}</span>
-                      <span v-if="item.isCertification === 0" class="status">已认证</span>
-                      <span v-else class="status">无状态</span>
+                      <!--<span v-if="item.isCertification === 0" class="status">已认证</span>-->
+                      <!--<span v-else class="status">无状态</span>-->
                     </div>
                     <p class="comyname" v-if="item.salesCompanyName === null">无公司</p>
                     <p class="comyname" v-else>{{ item.salesCompanyName}}</p>
@@ -91,6 +105,7 @@
     name: 'index',
     data () {
       return {
+        Grade: 'V1',
         tabs: 1,
         lastPage: '',
         nextPage: '',
@@ -109,22 +124,22 @@
       const tarbar = screenHeight - windowHeight
       // this.windowHeight = screenHeight - 278 - tarbar
       if (screenHeight < 569) {
-        this.windowHeight = screenHeight - 218 - tarbar
+        this.windowHeight = screenHeight - 199 - tarbar
       } else if (screenHeight > 569 && screenHeight < 668) {
-        this.windowHeight = screenHeight - 258 - tarbar
+        this.windowHeight = screenHeight - 233 - tarbar
       } else if (screenHeight > 668 && screenHeight < 737) {
-        this.windowHeight = screenHeight - 278 - tarbar
+        this.windowHeight = screenHeight - 256 - tarbar
       } else if (screenHeight > 738 && screenHeight < 813) {
-        this.windowHeight = screenHeight - 258 - tarbar
+        this.windowHeight = screenHeight - 233 - tarbar
+      } else if (screenHeight > 813 && screenHeight < 897) {
+        this.windowHeight = screenHeight - 256 - tarbar
       } else if (screenHeight > 1023 && screenHeight < 1025) {
-        this.windowHeight = windowHeight - 520
+        this.windowHeight = windowHeight - 480
       } else if (screenHeight > 1025 && screenHeight < 1113) {
-        this.windowHeight = windowHeight - 580
+        this.windowHeight = windowHeight - 520
       } else if (screenHeight > 1113 && screenHeight < 1367) {
-        this.windowHeight = windowHeight - 700
+        this.windowHeight = windowHeight - 640
       } else if (screenHeight > 1367) {
-        this.windowHeight = windowHeight - screenHeight / 2
-      } else {
         this.windowHeight = windowHeight - screenHeight / 2
       }
       // if (windowHeight < 569) {
@@ -222,7 +237,7 @@
                 item.imgUrl = 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png'
               }
             })
-            // console.log('data', this.cards)
+            console.log('data', this.cards)
             this.lastPage = res.data.lastPage
             this.pageNum = res.data.pageNum
             this.nextPage = res.data.nextPage

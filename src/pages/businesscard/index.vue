@@ -12,7 +12,7 @@
         <p>目前您还没有名片</p>
         <p>点击下方按钮去创建吧</p>
         <p @click="goToCard()" class="addImg">
-          <img src="../../../static/images/addCard.png">
+          <img src="/static/images/addCard.png">
         </p>
       </div>
     </div>
@@ -48,54 +48,69 @@
         <div @click="showType" class="cancel-btn">取消</div>
       </div>
       <!-- 登录 -->
-      <div class="modal" v-if="modalFlag" catchtouchmove="true">
-        <div class="dialog">
-          <div class="avatar row-item">
-            <div class="vbj">
-              <span></span>
-              <div class="img-wrp">
-                <image mode="widthFix" :src="imgUrl + '?x-oss-process=style/w100'" />
-              </div>
-              <div class="Grade">
-                <i v-if="Grade === v1">
-                    <img src="../../../static/images/v1.png">
-                </i>
-                <i v-else-if="Grade === v2">
-                    <img src="../../../static/images/v2.png">
-                </i>
-                <i v-else>
-                    <img src="../../../static/images/v3.png">
-                </i>
-              </div>
+      <!--<div class="modal" v-if="modalFlag" catchtouchmove="true">-->
+        <!--<div class="dialog">-->
+          <!--<div class="avatar row-item">-->
+            <!--<div class="vbj">-->
+              <!--<span></span>-->
+              <!--<div class="img-wrp" v-if="imgUrl">-->
+                <!--<image mode="widthFix" :src="imgUrl + '?x-oss-process=style/w100'" />-->
+              <!--</div>-->
+              <!--<div class="Grade">-->
+                <!--<i v-if="Grade === v1">-->
+                    <!--<img src="../../../static/images/v1.png">-->
+                <!--</i>-->
+                <!--<i v-else-if="Grade === v2">-->
+                    <!--<img src="../../../static/images/v2.png">-->
+                <!--</i>-->
+                <!--<i v-else>-->
+                    <!--<img src="../../../static/images/v3.png">-->
+                <!--</i>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+          <!--&lt;!&ndash;<p class="dialog-info">&ndash;&gt;-->
+          <!--&lt;!&ndash;<span>你好！ 初次见面，先登录一下吧</span>&ndash;&gt;-->
+          <!--&lt;!&ndash;</p>&ndash;&gt;-->
+          <!--<div class="img-show">-->
+            <!--&lt;!&ndash;<image :src="imgUrl + '?x-oss-process=style/w750'" mode="widthFix" class="img">&ndash;&gt;-->
+            <!--&lt;!&ndash;</image>&ndash;&gt;-->
+            <!--<div class="intro">-->
+              <!--<div class="first-row">-->
+                <!--<span>{{ name }}</span>-->
+                <!--<span>{{ job }}</span>-->
+              <!--</div>-->
+              <!--<div class="call-num">{{phone}}</div>-->
+            <!--</div>-->
+          <!--</div>-->
+          <!--<form name='pushMsgFm' report-submit='true' @submit='getFormID' class="pushHight">-->
+            <!--<div class='aa'>-->
+              <!--<button form-type="submit" class="author-button" lang="zh_CN" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">-->
+                <!--&lt;!&ndash;<span class="iconfont icon-weixin1"></span>&ndash;&gt;-->
+                <!--<span  @getuserinfo="bindGetUserInfo">收下名片</span>-->
+              <!--</button>-->
+              <!--<button form-type="submit" class="look-just" lang="zh_CN" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">看看再说</button>-->
+            <!--</div>-->
+          <!--</form>-->
+        <!--</div>-->
+      <!--</div>-->
+      <div v-if="modalFlag" catchtouchmove="true" class="window">
+          <div class="window-mian">
+            <div class="window-title">
+              <img src="https://oss.tzyizan.com/salesInfo/201907251327481564032468239.png">
+              <i>
+                <p>为了提供优质服务,请您授权后</p>
+                <p>放心使用,您的信息将受到保护</p>
+                <span>
+                        <button form-type="submit" class="look-just" lang="zh_CN" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">允许授权</button>
+                </span>
+              </i>
             </div>
           </div>
-          <!--<p class="dialog-info">-->
-          <!--<span>你好！ 初次见面，先登录一下吧</span>-->
-          <!--</p>-->
-          <div class="img-show">
-            <!--<image :src="imgUrl + '?x-oss-process=style/w750'" mode="widthFix" class="img">-->
-            <!--</image>-->
-            <div class="intro">
-              <div class="first-row">
-                <span>{{ name }}</span>
-                <span>{{ job }}</span>
-              </div>
-              <div class="call-num">{{phone}}</div>
-            </div>
-          </div>
-          <form name='pushMsgFm' report-submit='true' @submit='getFormID' class="pushHight">
-            <div class='aa'>
-              <button form-type="submit" class="author-button" lang="zh_CN" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">
-                <!--<span class="iconfont icon-weixin1"></span>-->
-                <span  @getuserinfo="bindGetUserInfo">收下名片</span>
-              </button>
-              <button form-type="submit" class="look-just" lang="zh_CN" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">看看再说</button>
-            </div>
-          </form>
-        </div>
       </div>
       <div class="business-main">
       <el-form ref="postForm" :model="postForm">
+        <div class="mainA">
         <div class="cards">
           <div class="cards-radar" @click="goRadar">
             <div class="main">
@@ -103,7 +118,7 @@
                 <block v-for="(item, index) in infoMation" :key="index" @click="routerTo(item.id)">
                   <swiper-item>
                     <div class="top">
-                        <div class="imgUrl"><img :src= item.avatarUrl /></div>
+                        <div class="imgUrl" v-if="item.avatarUrl"><img :src= item.avatarUrl /></div>
                         <div class="name">{{item.userName}}</div>
                         <div class="date">{{item.browseDate}}</div>
                     </div>
@@ -111,8 +126,8 @@
                   </swiper-item>
                 </block>
               </swiper>
+              <div class="title">寻客雷达</div>
             </div>
-            <div class="title">寻客雷达</div>
           </div>
           <!--名片风格1-->
           <div class="card-top" v-if="cardType ===0">
@@ -159,7 +174,7 @@
           </div>
           <!-- 名片风格3 -->
           <div class="card-topC" v-else-if="cardType ===1">
-            <div class="bgImgA">
+            <div class="bgImgA" v-if="postForm.imgUrl">
               <img :src="postForm.imgUrl"/>
             </div>
             <div class="main">
@@ -171,7 +186,7 @@
                 <p class="phone">
                   {{postForm.phone}}
                 </p>
-                <p class="Img">
+                <p class="Img" v-if="postForm.imgUrl">
                   <img :src="postForm.imgUrl"/>
                 </p>
               </div>
@@ -239,23 +254,25 @@
               <div class="word" v-if="postForm.headImgList.list.length === 10">…</div>
             </div>
             <div class="zan">
-              <img v-if="postForm.isCollect == 1" src="../../../static/images/love-se.png" class="icon-8" />
-              <img v-else src="../../../static/images/love.png" class="icon-8" />
+              <img v-if="postForm.isCollect == 1" src="../../../static/images/dianzan.png" class="icon-8" />
+              <img v-else src="../../../static/images/dianzan1.png" class="icon-8" />
               <!--<span class="iconfont icon-dianzan" :class="salesmanRecord&&salesmanRecord.isPraise==1? 'up':'down'" @click="clickThumb"></span>-->
             </div>
           </div>
           <div class="group-4">
-            <span class="people-browse">{{ postForm.browseCount }}人浏览</span>
+            <span class="people-browse">已有{{ postForm.browseCount }}人来访</span>
             <div class="block-5">
-              <text class="reliable">收藏</text>
-              <text class="reliable-next">{{ postForm.collectCount }}</text>
+              <text class="reliable">点赞</text>
+              <text class="reliable-next">{{ postForm.collectCount }}次</text>
             </div>
           </div>
+          </div>
+        </div>
           <!-- 名片码 -->
           <div :class="cardM" @click="routerTo(`./showQrcode/main?companyName=${postForm.salesCompanyName}&logo=${logo}&qrcode=${qrCodeUrl}&name=${postForm.name}&job=${postForm.job}&imgUrl=${postForm.imgUrl}`)">
             <p class="ma-txt">名片码</p>
             <div class="radius-img">
-              <img :src="qrCodeUrl" mode="aspectFill">
+              <img v-if="qrCodeUrl" :src="qrCodeUrl" mode="aspectFill">
             </div>
           </div>
           <!-- 个人简介 -->
@@ -402,7 +419,6 @@
               </div>
             </div>
           </div>
-        </div>
       </el-form>
     </div>
     </div>
@@ -528,7 +544,7 @@
               this.fotter = 'card-footerA'
               this.cardM = 'card-maC'
             }
-            console.log('cardType', this.cardType)
+            // console.log('cardType', this.cardType)
           }
           // const tradeStatus = res.data.tradeStatus
           // wx.setStorageSync('tradeStatus', tradeStatus)
@@ -596,7 +612,7 @@
             if (tempData === today) {
               item.browseDate = temp.format('A hh:mm')
             } else if (tempData === yesterday) {
-              item.browseDate = '昨天'
+              item.browseDate = '昨天' + temp.format('A hh:mm')
             } else if (this.moment(Date.now() - 3 * 24 * 60 * 60 * 1000) < item.browseDate) {
               item.browseDate = temp.format('dddd')
             } else {
@@ -742,27 +758,36 @@
       async bindGetUserInfo (e) {
         // 解密
         const userInfo = e.target.userInfo
-        wx.setStorageSync('userNameS', userInfo.nickName)
-        wx.getUserInfo({
-          success: async (res) => {
-            console.log(res)
-            this.encryptedData = res.encryptedData
-            this.iv = res.iv
-            const { data } = await personApi.getPhone({
-              iv: this.iv,
-              encryptedData: this.encryptedData
-            })
-            this.unionId = JSON.parse(data).unionId
-            userInfo.unionId = this.unionId
-            this.insertOpera('授权了信息', 9)
-            // await home.updateUser(userInfo)
-            // await personApi.updateRemarksNew({ remarks: userInfo.nickName, userId: this.id })
-          }
-        })
+        if (e.target.userInfo) {
+          wx.setStorageSync('userNameS', userInfo.nickName)
+          wx.getUserInfo({
+            success: async (res) => {
+              console.log(res)
+              this.encryptedData = res.encryptedData
+              this.iv = res.iv
+              const { data } = await personApi.getPhone({
+                iv: this.iv,
+                encryptedData: this.encryptedData
+              })
+              this.unionId = JSON.parse(data).unionId
+              userInfo.unionId = this.unionId
+              // await home.updateUser(userInfo)
+              // await personApi.updateRemarksNew({ remarks: userInfo.nickName, userId: this.id })
+            }
+          })
+        } else {
+          this.modalFlag = false
+          wx.showToast({
+            title: '取消授权',
+            icon: 'none',
+            duration: 2000
+          })
+        }
         wx.setStorageSync('avatarUrl', e.target.userInfo.avatarUrl)
         this.$nextTick(() => {
           this.modalFlag = false
         })
+        this.insertOpera('授权了信息', 9)
         if (this.phoneAuthorStatus === 1) {
           this.phoneModal = true
         }
@@ -797,12 +822,14 @@
             'userId': this.userId
           }
         }).then(res => {
-          // console.log('res', res.data)
+          console.log('res', res.data)
           this.latitude = res.data.latitude
           this.longitude = res.data.longitude
           if (res.data) {
             if (res.data.nickName === '' || res.data.nickName == null) {
               this.modalFlag = true
+            } else {
+              this.modalFlag = false
             }
             if (res.data.phone !== '') {
               const phone = res.data.phone
@@ -842,6 +869,8 @@
               this.voiceTime = this.formatSeconds(this.num)
               console.log(this.num)
             }, 100)
+          } else {
+            this.modalFlag = true
           }
         }).catch(err => {
           console.log(err.status, err.message)

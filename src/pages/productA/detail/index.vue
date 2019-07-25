@@ -112,7 +112,7 @@
       </div>
     </div>
     <!-- 加入购物车 -->
-    <div class="add-cart">
+    <div class="add-cart" v-if="buyStatus !== 0 || buyStatus == null">
       <div class="icon-box">
         <div class="icon-btn" @click="routerTo('../../pageA/cart/main')">
           <i class="iconfont iconshop-cart"><span class="tip-num" v-if="allnumber>0">{{allnumber}}</span></i>
@@ -125,6 +125,16 @@
       </div>
       <div class="add-btn common-btn" :class="{'disabled-bg':buyStatus===0}" @click="addCart">加入购物车</div>
       <div class="buy-now common-btn" :class="{'disabled-bg':buyStatus===0}" @click="buy">立即购买</div>
+    </div>
+    <div v-else class="add-cart">
+      <div class="icon-box">
+        <div class="icon-btn" @click="routerTo('/pages/OthersCard/main?id=' + salesmanIdA)">
+          <!--<i class="iconfont iconshop-cart"><span class="tip-num" v-if="allnumber>0">{{allnumber}}</span></i>-->
+          <i><img :src="salesmanHeadUrl"></i>
+          <p>更多</p>
+        </div>
+      </div>
+      <div class="add-btnA common-btnA"  @click="routerToA('/pages/msgcenter/main?id=' + userIdA)">咨询</div>
     </div>
   </div>
 </template>
@@ -160,6 +170,8 @@ export default {
       flag3: 0,
       clicknum: 0,
       goodmodel: [],
+      salesmanHeadUrl: '',
+      userId: '',
       tomodeimg: 'model1',
       number: 1,
       issueList: [{
@@ -179,6 +191,7 @@ export default {
         answer: '如果发现质量问题七天内包退换'
       }
       ],
+      salesmanIdA: '',
       showpop: false,
       title: '',
       time: '',
@@ -196,7 +209,7 @@ export default {
       url: '',
       businessId: '',
       salesmanId: '',
-      userId: '',
+      userIdA: '',
       buyList: [],
       total: null,
       priceStatus: 0,
@@ -245,6 +258,11 @@ export default {
       })
     },
     routerTo (url) {
+      wx.navigateTo({
+        url
+      })
+    },
+    routerToA (url) {
       wx.navigateTo({
         url
       })
@@ -425,8 +443,14 @@ export default {
       const gooddetail = result.data.goods
       this.goodmodel = result.data.goodsModels
       this.name = gooddetail.name
-      console.log('goodmodel', this.goodmodel)
+      wx.setNavigationBarTitle({
+        title: this.name
+      })
+      this.salesmanIdA = result.data.goods.salesmanId
+      // console.log('goodmodel', this.goodmodel)
       // this.info = gooddetail.info
+      this.salesmanHeadUrl = result.data.salesmanHeadUrl
+      this.userIdA = result.data.userId
       this.price = gooddetail.price.toFixed(2)
       this.promotionPrice = gooddetail.promotionPrice
       this.imgurl = gooddetail.imgUrl
@@ -484,9 +508,9 @@ export default {
     // const id = options.id
     this.isSalesMan = getIsSalesMan()
     if (this.isSalesMan === 1) {
-      this.url = '../../message/main'
+      this.url = '../../message/main?id='
     } else {
-      this.url = '../../msgcenter/main'
+      this.url = '../../msgcenter/main?id='
     }
     this.clicknum = null
     this.modelText = '请选择型号'

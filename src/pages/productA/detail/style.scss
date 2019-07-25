@@ -421,6 +421,15 @@
 
     .icon-btn {
       font-size: 22rpx;
+      img{
+        width: 47rpx;
+        height: 47rpx;
+        border-radius: 50%;
+      }
+      p{
+        color: #4A4A4A;
+        font-size: 22rpx;
+      }
 
       .iconfont {
         font-size: 38rpx;
@@ -449,7 +458,13 @@
       line-height: 90rpx;
       box-sizing: border-box;
     }
-
+    .common-btnA {
+      width: 85%;
+      height: 90rpx;
+      line-height: 90rpx;
+      box-sizing: border-box;
+      background: #FC493A;
+    }
     .buy-now {
       background-color: #2a94ec;
       color: #fff;
@@ -458,6 +473,10 @@
     .add-btn {
       border-left: 2rpx solid #eee;
       color: #2a94ec;
+    }
+    .add-btnA {
+      border-left: 2rpx solid #eee;
+      color: #ffffff;
     }
 
     .disabled-bg {

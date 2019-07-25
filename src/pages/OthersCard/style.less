@@ -696,13 +696,17 @@
       }
       .card-top{
         z-index: 9;
-        width: 100%;
+        width: ~'656';
         height: ~'556rpx';
+        border-top-left-radius: ~'10rpx';
+        border-top-right-radius: ~'10rpx';
+        border-left: ~'1rpx' solid #dddddd;
+        border-right: ~'1rpx' solid #dddddd;
         img{
-          width: 100%;
+          width: ~'654rpx';
           height: 100%;
-          //border-top-left-radius: ~'10rpx';
-          //border-top-right-radius: ~'10rpx';
+          border-top-left-radius: ~'10rpx';
+          border-top-right-radius: ~'10rpx';
         }
         .cards-M{
           margin-top: ~'-500rpx';
@@ -739,6 +743,8 @@
       }
       .card-topA{
         position: relative;
+        border: ~'1rpx' solid #dddddd;
+        border-radius: ~'10rpx';
         // 协会名片
         .three-card {
           background: #ffffff;
@@ -759,6 +765,8 @@
             top: 0;
             right: 0;
             overflow: hidden;
+            border-top-right-radius: ~'10rpx';
+            border-bottom-right-radius: ~'10rpx';
           }
 
           .triangle {
@@ -829,6 +837,8 @@
       }
       .card-topB{
         position: relative;
+        border: ~'1rpx' solid #dddddd;
+        border-radius: ~'10rpx';
         // 适应名字长的风格
         .four-card {
           width: 100%;
@@ -914,9 +924,12 @@
         display: inline-block;
         width: 100%;
         border-radius: ~'10rpx';
+        border: ~'1rpx' solid #dddddd;
+        border-radius: ~'10rpx';
         .bgImgA{
           width: 100%;
           height: ~'656rpx';
+          margin-top: ~'-2rpx';
           img{
             width: 100%;
             height: ~'656rpx';
@@ -970,6 +983,9 @@
       }
       .card-footer{
         text-align: center;
+        border-left: ~'1rpx' solid #dddddd;
+        border-right: ~'1rpx' solid #dddddd;
+        border-bottom: ~'1rpx' solid #dddddd;
         height: ~'150rpx';
         line-height: ~'150rpx';
         background: #ffffff;
@@ -1116,7 +1132,7 @@
   box-sizing: border-box;
   .zan{
     margin-top: ~'5rpx';
-    margin-left: ~'40rpx';
+    margin-right: ~'10rpx';
     .icon-8 {
       width: ~'55rpx';
       height: ~'55rpx';
@@ -1136,15 +1152,15 @@
       margin-left: ~'10rpx';
     }
     .logo-main{
-      max-width: ~'525rpx';
+      max-width: ~'620rpx';
       overflow: hidden;
       white-space: nowrap;
       .logo {
-        width: ~'55rpx';
-        height: ~'55rpx';
+        width: ~'45rpx';
+        height: ~'45rpx';
         //border: ~'2rpx' solid #778899;
         border-radius: 50%;
-        margin: ~'3rpx' ~'3rpx' ~'3rpx' ~'-5rpx';
+        margin: ~'3rpx' ~'3rpx' ~'3rpx' ~'5rpx';
       }
       .logo:nth-child(1){
         margin: 0;
@@ -1163,7 +1179,8 @@
   box-sizing: border-box;
   .people-browse {
     font-size: ~'20rpx'!important;
-    color: rgba(157, 157, 157, 1);
+    //color: rgba(157, 157, 157, 1);
+    color: #000000;
     line-height: ~'30rpx';
     white-space: nowrap;
   }
@@ -1174,7 +1191,7 @@
 
     .reliable {
       font-size: ~'20rpx';
-      color: rgba(157, 157, 157, 1);
+      //color: rgba(157, 157, 157, 1);
       line-height: ~'30pxrpx';
       font-weight: 500;
       white-space: nowrap;
@@ -1239,7 +1256,7 @@
 .card-maA {
   position: absolute;
   left: 0;
-  top: ~'634rpx';
+  top: ~'630rpx';
   border: ~'2rpx' solid #eee;
   background-color: #fff;
   border-left: 0;
@@ -1761,6 +1778,59 @@
     }
     .product-details:nth-child(even){
       float: right;
+    }
+  }
+}
+// 信息授权
+.window{
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 999999!important;
+  background: rgba(0,0,0,0.5);
+  .window-mian{
+    width: ~'556rpx';
+    height: ~'638rpx';
+    .window-title{
+      width: ~'556rpx';
+      height: ~'638rpx';
+      border-radius: ~'10rpx';
+      position: relative;
+      //background: url("https://oss.tzyizan.com/salesInfo/201907251327481564032468239.png") no-repeat ~'556rpx' ~'638rpx';
+      img{
+        width: ~'556rpx';
+        height: ~'638rpx';
+        display: inline-block;
+      }
+      i{
+        position: absolute;
+        top: ~'360rpx';
+        width: 100%;
+        text-align: center;
+        p{
+          font-size: ~'32rpx';
+        }
+        span{
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          text-align: center;
+          margin-top: ~'60rpx';
+          .look-just{
+            width: ~'284rpx';
+            height: ~'64rpx';
+            font-size: ~'28rpx';
+            line-height: ~'64rpx';
+            background: #2190EA;
+            color: #ffffff;
+          }
+        }
+      }
     }
   }
 }

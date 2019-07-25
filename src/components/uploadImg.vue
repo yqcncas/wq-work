@@ -43,10 +43,7 @@
     },
     data () {
       return {
-        urls: [{
-          title: '',
-          imgUrl: ''
-        }],
+        urls: [],
         tabA: 0,
         title: '',
         chooseStyle: 'chooseImg',
@@ -54,32 +51,35 @@
         imgUrl: ''
       }
     },
-    watch: {
-      srcs (newValue, oldValue) {
-        this.urls = []
-        if (newValue.length <= 3) {
-          console.log('newValue', newValue)
-          newValue.map((item) => {
-            this.urls.push({ imgUrl: item.imgUrl, title: '设为封面' })
-          })
-          if (this.tabA !== '') {
-            this.urls[this.tabA].title = '封面'
-          } else {
-            this.urls[this.tabA].title = '设为封面'
-          }
-        }
-      }
-    },
     onShow () {
-      this.urls = []
     },
     onLoad (options) {
+      this.tabA = 0
       if (options.edit === '1') {
         this.editInfo(options.id)
+      } else if (options.add === '1') {
+        // this.tabA = 0
+        // this.urls[this.tabA].title = '封面'
       }
     },
     onUnload () {
+      this.goodsImgUrlList = []
+      this.urls = []
     },
+    // watch: {
+    //   srcs (newValue, oldValue) {
+    //     this.urls = []
+    //     if (newValue.length <= 3) {
+    //       console.log('newValue', newValue)
+    //       newValue.map((item) => {
+    //         this.urls.push({ imgUrl: item.imgUrl, title: '设为封面' })
+    //       })
+    //       if (this.tabA !== '') {
+    //         this.urls[this.tabA].title = '封面'
+    //       }
+    //     }
+    //   }
+    // },
     methods: {
       // 编辑产品获取单个内容
       editInfo (id) {
@@ -103,6 +103,16 @@
                 this.tabA = index
               }
             })
+          }
+          this.urls = []
+          if (this.goodsImgUrlList.length <= 3) {
+            console.log('newValue', this.goodsImgUrlList)
+            this.goodsImgUrlList.map((item) => {
+              this.urls.push({ imgUrl: item.imgUrl, title: '设为封面' })
+            })
+            if (this.tabA !== '') {
+              this.urls[this.tabA].title = '封面'
+            }
           }
         }).catch(err => {
           console.log(err)
@@ -178,6 +188,9 @@
                   // 上传成功之后再把图片的地址更新到个人信息接口
                   that.urls.push({imgUrl: JSON.parse(res.data).data[0], title: '设为封面'})
                   that.$emit('choosed', {all: that.urls, num: that.tabA})
+                  if (that.urls.length === 1) {
+                    that.urls[0].title = '封面'
+                  }
                 }
               })
             }

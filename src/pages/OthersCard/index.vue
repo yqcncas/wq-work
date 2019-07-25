@@ -25,54 +25,69 @@
         <div @click="showType" class="cancel-btn">取消</div>
       </div>
       <!-- 登录 -->
-      <div class="modal" v-if="modalFlag" catchtouchmove="true">
-        <div class="dialog">
-          <div class="avatar row-item">
-            <div class="vbj">
-              <span></span>
-              <div class="img-wrp">
-                <image mode="widthFix" :src="imgUrl || 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png' + '?x-oss-process=style/w100'" />
-              </div>
-              <div class="Grade">
-                <i v-if="Grade === v1">
-                  <img src="../../../static/images/v1.png">
-                </i>
-                <i v-else-if="Grade === v2">
-                  <img src="../../../static/images/v2.png">
-                </i>
-                <i v-else>
-                  <img src="../../../static/images/v3.png">
-                </i>
-              </div>
-            </div>
+      <!--<div class="modal" v-if="modalFlag" catchtouchmove="true">-->
+        <!--<div class="dialog">-->
+          <!--<div class="avatar row-item">-->
+            <!--<div class="vbj">-->
+              <!--<span></span>-->
+              <!--<div class="img-wrp">-->
+                <!--<image mode="widthFix" :src="imgUrl || 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png' + '?x-oss-process=style/w100'" />-->
+              <!--</div>-->
+              <!--<div class="Grade">-->
+                <!--<i v-if="Grade === v1">-->
+                  <!--<img src="../../../static/images/v1.png">-->
+                <!--</i>-->
+                <!--<i v-else-if="Grade === v2">-->
+                  <!--<img src="../../../static/images/v2.png">-->
+                <!--</i>-->
+                <!--<i v-else>-->
+                  <!--<img src="../../../static/images/v3.png">-->
+                <!--</i>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+          <!--&lt;!&ndash;<p class="dialog-info">&ndash;&gt;-->
+          <!--&lt;!&ndash;<span>你好！ 初次见面，先登录一下吧</span>&ndash;&gt;-->
+          <!--&lt;!&ndash;</p>&ndash;&gt;-->
+          <!--<div class="img-show">-->
+            <!--&lt;!&ndash;<image :src="imgUrl + '?x-oss-process=style/w750'" mode="widthFix" class="img">&ndash;&gt;-->
+            <!--&lt;!&ndash;</image>&ndash;&gt;-->
+            <!--<div class="intro">-->
+              <!--<div class="first-row">-->
+                <!--<span>{{ name }}</span>-->
+                <!--<span>{{ job }}</span>-->
+              <!--</div>-->
+              <!--<div class="call-num">{{phone}}</div>-->
+            <!--</div>-->
+          <!--</div>-->
+          <!--<form name='pushMsgFm' report-submit='true' @submit='getFormID' class="pushHight">-->
+            <!--<div class='aa'>-->
+              <!--<button form-type="submit" class="author-button" lang="zh_CN" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">-->
+                <!--&lt;!&ndash;<span class="iconfont icon-weixin1"></span>&ndash;&gt;-->
+                <!--<span  @getuserinfo="bindGetUserInfo">收下名片</span>-->
+              <!--</button>-->
+              <!--<button form-type="submit" class="look-just" lang="zh_CN" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">看看再说</button>-->
+            <!--</div>-->
+          <!--</form>-->
+        <!--</div>-->
+      <!--</div>-->
+      <div v-if="modalFlag" catchtouchmove="true" class="window">
+        <div class="window-mian">
+          <div class="window-title">
+            <img src="https://oss.tzyizan.com/salesInfo/201907251327481564032468239.png">
+            <i>
+              <p>为了提供优质服务,请您授权后</p>
+              <p>放心使用,您的信息将受到保护</p>
+              <span>
+                        <button form-type="submit" class="look-just" lang="zh_CN" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">允许授权</button>
+                </span>
+            </i>
           </div>
-          <!--<p class="dialog-info">-->
-          <!--<span>你好！ 初次见面，先登录一下吧</span>-->
-          <!--</p>-->
-          <div class="img-show">
-            <!--<image :src="imgUrl + '?x-oss-process=style/w750'" mode="widthFix" class="img">-->
-            <!--</image>-->
-            <div class="intro">
-              <div class="first-row">
-                <span>{{ name }}</span>
-                <span>{{ job }}</span>
-              </div>
-              <div class="call-num">{{phone}}</div>
-            </div>
-          </div>
-          <form name='pushMsgFm' report-submit='true' @submit='getFormID' class="pushHight">
-            <div class='aa'>
-              <button form-type="submit" class="author-button" lang="zh_CN" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">
-                <!--<span class="iconfont icon-weixin1"></span>-->
-                <span  @getuserinfo="bindGetUserInfo">收下名片</span>
-              </button>
-              <button form-type="submit" class="look-just" lang="zh_CN" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">看看再说</button>
-            </div>
-          </form>
         </div>
       </div>
       <div class="business-main" >
         <el-form ref="postForm" :model="postForm" >
+          <div class="mainA">
           <div class="cards">
             <!--名片风格1-->
             <div class="card-top" v-if="cardType ===0">
@@ -196,27 +211,28 @@
             <div class="block-4">
               <div class="group-3">
                 <!--浏览记录的头像-->
-                <span class="logo-main" v-if="postForm.headImgList.list || postForm.headImgList.list.length !== 0"><img v-for="(item,index) in postForm.headImgList.list" :key="index" :src="item" class="logo" /></span>
-                <div class="word" v-if="postForm.headImgList.list.length === 10">…</div>
+                <span class="logo-main" v-if="list || list.length !== 0"><img v-for="(item,index) in list" :key="index" :src="item" class="logo" /></span>
+                <div class="word" v-if="list.length === 10">…</div>
               </div>
               <div class="zan">
-                <img  @click="cancelCollect(postForm.id)" v-if="postForm.isCollect == 1" src="../../../static/images/love-se.png" class="icon-8" />
-                <img @click="getCollect(postForm.id)" v-else src="../../../static/images/love.png" class="icon-8" />
+                <img  @click="cancelCollect(postForm.id)" v-if="postForm.isCollect == 1" src="../../../static/images/dianzan.png" class="icon-8" />
+                <img @click="getCollect(postForm.id)" v-else src="../../../static/images/dianzan1.png" class="icon-8" />
                 <!--<span class="iconfont icon-dianzan" :class="salesmanRecord&&salesmanRecord.isPraise==1? 'up':'down'" @click="clickThumb"></span>-->
               </div>
             </div>
             <div class="group-4">
-              <span class="people-browse">{{ postForm.browseCount }}人浏览</span>
+              <span class="people-browse">已有{{ postForm.browseCount }}人来访</span>
               <div class="block-5">
-                <text class="reliable">收藏</text>
-                <text class="reliable-next">{{ postForm.collectCount }}</text>
+                <text class="reliable">点赞</text>
+                <text class="reliable-next">{{ postForm.collectCount }} 次</text>
               </div>
             </div>
+          </div>
             <!-- 名片码 -->
             <div :class="cardM" @click="routerTo(`./showQrcode/main?companyName=${postForm.salesCompanyName}&logo=${logo}&qrcode=${qrCodeUrl}&name=${postForm.name}&job=${postForm.job}&imgUrl=${postForm.imgUrl}`)">
               <p class="ma-txt">名片码</p>
               <div class="radius-img">
-                <img :src="qrCodeUrl" mode="aspectFill">
+                <img  v-if="qrCodeUrl" :src="qrCodeUrl" mode="aspectFill">
               </div>
             </div>
             <!-- 个人简介 -->
@@ -284,7 +300,7 @@
             </div>
 
             <!--公司产品-->
-            <div class="product" v-if="postForm.goodsList.length !== 0">
+            <div class="product" v-if="goodsList.length !== 0">
               <div class="product-top">
                 <span class="product-icont">
                 <img src="../../../static/images/morebox.png">
@@ -295,7 +311,7 @@
                 </span>
               </div>
               <div class="product-main">
-                <div class="product-details" v-for="(item,index) in postForm.goodsList" :key="index" @click="goToProduct(postForm.goodsList[index].id)">
+                <div class="product-details" v-for="(item,index) in goodsList" :key="index" @click="goToProduct(goodsList[index].id)">
                     <div class="product-details-img">
                       <img :src="item.imgUrl + '?x-oss-process=style/c400'"/>
                     </div>
@@ -401,8 +417,9 @@
         currentAudio: '',
         imgWidth: null,
         companyName: '',
+        goodsList: [],
         id: '',
-        list: '',
+        list: [],
         videoFlag: false,
         video: '',
         imgUrlList: [],
@@ -438,6 +455,7 @@
       }
     },
     onLoad: function (options) {
+      this.list = []
       console.log('goodsId', options)
       if (options.goodsId !== 'null' && options.goodsId) {
         this.CardId = options.id
@@ -470,6 +488,7 @@
       this.postForm = []
       this.phone = ''
       this.logo = ''
+      this.list = []
     },
     onShareAppMessage () {
       this.insertOpera('分享了名片', 21)
@@ -491,7 +510,7 @@
         }).then(res => {
           if (res.data) {
             this.cardType = res.data[0].cardType
-            // this.cardType = 3
+            // this.cardType = 2
             if (this.cardType === 0) {
               this.fotter = 'card-footer'
               this.cardM = 'card-ma'
@@ -627,22 +646,31 @@
       async bindGetUserInfo (e) {
         // 解密
         const userInfo = e.target.userInfo
-        wx.setStorageSync('userNameS', userInfo.nickName)
-        wx.getUserInfo({
-          success: async (res) => {
-            console.log(res)
-            this.encryptedData = res.encryptedData
-            this.iv = res.iv
-            const { data } = await personApi.getPhone({
-              iv: this.iv,
-              encryptedData: this.encryptedData
-            })
-            this.unionId = JSON.parse(data).unionId
-            userInfo.unionId = this.unionId
-            // await home.updateUser(userInfo)
-            // await personApi.updateRemarksNew({ remarks: userInfo.nickName, userId: this.id })
-          }
-        })
+        if (e.target.userInfo) {
+          wx.setStorageSync('userNameS', userInfo.nickName)
+          wx.getUserInfo({
+            success: async (res) => {
+              console.log(res)
+              this.encryptedData = res.encryptedData
+              this.iv = res.iv
+              const { data } = await personApi.getPhone({
+                iv: this.iv,
+                encryptedData: this.encryptedData
+              })
+              this.unionId = JSON.parse(data).unionId
+              userInfo.unionId = this.unionId
+              // await home.updateUser(userInfo)
+              // await personApi.updateRemarksNew({ remarks: userInfo.nickName, userId: this.id })
+            }
+          })
+        } else {
+          this.modalFlag = false
+          wx.showToast({
+            title: '取消授权',
+            icon: 'none',
+            duration: 2000
+          })
+        }
         wx.setStorageSync('avatarUrl', e.target.userInfo.avatarUrl)
         this.$nextTick(() => {
           this.modalFlag = false
@@ -741,10 +769,13 @@
           if (res.data) {
             if (res.data.nickName === '' || res.data.nickName == null) {
               this.modalFlag = true
+            } else {
+              this.modalFlag = false
             }
             this.setUp = 1
           } else {
             this.setUp = 0
+            this.modalFlag = true
           }
         }).catch(err => {
           console.log(err.status, err.message)
@@ -774,6 +805,8 @@
           }
           this.user = res.data.userId
           this.postForm = res.data
+          this.list = res.data.headImgList.list
+          this.goodsList = res.data.goodsList
           this.name = res.data.name
           this.job = res.data.job
           this.phone = res.data.phone

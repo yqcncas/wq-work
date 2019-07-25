@@ -10,12 +10,12 @@
         <scroll-view :scroll-y="scrollTop">
         <div class="top">
             <div class="bgImg">
-              <img :src="imgUrl">
+              <img v-if="imgUrl" :src="imgUrl">
             </div>
             <div class="info">
               <div class="infoMain">
                 <span class="img">
-                  <img :src="logo">
+                  <img v-if="logo" :src="logo">
                 </span>
                 <span class="name">{{companyName}}</span>
                 <span class="status">
@@ -50,7 +50,7 @@
       <!--样式一-->
       <div class="product-listA" v-if="goodsType === 0">
         <div class="item-pro" v-for="(item,index) in productList" :key="index" @click="routeTo(item.id)">
-          <image class="pro-img"  :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
+          <image v-if="item.imgUrl" class="pro-img"  :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
                  mode="aspectFill"></image>
           <p class="bot-des">{{item.name}}</p>
           <div class="price-brow">
@@ -71,7 +71,7 @@
               <i class="name" v-if="item.salesmanName !== null">{{item.salesmanName}}</i>
             </span>
           </div>
-          <image @click="routeTo(item.id)" class="pro-img" :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
+          <image  v-if="item.imgUrl" @click="routeTo(item.id)" class="pro-img" :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
                  mode="aspectFill"></image>
           <p class="bot-des" @click="routeTo(item.id)">{{item.name}}</p>
           <div class="look-Num" @click="routeTo(item.id)">
@@ -105,7 +105,7 @@
               <i @click="shareGoods" class="iconfont icon31zhuanfa"></i>
           </button>
           <p  @click="routeTo(item.id)">
-            <image class="pro-img" :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
+            <image  v-if="item.imgUrl" class="pro-img" :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
                    mode="aspectFill"></image>
           </p>
           <p class="bot-des">{{item.name}}</p>
@@ -125,7 +125,7 @@
           </div>
         </div>
       </div>
-      <FloatBox :home="false" phone="value"></FloatBox>
+      <!--<FloatBox :home="false" phone="value"></FloatBox>-->
       <!--<CustomTabbar url="/pages/product/index"></CustomTabbar>-->
     </div>
   </div>

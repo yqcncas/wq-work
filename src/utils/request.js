@@ -99,17 +99,52 @@ fly.interceptors.request.use((request) => {
 
 // 添加响应拦截器
 fly.interceptors.response.use(
-  (response) => {
+  (response, promise) => {
     wx.hideLoading()
-    return response.data // 请求成功之后将返回值返回
+    if (response.data.code !== 200) {
+      wx.showToast({
+        title: response.data.message,
+        icon: 'none'
+      })
+    } else {
+      return response.data //  请求成功之后将返回值返回
+    }
   },
-  (err) => {
-    // 请求出错，根据返回状态码判断出错原因
-    console.log(err)
-    wx.hideLoading()
-    if (err) {
-      return '请求失败'
-    };
+  (err, promise) => {
+    const data = err.response.data
+    // console.log('aaaaaaaaaaa', data)
+    // // 请求出错，根据返回状态码判断出错原因
+    // console.log(err)
+    // wx.hideLoading()
+    // if (err) {
+    //   return '请求失败'
+    // };
+    if (err.status !== 200) {
+      wx.showToast({
+        title: `Status Code:${err.status}`,
+        icon: 'none'
+      })
+      if (err.status === 500) {
+        if (data.code && data.code !== 401) {
+          wx.showToast({
+            title: `Status Code:${err.status},message:${data.code}${data.message}`,
+            icon: 'none'
+          })
+        } else if (data.code === 401) {
+          wx.setStorageSync('token', null)
+          wx.redirectTo({
+            url: '/pages/loading/main'
+          })
+        } else {
+          wx.showToast({
+            title: `Status Code:${err.status}`,
+            icon: 'none'
+          })
+        }
+      }
+    }
+    wx.hideNavigationBarLoading()
+    return promise.resolve()
   }
 )
 
