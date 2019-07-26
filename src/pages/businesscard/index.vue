@@ -598,8 +598,8 @@
           url: '/platformOperationRecord/selectAllOperation',
           body: {
             'salesmanId': salesmanId,
-            'pageNum': 0,
-            'pageSize': 0
+            'pageNum': 1,
+            'pageSize': 10
           }
         }).then(res => {
           this.infoMation = res.data.list
