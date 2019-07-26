@@ -197,7 +197,7 @@
             <div class="ordinary-wrap shadow four-card">
               <div class="left-wrap">
                 <div class="img-wrap">
-                  <image @click="preview(postForm.imgUrl,[postForm.imgUrl])" class="img" :src="postForm.imgUrl+ '?x-oss-process=style/c100'" mode="widthFix" @load="imgLoad"></image>
+                  <image @click="preview(postForm.imgUrl,[postForm.imgUrl])" class="img" :src="postForm.imgUrl || 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png' + '?x-oss-process=style/c100'" mode="widthFix" @load="imgLoad"></image>
                 </div>
                 <p class="company-f">{{postForm.salesCompanyName}}</p>
               </div>
@@ -529,8 +529,8 @@
           }
         }).then(res => {
           if (res.data) {
-            // this.cardType = res.data[0].cardType
-            this.cardType = 1
+            this.cardType = res.data[0].cardType
+            // this.cardType = 1
             if (this.cardType === 0) {
               this.fotter = 'card-footer'
               this.cardM = 'card-ma'

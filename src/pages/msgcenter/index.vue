@@ -97,7 +97,7 @@
         nextPage: 1,
         pageSize: 5,
         id: '',
-        userId: 0,
+        userId: '',
         myUseId: null,
         paramStrs: '',
         msgforuser: [],
@@ -382,11 +382,12 @@
       wx.stopPullDownRefresh()
     },
     onLoad (options) {
-      this.userId = +options.id
-      this.getUserPhone()
       if (options.id) {
         this.type = 'sale'
         this.pageNum = 1
+        this.userId = +options.id
+        console.log('userid', +options.id)
+        this.getUserPhone()
         // this.selectSendRecord()
       } else {
         this.type = 'custom'

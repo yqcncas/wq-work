@@ -26,7 +26,7 @@
       </div>
 
       <!--名片-->
-      <div class="NetCard">
+      <div class="NetCard" v-if="tradeStatus !== 0">
         <div class="NetCard-top">
             <span class="title">热门名片</span>
             <span class="fire"><i class="iconfont iconremen"></i>我要上热门</span>
@@ -79,6 +79,11 @@
           </scroll-view>
         </div>
       </div>
+      <div class=" NetCard" v-else>
+        <div class="NetCard-mainA" :style="'height:' + windowHeight + 'px'">
+          <img  class="img" src="https://oss.tzyizan.com/audit-img.jpg?x-oss-process=style/w750">
+        </div>
+      </div>
 
 
       <div class="NetSucces" v-if="deleteShow === true">
@@ -115,7 +120,8 @@
         Check: 0,
         windowHeight: '',
         windowHeightA: '',
-        deleteShow: false
+        deleteShow: false,
+        tradeStatus: 1
       }
     },
     onLoad () {
@@ -163,6 +169,7 @@
       // }
     },
     onShow () {
+      this.tradeStatus = wx.getStorageSync('tradeStatus')
       this.pageNum = 1
       this.getCard()
     },

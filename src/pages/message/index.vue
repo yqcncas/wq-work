@@ -6,9 +6,9 @@
           <div class="center" @touchstart="touchStart($event)" @touchend="touchEnd($event,index)" :data-type="item.type" >
             <div class="cardHold-ftMain-ct-img" @click="recover(index)">
               <img :src="item.avatarUrl" aspectFit class="imgA"/>
-              <a class="message" v-if="item.newMessageNum !== 0 || item.newMessageNum">
+              <span class="messageA" v-if="item.newMessageNum !== 0 || item.newMessageNum">
                 {{item.newMessageNum}}
-              </a>
+              </span>
             </div>
             <div class="cardHold-ftMain-rt" @click="recover(index)">
               <span class="name">{{ item.name }}</span>
