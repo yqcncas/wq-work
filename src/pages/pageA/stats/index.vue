@@ -161,7 +161,7 @@
             duration: 2000
           })
         }
-      } else {
+      } else if (this.tab === 4) {
         if (this.pageNumD < this.lastPageD) {
           this.pageNumD = this.nextPageD
           this.getInfoD(this.pageNumD)
@@ -201,7 +201,7 @@
             status: 0
           }
         }).then(res => {
-          console.log('res', res)
+          // console.log('res', res)
           this.statsA = res.data.list
           // 时间戳转换成特定日期格式
           let today = this.moment().format('YYYY/MM/DD')
@@ -304,7 +304,7 @@
             status: 1
           }
         }).then(res => {
-          // this.statsD = res.data.list
+          this.statsD = res.data.list
           const data = res.data.list
           data.map(item => {
             this.statsD.push(item)
@@ -347,7 +347,7 @@
           this.getInfoC(1)
           this.tab = index
           this.status = index
-        } else {
+        } else if (index === 4) {
           this.getInfoD(1)
           this.tab = index
           this.status = index
