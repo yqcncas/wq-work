@@ -153,7 +153,7 @@
           <!--名片风格2-->
           <div class="card-topA" v-if="cardType===2">
             <div class="ordinary-wrap shadow three-card">
-              <image @click="preview(postForm.imgUrl,[postForm.imgUrl])" class="three-img" :src="postForm.imgUrl" mode="aspectFill" @load="imgLoad"></image>
+              <image @click="preview(postForm.imgUrl,[postForm.imgUrl])" class="three-img" :src="postForm.imgUrl + '?x-oss-process=style/c400'" mode="aspectFill" @load="imgLoad"></image>
               <div class="right-three">
                 <div class="triangle"></div>
                 <p class="top-club flexRow">
@@ -175,7 +175,7 @@
           <!-- 名片风格3 -->
           <div class="card-topC" v-else-if="cardType ===1">
             <div class="bgImgA" v-if="postForm.imgUrl">
-              <img :src="postForm.imgUrl"/>
+              <img :src="postForm.imgUrl || 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png' + '?x-oss-process=style/w750'"/>
             </div>
             <div class="main">
               <div class="footer">
@@ -187,7 +187,7 @@
                   {{postForm.phone}}
                 </p>
                 <p class="Img" v-if="postForm.imgUrl">
-                  <img :src="postForm.imgUrl"/>
+                  <img :src="postForm.imgUrl || 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png' + '?x-oss-process=style/c100'"/>
                 </p>
               </div>
             </div>
@@ -197,7 +197,7 @@
             <div class="ordinary-wrap shadow four-card">
               <div class="left-wrap">
                 <div class="img-wrap">
-                  <image @click="preview(postForm.imgUrl,[postForm.imgUrl])" class="img" :src="postForm.imgUrl" mode="widthFix" @load="imgLoad"></image>
+                  <image @click="preview(postForm.imgUrl,[postForm.imgUrl])" class="img" :src="postForm.imgUrl+ '?x-oss-process=style/c100'" mode="widthFix" @load="imgLoad"></image>
                 </div>
                 <p class="company-f">{{postForm.salesCompanyName}}</p>
               </div>
@@ -529,8 +529,8 @@
           }
         }).then(res => {
           if (res.data) {
-            this.cardType = res.data[0].cardType
-            // this.cardType = 3
+            // this.cardType = res.data[0].cardType
+            this.cardType = 1
             if (this.cardType === 0) {
               this.fotter = 'card-footer'
               this.cardM = 'card-ma'
