@@ -1,15 +1,48 @@
 .ag-extend-page {
   width: 100%;
   height: 100%;
-  background-color: #f2f2f2;
-.extend-wrap{
+  background-color: #fff;
+  position: relative;
+
+  swiper {
+    height: 70%;
+  }
+
+  .slide-image {
     width: 100%;
-    height: 536rpx;
-    background-color: #fff;
-    text-align: center;
-}
+  }
+
   .code-img {
-    width: 360rpx;
-    margin-top: 76rpx;
+    width: 248rpx;
+    position: absolute;
+    bottom: 42%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .tip-txt{
+    color: #828282;
+    font-size: 28rpx;
+    text-align: center;
+  }
+  // 按钮
+  .save-btn{
+    width: 322rpx;
+    height: 84rpx;
+    border-radius: 8rpx;
+    color: #23A4FE;
+    border:2rpx solid #23A4FE;
+    box-sizing: border-box;
+    margin: 46rpx auto 0;
+    font-size: 30rpx;
+    line-height: 82rpx;
+  }
+
+  // temp
+  .canvas{
+    width: 750rpx;
+    height: 1200rpx;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 }

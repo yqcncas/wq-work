@@ -689,5 +689,10 @@ const person = {
     baseURL: baseUrlApi
   })
 }
+//   //  获取ip
+//   getIp: (id) => request.get('/getIp/getIp', {}, {
+//   baseURL: baseUrlApi
+//   })
+// }
 
 export default person

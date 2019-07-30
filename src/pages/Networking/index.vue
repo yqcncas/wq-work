@@ -14,9 +14,11 @@
             <p class="size">签到次数</p>
           </div>
         </div>
-        <div class="Check" v-if="Check===0" @click="check()">
-          <button class="check-in"><span>签到</span></button>
-        </div>
+        <form report-submit='true' @submit='getFormID' class="form">
+          <div class="Check" v-if="Check===0" @click="check()">
+            <button class="check-in"><span>签到</span></button>
+          </div>
+        </form>
         <div class="CheckA" v-if="Check===1" @click="checkA()">
           <button class="check-in"><span>已签</span></button>
         </div>
@@ -26,7 +28,7 @@
       </div>
 
       <!--名片-->
-      <div class="NetCard" v-if="tradeStatus !== 0">
+      <div class="NetCard" v-if="tradeStatus == 0">
         <div class="NetCard-top">
             <span class="title">热门名片</span>
             <span class="fire"><i class="iconfont iconremen"></i>我要上热门</span>
@@ -106,6 +108,7 @@
 </template>
 
 <script>
+  import apiproducts from '@/api/product'
   export default {
     name: 'index',
     data () {
@@ -113,6 +116,7 @@
         Grade: 'V1',
         tabs: 1,
         lastPage: '',
+        apiproducts: apiproducts,
         nextPage: '',
         cards: [],
         pageNum: 0,
@@ -197,6 +201,9 @@
           icon: 'none',
           duration: 2000
         })
+      },
+      async getFormID (e) {
+        await apiproducts.getFormid(e.target.formId)
       },
       // 隐藏
       checkDelete () {

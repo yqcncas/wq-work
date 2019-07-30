@@ -82,7 +82,6 @@ export default {
           this.eatinCart(result)
           wx.setStorageSync('Card', false)
           this.getUnReadCount()
-          // console.log('login', res)
         }
       })
     },
@@ -98,7 +97,7 @@ export default {
       }).then(res => {
         this.isBuy = res.data.isBuy
         wx.setStorageSync('isBuy', this.isBuy)
-        console.log('isBuy', this.isBuy)
+        // console.log('isBuy', this.isBuy)
       }).catch(err => {
         console.log(err)
       })
@@ -157,6 +156,9 @@ export default {
     // 处理返回数据
     eatinCart (res) {
       console.log('login', res)
+      wx.setStorageSync('avatarUrl', res.data.avatarUrl)
+      wx.setStorageSync('nickName', res.data.nickName)
+      // console.log('login', res.data.avatarUrl)
       if (res.msg) {
         this.getUnReadCount()
       }

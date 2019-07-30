@@ -71,20 +71,22 @@
           <!--</form>-->
         <!--</div>-->
       <!--</div>-->
-      <div v-if="modalFlag" catchtouchmove="true" class="window">
-        <div class="window-mian">
-          <div class="window-title">
-            <img src="https://oss.tzyizan.com/salesInfo/201907251327481564032468239.png">
-            <i>
-              <p>为了提供优质服务,请您授权后</p>
-              <p>放心使用,您的信息将受到保护</p>
-              <span>
+      <form name='pushMsgFm' report-submit='true' @submit='getFormID' class="">
+        <div v-if="modalFlag" catchtouchmove="true" class="window">
+          <div class="window-mian">
+            <div class="window-title">
+              <img src="https://oss.tzyizan.com/salesInfo/201907251327481564032468239.png">
+              <i>
+                <p>为了提供优质服务,请您授权后</p>
+                <p>放心使用,您的信息将受到保护</p>
+                <span>
                         <button form-type="submit" class="look-just" lang="zh_CN" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">允许授权</button>
                 </span>
-            </i>
+              </i>
+            </div>
           </div>
         </div>
-      </div>
+      </form>
       <div class="business-main" >
         <el-form ref="postForm" :model="postForm" >
           <div class="mainA">
@@ -384,14 +386,16 @@
           <div v-if="setUp === 0" class="found" @click="goInto()">
             <i class="iconfont iconbianzu">   <s>+</s></i>
           </div>
-          <div class="foundA" @click="goMsg()">
-            <div class="main">
-                <span class="img">
-              <img :src="imgUrl || 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png' + '?x-oss-process=style/w100'"/>
-            </span>
-              <span class="talk">聊一聊</span>
+          <form report-submit='true' @submit='getFormID' class="form">
+            <div class="foundA" @click="goMsg()">
+              <div class="main">
+                  <span class="img">
+                <img :src="imgUrl || 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png' + '?x-oss-process=style/w100'"/>
+              </span>
+                <span class="talk">聊一聊</span>
+              </div>
             </div>
-          </div>
+          </form>
         </el-form>
       </div>
     </div>
@@ -399,6 +403,7 @@
 
 <script>
   import personApi from '@/api/person'
+  import apiproducts from '@/api/product'
   const backgroundAudioManager = wx.createInnerAudioContext() // 播放音频
   export default {
     name: 'index',
@@ -410,6 +415,7 @@
         fotter: 'card-footer',
         cardM: 'card-ma',
         personApi: personApi,
+        apiproducts: apiproducts,
         postForm: [],
         voiceUrl: '',
         voiceTime: '00',
@@ -531,6 +537,9 @@
         }).catch(err => {
           console.log(err)
         })
+      },
+      async getFormID (e) {
+        await apiproducts.getFormid(e.target.formId)
       },
       // 预览图片
       previewImg (e, A) {
@@ -672,6 +681,7 @@
           })
         }
         wx.setStorageSync('avatarUrl', e.target.userInfo.avatarUrl)
+        wx.setStorageSync('name', e.target.userInfo.nickName)
         this.$nextTick(() => {
           this.modalFlag = false
         })
@@ -791,7 +801,7 @@
             'salesmanId': this.CardId, 'userId': userId
           }
         }).then(res => {
-          console.log('aa', res)
+          // console.log('aa', res)
           this.latitude = res.data.latitude
           this.longitude = res.data.longitude
           if (res.data.richText !== null) {

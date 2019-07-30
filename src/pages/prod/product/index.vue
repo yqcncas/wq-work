@@ -1,24 +1,68 @@
 <template>
     <div class="Group">
       <div class="Top" @click = "getInto">
-        <div class="main" >
-          <span class="add"><img src="../../../../static/images/add.png"/></span>
-          <span class="title">添加产品</span>
-        </div>
+         <i class="iconfont iconaddgrey"></i>
       </div>
-      <div class="content">
-          <div class="title"  v-if="prolength!== 0">共{{prolength}}款产品</div>
-          <div class="product" v-if="prolength!==0" >
-            <div class="manage" v-for="(item, index) in products" :key="index">
-            <div @click="modify(item.id)">
+      <div class="testNav">
+        <div
+          :class="{'selected':tab === 1,'testTitle':true}"
+          @click="changTab(1)"
+        >已上架</div>
+        <div
+          :class="{'selected':tab === 2,'testTitle':true}"
+          @click="changTab(2)"
+        >已下架</div>
+        <div
+          :class="{'selected':tab === 3,'testTitle':true}"
+          @click="changTab(3)"
+        >我的推荐</div>
+      </div>
+      <div class="content" v-if="prolength!== 0" >
+          <!--<div class="title"  v-if="prolength!== 0">共{{prolength}}款产品</div>-->
+        <div class="product" v-if="tab === 1">
+          <div class="manage" v-for="(item, index) in productsA" :key="index">
+          <div class="main">
+            <span @click="modify(item.id)" class="img">
+              <img :src="item.imgUrl">
+            </span>
+              <p class="text">{{ item.name }}</p>
+              <p class="introduce">￥{{ item.price }}</p>
+              <div class="bt">
+                <button class="btA" @click="downStatus(item.id)">下架</button>
+                <!--<button class="btB">推荐</button>-->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="product" v-else-if="tab === 2">
+          <div class="manage" v-for="(item, index) in productsB" :key="index">
+            <div class="main">
+            <span  @click="modify(item.id)" class="img">
+              <img :src="item.imgUrl">
+            </span>
+              <p class="text">{{ item.name }}</p>
+              <p class="introduce">￥{{ item.price }}</p>
+              <div class="bt">
+                <button class="btA" @click="upStatus(item.id)">上架</button>
+                <!--<button class="btB">推荐</button>-->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="product" v-else-if="tab === 3">
+          <div class="manage" v-for="(item, index) in productsC" :key="index">
+            <div @click="modify(item.id)"  class="main">
             <span class="img">
               <img :src="item.imgUrl">
             </span>
               <p class="text">{{ item.name }}</p>
-              <p class="introduce">{{ item.price }}</p>
+              <p class="introduce">￥{{ item.price }}</p>
             </div>
           </div>
         </div>
+      </div>
+      <div v-else class="info">
+        暂无该类别产品信息
       </div>
     </div>
 </template>
@@ -29,13 +73,83 @@
       return {
         id: 0,
         prolength: '',
-        products: []
+        productsA: [],
+        productsB: [],
+        productsC: [],
+        statsC: [],
+        status: '',
+        tab: 1,
+        tabA: 0,
+        tabB: 0
+        // postForm: '',
+        // tagList: [],
+        // pageNumA: 1,
+        // lastPageA: '',
+        // nextPageA: '',
+        // pageNumB: 1,
+        // lastPageB: '',
+        // nextPageB: '',
+        // pageNumC: 1,
+        // lastPageC: '',
+        // nextPageC: ''
       }
     },
     onShow () {
-      this.getInfo()
+      this.getInfoA(1)
     },
     methods: {
+      // 上架
+      upStatus (id) {
+        this.$fly.request({
+          method: 'post', // post/get 请求方式
+          url: '/platformGoods/updateStatus',
+          body: {
+            'status': 1,
+            'id': id
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            this.getInfoB(0)
+          }
+          // console.log(res)
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      },
+      // 下架
+      downStatus (id) {
+        this.$fly.request({
+          method: 'post', // post/get 请求方式
+          url: '/platformGoods/updateStatus',
+          body: {
+            'status': 0,
+            'id': id
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            this.getInfoA(1)
+          }
+          // console.log(res)
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      },
+      // 选择
+      changTab (index) {
+        if (index === 1) {
+          this.getInfoA(1)
+          this.tab = index
+          this.status = index
+        } else if (index === 2) {
+          this.getInfoB(0)
+          this.tab = index
+          this.status = index
+        } else if (index === 3) {
+          this.getInfoC(1)
+          this.tab = index
+          this.status = index
+        }
+      },
       // 添加产品跳转
       getInto (e) {
         wx.navigateTo({
@@ -49,7 +163,49 @@
         })
       },
       // 加载产品列表
-      getInfo (e) {
+      getInfoA (id) {
+        const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
+        const salesmanId = wx.getStorageSync('salesmanId') // 获取本地userId
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/platformGoods/getAllGoodsByUserId',
+          body: {
+            'businessId': businessId,
+            'salesmanId': salesmanId,
+            'status': id
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            this.productsA = res.data.list
+            this.prolength = res.data.list.length
+          }
+          // console.log(res)
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      },
+      getInfoB (id) {
+        const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
+        const salesmanId = wx.getStorageSync('salesmanId') // 获取本地userId
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/platformGoods/getAllGoodsByUserId',
+          body: {
+            'businessId': businessId,
+            'salesmanId': salesmanId,
+            'status': id
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            this.productsB = res.data.list
+            this.prolength = res.data.list.length
+          }
+          // console.log(res)
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      },
+      getInfoC (id) {
         const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
         const salesmanId = wx.getStorageSync('salesmanId') // 获取本地userId
         this.$fly.request({
@@ -61,8 +217,8 @@
           }
         }).then(res => {
           if (res.code === 200) {
-            this.products = res.data.list
-            this.prolength = res.data.list.length
+            // this.productsC = res.data.list
+            this.prolength = this.productsC.length
           }
           // console.log(res)
         }).catch(err => {

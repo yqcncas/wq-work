@@ -11,7 +11,7 @@
       <div class="mian">
         <p>目前您还没有名片</p>
         <p>点击下方按钮去创建吧</p>
-        <p @click="goToCard()" class="addImg">
+        <p @click="goToCardA()" class="addImg">
           <img src="/static/images/addCard.png">
         </p>
       </div>
@@ -94,6 +94,7 @@
           <!--</form>-->
         <!--</div>-->
       <!--</div>-->
+      <form name='pushMsgFm' report-submit='true' @submit='getFormID' class="">
       <div v-if="modalFlag" catchtouchmove="true" class="window">
           <div class="window-mian">
             <div class="window-title">
@@ -108,6 +109,7 @@
             </div>
           </div>
       </div>
+      </form>
       <div class="business-main">
       <el-form ref="postForm" :model="postForm">
         <div class="mainA">
@@ -489,7 +491,6 @@
     },
     onLoad: function (options) {
       this.CardId = options.id
-      this.getOpA()
     },
     async onPullDownRefresh () {
       this.getInfo()
@@ -602,23 +603,26 @@
             'pageSize': 10
           }
         }).then(res => {
-          this.infoMation = res.data.list
-          let today = this.moment().format('YYYY/MM/DD')
-          let yesterday = this.moment(new Date()).add(-1, 'days').format('YYYY/MM/DD')
-          const dataA = res.data.list
-          dataA.map(item => {
-            let temp = this.moment(item.browseDate)
-            let tempData = this.moment(item.browseDate).format('YYYY/MM/DD')
-            if (tempData === today) {
-              item.browseDate = temp.format('A hh:mm')
-            } else if (tempData === yesterday) {
-              item.browseDate = '昨天' + temp.format('A hh:mm')
-            } else if (this.moment(Date.now() - 3 * 24 * 60 * 60 * 1000) < item.browseDate) {
-              item.browseDate = temp.format('dddd')
-            } else {
-              item.browseDate = tempData
-            }
-          })
+          console.log('reada', res)
+          if (res.data) {
+            this.infoMation = res.data.list
+            let today = this.moment().format('YYYY/MM/DD')
+            let yesterday = this.moment(new Date()).add(-1, 'days').format('YYYY/MM/DD')
+            const dataA = res.data.list
+            dataA.map(item => {
+              let temp = this.moment(item.browseDate)
+              let tempData = this.moment(item.browseDate).format('YYYY/MM/DD')
+              if (tempData === today) {
+                item.browseDate = temp.format('A hh:mm')
+              } else if (tempData === yesterday) {
+                item.browseDate = '昨天' + temp.format('A hh:mm')
+              } else if (this.moment(Date.now() - 3 * 24 * 60 * 60 * 1000) < item.browseDate) {
+                item.browseDate = temp.format('dddd')
+              } else {
+                item.browseDate = tempData
+              }
+            })
+          }
           // this.logo = res.data.logo
         }).catch(err => {
           console.log(err)
@@ -784,6 +788,7 @@
           })
         }
         wx.setStorageSync('avatarUrl', e.target.userInfo.avatarUrl)
+        wx.setStorageSync('nickName', e.target.userInfo.nickName)
         this.$nextTick(() => {
           this.modalFlag = false
         })
@@ -805,6 +810,11 @@
           url: '../index/main'
         })
       },
+      goToCardA () {
+        wx.navigateTo({
+          url: '../simple/main'
+        })
+      },
       // 跳转雷达
       goRadar () {
         wx.navigateTo({
@@ -822,15 +832,16 @@
             'userId': this.userId
           }
         }).then(res => {
-          console.log('res', res.data)
-          this.latitude = res.data.latitude
-          this.longitude = res.data.longitude
+          console.log('res', this.modalFlag)
           if (res.data) {
+            this.getOpA()
             if (res.data.nickName === '' || res.data.nickName == null) {
               this.modalFlag = true
             } else {
               this.modalFlag = false
             }
+            this.latitude = res.data.latitude
+            this.longitude = res.data.longitude
             if (res.data.phone !== '') {
               const phone = res.data.phone
               wx.setStorageSync('myPhone', phone)
@@ -869,9 +880,10 @@
               this.voiceTime = this.formatSeconds(this.num)
               console.log(this.num)
             }, 100)
-          } else {
+          } else if (res.data === null) {
             this.modalFlag = true
           }
+          console.log('modalFlag', this.modalFlag)
         }).catch(err => {
           console.log(err.status, err.message)
         })

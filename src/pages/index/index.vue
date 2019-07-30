@@ -664,7 +664,7 @@ export default {
         }
       }).then(res => {
         console.log('res', res)
-        if (res.data !== null) {
+        if (res.data) {
           this.postForm = res.data
           this.nickName = res.data.nickName
           this.voice = res.data.voice
@@ -674,7 +674,6 @@ export default {
           this.Yid = res.data.id
           this.richImg = res.data.richText
           this.video = res.data.video !== '' ? res.data.video : ''
-          this.richTextList = res.data.richText !== '' ? res.data.richText.split(',') : []
           this.name = res.data.name
           this.weChat = res.data.weChat
           this.job = res.data.job
@@ -690,6 +689,9 @@ export default {
           this.info = res.data.info
           this.videoImg = this.video + '?x-oss-process=video/snapshot,t_0,f_jpg,w_750,m_fast'
           const lab = typeof res.data.salesAddress
+          if (this.richTextList) {
+            this.richTextList = res.data.richText !== '' ? res.data.richText.split(',') : []
+          }
           if (lab === 'string') {
             this.region = JSON.parse(res.data.salesAddress)
             this.address = this.region
