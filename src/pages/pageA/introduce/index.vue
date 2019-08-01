@@ -7,7 +7,7 @@
       </div>
       <div class="studs">
         <span class="title">类型</span>
-        <picker class="choose" mode="selector" :value="index" :range="valueA" range-key="tradeName" @change="bindRegionChange">
+        <picker class="choose" mode="selector" :value="index" :range="valueA" range-key="tradeName" @change="bindRegionChange(index)">
           <span class="picker">{{ valueA[index].tradeName}}<i class="iconfont iconyouce"></i></span>
         </picker>
       </div>
@@ -159,16 +159,17 @@
           }
         }).then(res => {
           this.valueA = res.data.list
-          this.secTradeId = ''
+          this.secTradeId = this.valueA[0].id
+          console.log('res', this.valueA)
         }).catch(err => {
           console.log(err)
         })
       },
       // Change
-      bindRegionChange (e) {
-        this.indexA = parseInt(e.mp.detail.value)
+      bindRegionChange (id) {
+        this.indexA = this.valueA[id].id
         this.secTradeId = this.indexA
-        console.log('this.secTradeIdA', e.mp.detail)
+        console.log('this.secTradeIdA', this.valueA[id].id)
       },
       // 图片选择
       choosed (val) {
