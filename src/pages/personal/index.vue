@@ -227,6 +227,7 @@
             // wx.redirectTo({
             //   url: '/pages/pageA/agencyCenter/main'
             // })
+            wx.setStorageSync('BuyId', 3)
             this.choose = this.chooseB
             // console.log('resAAA', this.choose[6].url)
           } else {

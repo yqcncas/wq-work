@@ -87,11 +87,13 @@
     onLoad () {
       const isBuy = wx.getStorageSync('BuyId')
       // console.log('dklaa', isBuy)
-      if (isBuy !== 0) {
+      if (isBuy === 1) {
         this.isBuy = isBuy
-      } else {
+      } else if (isBuy === 0) {
         this.isBuy = 0
         wx.setStorageSync('BuyId', 0)
+      } else if (isBuy === 3) {
+        this.isBuy = isBuy
       }
       const status = wx.getStorageSync('status')
       // console.log('status', status)
@@ -113,6 +115,7 @@
           }
         }).then(res => {
           if (res.data) {
+            console.log('res', res.data)
             this.isDistributor = res.data.isDistributor
             this.levelId = res.data.levelId
             this.num = 1
@@ -122,14 +125,22 @@
               // wx.redirectTo({
               //   url: '/pages/pageA/agencyCenter/main'
               // })
+              this.isBuy = 3
+              // wx.setStorageSync('BuyId', 3)
             } else if (this.isDistributor === 2) {
+              this.isBuy = 1
+              wx.setStorageSync('BuyId', 1)
+              this.upgrade = 1
               wx.showToast({
                 title: '提交审核中',
                 icon: 'none',
                 duration: 3000
               })
-              this.upgrade = 1
+            } else if (this.isDistributor === 0) {
+              this.isBuy = 0
+              wx.setStorageSync('BuyId', 0)
             }
+            console.log('lok', this.isBuy)
           }
         }).catch(err => {
           console.log(err.status, err.message)
@@ -209,7 +220,7 @@
               }).then(res => {
                 console.log('up1', res)
                 if (res.code === 200) {
-                  this.title = '申请中'
+                  this.title = '提交审核中'
                   this.classA = 'openA'
                   this.upgrade = 1
                   this.status = 1
@@ -231,6 +242,7 @@
               icon: 'none',
               duration: 2000
             })
+            console.log('buaaaa', this.buy)
           } else if (num === 0) {
             wx.showToast({
               title: '已开通更高级别',
@@ -302,6 +314,9 @@
                 this.classA = 'openA'
                 this.upgrade = 1
               }
+            } else {
+              this.title = '开通'
+              this.classA = 'open'
             }
             // console.log('upType', this.upType)
             // console.log('tabA', this.tabA)
@@ -326,6 +341,28 @@
               this.classA = 'openA'
               this.upgrade = 1
             }
+          }
+          // console.log('upType', this.upType)
+          // console.log('tabA', this.tabA)
+          // console.log('levelId', this.levelId)
+        } else if (this.isBuy === 3) {
+          this.tabA = id
+          this.upType = upType
+          // console.log('upType', this.upType)
+          // console.log('tabA', this.tabA)
+          // console.log('levelId', this.levelId)
+          if (this.levelId > id) {
+            this.title = '已开通更高级别'
+            this.classA = 'openA'
+            this.num = 0
+          } else if (this.levelId === id) {
+            this.title = '已开通'
+            this.classA = 'openA'
+            this.num = 1
+          } else if (this.levelId < id) {
+            this.title = '立即升级'
+            this.classA = 'open'
+            this.num = 2
           }
           // console.log('upType', this.upType)
           // console.log('tabA', this.tabA)
