@@ -368,7 +368,7 @@
       this.pageNum = 1
       this.pageNumA = 1
       this.getCard()
-      this.tradeInfor()
+      // this.tradeInfor()
     },
     async onReachBottom () {
       if (this.show === 1) {
