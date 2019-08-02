@@ -33,14 +33,14 @@
         </div>
         <div class="btn-box" v-if="item.orderStatusId==1">
           <button class="common-btn" @click="cancelOrder(item.id)">取消订单</button>
-          <button class="common-btn blue-btn" @click="payOrder(item.payInfo,item.totalFee,item.goodsModelId[0].goodsId)">去付款</button>
+          <button class="common-btn blue-btn" @click="payOrder(item.payInfo,item.totalFee)">去付款</button>
         </div>
         <div class="btn-box" v-if="item.orderStatusId==2">
-          <button class="common-btn blue-btn" @click="routeTo(`../refund/index?id=${item.id}`)">退款</button>
+          <button class="common-btn blue-btn" @click="routeTo(`../refund/main?id=${item.id}`)">退款</button>
         </div>
         <div class="btn-box" v-if="item.orderStatusId==3">
-          <button class="common-btn" @click="routeTo(`../refund/index?id=${item.id}`)">退款</button>
-          <button class="common-btn" @click="routeTo(`../logistics/index?id=${item.id}`)">追踪物流</button>
+          <button class="common-btn" @click="routeTo(`../refund/main?id=${item.id}`)">退款</button>
+          <button class="common-btn" @click="routeTo(`../logistics/main?id=${item.id}`)">追踪物流</button>
           <button class="common-btn blue-btn" @click="confirmReceipt(item.outTradeNo)">确认收货</button>
         </div>
         <!-- <div class="btn-box" v-if="item.orderStatusId==2">
@@ -121,8 +121,9 @@ export default {
       await personApi.OperationInsert({ businessId, goodsId, info, recordType, salesmanId, userId })
     },
     // 付钱
-    payOrder (Info, fee, goodsId) {
+    payOrder (Info, fee) {
       const payInfo = JSON.parse(Info)
+      console.log('info', JSON.parse(Info))
       wx.requestPayment(
         {
           'timeStamp': payInfo.timeStamp,
@@ -132,10 +133,10 @@ export default {
           'paySign': payInfo.paySign,
           'success': (res) => {
             // this.insertOpera('支付了产品', 6, goodsId)
-            wx.redirectTo({ url: `../payfinish/index?price=${fee}&status=success` })
+            wx.redirectTo({ url: `/pages/pageA/payfinish/main?price=${fee}&status=success` })
           },
           'fail': function (res) {
-            wx.redirectTo({ url: `../payfinish/index?price=${fee}&status=fail` })
+            wx.redirectTo({ url: `/pages/pageA/payfinish/mian?price=${fee}&status=fail` })
           },
           'complete': function (res) {
           }
@@ -152,6 +153,7 @@ export default {
           n.unitPrice = (+n.unitPrice).toFixed(2)
         })
       })
+      console.log('orderList', this.orderList)
       if (this.pageNum === 1) {
         this.orderList = res.data.list
       } else {

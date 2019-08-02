@@ -155,6 +155,8 @@ export default {
     },
     // 处理返回数据
     eatinCart (res) {
+      console.log(wx.getSystemInfoSync().windowHeight)
+      console.log(wx.getSystemInfoSync().windowWidth)
       console.log('login', res)
       wx.setStorageSync('avatarUrl', res.data.avatarUrl)
       wx.setStorageSync('nickName', res.data.nickName)

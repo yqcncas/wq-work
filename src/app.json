@@ -48,6 +48,8 @@
         "agExtend/main",
         "agMyTeam/main",
         "agOrder/main",
+        "logistics/main",
+        "refund/main",
         "payfinish/main",
         "addaddress/main",
         "orderlist/main",

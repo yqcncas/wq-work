@@ -70,6 +70,9 @@
       } else if (this.height > 1113 && this.height < 1367) {
         this.pusherA = 'pusherA'
         this.Active = 'mainD'
+      } else if (this.height > 700 && this.height < 761) {
+        this.pusherA = 'pusher'
+        this.Active = 'mainE'
       } else {
         this.pusherA = 'pusher'
         this.Active = 'main'

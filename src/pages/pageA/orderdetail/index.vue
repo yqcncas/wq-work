@@ -156,7 +156,7 @@ export default {
               mask: false, // 显示透明蒙层，防止触摸穿透,
               success: res => {
                 // this.insertOpera('支付了产品', 6)
-                const url = '../payfinish/index'
+                const url = '../payfinish/main'
                 wx.navigateTo({ url })
               }
             })
