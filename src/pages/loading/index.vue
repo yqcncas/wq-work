@@ -157,6 +157,8 @@ export default {
     eatinCart (res) {
       console.log(wx.getSystemInfoSync().windowHeight)
       console.log(wx.getSystemInfoSync().windowWidth)
+      wx.setStorageSync('screenHeight', wx.getSystemInfoSync().screenHeight)
+      wx.setStorageSync('windowHeight', wx.getSystemInfoSync().windowHeight)
       console.log('login', res)
       wx.setStorageSync('avatarUrl', res.data.avatarUrl)
       wx.setStorageSync('nickName', res.data.nickName)

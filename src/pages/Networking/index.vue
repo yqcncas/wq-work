@@ -28,7 +28,7 @@
       </div>
 
       <!--名片-->
-      <div class="NetCard" v-if="tradeStatus == 0">
+      <div class="NetCard" v-if="tradeStatus !== 0">
         <div class="NetCard-top">
             <span class="title">热门名片</span>
             <span class="fire"><i class="iconfont iconremen"></i>我要上热门</span>
