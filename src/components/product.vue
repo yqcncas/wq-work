@@ -187,6 +187,7 @@
       this.getType()
     },
     onShow () {
+      this.getProduct({ type: 0 })
     },
     onPageScroll: function (ev) {
       console.log('ev', ev)
