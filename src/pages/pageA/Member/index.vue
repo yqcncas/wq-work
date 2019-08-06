@@ -191,6 +191,9 @@ export default {
   },
   onLoad () {
   },
+  onUnload () {
+    this.tabA = ''
+  },
   methods: {
     // 查询等级
     MemberNum (id) {

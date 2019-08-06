@@ -3,29 +3,19 @@
 	"setting": {
 		"urlCheck": false,
 		"es6": true,
-		"enhance": false,
 		"postcss": true,
 		"minified": true,
 		"newFeature": true,
 		"nodeModules": true,
 		"autoAudits": true,
-		"uglifyFileName": true,
-		"checkInvalidKey": true,
-		"checkSiteMap": true,
-		"uploadWithSourceMap": true,
-		"babelSetting": {
-			"ignore": [],
-			"disablePlugins": [],
-			"outputPath": ""
-		}
+		"uglifyFileName": true
 	},
 	"miniprogramRoot": "dist/wx/",
 	"compileType": "miniprogram",
-	"appid": "wx2e3ab31dae91d019",
+	"appid": "wx3f1e71e9ef9aaabf",
 	"projectname": "%E9%A9%BF%E7%AB%99%E5%B9%B3%E5%8F%B0",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
-	"libVersion": "2.7.7",
 	"condition": {
 		"search": {
 			"current": -1,
@@ -44,7 +34,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 14,
+			"current": 23,
 			"list": [
 				{
 					"id": 1,
@@ -146,8 +136,8 @@
 				},
 				{
 					"id": 14,
-					"name": "产品管理",
-					"pathName": "pages/prod/product/main",
+					"name": "添加产品",
+					"pathName": "pages/loading/main",
 					"query": "",
 					"scene": null
 				},
@@ -211,7 +201,6 @@
 					"id": -1,
 					"name": "集市",
 					"pathName": "pages/navigation/main",
-					"query": "",
 					"scene": null
 				}
 			]
