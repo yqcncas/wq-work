@@ -34,7 +34,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 23,
+			"current": 24,
 			"list": [
 				{
 					"id": 1,
@@ -201,6 +201,13 @@
 					"id": -1,
 					"name": "集市",
 					"pathName": "pages/navigation/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "wode ",
+					"pathName": "pages/personal/main",
 					"scene": null
 				}
 			]

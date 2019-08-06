@@ -97,7 +97,7 @@ export default {
   @import url(style/iconfont.css);
   page {
     height: 100%;
-    background: #f1f2f4;
+    background: #F2F2F2;
     font-family: PingFangSC-Regular, Helvetica, sans-serif;
   }
   ::-webkit-scrollbar {
