@@ -3,6 +3,9 @@
     "pages/loading/main",
     "pages/navigation/main",
     "pages/Networking/main",
+    "pages/cardCollect/main",
+    "pages/Networking/detail/main",
+    "pages/Networking/leaveMessage/main",
     "pages/index/main",
     "pages/logs/main",
     "pages/personal/main",
@@ -25,7 +28,10 @@
     "pages/productA/detail/buyHis/main",
     "pages/productA/detail/buydetail/main",
     "pages/productA/detail/main",
-    "pages/simple/main"
+    "pages/simple/main",
+    "pages/group/main",
+    "pages/addGroup/main",
+    "pages/GroupCard/main"
   ],
   "subPackages": [
     {
@@ -40,6 +46,8 @@
       "root": "pages/pageA/",
       "pages": [
         "stats/main",
+        "Opinion/main",
+        "integral/main",
         "orderdetail/main",
         "agencyCenter/main",
         "agCommission/main",
@@ -63,9 +71,6 @@
         "release/main",
         "resEdit/main",
         "counter/main",
-        "GroupCard/main",
-        "group/main",
-        "addGroup/main",
         "CustomType/main",
         "Introduction/main",
         "chooseTrade/main",
@@ -94,35 +99,35 @@
   "tabBar": {
     "color": "#999",
     "backgroundColor": "#fafafa",
-    "selectedColor": "#2A94EC",
+    "selectedColor": "#ff8848",
     "borderStyle": "white",
     "list": [
       {
         "text": "主页",
         "pagePath": "pages/businesscard/main",
         "iconPath": "static/images/my.png",
-        "selectedIconPath": "static/images/my-se.png"
+        "selectedIconPath": "static/images/my-se1.png"
       },{
-      "text": "名片夹",
-      "pagePath": "pages/logs/main",
-      "iconPath": "static/images/personcard.png",
-      "selectedIconPath": "static/images/personcard-se.png"
+      "text": "动态",
+      "pagePath": "pages/Networking/main",
+      "iconPath": "static/images/dongtai.png",
+      "selectedIconPath": "static/images/dongtaise.png"
     },{
         "text": "人脉",
-        "pagePath": "pages/Networking/main",
+        "pagePath": "pages/logs/main",
         "iconPath": "static/images/net.png",
-        "selectedIconPath": "static/images/net-se.png"
+        "selectedIconPath": "static/images/net-se1.png"
       },{
       "text": "集市",
       "pagePath": "pages/navigation/main",
       "iconPath": "static/images/more.png",
-      "selectedIconPath": "static/images/more-se.png"
+      "selectedIconPath": "static/images/more-se1.png"
     },
       {
       "text": "个人中心",
       "pagePath": "pages/personal/main",
       "iconPath": "static/images/person.png",
-      "selectedIconPath": "/static/images/person-se.png"
+      "selectedIconPath": "/static/images/person-se1.png"
       }],
     "position": "bottom"
   }

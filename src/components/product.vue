@@ -6,25 +6,47 @@
           :back-visible="true"
           :home-path="'/pages/message/main'"></navigation-bar>
       </section>
+      <div class="title">
+        <span>产品</span>
+      </div>
       <div class="nav-control">
         <scroll-view :scroll-y="scrollTop">
-        <div class="top">
-            <div class="bgImg">
-              <img v-if="imgUrl" :src="imgUrl">
+        <!--<div class="top">-->
+            <!--<div class="bgImg">-->
+              <!--<img v-if="imgUrl" :src="imgUrl">-->
+            <!--</div>-->
+            <!--<div class="info">-->
+              <!--<div class="infoMain">-->
+                <!--<span class="img">-->
+                  <!--<img v-if="logo" :src="logo">-->
+                <!--</span>-->
+                <!--<span class="name">{{companyName}}</span>-->
+                <!--<span class="status">-->
+                  <!--<i class="iconfont iconrenzheng"></i>-->
+                  <!--<a>认证企业</a>-->
+                <!--</span>-->
+              <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+          <div class="BTop">
+            <div class="banner">
+              <swiper :indicator-dots="indicatorDots" :autoplay="autoplay" indicator-color= "#ffffff" :interval="interval" :duration="duration" :circular ="circular" class="bannerMain">
+                <block v-for="item in imgUrls" :key="index">
+                  <swiper-item class="swiper">
+                    <img :src="item.src" class="slide-image"/>
+                  </swiper-item>
+                </block>
+              </swiper>
             </div>
-            <div class="info">
-              <div class="infoMain">
-                <span class="img">
-                  <img v-if="logo" :src="logo">
-                </span>
-                <span class="name">{{companyName}}</span>
-                <span class="status">
-                  <i class="iconfont iconrenzheng"></i>
-                  <a>认证企业</a>
-                </span>
-              </div>
+
+            <div class="Tuik">
+              <img src="https://oss.tzyizan.com/salesInfo/201908081456201565247380716.png">
             </div>
-        </div>
+
+            <div class="ification">
+              <wan-taba @change='tabChange' :tabs="category"></wan-taba>
+            </div>
+          </div>
         </scroll-view>
         <div :class="[Active === true ? 'fade':'F']">
           <div style="position: fixed;top: 0;width: 100%;">
@@ -41,7 +63,7 @@
           <!--<div v-else-if="showA=== true" :class="[show === true ? 'fadeup':'fadedown'] ">-->
             <!--<wan-tabs @change='tabChange' :tabs="category"></wan-tabs>-->
           <!--</div>-->
-            <wan-tabs @change='tabChange' :tabs="category"></wan-tabs>
+            <wan-tabs @change='tabChangeA' :tabs="categoryA"></wan-tabs>
         </div>
       </div>
 
@@ -74,10 +96,6 @@
           <image  v-if="item.imgUrl" @click="routeTo(item.id)" class="pro-img" :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
                  mode="aspectFill"></image>
           <p class="bot-des" @click="routeTo(item.id)">{{item.name}}</p>
-          <div class="look-Num" @click="routeTo(item.id)">
-            <p class="browseCount"><i class="iconfont iconyanjing"></i><span class="num">浏览{{ item.browseCount}}次</span></p>
-            <p class="pushCount"><i class="iconfont iconfeiji1"></i><span class="num">已推 {{item.forwardCount}} 次</span></p>
-          </div>
           <div class="price-brow" @click="routeTo(item.id)">
             <p v-if="item.priceStatus!==0" class="price-brow-main"><span class="yang">￥</span><span class="price">{{item.price}}</span></p>
             <p v-if="item.getMoney >= 0" class="box-brow" >
@@ -85,13 +103,18 @@
               <span class="Money">￥ {{item.getMoney}}</span>
             </p>
           </div>
+          <div class="look-Num" @click="routeTo(item.id)">
+            <p class="browseCount"><i class="iconfont iconyanjing"></i><span class="num">浏览{{ item.browseCount}}次</span></p>
+            <p class="pushCount"><i class="iconfont iconfeiji1"></i><span class="num">分享{{item.forwardCount}} 次</span></p>
+            <p class="renZ"><i class="iconfont iconrenzheng"></i><span class="num">已认证</span></p>
+          </div>
           <div class="Forward">
             <button open-type="share" :data-item="item" class="share-btn" @click="openInfo">
-              <i class="iconfont icon31zhuanfa"></i>
+              <i class="iconfont iconfenxiang3"></i>
             </button>
           </div>
           <div class="purchase" @click="routeTo(item.id)">
-            <span>抢购</span>
+            <i class="iconfont iconiconjia"></i>
           </div>
         </div>
       </div>
@@ -127,6 +150,9 @@
       </div>
       <!--<FloatBox :home="false" phone="value"></FloatBox>-->
       <!--<CustomTabbar url="/pages/product/index"></CustomTabbar>-->
+      <div class="footer" @click="goProduct">
+        <span>发布<br>产品</span>
+      </div>
     </div>
   </div>
 </template>
@@ -136,6 +162,7 @@
   import { getExt } from '@/utils/index'
   import FloatBox from '@/components/floatBox'
   import tabs from '@/components/wan/tabs'
+  import taba from '@/components/wan/taba'
   import Searchbaa from '@/components/Searchbaa'
   import product from '@/api/product'
   import personApi from '@/api/person'
@@ -148,8 +175,42 @@
     },
     data () {
       return {
+        imgUrls: [{
+          src: 'https://images.unsplash.com/photo-1551334787-21e6bd3ab135?w=640'
+        }, {
+          src: 'https://images.unsplash.com/photo-1551214012-84f95e060dee?w=640'
+        }, {
+          src: 'https://images.unsplash.com/photo-1551446591-142875a901a1?w=640'
+        }
+        ],
+        categoryA: [{
+          businessId: 1,
+          id: 0,
+          sorting: 0,
+          typeId: 0,
+          typeName: '综合'
+        }, {
+          businessId: 1,
+          id: 1,
+          sorting: 0,
+          typeId: 0,
+          typeName: '销量'
+        }, {
+          businessId: 1,
+          id: 2,
+          sorting: 0,
+          typeId: 0,
+          typeName: '人气'
+        }
+        ],
+        indicatorDots: true,
+        autoplay: true,
+        interval: 3000,
+        duration: 1000,
+        circular: true,
         scrollTop: 0,
         category: [],
+        // categoryA: [],
         showA: '',
         categoryId: '',
         showB: '',
@@ -167,9 +228,11 @@
         name: '',
         personApi: personApi,
         companyName: '',
-        logo: '',
-        imgUrl: '',
-        goodsType: 0
+        logo: 'https://oss.wq1516.com/businessImage/201902011110241548990624073.png',
+        imgUrl: 'https://oss.tzyizan.com/businessImage/201907181428461563431326479.png',
+        goodsType: 0,
+        url: '',
+        sortingType: ''
       }
     },
 
@@ -178,6 +241,7 @@
       navigationBar,
       FloatBox,
       'wan-tabs': tabs,
+      'wan-taba': taba,
       CustomTabbar
     },
     onLoad () {
@@ -187,6 +251,8 @@
       this.getType()
     },
     onShow () {
+      this.getInfo()
+      // this.getProduct({ type: 0 })
     },
     onPageScroll: function (ev) {
       console.log('ev', ev)
@@ -202,26 +268,26 @@
         // this.showA = true
         this.showA = true
         this.showB = true
-        if (ev.scrollTop > 60) {
+        if (ev.scrollTop > 245) {
           this.show = true
-        } else if (ev.scrollTop < 60) {
+        } else if (ev.scrollTop < 245) {
           this.show = false
         }
-        if (ev.scrollTop > 98) {
+        if (ev.scrollTop > 283) {
           this.Active = true
         }
         // console.log('向下滚动')
       } else {
         this.showA = false
-        if (ev.scrollTop < 80) {
+        if (ev.scrollTop < 265) {
           this.showB = false
         }
-        if (ev.scrollTop < 60) {
+        if (ev.scrollTop < 245) {
           this.show = false
-        } else if (ev.scrollTop > 60) {
+        } else if (ev.scrollTop > 245) {
           this.show = true
         }
-        if (ev.scrollTop < 98) {
+        if (ev.scrollTop < 285) {
           this.Active = false
           // this.show = false
         }
@@ -253,6 +319,9 @@
       // 停止下拉刷新
       wx.stopPullDownRefresh()
     },
+    onTabItemTap (item) {
+      this.getProduct({ type: 0 })
+    },
     // onLoad () {
     //   this.getCategory()
     //   this.getProduct({ type: 0 })
@@ -269,6 +338,34 @@
     //   }
     // },
     methods: {
+      // 页面加载信息
+      getInfo () {
+        const userId = wx.getStorageSync('userId') // 获取本地userId
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/platformSalesman/selectSelfInfo',
+          body: {
+            'userId': userId
+          }
+        }).then(res => {
+          const data = wx.getStorageSync('Card')
+          if (res.data !== null) {
+            this.postForm = res.data
+          }
+          if (data !== true) {
+            this.url = '../businesscard/main'
+          } else {
+            this.url = '/pages/prod/product/main'
+          }
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      },
+      goProduct () {
+        wx.navigateTo({
+          url: '/pages/prod/product/main'
+        })
+      },
       openInfo () {
         // this.getProduct({ type: 0 })
         // console.log('info', this.info)
@@ -303,8 +400,16 @@
         }).then(res => {
           if (res.data) {
             this.companyName = res.data.companyName
-            this.logo = res.data.logo
-            this.imgUrl = res.data.imgUrl
+            if (res.data.logo !== null) {
+              this.logo = res.data.logo
+            } else {
+              this.logo = 'https://oss.wq1516.com/businessImage/201902011110241548990624073.png'
+            }
+            if (res.data.imgUrl !== null) {
+              this.imgUrl = res.data.imgUrl
+            } else {
+              this.imgUrl = 'https://oss.tzyizan.com/businessImage/201907181428461563431326479.png'
+            }
           }
           // const tradeStatus = res.data.tradeStatus
           // wx.setStorageSync('tradeStatus', tradeStatus)
@@ -337,7 +442,7 @@
         this.getProduct(0)
       },
       routeTo (id) {
-        console.log('aaa')
+        // console.log('aaa')
         this.insertOperaA('查看了产品', 3, id)
         wx.navigateTo({
           url: '../productA/detail/main?id=' + id
@@ -352,8 +457,9 @@
       },
       // 得到商品的列表
       async getProduct ({ type = 0, name = '' }) {
+        // console.log('11111')
         let businessId = getExt().shopId
-        const result = await product.getProduct({ businessId, pageNum: this.pageNum, pageSize: this.pageSize, type: this.categoryId, name: this.searchContent })
+        const result = await product.getProduct({ businessId, pageNum: this.pageNum, pageSize: this.pageSize, type: this.categoryId, name: this.searchContent, sortingType: this.sortingType })
         result.data.list.map(item => {
           item.price = item.price ? item.price.toFixed(2) : ''
         })
@@ -375,10 +481,12 @@
         let businessId = getExt().shopId
         const result = await product.getCategory({ businessId })
         const category = result.data
+        console.log('categoryA', category)
         category.unshift({
           business_id: businessId,
           id: '',
           typeId: 0,
+          iconUrl: 'https://oss.tzyizan.com/goodsTypeIcon/微信图片_20190815083453.png',
           typeName: '全部'
         })
         this.category = category
@@ -387,17 +495,33 @@
       tabChange (obj) {
         this.pageNum = 1
         this.searchContent = ''
-        wx.pageScrollTo({
-          scrollTop: 98
-        })
+        // wx.pageScrollTo({
+        //   scrollTop: 290
+        // })
         this.categoryId = obj.categoryId
+        this.getProduct(0)
+      },
+      tabChangeA (obj) {
+        this.pageNum = 1
+        this.searchContent = ''
+        wx.pageScrollTo({
+          scrollTop: 290
+        })
+        this.categoryId = 0
+        this.sortingType = obj.sortingType
         this.getProduct(0)
       }
     }
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+  .classImg{
+    width: 87rpx!important;
+    height: 87rpx!important;
+    border-radius: 50%;
+    display: inline-block;
+  }
   .fadedownA{
     animation: spin-downA 0.5s linear normal;
     animation-delay: 0.2s;
@@ -538,6 +662,19 @@
     align-items: center;
   }
   .product-page {
+    .title{
+      width: 100%;
+      height: 150rpx ;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      span{
+        font-weight: 600;
+        font-size: 37rpx;
+        color: #000000;
+      }
+    }
     width: 100%;
     min-height: 100%;
     background-color: #f0eff5;
@@ -552,13 +689,112 @@
   }
   .nav-control {
     width: 100%;
-    height: 550rpx;
+    height: 708rpx;
+    background: #ffffff;
     z-index: 1000;
     /*position: fixed;*/
     /*top:0;*/
+    .BTop{
+      width: 100%;
+      background: #ffffff;
+      .Tuik{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #ffffff;
+        margin-top: 20rpx;
+        img{
+          width: 715rpx;
+          height: 103rpx;
+        }
+      }
+      .banner{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #ffffff;
+        .bannerMain{
+          width: 715rpx;
+          /*background: #000000;*/
+          height: 301rpx;
+          z-index: 9999!important;
+          border-radius: 10rpx;
+          .swiper{
+            width: 715rpx;
+            height: 301rpx;
+            border-radius: 10rpx;
+            .slide-image{
+              width: 715rpx;
+              height: 301rpx;
+              display: inline-block;
+              border-radius: 10rpx;
+            }
+          }
+        }
+      }
+
+
+
+      /*.ification{*/
+        /*width: 100%;*/
+        /*!*margin-top: 20rpx;*!*/
+        /*height: 150rpx;*/
+        /*display: flex;*/
+        /*align-items: center;*/
+        /*justify-content: center;*/
+        /*.scorll{*/
+          /*margin-top: 20rpx;*/
+          /*height: 120rpx;*/
+          /*display: inline-block;*/
+          /*.van-tabs__nav--line {*/
+            /*padding:0 20rpx;*/
+            /*.van-tabs__line {*/
+              /*z-index: 1;*/
+              /*left: 0;*/
+              /*bottom: 0;*/
+              /*height: 4rpx;*/
+              /*position: absolute;*/
+              /*background-color: #f44;*/
+              /*.van-tab {*/
+                /*padding: 0 10rpx;*/
+                /*font-size: 28rpx;*/
+                /*position: relative;*/
+                /*color: #333;*/
+                /*line-height: 88rpx;*/
+                /*text-align: center;*/
+                /*box-sizing: border-box;*/
+                /*background-color: #fff;*/
+                /*.van-ellipsisA{*/
+                  /*width: 80rpx;*/
+                  /*height: 120rpx;*/
+                  /*display: inline-block;*/
+                  /*.sImg{*/
+                    /*width: 87rpx;*/
+                    /*height: 87rpx;*/
+                    /*border-radius: 50%;*/
+                    /*.classImg{*/
+                      /*width: 87rpx!important;*/
+                      /*height: 87rpx!important;*/
+                      /*border-radius: 50%;*/
+                      /*display: inline-block;*/
+                    /*}*/
+                  /*}*/
+                  /*.sTram{*/
+                    /*font-size: 30rpx;*/
+                    /*color: #9B9B9B;*/
+                  /*}*/
+                /*}*/
+              /*}*/
+            /*}*/
+          /*}*/
+        /*}*/
+      /*}*/
+    }
+
+
     .top{
       width: 100%;
-      height: 450rpx;
+      height: 301rpx;
       background: #ffffff;
       position: relative;
       transition: all 0.4s ease;
@@ -651,7 +887,7 @@
       white-space: nowrap;
     }
     .tab-active .van-ellipsis {
-      color: #4a90e2;
+      color: #4a90e2!important;
     }
     .weui-search-bar__input {
       color: #9b9b9b;
@@ -681,6 +917,7 @@
     .item-pro {
       width: 694rpx;
       height: 200rpx;
+      border-radius: 10rpx;
       background-color: #fff;
       display: inline-block;
       margin: 30rpx auto 0;
@@ -691,12 +928,15 @@
         width: 200rpx;
         height: 200rpx;
         float: left;
+        border-top-left-radius: 10rpx;
+        border-bottom-left-radius: 10rpx;
       }
       .topA{
         position: absolute;
         bottom: 0;
         width: 200rpx;
         background-color:rgba(0,0,0,0.5);
+        border-bottom-left-radius: 10rpx;
         .info{
           display: flex;
           align-items: center;
@@ -743,8 +983,9 @@
     }
     .look-Num{
       font-size: 22rpx;
-      margin: 0rpx 30rpx 0rpx 28rpx;
+      margin: 4rpx 30rpx 0rpx 28rpx;
       color: #9d9d9d;
+      width: 100%;
       display: block;
       text-align: left;
       .browseCount{
@@ -767,10 +1008,21 @@
           margin-right: 10rpx;
         }
       }
+      .renZ{
+        display: inline-block;
+        .iconrenzheng{
+          display: inline-block;
+          color: #CCCCCC;
+          font-size: 28rpx;
+          margin-right: 10rpx;
+        }
+      }
     }
     .price-brow {
+      width: 100%;
       font-size: 22rpx;
       display: block;
+      height: 50rpx;
       margin: 0rpx 16rpx;
       color: #9d9d9d;
       text-align: left;
@@ -819,27 +1071,37 @@
     // 转发
     .Forward{
       position: absolute;
-      top: -20rpx;
-      right: 0rpx;
+      top: 20rpx;
+      right: 20rpx;
       .share-btn{
         padding: 0rpx 20rpx;
-        .icon31zhuanfa{
-          color: #FF424E;
-          font-size: 40rpx;
+        width: 43rpx;
+        height: 30rpx;
+        border-radius: 30rpx;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #FF8331;
+        .iconfenxiang3{
+          color: #ffffff;
+          font-size: 20rpx;
         }
       }
     }
     // 抢购
     .purchase{
-      width: 100rpx;
-      height: 38rpx;
+      /*width: 100rpx;*/
+      /*height: 38rpx;*/
       display: block;
-      border: 1px solid #4A4A4A;
+      /*border: 1px solid #4A4A4A;*/
       color: #4A4A4A;
       position: absolute;
       right: 20rpx;
-      bottom: 26rpx;
+      bottom: 22rpx;
       border-radius: 10rpx;
+      .iconiconjia{
+        color:#FF8331;
+      }
       span{
         font-size:24rpx;
         width: 100%;
@@ -1055,6 +1317,22 @@
         margin-right: 10rpx;
         font-size: 32rpx;
       }
+    }
+  }
+  .footer{
+    position: fixed;
+    bottom: 200rpx;
+    right: 20rpx;
+    width: 100rpx;
+    height: 100rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.2);
+    span{
+      color: #ffffff;
     }
   }
 </style>

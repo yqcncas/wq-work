@@ -227,7 +227,7 @@ export default {
       text-align: center;
     }
     .active {
-      color: #4a90e2;
+      color: #FF903F;
     }
   }
 }
@@ -253,7 +253,7 @@ export default {
       justify-content: space-between;
     }
     .order-status {
-      color: #4a90e2;
+      color: #FF903F;
     }
   }
 }
@@ -320,7 +320,7 @@ export default {
   }
 }
 .blue-btn {
-  color: #2a94ec;
-  border-color: #2a94ec;
+  color: #FF903F;
+  border-color: #FF903F;
 }
 </style>

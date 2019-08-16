@@ -7,7 +7,7 @@
           <span>{{item.phone}}</span>
         </p>
         <p class="address-s">
-          <i class="iconfont icon-location"></i>
+          <i class="iconfont icondizhi-copy"></i>
           <span>{{item.address}}{{item.addressDetail||''}}</span>
         </p>
         <div class="bottom-set">

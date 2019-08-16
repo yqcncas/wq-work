@@ -46,7 +46,7 @@
         <span>余额</span>
         <span class="money">￥0</span>
       </p>
-      <switch v-model="switchValue" @change="switchChange" color="#2A94EC" disabled></switch>
+      <switch v-model="switchValue" @change="switchChange" color="#FF903F" disabled></switch>
     </div>
     <!-- 备注 -->
     <div class="remark-box">

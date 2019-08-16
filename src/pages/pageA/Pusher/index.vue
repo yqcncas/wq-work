@@ -70,9 +70,12 @@
       } else if (this.height > 1113 && this.height < 1367) {
         this.pusherA = 'pusherA'
         this.Active = 'mainD'
-      } else if (this.height > 700 && this.height < 761) {
+      } else if (this.height > 750 && this.height < 761) {
         this.pusherA = 'pusher'
         this.Active = 'mainE'
+      } else if (this.height > 735 && this.height <= 736) {
+        this.pusherA = 'pusher'
+        this.Active = 'main'
       } else {
         this.pusherA = 'pusher'
         this.Active = 'main'
@@ -118,16 +121,13 @@
           }
         }).then(res => {
           if (res.data) {
-            console.log('res', res.data)
+            console.log('res', res.data.isDistributor)
             this.isDistributor = res.data.isDistributor
             this.levelId = res.data.levelId
             this.num = 1
             this.tabA = ''
             this.changTabMeberA(this.levelId, this.upType)
             if (this.isDistributor === 1) {
-              // wx.redirectTo({
-              //   url: '/pages/pageA/agencyCenter/main'
-              // })
               this.isBuy = 3
               // wx.setStorageSync('BuyId', 3)
             } else if (this.isDistributor === 2) {
@@ -285,7 +285,7 @@
           console.log(err)
         })
       },
-      // 选择会员
+      // 选择分销
       changTabMeberA (id, upType) {
         console.log('buy', this.isBuy)
         if (this.isBuy === 1) {

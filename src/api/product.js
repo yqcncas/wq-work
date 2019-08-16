@@ -16,13 +16,15 @@ const product = {
     businessId,
     pageNum,
     pageSize,
-    name
+    name,
+    sortingType
   }) => request.get('platformGoods/allForUser?status=1', {
     businessId,
     type,
     pageNum,
     pageSize,
-    name
+    name,
+    sortingType
   }, {
     baseURL: baseUrlApi
   }),

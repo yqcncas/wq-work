@@ -11,7 +11,7 @@
         <div class="top">
           <div class="left">
             <button class="wxhy-btn" open-type="share">
-              <span class="wx-fri iconfont iconweixin1"></span>
+              <span class="wx-fri iconfont iconweixin"></span>
               <span class="font-26">微信好友</span>
             </button>
           </div>

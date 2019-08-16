@@ -134,7 +134,67 @@ scroll-view{
             font-size: ~'30rpx';
             padding: ~'10rpx' 0;
             float: right;
+            text-align: center;
             width: ~'350rpx';
+            .status{
+              font-size: ~'32rpx';
+              color: #000000;
+              font-weight: 600;
+            }
+            .com{
+              color: #4A4A4A;
+              margin-top: ~'20rpx';
+              font-size: ~'24rpx';
+            }
+            .comActive{
+              color: #FFBA50;
+              margin-top: ~'20rpx';
+              font-size: ~'24rpx';
+              .iconrenzheng{
+                color: #FFBA50;
+                display: inline-block;
+              }
+            }
+            .footerActive{
+              margin-top: ~'20rpx';
+              display: inline-block;
+              width: ~'180rpx';
+              height: ~'50rpx';
+              line-height: ~'50rpx';
+              background: #FFBA50;
+              text-align: center;
+              font-size: ~'22rpx';
+              color: #ffffff;
+              border-radius: ~'50rpx';
+              i{
+                display: inline-block;
+                vertical-align: bottom;
+                font-size: ~'25rpx';
+                margin-right: ~'5rpx';
+              }
+            }
+            .footer{
+              margin-top: ~'20rpx';
+              display: inline-block;
+              width: ~'180rpx';
+              height: ~'50rpx';
+              line-height: ~'50rpx';
+              background: #FF5C31;
+              text-align: center;
+              font-size: ~'22rpx';
+              color: #ffffff;
+              border-radius: ~'50rpx';
+              i{
+                display: inline-block;
+                vertical-align: bottom;
+                font-size: ~'25rpx';
+                margin-right: ~'5rpx';
+              }
+            }
+            .iconbianji_fuzhi{
+              display: inline-block;
+              color: #ffffff;
+            }
             .cardHold-top-main-name{
               font-size: ~'32rpx';
               font-weight: 600;
@@ -194,11 +254,11 @@ scroll-view{
   /*雷达*/
   .cardHold-main{
     width: 100%;
-    height: ~'450rpx';
+    //height: ~'450rpx';
     background: #ffffff;
     .cardHold-main-me{
       width: 100%;
-      height: ~'250rpx';
+      //height: ~'250rpx';
       display: inline-block;
       border-radius: ~'10rpx';
       margin-top: ~'200rpx';
@@ -216,8 +276,9 @@ scroll-view{
             height: ~'100rpx';
             border-radius: ~'10rpx';
             background: #FFBA50;
-            text-align: center;
-            line-height: ~'120rpx';
+            display: flex;
+            align-items: center;
+            justify-content: center;
             float: left;
             img {
               width: ~'50rpx';
@@ -228,12 +289,27 @@ scroll-view{
             width: ~'100rpx';
             height: ~'100rpx';
             border-radius: ~'10rpx';
-            background: #2A94EC;
-            text-align: center;
-            line-height: ~'120rpx';
+            background: #FF984E;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             float: left;
             img {
               width: ~'50rpx';
+              height: ~'50rpx';
+            }
+          }
+          .cardHold-Img2{
+            width: ~'100rpx';
+            height: ~'100rpx';
+            border-radius: ~'10rpx';
+            background: #FF5C31;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            float: left;
+            img {
+              width: ~'60rpx';
               height: ~'50rpx';
             }
           }
@@ -257,6 +333,251 @@ scroll-view{
       }
     }
   }
+  //人脉
+  .connections{
+    width: 100%;
+    margin-top: ~'20rpx';
+    background:#ffffff;
+    //padding-bottom: ~'60rpx';
+    .con-top{
+      width: 100%;
+      background:#ffffff;
+      height: ~'88rpx';
+      border-bottom: ~'1rpx' solid #cccccc;
+      .promote{
+        width: 30%;
+        height: ~'88rpx';
+        //line-height: ~'88rpx';
+        float: right;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        span{
+          width: ~'130rpx';
+          height: ~'34rpx';
+          display: inline-block;
+          border-radius: ~'20rpx';
+          color: #ffffff;
+          font-size: ~'24rpx';
+          background: linear-gradient(to right, #FF5C31, #FF9C51);
+        }
+      }
+      .testNav {
+        margin:  0;
+        //padding: 0 ~'10rpx' 0 ~'10rpx';
+        height: ~'88rpx';
+        line-height: ~'88rpx';
+        width: 66%;
+        display: flex;
+        float: left;
+        color: #5B5B5B;
+        font-weight: 600;
+        font-size: ~'30rpx';
+        div{
+          padding: 0;
+          margin: 0 ~'30rpx';
+          color: #5B5B5B;
+        }
+        .testTitle {
+          flex: 1;
+          text-align: center;
+        }
+        .selected {
+          font-size: ~'32rpx';
+          color: #FFAB37;
+          //border-bottom: 1px solid #ffffff;
+        }
+      }
+    }
+
+
+    .con-main{
+      width: 100%;
+      min-height: ~'200rpx';
+      background: #ffffff;
+      .cardA{
+        .cardData{
+          padding: 0 ~'20rpx';
+          .cardTitle{
+            width: 100%;
+            height: ~'164rpx';
+            padding: ~'30rpx' 0 ;
+            border-bottom: ~'1rpx' solid #cccccc;
+            .cardData-left{
+              margin-left: ~'20rpx';
+              width: 20%;
+              float: left;
+              .headImg{
+                width: ~'100rpx';
+                height: ~'100rpx';
+                border-radius: ~'10rpx';
+                position: relative;
+                img{
+                  width: 100%;
+                  height: 100%;
+                  border-radius: ~'10rpx';
+                }
+                .meber{
+                  position: absolute;
+                  right: ~'-15rpx';
+                  bottom: ~'-15rpx';
+                  i{
+                    width: ~'45rpx';
+                    height: ~'45rpx';
+                    img{
+                      width: 100%;
+                      height: 100%;
+                      display: inline-block;
+                    }
+                  }
+                }
+              }
+
+              .lookData{
+                font-size: ~'22rpx';
+                color: #FF9A4F;
+                margin-top: ~'38rpx';
+                .eye{
+                  .iconchakan{
+                    display: inline-block;
+                    color: #CCCCCC;
+                    font-size: ~'24rpx';
+                  }
+                }
+                .star{
+                  .iconshoucang4{
+                    font-size: ~'24rpx';
+                    display: inline-block;
+                    color: #CCCCCC;
+                  }
+                }
+              }
+            }
+
+
+
+            .cardData-main{
+              float: left;
+              width: 50%;
+              overflow: hidden;
+              margin-top: ~'-8rpx';
+              .top{
+                .icon{
+                  border: ~'1rpx'solid #FF984E;
+                  border-radius: 50%;
+                  color: #FF984E;
+                  width: ~'28rpx';
+                  height: ~'28rpx';
+                  font-size: ~'20rpx';
+                  display: inline-block;
+                  vertical-align: middle;
+                  text-align: center;
+                  margin-right: ~'15rpx';
+                }
+                .name{
+                  color: #000000;
+                  font-size: ~'30rpx';
+                  font-weight: 600;
+                  margin-right: ~'15rpx';
+                }
+                .job{
+                  color: #9d9d9d;
+                  font-size: ~'24rpx';
+                }
+              }
+
+              .company{
+                color: #9d9d9d;
+                font-size: ~'24rpx';
+                margin-top: ~'10rpx';
+              }
+              .DoT{
+                margin-top: ~'10rpx';
+                color: #FFBA50;
+                font-size: ~'22rpx';
+              }
+              .product{
+                margin-top: ~'10rpx';
+                color: #9d9d9d;
+                font-size: ~'22rpx';
+                span{
+                  color: #FFAC6D;
+                }
+              }
+            }
+
+            .cardData-right{
+              text-align: right;
+              width: 20%;
+              float: right;
+              margin-right: ~'20rpx';
+              .talk{
+                .iconliaotian1{
+                  font-size: ~'50rpx';
+                  color: #BFBFBF;
+                }
+              }
+              .collect{
+                margin-top: ~'18rpx';
+                display: inline-block;
+                text-align: center;
+                border-radius: ~'30rpx';
+                font-size: ~'26rpx';
+                width: ~'91rpx';
+                height: ~'37rpx';
+                background: #FF8331;
+                color: #ffffff;
+              }
+              .collectA{
+                margin-top: ~'18rpx';
+                display: inline-block;
+                text-align: center;
+                border-radius: ~'30rpx';
+                font-size: ~'26rpx';
+                width: ~'91rpx';
+                height: ~'37rpx';
+                color: #ffffff;
+                background: #ffffff;
+              }
+              .distance{
+                margin-top: ~'18rpx';
+                color: #9D9D9D;
+                font-size: ~'24rpx';
+                font-weight: normal;
+              }
+            }
+          }
+        }
+
+        .Gao{
+          width: 100%;
+          height: ~'115rpx';
+          margin-top: ~'-1rpx';
+          padding: 0 !important;
+          img{
+            width: 100%;
+            height: 100%;
+            display: inline-block;
+          }
+        }
+      }
+      .noS{
+        line-height: ~'200rpx';
+        text-align: center;
+        color: #CCCCCC;
+      }
+    }
+  }
+
+
+
+
+
+
+
+
+
   //底部搜索
   .cardHold-ft{
     width: 100%;
@@ -626,4 +947,40 @@ scroll-view{
   height: ~'80rpx';
   border-top: ~'12rpx' solid #f5f5f5;
   border-bottom: ~'12rpx' solid #f5f5f5;
+}
+
+
+// 消息
+.message{
+  position: fixed;
+  bottom: ~'200rpx';
+  right: ~'20rpx';
+  .bt{
+    width: ~'100rpx';
+    height: ~'100rpx';
+    border-radius: ~'50rpx';
+    background: rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    .iconwodexiaoxi{
+      font-size: ~'40rpx';
+      color: #ffffff;
+    }
+    .num{
+      position: absolute;
+      width: ~'30rpx';
+      height: ~'30rpx';
+      background: #FF6565;
+      color: #ffffff;
+      border-radius: 50%;
+      top: ~'15rpx';
+      right: ~'15rpx';
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: ~'20rpx';
+    }
+  }
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="agency-page">
     <div class="top-wrap">
-      <image class="bg" src="/static/images/bg-blue.png"></image>
+      <image class="bg" src="https://oss.tzyizan.com/salesInfo/201908161649371565945377368.png"></image>
       <!-- navbar -->
       <div class="absolute-wrap">
         <p class="nav-bar" :style="styleBar" @click="backTo">

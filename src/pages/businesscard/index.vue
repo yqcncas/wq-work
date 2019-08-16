@@ -34,7 +34,7 @@
         <div class="top">
           <div class="left">
             <button class="wxhy-btn" open-type="share">
-              <span class="wx-fri iconfont iconweixin1"></span>
+              <span class="wx-fri iconfont iconweixin"></span>
               <span class="font-26">微信好友</span>
             </button>
           </div>
@@ -128,7 +128,7 @@
                   </swiper-item>
                 </block>
               </swiper>
-              <div class="title">寻客雷达</div>
+              <div class="title">数据中心</div>
             </div>
           </div>
           <!--名片风格1-->
@@ -423,6 +423,18 @@
           </div>
       </el-form>
     </div>
+
+      <div class="message">
+        <div class="bt" @click="goToProductA()">
+          <span class="product">查看<br/>产品</span>
+        </div>
+        <div class="bt" @click="goToMessage()">
+          <span class="product">我的<br/>消息</span>
+          <!--<i class="iconfont iconwodexiaoxi"></i>-->
+          <span class="num" v-if="num < 99 && num !== 0">{{num}}</span>
+          <span class="num" v-else-if="num >=99">99</span>
+        </div>
+      </div>
     </div>
 </template>
 
@@ -491,6 +503,7 @@
     },
     onLoad: function (options) {
       this.CardId = options.id
+      this.getMap()
     },
     async onPullDownRefresh () {
       this.getInfo()
@@ -519,6 +532,93 @@
       }
     },
     methods: {
+      // 查看产品
+      goToProductA () {
+        wx.navigateTo({
+          url: '/pages/prod/product/main'
+        })
+      },
+      // 进入聊天信息页面
+      goToMessage () {
+        wx.navigateTo({
+          url: '../message/main'
+        })
+      },
+      // 获取地理权限
+      getMap () {
+        wx.getLocation({
+          type: 'wgs84',
+          success (res) {
+            // console.log('resreaaa11111s', res)
+            wx.setStorageSync('latitude', res.latitude)
+            wx.setStorageSync('longitude', res.longitude)
+            // 如果首次授权成功则执行地图定位操作，具体实现代码与此文无关，就不贴出
+          },
+          fail: function (res) {
+            // 授权失败
+            wx.getSetting({
+              // 获取用户的当前设置，返回值中只会出现小程序已经向用户请求过的权限
+              success: function (res) {
+                // console.log('resres', res)
+                // 成功调用授权窗口
+                var statu = res.authSetting
+                if (!statu['scope.userLocation']) {
+                  // 如果设置中没有位置权限
+                  wx.showModal({
+                    // 弹窗提示
+                    title: '是否授权当前位置',
+                    content:
+                      '需要获取您的地理位置，请确认授权，否则有些功能将无法使用',
+                    success: function (tip) {
+                      console.log('tip', tip)
+                      if (tip.confirm) {
+                        wx.openSetting({
+                          // 点击确定则调其用户设置
+                          success: function (data) {
+                            // console.log('data', data)
+                            if (data.authSetting['scope.userLocation'] === true) {
+                              // 如果设置成功
+                              wx.showToast({
+                                // 弹窗提示
+                                title: '授权成功',
+                                icon: 'success',
+                                duration: 1000
+                              })
+                              wx.getLocation({
+                                // 通过getLocation方法获取数据
+                                type: 'wgs84',
+                                success (res) {
+                                  // 成功的执行方法
+                                  wx.setStorageSync('latitude', res.latitude)
+                                  wx.setStorageSync('longitude', res.longitude)
+                                  // console.log('res', res)
+                                }
+                              })
+                            }
+                          }
+                        })
+                      } else {
+                        // 点击取消按钮，则刷新当前页面
+                        wx.switchTab({
+                          // 销毁当前页面，并跳转到当前页面
+                          url: '/pages/businesscard/main' // 此处按照自己的需求更改
+                        })
+                      }
+                    }
+                  })
+                }
+              },
+              fail: function (res) {
+                wx.showToast({
+                  title: '调用授权窗口失败',
+                  icon: 'success',
+                  duration: 1000
+                })
+              }
+            })
+          }
+        })
+      },
       getType () {
         const businessId = wx.getStorageSync('businessId') // 获取本地userId
         this.$fly.request({
@@ -834,7 +934,6 @@
         }).then(res => {
           console.log('res', this.modalFlag)
           if (res.data) {
-            this.getOpA()
             if (res.data.nickName === '' || res.data.nickName == null) {
               this.modalFlag = true
             } else {
@@ -880,6 +979,7 @@
               this.voiceTime = this.formatSeconds(this.num)
               console.log(this.num)
             }, 100)
+            this.getOpA()
           } else if (res.data === null) {
             this.modalFlag = true
           }

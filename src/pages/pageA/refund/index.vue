@@ -37,7 +37,8 @@
       <div class="img-wrap flexRow">
         <div class="common-size img-margin" v-for="(item,index) in richTextList" :key="index">
           <image :src="item" class="common-size" mode="aspectFill" @click="previewImg(item)"></image>
-          <image class="delete-img" src="/static/images/delete.png" mode="widthFix" @click="deleteImgList(index)"></image>
+          <!--<image class="delete-img" src="/static/images/delete.png" mode="widthFix" @click="deleteImgList(index)"></image>-->
+          <i class="iconfont iconshanchu-copy delete-img" @click="deleteImgList(index)"></i>
         </div>
         <div class="common-size add-img" @click="chooseImageList" v-if="richTextList.length!==4">
           <i class="iconfont iconxiangji"></i>
@@ -57,11 +58,11 @@
       <p class="title">货物状态</p>
       <div class="flexRow com-status first-border" @click="goodStatus('未收到货')">
         <span>未收到货</span>
-        <i class="iconfont icon-choose" :class="{'icon-xianshi_xuanzetianchong':tempChoose==='未收到货'}"></i>
+        <i class="iconfont iconchoose" :class="{'iconxianshi_xuanzetianchong':tempChoose==='未收到货'}"></i>
       </div>
       <div class="flexRow com-status" @click="goodStatus('已收到货')">
         <span>已收到货</span>
-        <i class="iconfont icon-choose" :class="{'icon-xianshi_xuanzetianchong':tempChoose==='已收到货'}"></i>
+        <i class="iconfont iconchoose" :class="{'iconxianshi_xuanzetianchong':tempChoose==='已收到货'}"></i>
       </div>
       <button class="close-btn" @click="modal('')">关闭</button>
     </div>

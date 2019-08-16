@@ -31,7 +31,7 @@
           <div class="cardHold-ftMain-ct" v-for="(item,index) in commitInfo" :key="index">
             <div class="center" @touchstart="touchStart($event)" @touchend="touchEnd($event,index)" :data-type="item.type" >
               <div class="cardHold-ftMain-ct-img" @click="recover(index)">
-                <img src="../../../../static/images/tiangou.jpg"/>
+                <img src="../../../static/images/tiangou.jpg"/>
               </div>
               <div class="cardHold-ftMain-rt" @click="recover(index)">
                 <span class="icon">{{ item.icon }}</span>
@@ -147,7 +147,7 @@
       },
       router () {
         wx.navigateTo({
-          url: '../group/main'
+          url: 'pages/group/main'
         })
       }
     }
@@ -155,5 +155,5 @@
 </script>
 
 <style lang="less" scoped>
-@import "./style";
+@import "style";
 </style>

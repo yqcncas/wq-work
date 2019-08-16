@@ -2,7 +2,7 @@
     <div class="Group">
       <div class="Top">
         <div class="main" @click="routerTo">
-          <span class="add"><img src="../../../../static/images/add.png"/></span>
+          <span class="add"><img src="/static/images/add.png"/></span>
           <span class="title">创建群名片</span>
         </div>
       </div>
@@ -32,13 +32,13 @@
     data () {
       return {
         Groups: [{
-          src: '../../../static/images/tiangou.jpg',
+          src: '/static/images/tiangou.jpg',
           name: '今天你吃了吗',
           number: '3',
           attribute: '公司通讯录',
           center: '大家好这是我们的日常聊天互骚群，欢迎各位加入'
         }, {
-          src: '../../../static/images/tiangou.jpg',
+          src: '/static/images/tiangou.jpg',
           name: '今天你吃了吗',
           number: '3',
           attribute: '公司通讯录',
@@ -49,7 +49,7 @@
     methods: {
       routerTo (url) {
         wx.navigateTo({
-          url: '../addGroup/main'
+          url: 'pages/addGroup/main'
         })
       }
     }
@@ -57,5 +57,5 @@
 </script>
 
 <style lang="less" scoped>
-@import "./style";
+@import "style";
 </style>

@@ -29,7 +29,8 @@
         </div>
       </div>
       <div class="footer">
-        <button @click="getBuyCard()">确定</button>
+        <button v-if="isBuy === 0" class="save" @click="getSalesmanUpdate()">确定</button>
+        <button v-else @click="getBuyCard()">确定</button>
       </div>
     </div>
 </template>
@@ -48,15 +49,16 @@
         imgUrl: '',
         personApi: personApi,
         phoneIp: '',
+        isBuy: '', // 控制是否支付
         disabled: false
       }
     },
     onShow () {
       this.isBuy = wx.getStorageSync('isBuy')
-      const imgurl = wx.getStorageSync('avatarUrl')
+      const imgUrl = wx.getStorageSync('avatarUrl')
       const nickName = wx.getStorageSync('nickName')
-      if (imgurl) {
-        this.imgUrl = imgurl
+      if (imgUrl) {
+        this.imgUrl = imgUrl
       }
       if (nickName) {
         this.name = nickName

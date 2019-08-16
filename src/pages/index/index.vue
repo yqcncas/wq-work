@@ -342,7 +342,7 @@ export default {
   methods: {
     // 查询是否购买mingp
     getBuyCard () {
-      console.log('11111')
+      // console.log('11111')
       this.disabled = true
       this.$fly.request({
         method: 'get', // post/get 请求方式
@@ -406,12 +406,10 @@ export default {
             this.isBuy = 0
             this.getBuy()
             // this.insertOpera('支付了产品', 6)
-            // wx.redirectTo({ url: `../payfinish/index?price=${this.allprice}&status=success` })
           },
           'fail': (res) => {
             this.isBuy = 1
             this.disabled = false
-            // wx.redirectTo({ url: `../payfinish/index?price=${this.allprice}&status=fail` })
           },
           'complete': function (res) {
           }
@@ -790,7 +788,7 @@ export default {
       //     return false
       //   }
       // }
-      if (this.judgeNull(this.email, '邮箱')) return
+      // if (this.judgeNull(this.email, '邮箱')) return
       // 检测邮箱
       if (this.email) {
         var regE = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
@@ -914,7 +912,7 @@ export default {
     // 获取当前定位
     chooseLocation () {
       var that = this
-      console.log('111')
+      // console.log('111')
       wx.chooseLocation({
         success: (res) => {
           console.log(res)

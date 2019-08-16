@@ -28,7 +28,6 @@ export default {
   onLoad (options) {
     this.fromWay = 0
     this.getInfo()
-    this.getBuy()
     this.goodsId = null
     if (options.fromWay) {
       this.fromWay = options.fromWay
@@ -77,11 +76,13 @@ export default {
       wx.login({
         success: async (res) => {
           let shopId = getExt().shopId
+          wx.setStorageSync('businessId', shopId)
           let data = { code: res.code, id: shopId, userId: this.userId, fromWay: this.fromWay, salesmanId, param, FX }
           const result = await homeApi.doLogin(data)
           this.eatinCart(result)
           wx.setStorageSync('Card', false)
           this.getUnReadCount()
+          this.getBuy()
         }
       })
     },
@@ -95,8 +96,12 @@ export default {
           'businessId': businessId
         }
       }).then(res => {
-        this.isBuy = res.data.isBuy
-        wx.setStorageSync('isBuy', this.isBuy)
+        if (res.data) {
+          this.isBuy = res.data.isBuy
+          wx.setStorageSync('isBuy', this.isBuy)
+        } else {
+          wx.setStorageSync('isBuy', 0)
+        }
         // console.log('isBuy', this.isBuy)
       }).catch(err => {
         console.log(err)
@@ -129,7 +134,7 @@ export default {
       })
       this.num = result.data
       wx.setStorageSync('msgNum', this.num)
-      console.log('获取消息数量1', this.num)
+      console.log('获取消息数量', this.num)
     },
     // // 插入雷达
     // async insertOpera (info, recordType) {
@@ -155,8 +160,8 @@ export default {
     },
     // 处理返回数据
     eatinCart (res) {
-      console.log(wx.getSystemInfoSync().windowHeight)
-      console.log(wx.getSystemInfoSync().windowWidth)
+      // console.log(wx.getSystemInfoSync().windowHeight)
+      // console.log(wx.getSystemInfoSync().windowWidth)
       wx.setStorageSync('screenHeight', wx.getSystemInfoSync().screenHeight)
       wx.setStorageSync('windowHeight', wx.getSystemInfoSync().windowHeight)
       console.log('login', res)
@@ -174,7 +179,7 @@ export default {
       this.userId = wx.getStorageSync('userId', id)
       this.businessId = wx.getStorageSync('businessId', businessId)
       wx.setStorageSync('token', token)
-      wx.setStorageSync('businessId', businessId)
+      // wx.setStorageSync('businessId', businessId)
       setIsSalesMan(isSalesman)
       wx.setStorageSync('userId', id)
       const updateManager = wx.getUpdateManager()

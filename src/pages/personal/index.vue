@@ -12,18 +12,22 @@
         <div class="title"><a>我的</a></div>
         <el-form ref="postForm" :model="postForm">
           <div class="top-main">
-          <span class="headImg">
-            <img :src="postForm.imgUrl"/>
-            <i><s>企</s></i>
-          </span>
-            <p class="">
-              <span class="name">{{ postForm.name }}</span>
-              <span class="job">{{ postForm.job }}</span>
-              <span class="comyname">{{ postForm.salesCompanyName}}</span>
-              <span class="edit" @click="goMessage">
-              <img src="../../../static/images/消息.png"/>消息中心
-              </span>
-            </p>
+            <span class="headImg">
+              <img :src="postForm.imgUrl"/>
+              <i><s>企</s></i>
+            </span>
+              <div class="p">
+                <p class="zhiding">
+                  <span class="name">{{ postForm.name }}</span>
+                  <span class="job">{{ postForm.job }}</span>
+                </p>
+                <span class="comyname">{{ postForm.salesCompanyName}}</span>
+                <span class="edit" @click="goMessage">
+                  <img src="../../../static/images/消息.png"/>我的消息
+                  <a class="left" v-if="num !== 0 && num < 99" >{{num}}</a>
+                  <a class="right" v-else-if="num > 99" >99<s>+</s></a>
+                </span>
+              </div>
           </div>
         </el-form>
       </div>
@@ -59,32 +63,44 @@
         </div>
       </div>
     </div>
+    <div class="check">
+      <div class="check-in">
+        <img  @click="goIntegral" src="https://oss.tzyizan.com/salesInfo/201908071432331565159553627.png">
+        <div class="info"  @click="goIntegral">
+          <div class="info-left">
+            <p class="num">{{numA}}分</p>
+            <p class="size">签到积分</p>
+          </div>
+          <div class="info-right">
+            <p class="num">{{count}}次</p>
+            <p class="size">签到次数</p>
+          </div>
+        </div>
+        <form report-submit='true' @submit='getFormID' class="form">
+          <div class="Check" v-if="Check===0" @click="check()">
+            <button class="check-inA"><span>签到</span></button>
+          </div>
+        </form>
+        <div class="CheckA" v-if="Check===1" @click="checkA()">
+          <button class="check-inA"><span>已签</span></button>
+        </div>
+      </div>
+    </div>
     <div class="meber" @click="goMeber">
-      <div class="meber-main" v-if="Member === 0">
+      <div class="meber-main" v-if="Member == '无会员'">
         <img src="https://oss.tzyizan.com/salesInfo/201908051614261564992866702.png">
       </div>
-      <div class="meber-main" v-else-if="Member === 1">
-        <img src="https://oss.tzyizan.com/salesInfo/201908051614261564992866702.png">
+      <div class="meber-main" v-else-if="Member == '白银会员'">
+        <img src="https://oss.tzyizan.com/salesInfo/201908061437361565073456909.png">
       </div>
-      <div class="meber-main" v-else-if="Member === 2">
-        <img src="https://oss.tzyizan.com/salesInfo/201908051614261564992866702.png">
+      <div class="meber-main" v-else-if="Member == '黄金会员'">
+        <img src="https://oss.tzyizan.com/salesInfo/201908061437331565073453159.png">
       </div>
-      <div class="meber-main" v-else-if="Member === 4">
-        <img src="https://oss.tzyizan.com/salesInfo/201908051614261564992866702.png">
+      <div class="meber-main" v-else-if="Member == '钻石会员'">
+        <img src="https://oss.tzyizan.com/salesInfo/201908061437391565073459176.png">
       </div>
     </div>
       <div class="choose">
-        <div class="choose-main">
-          <div class="choose-Map" v-for="(item,index) in chooseBlue" :key="index">
-            <div @click="goInto(item.url)">
-              <span class="icon"><img v-if="item.src" :src="item.src"/></span>
-              <span class="title">{{ item.title }}</span>
-              <span class="right">
-                <i class="iconfont iconyouce"></i>
-              </span>
-            </div>
-          </div>
-        </div>
         <div class="choose-main">
           <div class="choose-Map" v-for="(item,index) in chooseYellow" :key="index">
             <div @click="goInto(item.url)">
@@ -108,6 +124,17 @@
           </div>
         </div>
         <div class="choose-main">
+          <div class="choose-Map" v-for="(item,index) in chooseBlue" :key="index">
+            <div @click="goInto(item.url)">
+              <span class="icon"><img v-if="item.src" :src="item.src"/></span>
+              <span class="title">{{ item.title }}</span>
+              <span class="right">
+                <i class="iconfont iconyouce"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="choose-main">
           <div class="choose-Map" v-for="(item,index) in chooseRed" :key="index">
             <div @click="goInto(item.url)">
               <span class="icon"><img v-if="item.src" :src="item.src"/></span>
@@ -119,6 +146,22 @@
           </div>
         </div>
       </div>
+    <div class="NetSucces" v-if="deleteShow === true">
+      <div class="NetSucces-main">
+        <div class="img">
+          <img src="https://oss.tzyizan.com/salesInfo/201908161342141565934134542.png">
+          <div class="main">
+            <p class="suc">签到成功</p>
+            <p class="title">恭 喜 你 获 得 5 积 分</p>
+            <p class="info">积 分 可 用 于 名 片 置 顶 等 服 务</p>
+          </div>
+          <div class="delete">
+            <p class="line"></p>
+            <i class="iconfont iconshanchu-copy" @click="checkDelete()"></i>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -143,20 +186,26 @@
           praiseMeNum: 0,
           iLookNum: 0
         },
+        num: '',
+        numA: 0,
+        count: 0,
         selectNavIndex: 3,
         needButton: true,
         handButton: true,
-        Member: 0,
+        Member: '无会员',
         btnText: '个人中心',
         indicatorDots: true,
         cardStatus: true,
+        Check: 0,
+        deleteShow: false,
         chooseBlue: [{
           src: '../../static/images/compny.png',
           title: '企业认证',
           url: '../pageA/attestation/main'
         }, {
           src: '../../static/images/jieshao.png',
-          title: '公司介绍'
+          title: '公司介绍',
+          url: '../pageA/introduce/main'
         }],
         chooseYellow: [{
           src: '../../static/images/chanpin.png',
@@ -183,7 +232,7 @@
         chooseRed: [{
           src: '../../static/images/xiaoxi.png',
           title: '反馈中心',
-          url: ''
+          url: '/pages/pageA/Opinion/main'
         }],
         chooseBlueA: [{
           src: '../../static/images/compny.png',
@@ -191,7 +240,8 @@
           url: '../pageA/attestation/main'
         }, {
           src: '../../static/images/jieshao.png',
-          title: '公司介绍'
+          title: '公司介绍',
+          url: '../pageA/introduce/main'
         }],
         chooseYellowA: [{
           src: '../../static/images/chanpin.png',
@@ -218,7 +268,7 @@
         chooseRedA: [{
           src: '../../static/images/xiaoxi.png',
           title: '反馈中心',
-          url: ''
+          url: '/pages/pageA/Opinion/main'
         }],
         chooseBlueB: [{
           src: '../../static/images/compny.png',
@@ -226,7 +276,8 @@
           url: '../pageA/attestation/main'
         }, {
           src: '../../static/images/jieshao.png',
-          title: '公司介绍'
+          title: '公司介绍',
+          url: '../pageA/introduce/main'
         }],
         chooseYellowB: [{
           src: '../../static/images/chanpin.png',
@@ -248,13 +299,14 @@
         }, {
           src: '../../static/images/tuike.png',
           title: '推客中心',
-          url: '../pageA/Pusher/main'
+          url: '/pages/pageA/agencyCenter/main'
         }],
         chooseRedB: [{
           src: '../../static/images/xiaoxi.png',
           title: '反馈中心',
-          url: ''
-        }]
+          url: '/pages/pageA/Opinion/main'
+        }],
+        silver: []
       }
     },
 
@@ -263,18 +315,71 @@
     onShow () {
       this.getInfo()
       this.getRecord()
-      const Member = wx.getStorageSync('vipId')
-      console.log('Member', Member)
-      if (Member === 0 || Member === null) {
-        this.Member = 0
-      } else {
-        this.Member = Member
-      }
+      this.getMerber()
     },
     onLoad () {
+      setInterval(() => {
+        const that = this
+        const num = wx.getStorageSync('msgNum')
+        that.num = num
+        // console.log('获取消息数量', that.num)
+      }, 1000)
       // this.getShop()
     },
     methods: {
+      // 进入积分明细
+      goIntegral () {
+        wx.navigateTo({
+          url: '/pages/pageA/integral/main'
+        })
+      },
+      // 隐藏
+      checkDelete () {
+        this.deleteShow = false
+        this.Check = 1
+      },
+      // 签到
+      check () {
+        this.deleteShow = true
+        this.Check = 1
+        this.numA = this.numA + 5
+        this.count = this.count + 1
+      },
+      checkA () {
+        wx.showToast({
+          title: '已签，明天继续哦',
+          icon: 'none',
+          duration: 2000
+        })
+      },
+      // 查询会员等级信息
+      getMerber () {
+        const businessId = wx.getStorageSync('businessId')
+        this.$fly.request({
+          method: 'get',
+          url: 'vip/findList',
+          body: {
+            'businessId': businessId
+          }
+        }).then(res => {
+          const Member = wx.getStorageSync('vipId')
+          console.log('Member', Member)
+          if (Member === 0 || Member === null) {
+            this.Member = '无会员'
+          } else {
+            // this.Member = Member
+            this.silver = res.data
+            this.silver.map((item) => {
+              if (Member === item.id) {
+                this.Member = item.levelName
+              }
+            })
+            console.log('resAAAA', this.Member)
+          }
+        }).catch(err => {
+          console.log('err', err)
+        })
+      },
       // 进入会员中心,
       goMeber () {
         if (this.cardStatus === true) {
@@ -416,6 +521,102 @@
 </script>
 
 <style lang="less" scoped>
+  .Check{
+    position: absolute;
+    z-index: 99;
+    right: ~'80rpx';
+    top: ~'15rpx';
+    width: ~'79rpx';
+    height: ~'79rpx';
+    background: #FFC77A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    .check-inA{
+      animation: spin-down 2s linear infinite normal;
+      width: ~'79rpx';
+      height: ~'79rpx';
+      border-radius: 50%;
+      font-size: ~'20rpx';
+      background: #FFE3BD;
+      color: #FFA11F;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  .CheckA{
+    position: absolute;
+    right: ~'80rpx';
+    top: ~'15rpx';
+    width: ~'79rpx';
+    height: ~'79rpx';
+    background: #FFC77A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    .check-inA{
+      font-size: ~'20rpx';
+      //animation: spin-down 2s linear infinite normal;
+      width: ~'55rpx';
+      height: ~'55rpx';
+      border-radius: 50%;
+      background: #FFE3BD;
+      color: #FFA11F;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  .check{
+    width: 100%;
+    margin-top: ~'20rpx';
+    display: flex;
+    justify-content: center;
+    .check-in{
+      width: ~'702rpx';
+      height: ~'105rpx';
+      border-radius: ~'20rpx';
+      position: relative;
+      img{
+        width: 100%;
+        height: 100%;
+        display: inline-block;
+      }
+      .info{
+        position: absolute;
+        top: ~'20rpx';
+        left: ~'80rpx';
+        color: #ffffff;
+        text-align: center;
+        .info-left{
+          display: inline-block;
+          margin-right: ~'30rpx';
+          .num{
+            font-size: ~'26rpx';
+            color: #ffffff;
+            font-weight: 500;
+          }
+          .size{
+            font-size: ~'24rpx';
+          }
+        }
+        .info-right{
+          display: inline-block;
+          .num{
+            font-size: ~'26rpx';
+            font-weight: 500;
+            color: #ffffff;
+          }
+          .size{
+            font-size: ~'24rpx';
+          }
+        }
+      }
+    }
+  }
   .meber{
     width: 100%;
     display: flex;
@@ -454,28 +655,34 @@
   height: ~'133rpx';
   position: relative;
 }
-.top-main p{
+.top-main .p{
   width: 75%;
   height: 75%;
   margin-right: ~'40rpx';
   float: right;
   color: #ffffff;
 }
-.top-main .name{
+.top-main .zhiding{
   position: absolute;
-  color: #484848;
-  left: ~'180rpx';
   top: ~'150rpx';
+  left: ~'180rpx';
+}
+.top-main .zhiding .name{
+  /*position: absolute;*/
+  color: #484848;
+  /*left: ~'180rpx';*/
+  /*top: ~'150rpx';*/
   font-weight: 600;
   font-size: ~'30rpx';
+  padding-right: ~'20rpx';
 }
- .top-main .job{
+ .top-main .zhiding .job{
    color: #484848;
-   top: ~'150rpx';
-   position: absolute;
+   /*top: ~'150rpx';*/
+   /*position: absolute;*/
    font-size: ~'24rpx';
    margin-top: ~'5rpx';
-   left: ~'300rpx';
+   /*left: ~'300rpx';*/
    font-weight: 200;
  }
  .top-main .comyname{
@@ -491,7 +698,6 @@
    position: absolute;
    /*right: ~'80rpx';*/
    right: 0;
-   width: ~'175rpx';
    height: ~'55rpx';
    bottom: ~'75rpx';
    font-weight: 600;
@@ -512,7 +718,45 @@
    display: inline-block;
    /*margin-left: ~'5rpx';*/
    margin-right: ~'10rpx';
+   margin-left: ~'10rpx';
  }
+  .top-main .edit .left{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: ~'35rpx';
+    height: ~'35rpx';
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    color: #ffffff;
+    font-size: ~'22rpx';
+    text-align: center;
+    margin-left: ~'10rpx';
+    margin-right: ~'10rpx';
+  }
+  .top-main .edit .right{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: ~'40rpx';
+    height: ~'40rpx';
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    color: #ffffff;
+    font-size: ~'22rpx';
+    text-align: center;
+    margin-left: ~'10rpx';
+    margin-right: ~'10rpx';
+    position: relative;
+    s{
+      display: inline-block;
+      position: absolute;
+      top: ~'-6rpx';
+      font-size: ~'30rpx';
+      font-weight: 600;
+      right: ~'-4rpx';
+    }
+  }
 .headImg{
   display: block;
   width: ~'100rpx';
@@ -644,4 +888,93 @@
 .iconyouce{
   color: #cccccc;
 }
+  @keyframes spin-down {
+    0% {
+      opacity: 0.4;
+      width: ~'79rpx';
+      height: ~'79rpx';
+      border-radius: 50%;
+    }
+
+    50% {
+      opacity: 1;
+      width: ~'50rpx';
+      height: ~'50rpx';
+      border-radius: 50%;
+    }
+
+    100% {
+      opacity: 0.4;
+      width: ~'79rpx';
+      height: ~'79rpx';
+      border-radius: 50%;
+    }
+  }
+  //签到成功
+  .NetSucces{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 99999!important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .NetSucces-main{
+      width:~'469rpx';
+      height: ~'600rpx';
+      display: inline-block;
+      //background: url("https://oss.tzyizan.com/salesInfo/201907231449301563864570184.png") no-repeat 50% 50%;
+      .img{
+        display: inline-block;
+        position: relative;
+        img{
+          width:~'469rpx';
+          height: ~'600rpx';
+        }
+        .main{
+          color: #dddddd;
+          position: absolute;
+          top: ~'380rpx';
+          height: ~'200rpx';
+          width: ~'450rpx';
+          text-align: center;
+          .suc{
+            color: #FFA11F;
+            font-size: ~'34rpx';
+          }
+          .title{
+            color: #000000;
+            font-size: ~'26rpx';
+            padding: ~'20rpx' 0;
+          }
+          .info{
+            color: #BABABA;
+            font-size: ~'24rpx';
+            font-weight: normal;
+          }
+        }
+        .delete{
+          width: ~'469rpx';
+          display: flex;
+          justify-content: center;
+          position: absolute;
+          bottom: ~'-90rpx';
+          .line{
+            width: ~'2rpx';
+            background: #ffffff;
+            height: ~'100rpx';
+            position: relative;
+          }
+          .iconshanchu-copy{
+            position: absolute;
+            bottom: ~'-30rpx';
+            color: #ffffff;
+            font-size: ~'40rpx';
+          }
+        }
+      }
+    }
+  }
 </style>

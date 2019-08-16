@@ -14,8 +14,14 @@
         </div>
       </scroll-view>
     </div>
-    <div class="Catalog">
-      <i class="iconfont iconmulu"></i>
+    <div class="CatalogA" @click="toCA">
+      <i class="iconfont iconsousuo"></i>
+    </div>
+    <div class="Catalog" @click="routerTo('/pages/pageA/cart/main')" >
+      <i class="iconfont icongouwuche">
+        <span class="num" v-if="allnumber>0 && allnumber<99">{{allnumber}}</span>
+        <span class="num" v-else-if="allnumber>=99">99</span>
+      </i>
     </div>
     <div class="tabs-content">
       <slot />
@@ -24,6 +30,7 @@
 </template>
 
 <script>
+import cartApi from '@/api/cart'
 export default {
   name: 'tabs',
   data () {
@@ -32,7 +39,8 @@ export default {
       active: false,
       activeTab: 0,
       lineStyle: '',
-      scrollLeft: 0
+      scrollLeft: 0,
+      allnumber: 0
     }
   },
   props: {
@@ -54,9 +62,28 @@ export default {
     }
   },
   onLoad () {
+    this.getCartCount()
     this.jumpTo()
   },
+  onShow () {
+    this.getCartCount()
+  },
   methods: {
+    routerTo (url, flag) {
+      wx.navigateTo({
+        url
+      })
+    },
+    toCA () {
+      wx.pageScrollTo({
+        scrollTop: 291
+      })
+    },
+    // 获取所有的购物车里的数量
+    async getCartCount () {
+      const result = await cartApi.getCartCount()
+      this.allnumber = result.data.cartTotal.goodsCount
+    },
     jumpTo () {
       this.$nextTick(() => {
         this.tabs.map((item, index) => {
@@ -65,14 +92,14 @@ export default {
           }
           if (item.typeName === this.typeName) {
             this.activeTab = index
-            this.$emit('change', { test: 'hh', categoryId: item.id, typeId: item.typeId })
+            this.$emit('change', { test: 'hh', sortingType: item.id, typeId: item.typeId })
           }
         })
       })
     },
     handleChange (t, k) {
       this.setActive(k)
-      this.$emit('change', { test: 'hh', categoryId: t.id, typeId: t.typeId })
+      this.$emit('change', { test: 'hh', sortingType: t.id, typeId: t.typeId })
       // 将当前对象 evt 传递到父组件
     },
     setActive (active) {
@@ -96,7 +123,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .van-hairline,
 .van-hairline--bottom,
 .van-hairline--left,
@@ -129,7 +156,7 @@ export default {
   border: 0 solid #eee;
 }
 .scorll{
-  width: 90%;
+  width: 82%;
 }
 .van-hairline--top::after {
   border-top-width: 2rpx;
@@ -143,13 +170,13 @@ export default {
   border-right-width: 2rpx;
 }
 
-.van-hairline--bottom::after {
-  border-bottom-width: 2rpx;
-}
+/*.van-hairline--bottom::after {*/
+  /*border-bottom-width: 2rpx;*/
+/*}*/
 
-.van-hairline--top-bottom::after {
-  border-width: 2rpx 0;
-}
+/*.van-hairline--top-bottom::after {*/
+  /*border-width: 2rpx 0;*/
+/*}*/
 
 .van-hairline--surround::after {
   border-width: 2rpx;
@@ -158,6 +185,20 @@ export default {
 .van-tabs {
   position: relative;
   -webkit-tap-highlight-color: transparent;
+}
+.CatalogA{
+  position: absolute;
+  right:70rpx;
+  top: 20rpx;
+  width: 70rpx;
+  height: 48rpx ;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 6rpx;
+  background: #ffffff;
+  /*border-left: 1rpx solid #cccccc;*/
+  z-index: 100;
 }
 .Catalog{
   position: absolute;
@@ -170,8 +211,25 @@ export default {
   justify-content: center;
   margin-right: 6rpx;
   background: #ffffff;
-  /*border-left: 1rpx solid #cccccc;*/
+  border-left: 1rpx solid #cccccc;
   z-index: 100;
+  i{
+    position: relative;
+    .num{
+      position: absolute;
+      top: -10rpx;
+      right: -10rpx;
+      width: 24rpx;
+      height: 24rpx;
+      background: #FF424E;
+      color: #ffffff;
+      font-size: 16rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+  }
 }
 .tabs-wrap {
   top: 0;
@@ -199,15 +257,18 @@ export default {
 
 .van-tabs__nav {
   display: -webkit-box;
-  display: -webkit-flex;
-  display: flex;
+  /*display: -webkit-flex;*/
+  /*display: flex;*/
   -webkit-user-select: none;
   user-select: none;
   position: relative;
   background-color: #fff;
+  /*width: 100%;*/
 
 }
-
+.van-ellipsis{
+  margin-right: 30rpx;
+}
 .van-tabs__nav--line {
   height: 100%;
   padding:0 20rpx;
@@ -269,7 +330,7 @@ export default {
   padding: 0 10rpx;
   font-size: 28rpx;
   position: relative;
-  color: #333;
+  color: #9B9B9B;
   line-height: 88rpx;
   text-align: center;
   box-sizing: border-box;
@@ -281,7 +342,7 @@ export default {
 }
 
 .tab-active {
-  color: #f44;
+  color: #FFAB37;
 }
 
 .van-tab--disabled {

@@ -1,7 +1,7 @@
 <template>
   <div class="pay-finish">
     <div>
-      <i class="iconfont icon-icon_order"></i>
+      <i class="iconfont icondingdan-pressed"></i>
       <p class="status">订单支付{{params.status==='success'?'成功':'失败'}}</p>
       <p class="money">￥{{params.price}}</p>
       <p class="des">{{params.status==='success'?'仓库正在为您备货中':'您的订单没有支付成功'}}</p>

@@ -56,7 +56,9 @@
     color: #4A90E2;
   }
 }
-
+icon-choose{
+  display: inline-block;
+}
 // 退款原因
 .reason-re {
   display: flex;
@@ -86,6 +88,10 @@
   }
 
   .img-wrap {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    align-items: center;
     .common-size {
       width: 150rpx;
       height: 150rpx;
@@ -120,8 +126,12 @@
     .delete-img {
       position: absolute;
       width: 50rpx;
-      right: 0;
+      right: -18rpx;
       top: 0;
+    }
+    .iconshanchu-copy{
+      color: #F2F2F2;
+      font-size: 32rpx;
     }
   }
 
@@ -130,7 +140,7 @@
 .sub-btn {
   width: 522rpx;
   height: 86rpx;
-  background-color: #2A94EC;
+  background-color: #FF903F;
   color: #fff;
   border-radius: 8rpx;
   margin: 96rpx auto 0;
@@ -175,14 +185,17 @@
   }
 
   .iconfont {
-    color: #2A94EC;
+    color: #FF903F;
+    float: right;
     font-size: 40rpx;
+    display: inline-block;
   }
 
   .com-status {
     justify-content: space-between;
     padding: 0 6rpx;
     height: 70rpx;
+    line-height: 70rpx;
   }
 
   .first-border {
@@ -194,7 +207,7 @@
     height: 86rpx;
     line-height: 86rpx;
     color: #fff;
-    background-color: #2A94EC;
+    background-color: #FF903F;
     position: absolute;
     bottom: 0;
     left: 0;

@@ -107,7 +107,7 @@ export default {
       //   电话
       ctx.beginPath()
       ctx.arc(this.cal(34), this.cal(405), this.cal(8), 0, 2 * Math.PI)
-      ctx.setFillStyle('#2190EA')
+      ctx.setFillStyle('#FF8848')
       ctx.fill()
       ctx.drawImage('/static/images/icon1.png', this.cal(30), this.cal(401), this.cal(8), this.cal(8))
       ctx.setFillStyle('#9D9D9D')
@@ -116,7 +116,7 @@ export default {
       //   微信
       ctx.beginPath()
       ctx.arc(this.cal(34), this.cal(427), this.cal(8), 0, 2 * Math.PI)
-      ctx.setFillStyle('#2190EA')
+      ctx.setFillStyle('#FF8848')
       ctx.fill()
       ctx.drawImage('/static/images/icon2.png', this.cal(30), this.cal(422), this.cal(9), this.cal(9))
       ctx.setFillStyle('#9D9D9D')
@@ -125,7 +125,7 @@ export default {
       //   邮件
       ctx.beginPath()
       ctx.arc(this.cal(34), this.cal(449), this.cal(8), 0, 2 * Math.PI)
-      ctx.setFillStyle('#2190EA')
+      ctx.setFillStyle('#FF8848')
       ctx.fill()
       ctx.drawImage('/static/images/icon3.png', this.cal(30), this.cal(445), this.cal(8), this.cal(8))
       ctx.setFillStyle('#9D9D9D')
@@ -134,7 +134,7 @@ export default {
       //   地址
       ctx.beginPath()
       ctx.arc(this.cal(34), this.cal(471), this.cal(8), 0, 2 * Math.PI)
-      ctx.setFillStyle('#2190EA')
+      ctx.setFillStyle('#FF8848')
       ctx.fill()
       ctx.drawImage('/static/images/icon4.png', this.cal(29), this.cal(466), this.cal(10), this.cal(10))
       ctx.setFillStyle('#9D9D9D')

@@ -1,7 +1,7 @@
 <template>
   <div class="action">
       <div class="action-main">
-        <p class="action-img"><img src="https://oss.wq1516.com/companyProduce/201906251611441561450304322.png"/> </p>
+        <p class="action-img"><img src="https://oss.tzyizan.com/salesInfo/201908161342101565934130636.png"/> </p>
         <div class="message">
           <p class="action-name"><input v-model="companyName" :disabled="disabled" placeholder="企业名称"/></p>
           <p class="action-FdName"><input v-model="legalPersonaName" :disabled="disabled" placeholder="法定代表人姓名" /></p>
@@ -270,7 +270,7 @@ export default {
     font-size: ~'30rpx';
     font-weight: 400;
     color: #ffffff;
-    background: #FF6850;
+    background: #FFAF42;
   }
   .footer-btA{
     border: none;

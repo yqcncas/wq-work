@@ -33,8 +33,12 @@
 			"currentL": -1,
 			"list": []
 		},
+		"gamePlugin": {
+			"current": -1,
+			"list": []
+		},
 		"miniprogram": {
-			"current": 24,
+			"current": 15,
 			"list": [
 				{
 					"id": 1,
@@ -142,9 +146,9 @@
 					"scene": null
 				},
 				{
-					"id": -1,
-					"name": "我的发布",
-					"pathName": "pages/release/main",
+					"id": 15,
+					"name": "pages/pageA/release/main",
+					"pathName": "pages/pageA/release/main",
 					"query": "",
 					"scene": null
 				},
@@ -157,8 +161,8 @@
 				},
 				{
 					"id": 17,
-					"name": "名片夹",
-					"pathName": "pages/navigation/main",
+					"name": "pages/logs/main",
+					"pathName": "pages/logs/main",
 					"query": "",
 					"scene": null
 				},
@@ -191,9 +195,9 @@
 					"scene": null
 				},
 				{
-					"id": -1,
-					"name": "人脉",
-					"pathName": "pages/Networking/main",
+					"id": 22,
+					"name": "pages/logs/main",
+					"pathName": "pages/logs/main",
 					"query": "",
 					"scene": null
 				},
@@ -208,6 +212,41 @@
 					"id": -1,
 					"name": "wode ",
 					"pathName": "pages/personal/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "动态",
+					"pathName": "pages/Networking/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "toMessage",
+					"pathName": "pages/Networking/leaveMessage/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "名片夹",
+					"pathName": "pages/cardCollect/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "意见反馈",
+					"pathName": "pages/pageA/Opinion/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "积分明细",
+					"pathName": "pages/pageA/integral/main",
 					"scene": null
 				}
 			]

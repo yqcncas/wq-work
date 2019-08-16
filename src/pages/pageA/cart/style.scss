@@ -23,7 +23,7 @@
   }
 
   .iconxianshi_xuanzetianchong {
-    color: #2A94EC;
+    color: #FF8331;
   }
 
   .cartlist {
@@ -118,7 +118,7 @@
         right: 0;
         text-align: center;
         height: 100%;
-        background: #1E90FF;
+        background: #FF8331;
         color: #fff;
         display: flex;
         align-items: center;
@@ -175,11 +175,11 @@
 
       div:nth-child(2) {
         width: 220rpx;
-        height: 90rpx;
+        //height: 90rpx;
         text-align: center;
         line-height: 90rpx;
         font-size: 32rpx;
-        background: #2A94EC;
+        background: #FF8331;
         color: #fff;
       }
     }

@@ -14,7 +14,9 @@
                       <cover-image v-if="headImg" class="back-image" :src="headImg"></cover-image>
                     </cover-view>
                     <cover-view class="opt opt-home" @click="homeClick()">
-                      <cover-view style="font-size: 20rpx">消息中心</cover-view><cover-view v-if="num !== 0" style="width: 22rpx;height: 22rpx;background:red;border-radius: 50rpx;color: #fff;font-size: 18rpx;padding: 4rpx;" ><cover-view style="text-align: center">{{num}}</cover-view></cover-view>
+                      <cover-view style="font-size: 20rpx">消息中心</cover-view>
+                      <cover-view v-if="num !== 0 && num < 99" style="width: 22rpx;height: 22rpx;background:red;border-radius: 50rpx;color: #fff;font-size: 18rpx;padding: 4rpx;" ><cover-view style="text-align: center">{{num}}</cover-view></cover-view>
+                      <cover-view v-if="num > 99" class="num" style="width: 22rpx;height: 22rpx;background:red;border-radius: 50rpx;color: #fff;font-size: 18rpx;padding: 4rpx;" ><cover-view style="text-align: center">99</cover-view></cover-view>
                     </cover-view>
                 </cover-view>
                 <!-- 标题 -->

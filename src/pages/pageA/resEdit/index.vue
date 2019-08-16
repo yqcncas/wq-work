@@ -1,28 +1,37 @@
 <template>
   <div class="release">
     <div class="main">
-      <div class="top"  v-if="opId" >
-        <!--<span class="cancel">取消</span>-->
-        <span class="sure" @click="update(opId)">更新</span>
-      </div>
-      <div class="top" v-else>
-        <span class="sure" @click="save()">确定</span>
-        <!--<span class="cancel">取消</span>-->
-      </div>
-      <div class="text">
-        <textarea v-model="title" class="inputMsg" placeholder="请输入内容" @input="txtInput"></textarea>
-      </div>
-      <div class="upload" v-if="photoId == 1">
-        <uploadImgA ref="imgUrlList" :srcs="imgUrlList" width="207rpx" height="207rpx" max="9" @choosed="choosed" @delete=""></uploadImgA>
-      </div>
-      <div class="upload" v-if="videoId == 1">
-        <uploadVideo ref="video" :srcs="video" width="207rpx" height="207rpx"  max="1" @choosedvideo="choosedvideo"></uploadVideo>
-      </div>
-      <div class="address" @click="chooseLocation()">
+      <div class="maintop">
+        <div class="studs">
+            <span class="title">类型</span>
+            <picker class="choose" mode="selector" :value="indexB" :range="valueB" range-key="type" @change="bindPickerChangeB" >
+              <span class="picker">{{valueB[indexB].type}}<i class="iconfont  iconyouce Down"></i></span>
+            </picker>
+        </div>
+        <div class="text">
+          <textarea v-model="title" class="inputMsg" placeholder="请输入内容" @input="txtInput"></textarea>
+        </div>
+        <div class="upload" v-if="photoId == 1">
+          <uploadImgA ref="imgUrlList" :srcs="imgUrlList" width="207rpx" height="207rpx" max="9" @choosed="choosed" @delete=""></uploadImgA>
+        </div>
+        <div class="upload" v-if="videoId == 1">
+          <uploadVideo ref="video" :srcs="video" width="207rpx" height="207rpx"  max="1" @choosedvideo="choosedvideo"></uploadVideo>
+        </div>
+        <div class="address" @click="chooseLocation()">
         <span class="icont">
           <i class="iconfont icondizhi-copy"></i>
         </span>
-        <span class="map"> {{ location }}</span>
+          <span class="map"> {{ location }}</span>
+        </div>
+      </div>
+      <div class="bottom"  v-if="opId" >
+        <!--<span class="cancel">取消</span>-->
+        <span class="sure" @click="update(opId)">更新</span>
+      </div>
+
+      <div class="bottom" v-else>
+        <span class="sure" @click="save()">确定</span>
+        <!--<span class="cancel">取消</span>-->
       </div>
     </div>
   </div>
@@ -41,6 +50,7 @@ export default {
       status: false,
       videoId: 0,
       photoId: 0,
+      indexB: 0,
       location: '定位',
       address: '',
       longitude: '', // 精度
@@ -50,10 +60,36 @@ export default {
       video: '',
       imgUrl: '',
       richTextList: [],
-      opId: ''
+      opId: '',
+      valueB: [{
+        type: ''
+      }], // 分类,
+      goodsStyleTypeId: ''
     }
   },
   methods: {
+    bindPickerChangeB (e) {
+      this.indexB = parseInt(e.mp.detail.value)
+      this.goodsStyleTypeId = this.valueB[this.indexB].id
+    },
+    // 获取产品模板
+    getGoodB () {
+      const businessId = wx.getStorageSync('businessId')
+      this.$fly.request({
+        method: 'get', // post/get 请求方式
+        url: '/goodsStyleType/selectAllForUser',
+        body: {
+          'businessId': businessId
+        }
+      }).then(res => {
+        if (res.data) {
+          this.valueB = res.data
+          this.goodsStyleTypeId = this.valueB[0].id
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
     // getEditMain 编辑获取页面
     getEditMain (id) {
       const userId = wx.getStorageSync('userId')
@@ -272,6 +308,7 @@ export default {
     }
   },
   onLoad (option) {
+    this.getGoodB()
     if (option.status !== false) {
       if (option.id) {
         this.getEditMain(option.id)

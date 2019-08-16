@@ -1,4 +1,5 @@
 {
     "navigationBarTextStyle": "black",
-  "navigationBarTitleText": "添加地址"
+  "navigationBarTitleText": "添加地址",
+  "navigationBarBackgroundColor": "#FF903F"
 }

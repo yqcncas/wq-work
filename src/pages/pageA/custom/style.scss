@@ -10,7 +10,7 @@
 
   .weui-search-bar__cancel-btn {
     font-size: 28rpx;
-    color: #2a94ec;
+    color: #FFBA50;
   }
 
   .top-search {
@@ -39,7 +39,7 @@
   }
 
   .active {
-    color: #2A94EC;
+    color: #FFBA50;
     position: relative;
 
     &:after {
@@ -50,7 +50,7 @@
       bottom: 18rpx;
       height: 2rpx;
       border-radius: 10rpx;
-      background-color: #2a94ec;
+      background-color: #FFBA50;
     }
   }
 }
@@ -81,7 +81,7 @@
     height: 144rpx;
     border-bottom: 3rpx solid #eee;
     font-size: 28rpx;
-    color: #309EEF;
+    color: #FFBA50;
     padding: 20rpx 6rpx 20rpx 24rpx;
     box-sizing: border-box;
     .main{
@@ -128,7 +128,7 @@
   }
 
   .icon-blue {
-    color: #309EEF;
+    color: #FFBA50;
   }
   .tag-style{
     display: inline-block;
@@ -143,7 +143,7 @@
       left: 8rpx;
       width: 2rpx;
       height: 28rpx;
-      background-color: #309EEF;
+      background-color: #FFBA50;
     }
   }
 
@@ -203,6 +203,6 @@
 
   .tag-active {
     color: #fff;
-    background-color: #309EEF;
+    background-color: #FFBA50;
   }
 }

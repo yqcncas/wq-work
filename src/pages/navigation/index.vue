@@ -370,31 +370,31 @@
       this.getCard()
       // this.tradeInfor()
     },
-    async onReachBottom () {
-      if (this.show === 1) {
-        if (this.pageNum < this.lastPage) {
-          this.pageNum = this.nextPage
-          this.getCard(this.pageNum)
-        } else {
-          wx.showToast({
-            title: '没有更多了',
-            icon: 'none',
-            duration: 2000
-          })
-        }
-      } else if (this.show === 0) {
-        if (this.pageNumA < this.lastPageA) {
-          this.pageNumA = this.nextPageA
-          this.tradeInfor(this.pageNumA)
-        } else {
-          wx.showToast({
-            title: '没有更多了',
-            icon: 'none',
-            duration: 2000
-          })
-        }
-      }
-    },
+    // async onReachBottom () {
+    //   if (this.show === 1) {
+    //     if (this.pageNum < this.lastPage) {
+    //       this.pageNum = this.nextPage
+    //       this.getCard(this.pageNum)
+    //     } else {
+    //       wx.showToast({
+    //         title: '没有更多了',
+    //         icon: 'none',
+    //         duration: 2000
+    //       })
+    //     }
+    //   } else if (this.show === 0) {
+    //     if (this.pageNumA < this.lastPageA) {
+    //       this.pageNumA = this.nextPageA
+    //       this.tradeInfor(this.pageNumA)
+    //     } else {
+    //       wx.showToast({
+    //         title: '没有更多了',
+    //         icon: 'none',
+    //         duration: 2000
+    //       })
+    //     }
+    //   }
+    // },
     onShareAppMessage (options) {
       console.log('options', options)
       const salesmanId = wx.getStorageSync('salesmanId')

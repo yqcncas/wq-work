@@ -463,6 +463,7 @@ export default {
       //   围观人数
       this.browseCount = result.data.userNum
       //   围观头像
+      console.log('avatarUrlList', result.data.avatarUrlList)
       this.avatarUrlList = result.data.avatarUrlList
       // this.allnumber = gooddetail.allnumber
       // if (gooddetail.praiseCount > 0) {

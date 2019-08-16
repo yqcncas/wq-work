@@ -8,7 +8,7 @@
         <div class="headImage">
           <span >群头像</span>
           <p class="right">
-            <img src="../../../../static/images/addImage.jpg"/>
+            <img src="../../../static/images/addImage.jpg"/>
             <i class="iconfont iconyouce"></i>
           </p>
         </div>
@@ -82,5 +82,5 @@
 </script>
 
 <style lang="less" scoped>
-@import "./style.less";
+@import "style.less";
 </style>
