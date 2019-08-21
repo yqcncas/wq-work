@@ -1,5 +1,6 @@
 <template>
   <!-- 名片 -->
+  <div class="suc" style="width: 100%;height: 100%">
     <div  class="center"  v-if="postForm.length === 0 || postForm === null">
       <!--<vue-tab-bar-->
         <!--@fetch-index="clickIndexNav"-->
@@ -12,7 +13,8 @@
         <p>目前您还没有名片</p>
         <p>点击下方按钮去创建吧</p>
         <p @click="goToCardA()" class="addImg">
-          <img src="/static/images/addCard.png">
+          <!--<img src="/static/images/addCard.png">-->
+          <i class="iconaddgrey iconfont"></i>
         </p>
       </div>
     </div>
@@ -94,22 +96,22 @@
           <!--</form>-->
         <!--</div>-->
       <!--</div>-->
-      <form name='pushMsgFm' report-submit='true' @submit='getFormID' class="">
-      <div v-if="modalFlag" catchtouchmove="true" class="window">
-          <div class="window-mian">
-            <div class="window-title">
-              <img src="https://oss.tzyizan.com/salesInfo/201907251327481564032468239.png">
-              <i>
-                <p>为了提供优质服务,请您授权后</p>
-                <p>放心使用,您的信息将受到保护</p>
-                <span>
-                        <button form-type="submit" class="look-just" lang="zh_CN" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">允许授权</button>
-                </span>
-              </i>
-            </div>
-          </div>
-      </div>
-      </form>
+      <!--<form name='pushMsgFm' report-submit='true' @submit='getFormID' class="">-->
+      <!--<div v-if="modalFlag" catchtouchmove="true" class="window">-->
+          <!--<div class="window-mian">-->
+            <!--<div class="window-title">-->
+              <!--<img src="https://oss.tzyizan.com/salesInfo/201907251327481564032468239.png">-->
+              <!--<i>-->
+                <!--<p>为了提供优质服务,请您授权后</p>-->
+                <!--<p>放心使用,您的信息将受到保护</p>-->
+                <!--<span>-->
+                        <!--<button form-type="submit" class="look-just" lang="zh_CN" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">允许授权</button>-->
+                <!--</span>-->
+              <!--</i>-->
+            <!--</div>-->
+          <!--</div>-->
+      <!--</div>-->
+      <!--</form>-->
       <div class="business-main">
       <el-form ref="postForm" :model="postForm">
         <div class="mainA">
@@ -123,12 +125,28 @@
                         <div class="imgUrl" v-if="item.avatarUrl"><img :src= item.avatarUrl /></div>
                         <div class="name">{{item.userName}}</div>
                         <div class="date">{{item.browseDate}}</div>
+                        <div class="operation">{{item.info}}</div>
                     </div>
-                    <div class="operation">{{item.info}}</div>
                   </swiper-item>
                 </block>
               </swiper>
               <div class="title">数据中心</div>
+              <div class="Member" v-if="Member == '无会员'" @click="goToMember">
+                <span class="left">成 为 VIP 会 员 , 获 得 更 多 精 准 用 户</span>
+                <span class="right">立即开通</span>
+              </div>
+              <div class="Member" v-else-if="Member == '白银会员'">
+                <span class="left">尊 贵 的 白 银 会 员 , 升 级 获 取 更 多 权 限</span>
+                <span class="right">立即升级</span>
+              </div>
+              <div class="Member" v-else-if="Member == '黄金会员'">
+                <span class="left">尊 贵 的 黄 金 会 员 , 升 级 获 取 更 多 权 限</span>
+                <span class="right">立即升级</span>
+              </div>
+              <div class="Member" v-else-if="Member == '钻石会员'">
+                <span class="left">尊 贵 的 钻 石 会 员 , 已 升 级 至 最 高 权 限</span>
+                <span class="right">最高权限</span>
+              </div>
             </div>
           </div>
           <!--名片风格1-->
@@ -305,7 +323,7 @@
                       <!--<img class="personal-voice" src="../../../static/images/voice.png">-->
                       <div class="action-bg" @click="playAudio">
                         <!--<div class="back iconfont icon-icon-test3"></div>-->
-                        <span class="playan iconfont iconbofang" v-if="!changeVoiceFlag"></span>
+                        <span class="playan iconfont iconyuyin" v-if="!changeVoiceFlag"></span>
                         <span class="playan iconfont iconbofanghover" v-if="changeVoiceFlag"></span>
                       </div>
                       <div class="center-re">
@@ -436,6 +454,23 @@
         </div>
       </div>
     </div>
+  <form name='pushMsgFm' report-submit='true' @submit='getFormID' class="">
+    <div v-if="modalFlag" catchtouchmove="true" class="window">
+      <div class="window-mian">
+        <div class="window-title">
+          <img src="https://oss.tzyizan.com/salesInfo/201907251327481564032468239.png">
+          <i>
+            <p>为了提供优质服务,请您授权后</p>
+            <p>放心使用,您的信息将受到保护</p>
+            <span>
+                        <button form-type="submit" class="look-just" lang="zh_CN" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">允许授权</button>
+                </span>
+          </i>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
 </template>
 
 <script>
@@ -498,22 +533,32 @@
         latitude: '',
         longitude: '',
         cardType: 0,
-        animal: ''
+        animal: '',
+        Member: '无会员',
+        silver: ''
       }
     },
     onLoad: function (options) {
       this.CardId = options.id
       this.getMap()
+      this.getMerber()
     },
     async onPullDownRefresh () {
       this.getInfo()
       this.getLogo()
+      this.getMerber()
       this.getSun()
       this.getOpA()
       this.getType()
       this.showpop = false
       this.selectNavIndex = 0
       wx.stopPullDownRefresh()
+      const nickName = wx.getStorageSync('nickName')
+      if (nickName === '' || nickName === null) {
+        this.modalFlag = true
+      } else {
+        this.modalFlag = false
+      }
     },
     onShow () {
       // wx.hideTabBar()
@@ -523,6 +568,12 @@
       this.showpop = false
       this.selectNavIndex = 0
       this.getType()
+      const nickName = wx.getStorageSync('nickName')
+      if (nickName === '' || nickName === null) {
+        this.modalFlag = true
+      } else {
+        this.modalFlag = false
+      }
     },
     onShareAppMessage () {
       this.insertOpera('分享了名片', 21)
@@ -532,6 +583,40 @@
       }
     },
     methods: {
+      // 查询会员等级信息
+      getMerber () {
+        const businessId = wx.getStorageSync('businessId')
+        this.$fly.request({
+          method: 'get',
+          url: 'vip/findList',
+          body: {
+            'businessId': businessId
+          }
+        }).then(res => {
+          const Member = wx.getStorageSync('vipId')
+          console.log('Member', Member)
+          if (Member === 0 || Member === null) {
+            this.Member = '无会员'
+          } else {
+            // this.Member = Member
+            this.silver = res.data
+            this.silver.map((item) => {
+              if (Member === item.id) {
+                this.Member = item.levelName
+              }
+            })
+            console.log('啊啊啊啊', this.Member)
+          }
+        }).catch(err => {
+          console.log('err', err)
+        })
+      },
+      // 跳转会员中心
+      goToMember () {
+        wx.navigateTo({
+          url: '../pageA/Member/main'
+        })
+      },
       // 查看产品
       goToProductA () {
         wx.navigateTo({
@@ -703,7 +788,6 @@
             'pageSize': 10
           }
         }).then(res => {
-          console.log('reada', res)
           if (res.data) {
             this.infoMation = res.data.list
             let today = this.moment().format('YYYY/MM/DD')
@@ -875,6 +959,7 @@
               })
               this.unionId = JSON.parse(data).unionId
               userInfo.unionId = this.unionId
+              wx.setStorageSync('nickName', JSON.parse(data).nickName)
               // await home.updateUser(userInfo)
               // await personApi.updateRemarksNew({ remarks: userInfo.nickName, userId: this.id })
             }
@@ -934,11 +1019,11 @@
         }).then(res => {
           console.log('res', this.modalFlag)
           if (res.data) {
-            if (res.data.nickName === '' || res.data.nickName == null) {
-              this.modalFlag = true
-            } else {
-              this.modalFlag = false
-            }
+            // if (res.data.nickName === '' || res.data.nickName == null) {
+            //   this.modalFlag = true
+            // } else {
+            //   this.modalFlag = false
+            // }
             this.latitude = res.data.latitude
             this.longitude = res.data.longitude
             if (res.data.phone !== '') {
@@ -981,9 +1066,9 @@
             }, 100)
             this.getOpA()
           } else if (res.data === null) {
-            this.modalFlag = true
+            // this.modalFlag = true
           }
-          console.log('modalFlag', this.modalFlag)
+          // console.log('modalFlag', this.modalFlag)
         }).catch(err => {
           console.log(err.status, err.message)
         })

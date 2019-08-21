@@ -1,5 +1,9 @@
 <template>
     <div class="simple">
+      <div class="vipTop" v-if="Member === '无会员'" @click="goToMember">
+        <span class="title">成 为 VIP 会 员 , 拥 有 更 多 权 限</span>
+        <span class="bt">立即开通</span>
+      </div>
       <div class="top">
         <div class="Img" v-if="imgUrl !== ''"   @click="chooseImage()">
           <image :src="imgUrl"> <span>换个头像</span></image>
@@ -27,10 +31,30 @@
           <p>担任职位</p>
           <input placeholder="请输入" v-model="job" placeholder-style="color:#cccccc;">
         </div>
+        <div class="addDetailed">
+          <p>地址</p>
+          <i class="iconfont icondingweiweizhi" v-if="addDetailed === '' || addDetailed === null" @click="chooseLocation()" ><span>一键获取</span></i>
+          <input v-else placeholder="请输入" v-model="addDetailed" placeholder-style="color:#cccccc;">
+        </div>
       </div>
       <div class="footer">
+        <!--<button @click="True()">确定</button>-->
         <button v-if="isBuy === 0" class="save" @click="getSalesmanUpdate()">确定</button>
         <button v-else @click="getBuyCard()">确定</button>
+      </div>
+
+      <div class="NetSucces" v-if="deleteShow === true">
+        <div class="NetSucces-main">
+          <div class="img">
+            <img src="https://oss.tzyizan.com/salesManImg/201908191106561566184016370.png">
+            <div class="main">
+              <p class="suc">三分钟完善名片信息</p>
+              <p class="title">可以获得更多精准客户</p>
+              <p class="now" @click="goToIndex">完善名片</p>
+              <p class="late" @click="goToBus">稍后完善</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 </template>
@@ -43,14 +67,19 @@
     data () {
       return {
         name: '',
+        deleteShow: false,
         job: '',
+        addDetailed: '',
         phone: '',
         company: '',
         imgUrl: '',
         personApi: personApi,
         phoneIp: '',
         isBuy: '', // 控制是否支付
-        disabled: false
+        disabled: false,
+        Member: '',
+        latitude: '',
+        longitude: ''
       }
     },
     onShow () {
@@ -67,7 +96,105 @@
       // console.log('nickName', nickName)
       // wx.setStorageSync('name', e.target.userInfo.name)
     },
+    onLoad () {
+      const Member = wx.getStorageSync('vipId')
+      if (Member === 0 || Member === null) {
+        this.Member = '无会员'
+      }
+    },
+    onUnload () {
+      this.addDetailed = ''
+      this.longitude = ''
+      this.latitude = ''
+      this.job = ''
+      this.name = ''
+      this.company = ''
+    },
     methods: {
+      // 完善名片
+      goToIndex () {
+        wx.navigateTo({
+          url: '/pages/index/main'
+        })
+      },
+      // 稍后完善
+      goToBus () {
+        wx.switchTab({
+          url: '/pages/businesscard/main'
+        })
+      },
+      True () {
+        this.deleteShow = true
+      },
+      // 获取当前定位
+      chooseLocation () {
+        var that = this
+        // console.log('111')
+        wx.chooseLocation({
+          success: (res) => {
+            console.log(res)
+            that.addDetailed = res.name
+            that.latitude = res.latitude
+            that.longitude = res.longitude
+            // that.region = res.name
+            // that.address = that.region
+          },
+          fail: (res) => {
+            wx.getSetting({
+              success: function (res) {
+                var statu = res.authSetting
+                if (!statu['scope.userLocation']) {
+                  wx.showModal({
+                    title: '是否授权当前位置',
+                    content: '需要获取您的地理位置，请确认授权，否则地图功能将无法使用',
+                    success: function (tip) {
+                      if (tip.confirm) {
+                        wx.openSetting({
+                          success: function (data) {
+                            if (data.authSetting['scope.userLocation'] === true) {
+                              wx.showToast({
+                                title: '授权成功',
+                                icon: 'success',
+                                duration: 1000
+                              })
+                              // 授权成功之后，再调用chooseLocation选择地方
+                              wx.chooseLocation({
+                                success: function (res) {
+                                  // obj.setData({
+                                  //   addr: res.address
+                                  // })
+                                }
+                              })
+                            } else {
+                              wx.showToast({
+                                title: '授权失败',
+                                icon: 'success',
+                                duration: 1000
+                              })
+                            }
+                          },
+                          fail: function (res) {
+                            wx.showToast({
+                              title: '调用授权窗口失败',
+                              icon: 'success',
+                              duration: 1000
+                            })
+                          }
+                        })
+                      }
+                    }
+                  })
+                }
+              }
+            })
+          }
+        })
+      },
+      goToMember () {
+        wx.navigateTo({
+          url: '../pageA/Member/main'
+        })
+      },
       getPhoneNumber (e) {
         console.log('111', e)
       },
@@ -240,6 +367,9 @@
             companyName: this.company,
             phone: this.phone,
             job: this.job,
+            addDetailed: this.addDetailed,
+            longitude: this.longitude,
+            latitude: this.latitude,
             video: '',
             voice: '',
             email: '',
@@ -256,9 +386,10 @@
                 icon: 'none',
                 duration: 2000
               })
-              setTimeout(function () {
-                wx.navigateBack(-1)
-              }, 2000)
+              this.deleteShow = true
+              // setTimeout(function () {
+              //   wx.navigateBack(-1)
+              // }, 2000)
             }
           },
           fail: function (res) {

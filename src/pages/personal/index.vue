@@ -382,17 +382,20 @@
       },
       // 进入会员中心,
       goMeber () {
-        if (this.cardStatus === true) {
-          wx.navigateTo({
-            url: '../pageA/Member/main'
-          })
-        } else {
-          wx.showToast({
-            title: '请先创建名片',
-            icon: 'none',
-            duration: 3000
-          })
-        }
+        wx.navigateTo({
+          url: '../pageA/Member/main'
+        })
+        // if (this.cardStatus === true) {
+        //   wx.navigateTo({
+        //     url: '../pageA/Member/main'
+        //   })
+        // } else {
+        //   wx.showToast({
+        //     title: '请先创建名片',
+        //     icon: 'none',
+        //     duration: 3000
+        //   })
+        // }
       },
       // 进入消息中心,
       goMessage () {

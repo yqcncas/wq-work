@@ -85,7 +85,7 @@
                               动态:<span v-if="item.dynamic"> {{item.dynamic.title}}</span><span v-else> 无</span>
                             </p>
                             <p class="product">
-                              产品: 益赞名片 <span class="number">200000 元</span>
+                              产品: <span class="number">无</span>
                             </p>
                           </div>
 

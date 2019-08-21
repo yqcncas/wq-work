@@ -40,9 +40,12 @@
             </div>
 
             <div class="Tuik">
-              <img src="https://oss.tzyizan.com/salesInfo/201908081456201565247380716.png">
+              <img v-if="cardStatus === true"  @click="goToTui()" src="https://oss.tzyizan.com/salesInfo/201908081456201565247380716.png">
+              <img v-else @click="ToMessage()" src="https://oss.tzyizan.com/salesInfo/201908081456201565247380716.png">
             </div>
-
+            <!--<div class="Tuik" @click="ToMessage()" v-else>-->
+              <!--<img src="https://oss.tzyizan.com/salesInfo/201908081456201565247380716.png">-->
+            <!--</div>-->
             <div class="ification">
               <wan-taba @change='tabChange' :tabs="category"></wan-taba>
             </div>
@@ -232,7 +235,8 @@
         imgUrl: 'https://oss.tzyizan.com/businessImage/201907181428461563431326479.png',
         goodsType: 0,
         url: '',
-        sortingType: ''
+        sortingType: '',
+        cardStatus: false
       }
     },
 
@@ -249,10 +253,10 @@
       this.getCategory()
       this.getProduct({ type: 0 })
       this.getType()
+      this.getInfo()
     },
     onShow () {
-      this.getInfo()
-      // this.getProduct({ type: 0 })
+      this.getProduct({ type: 0 })
     },
     onPageScroll: function (ev) {
       console.log('ev', ev)
@@ -338,6 +342,39 @@
     //   }
     // },
     methods: {
+      // 进入推客页面
+      ToMessage () {
+        wx.showToast({
+          title: '请先注册名片',
+          icon: 'none',
+          duration: 2000
+        })
+      },
+      // 获取分销商信息
+      goToTui () {
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/distributor/selectOne',
+          body: {
+          }
+        }).then(res => {
+          const isDistributor = res.data.isDistributor
+          // console.log('isDistributor', isDistributor)
+          if (isDistributor === 1) {
+            wx.redirectTo({
+              url: '/pages/pageA/agencyCenter/main'
+            })
+            wx.setStorageSync('BuyId', 3)
+            // console.log('resAAA', this.choose[6].url)
+          } else {
+            wx.redirectTo({
+              url: '/pages/pageA/Pusher/main'
+            })
+          }
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      },
       // 页面加载信息
       getInfo () {
         const userId = wx.getStorageSync('userId') // 获取本地userId
@@ -354,8 +391,10 @@
           }
           if (data !== true) {
             this.url = '../businesscard/main'
+            this.cardStatus = false
           } else {
             this.url = '/pages/prod/product/main'
+            this.cardStatus = true
           }
         }).catch(err => {
           console.log(err.status, err.message)
@@ -1333,6 +1372,7 @@
     background: rgba(0,0,0,0.2);
     span{
       color: #ffffff;
+      font-size: 24rpx;
     }
   }
 </style>

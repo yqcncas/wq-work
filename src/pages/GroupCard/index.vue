@@ -147,7 +147,7 @@
       },
       router () {
         wx.navigateTo({
-          url: 'pages/group/main'
+          url: '/pages/group/main'
         })
       }
     }

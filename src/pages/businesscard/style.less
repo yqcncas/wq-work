@@ -342,24 +342,32 @@ font-size: ~'26rpx';
 }
 .center{
   width: 100%;
-  height: 100%;
   font-size: ~'30rpx';
   display: flex;
-  margin-top: ~'-61rpx';
+  padding-top: ~'350rpx';
   justify-content: center;
   align-items: center;
   text-align: center;
+  overflow: hidden;
   .mian{
-   flex: 1;
+    display: inline-block;
     width: 100%;
     p:nth-child(2){
-      color: #2A94EC;
+      color: #FF8848;
     }
     .addImg{
-      display: inline-block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       margin:  ~'50rpx' auto 0;
       width: ~'130rpx';
       height: ~'130rpx';
+      background: #ff8848;
+      border-radius: 50%;
+      .iconaddgrey{
+        color: #ffffff;
+        font-size: ~'45rpx';
+      }
       img{
         width: 100%;
         height: 100%;
@@ -423,6 +431,7 @@ font-size: ~'26rpx';
           padding-top: ~'5rpx';
           .main{
             border: ~'1rpx' solid #dddddd;
+            background-image: linear-gradient( to bottom, #ffffff 60% , #FFEBCC);
             width: ~'656rpx';
             font-size: ~'28rpx';
             height: ~'144rpx';
@@ -430,7 +439,7 @@ font-size: ~'26rpx';
             box-shadow: ~'0rpx' ~'0rpx' ~'0rpx' #dddddd;
             border-top-left-radius: ~'10rpx';
             border-top-right-radius: ~'10rpx';
-            background: #ffffff!important;
+            //background: #ffffff!important;
             .swiper{
               width: ~'616rpx';
               height: ~'104rpx';
@@ -452,7 +461,7 @@ font-size: ~'26rpx';
                   color: #5B5B5B;
                   padding: 0 ~'20rpx';
                   display: inline-block;
-                  max-width: ~'360rpx';
+                  max-width: ~'160rpx';
                   overflow: hidden;
                   text-overflow:ellipsis;
                   white-space: nowrap;
@@ -462,11 +471,12 @@ font-size: ~'26rpx';
                   font-size: ~'24rpx';
                   display: inline-block;
                 }
-              }
-              .operation{
-                color: #9D9D9D;
-                font-size: ~'28rpx';
-                margin-top: ~'10rpx';
+                .operation{
+                  color: #9D9D9D;
+                  font-size: ~'26rpx';
+                  //margin-top: ~'10rpx';
+                  margin-left: ~'20rpx';
+                }
               }
             }
             .title{
@@ -481,6 +491,24 @@ font-size: ~'26rpx';
               border-bottom-left-radius: ~'10rpx';
               text-align: center;
               background:#FF8848 ;
+            }
+            .Member{
+              position: absolute;
+              bottom: ~'5rpx';
+              color: #FF984E;
+              font-size: ~'24rpx';
+              //margin: 0  ~'30rpx';
+              width: 94%;
+              margin:0 3%;
+              display: flex;
+              align-items: center;
+              justify-content: space-around;
+              span:nth-child(2){
+                padding: ~'3rpx' 20rpx;
+                border: ~'1rpx' solid #FF8848;
+                border-radius: ~'25rpx';
+                font-size: ~'20rpx';
+              }
             }
           }
         }
@@ -1335,13 +1363,13 @@ font-size: ~'26rpx';
     font-size: ~'80rpx';
     margin-left: ~'10rpx';
   }
-  .iconbofang{
+  .iconyuyin{
     font-size: ~'50rpx'!important;
     color: #FF8848;
   }
   .iconbofanghover{
     font-size: ~'50rpx'!important;
-    color: #2A94EC;
+    color: #FF8848;
   }
   .playan {
     position: absolute;
@@ -1665,6 +1693,7 @@ font-size: ~'26rpx';
     justify-content: center;
     position: relative;
     margin-bottom: ~'40rpx';
+    font-size: ~'24rpx';
     .product{
       text-align: center;
       font-size: ~'28rpx';
@@ -1687,6 +1716,63 @@ font-size: ~'26rpx';
       align-items: center;
       justify-content: center;
       font-size: ~'20rpx';
+    }
+  }
+}
+
+
+
+
+// 信息授权
+.window{
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 999999!important;
+  background: rgba(0,0,0,0.5);
+  .window-mian{
+    width: ~'556rpx';
+    height: ~'638rpx';
+    .window-title{
+      width: ~'556rpx';
+      height: ~'638rpx';
+      border-radius: ~'10rpx';
+      position: relative;
+      //background: url("https://oss.tzyizan.com/salesInfo/201907251327481564032468239.png") no-repeat ~'556rpx' ~'638rpx';
+      img{
+        width: ~'556rpx';
+        height: ~'638rpx';
+        display: inline-block;
+      }
+      i{
+        position: absolute;
+        top: ~'360rpx';
+        width: 100%;
+        text-align: center;
+        p{
+          font-size: ~'32rpx';
+        }
+        span{
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          text-align: center;
+          margin-top: ~'60rpx';
+          .look-just{
+            width: ~'284rpx';
+            height: ~'64rpx';
+            font-size: ~'28rpx';
+            line-height: ~'64rpx';
+            background: #2190EA;
+            color: #ffffff;
+          }
+        }
+      }
     }
   }
 }

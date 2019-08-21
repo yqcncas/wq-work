@@ -145,8 +145,6 @@
       }
     },
     onShow () {
-      this.getGoodA()
-      this.getGoodB()
     },
     onUnload () {
       this.MoreList = ''
@@ -163,6 +161,8 @@
       this.infoImgList = []
     },
     onLoad: function (options) {
+      this.getGoodA()
+      this.getGoodB()
       // this.coverImg = wx.getStorageSync('coverImg')
       // console.log('this.imgUrl', this.coverImg)
       console.log(options)
@@ -211,6 +211,7 @@
           }
         }).then(res => {
           this.stylesName = res.data.typeName
+          console.log('stylesName', res.data.typeName)
         }).catch(err => {
           console.log(err)
         })
@@ -224,6 +225,7 @@
             'id': id
           }
         }).then(res => {
+          console.log('guiName', res.data.type)
           this.guiName = res.data.type
           this.goodsStyleTypeId = res.data.id
         }).catch(err => {
@@ -310,12 +312,18 @@
         console.log('infoImgList', arr)
       },
       bindPickerChangeA (e) {
+        const that = this
         this.indexA = parseInt(e.mp.detail.value)
-        this.typeId = this.valueA[this.indexA].id
+        that.typeId = this.valueA[this.indexA].id
+        // wx.setStorageSync('typeId', that.typeId)
+        console.log('tyoeId', that.typeId)
       },
       bindPickerChangeB (e) {
+        const that = this
         this.indexB = parseInt(e.mp.detail.value)
-        this.goodsStyleTypeId = this.valueB[this.indexB].id
+        that.goodsStyleTypeId = this.valueB[this.indexB].id
+        // wx.setStorageSync('goodsStyleTypeId', that.goodsStyleTypeId)
+        console.log('goodsStyleTypeId', that.goodsStyleTypeId)
       },
       // 获取产品分类
       getGoodA () {
@@ -478,6 +486,14 @@
       },
       // 保存商品请求
       getGoods () {
+        const that = this
+        // const typeId = wx.getStorageSync('typeId')
+        // if (typeId !== '' || typeId !== null) {
+        //   that.typeId = wx.getStorageSync('typeId')
+        //   that.goodsStyleTypeId = wx.getStorageSync('goodsStyleTypeId')
+        // }
+        console.log('type', that.typeId)
+        console.log('goodsStyleTypeId', that.goodsStyleTypeId)
         const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
         const userId = wx.getStorageSync('userId') // 获取本地userId
         const token = wx.getStorageSync('token') // 获取本地bussiness
@@ -505,7 +521,7 @@
             url: '/platformGoods/add',
             body: {
               'token': token,
-              'type': this.typeId,
+              'type': that.typeId,
               'businessId': businessId,
               'userId': userId,
               'goodsImgUrlList': this.goodsImgUrlList,
@@ -513,7 +529,7 @@
               'price': this.price,
               'info': this.info,
               'imgUrl': this.imgUrl,
-              'goodsStyleTypeId': this.goodsStyleTypeId
+              'goodsStyleTypeId': that.goodsStyleTypeId
             }
           }).then(res => {
             if (res.code === 200) {

@@ -174,9 +174,10 @@
               </div>
             </div>
               <div :class="fotter">
-                <submit class="share"  @click="showType">分享名片</submit>
-                <submit class="save" v-if="postForm.isCollect !== 1" @click="getCollect(postForm.id)">保存名片</submit>
-                <submit class="save" v-else @click="cancelCollect(postForm.id)">取消关注</submit>
+                <!--<submit class="share" v-if="postForm.isCollect !== 1" @click="getCollect(postForm.id)">保存名片</submit>-->
+                <!--<submit class="share" v-else @click="cancelCollect(postForm.id)">取消关注</submit>-->
+                <submit class="share" @click="BweChat">复制微信</submit>
+                <submit class="save"  @click="showType">分享名片</submit>
               </div>
           </div>
           <!-- 标签 -->
@@ -265,7 +266,7 @@
                       <!--<img class="personal-voice" src="../../../static/images/voice.png">-->
                       <div class="action-bg" @click="playAudio">
                         <!--<div class="back iconfont icon-icon-test3"></div>-->
-                        <span class="playan iconfont iconbofang" v-if="!changeVoiceFlag"></span>
+                        <span class="playan iconfont iconyuyin" v-if="!changeVoiceFlag"></span>
                         <span class="playan iconfont iconbofanghover" v-if="changeVoiceFlag"></span>
                       </div>
                       <div class="center-re">
@@ -384,9 +385,16 @@
           </div>
           <!--v-if="setUp === 0"-->
           <div v-if="setUp === 0" class="found" @click="goInto()">
-            <i class="iconfont iconbianzu">   <s>+</s></i>
+            <!--<i class="iconfont iconbianzu">   <s>+</s></i>-->
+              10 秒 创 建 我 的 名 片
           </div>
           <form report-submit='true' @submit='getFormID' class="form">
+            <div class="foundB">
+              <div class="main">
+                <span class="talk" v-if="postForm.isCollect !== 1" @click="getCollect(postForm.id)">收藏<br/>名片</span>
+                <span class="talk" v-else @click="cancelCollect(postForm.id)">取消<br/>收藏</span>
+              </div>
+            </div>
             <div class="foundA" @click="goMsg()">
               <div class="main">
                   <span class="img">
@@ -461,6 +469,8 @@
       }
     },
     onLoad: function (options) {
+      this.getInfoA()
+      this.isBuy = wx.getStorageSync('isBuy')
       this.list = []
       console.log('goodsId', options)
       if (options.goodsId !== 'null' && options.goodsId) {
@@ -476,9 +486,14 @@
       this.showpop = false
       this.getSun()
       this.getLogo()
-      this.getInfoA()
       this.getType()
-      this.isBuy = wx.getStorageSync('isBuy')
+      const nickName = wx.getStorageSync('nickName')
+      console.log('nickName', nickName)
+      if (nickName === '' || nickName === null) {
+        this.modalFlag = true
+      } else {
+        this.modalFlag = false
+      }
     },
     onUnload () {
       this.video = ''
@@ -504,6 +519,26 @@
       }
     },
     methods: {
+      // 复制微信
+      BweChat () {
+        if (this.weChat !== '' || this.weChat !== null) {
+          wx.setClipboardData({
+            data: this.weChat,
+            success: (res) => {
+              wx.showToast({
+                title: '复制成功',
+                icon: 'none'
+              })
+              this.insertOpera('复制了微信', 18)
+            }
+          })
+        } else {
+          wx.showToast({
+            title: '用户没有填写微信',
+            icon: 'none'
+          })
+        }
+      },
       getType () {
         const businessId = wx.getStorageSync('businessId') // 获取本地userId
         this.$fly.request({
@@ -668,6 +703,7 @@
               })
               this.unionId = JSON.parse(data).unionId
               userInfo.unionId = this.unionId
+              wx.setStorageSync('nickName', JSON.parse(data).nickName)
               // await home.updateUser(userInfo)
               // await personApi.updateRemarksNew({ remarks: userInfo.nickName, userId: this.id })
             }
@@ -776,16 +812,17 @@
             'userId': this.userId
           }
         }).then(res => {
+          console.log('resa', res)
           if (res.data) {
-            if (res.data.nickName === '' || res.data.nickName == null) {
-              this.modalFlag = true
-            } else {
-              this.modalFlag = false
-            }
+            // if (res.data.nickName === '' || res.data.nickName == null) {
+            //   this.modalFlag = true
+            // } else {
+            //   this.modalFlag = false
+            // }
             this.setUp = 1
           } else {
             this.setUp = 0
-            this.modalFlag = true
+            // this.modalFlag = true
           }
         }).catch(err => {
           console.log(err.status, err.message)

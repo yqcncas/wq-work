@@ -4,6 +4,7 @@
     "pages/navigation/main",
     "pages/Networking/main",
     "pages/cardCollect/main",
+    "pages/SNetworking/main",
     "pages/Networking/detail/main",
     "pages/Networking/leaveMessage/main",
     "pages/index/main",

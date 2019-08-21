@@ -54,11 +54,11 @@
                 </span>
                 <div class="cardHold-top-main-right">
                   <p class="status">企业认证</p>
-                  <p class="comActive" v-if="job !==''">
-                    <i class="iconfont iconrenzheng"></i>{{job}}</p>
+                  <p class="comActive" v-if="statusA == 1">
+                    <i class="iconfont iconrenzheng"></i>{{companyName}}</p>
                   <p class="com" v-else>您还未进行企业认证</p>
                   <p>
-                    <submit  v-if="name !== '' && job !== ''" class="footerActive " @click="routerTo(`/pages/pageA/attestation/main`)">
+                    <submit  v-if="statusA == 1" class="footerActive " @click="routerTo(`/pages/pageA/attestation/main`)">
                     <span><i class="iconfont iconbianji_fuzhi"></i>立即修改</span>
                     </submit>
                     <submit v-else class="footer" @click="routerTo(`/pages/pageA/attestation/main`)">
@@ -178,7 +178,7 @@
               <div class="cardA" v-if="postform.length > 0 ">
                 <div class="cardData" v-for="(items,indexs) in postform" :key="indexs">
                   <div class="cardTitle" v-if="items.status === null">
-                    <div class="cardData-left" @click="goToCard(items.salesmanId)">
+                    <div class="cardData-left" @click="goToCard(items.id)">
                       <div class="headImg">
                         <img :src="items.imgUrl">
                         <div class="meber">
@@ -212,7 +212,7 @@
                         动态:<span v-if="items.dynamic">{{items.dynamic.title}}</span><span v-else>无</span>
                       </p>
                       <p class="product">
-                        产品: 益赞名片 <span class="number">200000 元</span>
+                        产品: <span class="number">无</span>
                       </p>
                     </div>
 
@@ -366,6 +366,8 @@
         startX: 0,
         main: [],
         num: 0,
+        legalPersonaName: '',
+        statusA: '',
         endX: 0,
         letter: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
         letterA: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
@@ -386,6 +388,7 @@
       this.pageNum = 1
     },
     onLoad (options) {
+      this.getInfomation()
       this.getCardInfo(0, this.pageNum)
       // this.getInfo()
       this.getSun()
@@ -415,7 +418,6 @@
       })
     },
     async onReachBottom () {
-      console.log('1111')
       if (this.pageNum < this.lastPage) {
         // wx.showToast({
         //   title: '加载中',
@@ -444,6 +446,32 @@
       // console.log(this.toView)
     },
     methods: {
+      // 如果申请过 获取认证信息
+      getInfomation () {
+        const userId = wx.getStorageSync('userId') // 获取本地userId
+        this.$fly.request({
+          method: 'get',
+          url: '/certification/selectOne',
+          body: {
+            'userId': userId
+          }
+        }).then(res => {
+          console.log('1', res)
+          wx.setStorageSync('id', res.data.id)
+          this.legalPersonaName = res.data.legalPersonaName
+          this.companyName = res.data.companyName
+          this.statusA = res.data.status
+          if (this.status === 0 || this.status === 1) {
+            this.disabled = true
+          } else if (this.status === 2) {
+            this.disabled = false
+          } else {
+            console.log('申请认证失败')
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+      },
       // 进入聊天信息页面
       goToMessage () {
         wx.navigateTo({
@@ -469,7 +497,6 @@
             'businessId': businessId
           }
         }).then(res => {
-          console.log('res', res)
           if (res.code === 200) {
             const that = this
             this.number = this.lastPage
@@ -499,7 +526,7 @@
             'sortingType': id
           }
         }).then(res => {
-          // this.postform = []
+          this.postform = []
           if (res.code === 200) {
             const data = res.data.list
             data.map(item => {
@@ -525,19 +552,16 @@
       },
       changTab (index) {
         if (index === 1) {
-          this.postform = []
           this.pageNum = 1
           this.tab = index
           this.status = 0
           this.getCardInfo(0, 1)
         } else if (index === 2) {
-          this.postform = []
           this.pageNum = 1
           this.tab = index
           this.status = 2
           this.getCardInfo(2, 1)
         } else if (index === 3) {
-          this.postform = []
           this.pageNum = 1
           this.tab = index
           this.status = 3
@@ -817,14 +841,14 @@
       },
       // 跳转群组
       goGroup () {
-        wx.showToast({
-          title: '功能还在开发中哦',
-          duration: 2000,
-          icon: 'none'
-        })
-        // wx.navigateTo({
-        //   url: '/pages/GroupCard/main'
+        // wx.showToast({
+        //   title: '功能还在开发中哦',
+        //   duration: 2000,
+        //   icon: 'none'
         // })
+        wx.navigateTo({
+          url: '/pages/GroupCard/main'
+        })
       },
       // 跳转到名片夹
       goCollect () {

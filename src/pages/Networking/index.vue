@@ -28,7 +28,7 @@
         </div>
         <div class="NewClass">
           <div class="NewClass-main">
-            <div class="NewChoose" v-for="item in categoryA" :key="index">
+            <div class="NewChoose" v-for="item in categoryA" :key="index" @click="goToSN(item.typeName)">
              <p class="NewImg">
                <img :src="item.src">
              </p>
@@ -248,18 +248,23 @@
         }
         ],
         categoryA: [{
+          id: 1,
           src: '../../../../../static/images/class1.png',
           typeName: '全部'
         }, {
+          id: 2,
           src: '../../../../../static/images/class2.png',
           typeName: '全部'
         }, {
+          id: 3,
           src: '../../../../../static/images/class3.png',
           typeName: '全部'
         }, {
+          id: 4,
           src: '../../../../../static/images/class4.png',
           typeName: '全部'
         }, {
+          id: 5,
           src: '../../../../../static/images/class5.png',
           typeName: '全部'
         }],
@@ -368,6 +373,12 @@
       wx.stopPullDownRefresh()
     },
     methods: {
+      // 分类检索
+      goToSN (name) {
+        wx.navigateTo({
+          url: '/pages/SNetworking/main?name=' + name
+        })
+      },
       // 选择
       changTab (index) {
         this.newsList = []
@@ -398,6 +409,9 @@
         } else if (index === 5) {
           this.tab = 1
           this.status = 1
+          this.typeId = 0
+          this.pageNum = 1
+          this.getNews({})
           wx.switchTab({
             url: '/pages/logs/main'
           })

@@ -2,7 +2,7 @@
     <div class="Group">
       <div class="Top">
         <div class="main" @click="routerTo">
-          <span class="add"><img src="/static/images/add.png"/></span>
+          <span class="add"><i class="iconfont iconiconjia"></i></span>
           <span class="title">创建群名片</span>
         </div>
       </div>

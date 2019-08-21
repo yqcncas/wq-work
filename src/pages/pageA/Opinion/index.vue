@@ -23,7 +23,7 @@
       <p class="title">联系方式 （选填）</p>
       <input placeholder="邮箱/手机号">
     </div>
-    <div class="fotter">
+    <div class="fotter" @click="save">
       <button>提交</button>
     </div>
   </div>
@@ -39,6 +39,13 @@
       }
     },
     methods: {
+      save () {
+        wx.showToast({
+          title: '功能还在开发中哦',
+          duration: 2000,
+          icon: 'none'
+        })
+      },
       // 删除图片
       deleteImgList (i) {
         this.richTextList.splice(i, 1)

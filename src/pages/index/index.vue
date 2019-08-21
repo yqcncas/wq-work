@@ -2,7 +2,7 @@
   <div class="modify">
     <el-form ref="postForm" :model="postForm" >
       <div class="TopImg">
-        <img src="https://oss.wq1516.com/salesInfo/201906181304341560834274402.jpg"/>
+        <img src="https://oss.tzyizan.com/salesInfo/201908191634331566203673875.png"/>
       </div>
       <div class="test">
         <i @click="back()" class="iconfont iconE leftA"></i>
@@ -82,7 +82,8 @@
                   <label>定位</label>
                   <input v-model="addDetailed"/>
                   <p @click="chooseLocation()">
-                    <img src="../../../static/images/map.png">
+                    <!--<img src="../../../static/images/map.png">-->
+                    <i class="iconfont icondingweiweizhi"></i>
                   </p>
                 </div>
                 <!--<div class="address">-->
@@ -128,11 +129,11 @@
               <open-data class="header-img" type="userAvatarUrl"></open-data>
               <text v-if="info === ''" class="text-area">{{infoA}}</text>
               <text v-else class="text-area">{{info}}</text>
-              <p class="here-txt" @click="routeTo(info)">不会写简介？戳这里<img src="../../../static/images/right-blue.png"/> <i class="icon-arrow-right iconfont"></i></p>
+              <p class="here-txt" @click="routeTo(info)">不会写简介？戳这里<i class="iconyouce iconfont"></i></p>
               <!-- 语音 -->
               <div class="voice-box ">
                 <!--<i class="iconfont icon-yuyinqiehuan" @click="play"></i>-->
-                <i class="YuYin" @click="play"><img src="../../../static/images/yuyin.png"></i>
+                <i class="YuYin iconfont iconyuyin" @click="play"></i>
                 <div>
                   <p class="intro-p">语音介绍</p>
                   <div class="center-re">
