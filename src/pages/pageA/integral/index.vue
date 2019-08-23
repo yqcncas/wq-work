@@ -6,7 +6,7 @@
           <!--<i class="iconfont iconqiandai"></i>-->
           <span class="txtA">签到总积分</span>
         </p>
-        <p>{{predictMoney}}元</p>
+        <p>{{predictMoney}}分</p>
       </div>
       <!--<ul class="pay-list flexRow">-->
         <!--<li :class="{'active':active===0}" @click="chooseWay(0)">所有</li>-->

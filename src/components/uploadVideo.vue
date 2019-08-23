@@ -89,6 +89,7 @@
         // 更新一下个人信息接口，图片传‘’
         this.videoFlag = false
         this.video = ''
+        this.$emit('choosedvideo', { all: this.video })
       }, // 播放视频
       videoPlay () {
         this.videoFlag = true

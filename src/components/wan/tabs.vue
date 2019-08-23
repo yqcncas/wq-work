@@ -61,7 +61,8 @@ export default {
       default: ''
     }
   },
-  onLoad () {
+  onLoad (options) {
+    console.log('options', options)
     this.getCartCount()
     this.jumpTo()
   },

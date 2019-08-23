@@ -98,8 +98,9 @@
     },
     onLoad () {
       const Member = wx.getStorageSync('vipId')
-      if (Member === 0 || Member === null) {
+      if (Member === 0 || Member === null || Member === '') {
         this.Member = '无会员'
+        wx.setStorageSync('vipId', 0)
       }
     },
     onUnload () {

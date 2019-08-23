@@ -27,7 +27,6 @@
     },
     onLoad (options) {
       this.fromWay = 0
-      this.getInfo()
       this.goodsId = null
       if (options.fromWay) {
         this.fromWay = options.fromWay
@@ -81,13 +80,14 @@
             const result = await homeApi.doLogin(data)
             wx.setStorageSync('avatarUrl', result.data.avatarUrl)
             wx.setStorageSync('nickName', result.data.nickName)
-            console.log('nickName', result.data.nickName)
-            console.log('result.data.avatarUrl', result.data.avatarUrl)
-            console.log('result.data. result.data.nickName', result.data.nickName)
+            // console.log('nickName', result.data.nickName)
+            // console.log('result.data.avatarUrl', result.data.avatarUrl)
+            // console.log('result.data. result.data.nickName', result.data.nickName)
             this.eatinCart(result)
             wx.setStorageSync('Card', false)
             this.getUnReadCount()
             this.getBuy()
+            this.getInfo()
           }
         })
       },
@@ -159,6 +159,7 @@
         }).then(res => {
           const salesmanId = res.data.id
           wx.setStorageSync('salesmanId', salesmanId)
+          console.log('salesmanId', salesmanId)
         }).catch(err => {
           console.log(err)
         })
@@ -188,8 +189,8 @@
         wx.setStorageSync('userId', id)
         const updateManager = wx.getUpdateManager()
         updateManager.onCheckForUpdate((res) => {
+          this.getSalesmanId()
           if (!res.hasUpdate) {
-            this.getSalesmanId()
             // this.insertOpera('用户登陆', 0)
             // wx.switchTab({
             //   url: '../businesscard/main?id=' + this.goodsId
@@ -231,6 +232,10 @@
               } else if (this.fromWay === '1') {
                 wx.reLaunch({
                   url: '../logs/main?id=' + this.salesmanId + '&fromWay=1&userId=' + id
+                })
+              } else if (this.fromWay === '4') {
+                wx.reLaunch({
+                  url: '../Networking/main?id=' + this.salesmanId + '&fromWay=4&newsId=' + this.newsId
                 })
               } else {
                 wx.switchTab({

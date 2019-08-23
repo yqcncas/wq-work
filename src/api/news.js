@@ -9,8 +9,8 @@ const news = {
   ossUrl: ossUrl,
   getNews: ({
     businessId,
-    pageNum = 2,
-    pageSize = 2,
+    pageNum,
+    pageSize,
     typeId,
     longitude,
     latitude
@@ -21,6 +21,32 @@ const news = {
     type: typeId,
     longitude: longitude,
     latitude: latitude
+  }, {
+    baseURL: baseUrlApi
+  }),
+  getNewsType: ({
+    businessId,
+    pageNum,
+    pageSize,
+    type
+  }) => request.get('dynamic/selectByNewsType', {
+    businessId: businessId,
+    pageNum: pageNum,
+    pageSize: pageSize,
+    type: type
+  }, {
+    baseURL: baseUrlApi
+  }),
+  getNewsTypeName: ({
+    businessId,
+    pageNum,
+    pageSize,
+    type
+  }) => request.get('dynamic/selectByKeyWords', {
+    businessId: businessId,
+    pageNum: pageNum,
+    pageSize: pageSize,
+    keywords: type
   }, {
     baseURL: baseUrlApi
   }),
@@ -73,22 +99,40 @@ const news = {
     baseURL: baseUrlApi
   }),
   // 增加新闻收藏
+  addNewsA: ({
+    commentType,
+    commentNewsId,
+    commentUserId,
+    content
+  }) => request.post('/dynamicComment/insert', {
+    'commentType': commentType,
+    'commentNewsId': commentNewsId,
+    'commentUserId': commentUserId,
+    'content': content
+  }, {
+    baseURL: baseUrlApi
+  }),
+  // 增加新闻收藏
   addNews: ({
     status = 0,
-    id
+    id,
+    salesmanId
   }) => request.post('/dynamic/praise', {
     'status': status,
-    'id': id
+    'commentNewsId': id,
+    'salesmanId': salesmanId
   }, {
     baseURL: baseUrlApi
   }),
   // 删除新闻收藏
   deleteNews: ({
     status = 1,
-    id
+    id,
+    salesmanId
   }) => request.post('/dynamic/praise', {
     'status': status,
-    'id': id
+    'commentNewsId': id,
+    'salesmanId': salesmanId
   }, {
     baseURL: baseUrlApi
   })

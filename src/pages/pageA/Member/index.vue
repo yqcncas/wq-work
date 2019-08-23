@@ -178,8 +178,8 @@ export default {
     this.getMerber()
     this.getInfo()
     const Member = wx.getStorageSync('vipId')
-    this.changTabMeberA(Member)
-    if (Member === 0 || Member === null) {
+    console.log('Member', Member)
+    if (Member === 0 || Member === null || Member === '') {
       this.Member = '会员未开通'
       this.title = '立即开通'
       this.classA = 'bt'
@@ -187,6 +187,7 @@ export default {
     } else {
       this.MemberNum(Member)
       this.buy = 1
+      this.changTabMeberA(Member)
     }
   },
   onLoad () {
@@ -205,7 +206,9 @@ export default {
         }
       }).then(res => {
         // console.log('ajhdad', res)
-        this.Member = res.data.levelName
+        if (res.code === 200) {
+          this.Member = res.data.levelName
+        }
         // this.levelNum = res.data.levelNum
         // wx.setStorageSync('vipId', this.levelNum)
       }).catch(err => {
@@ -223,7 +226,9 @@ export default {
         }
       }).then(res => {
         console.log('res', res)
-        this.silver = res.data
+        if (res.code === 200) {
+          this.silver = res.data
+        }
       }).catch(err => {
         console.log('err', err)
       })
@@ -335,10 +340,15 @@ export default {
           'userId': userId
         }
       }).then(res => {
+        console.log('resaaa', res)
         if (res.data !== null) {
           this.nickName = res.data.nickName
           this.imgUrl = res.data.imgUrl
           this.name = res.data.name
+        } else {
+          this.nickName = wx.getStorageSync('nickName')
+          this.imgUrl = wx.getStorageSync('avatarUrl')
+          this.name = wx.getStorageSync('nickName')
         }
       }).catch(err => {
         console.log(err.status, err.message)

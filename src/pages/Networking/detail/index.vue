@@ -1,33 +1,55 @@
 <template>
   <div class="main">
     <div class="news-wrap">
-      <div class="head">
-        <!--<h1 class="title">{{title}}</h1>-->
-        <div class="info">
-          <span class="source js-source">{{author}}</span>
-          <span class="time js-time">{{time}}</span>
-        </div>
-      </div>
-      <div class="content">
-        <div class="title" v-if="title">
-          <span>&nbsp; &nbsp; &nbsp; &nbsp;{{title}}</span>
-        </div>
-        <div class="img" v-if="img">
-          <div class="imgMain" v-for="item in img" :key="index">
-            <img :src="item"/>
+      <div v-if="salesmanId !== ''">
+        <div class="head">
+          <!--<h1 class="title">{{title}}</h1>-->
+          <div class="info">
+            <span class="source js-source">{{author}}</span>
+            <span class="time js-time">{{time}}</span>
           </div>
         </div>
-        <div class="up-video" v-if="video">
-          <video id="myVideo" v-if="videoFlag" :src="video" @play="playA()"  @ended=" end()" autoplay objectFit="fill" class="cover-hw"></video>
-          <div v-else class="cover-view" >
-            <div @click="videoPlay">
-              <!--<i class="delete-img iconfont iconshanchu-copy" @click="deleteVideo"></i>-->
-              <img class="FMimg" :src="videoImg" mode="scaleToFill" />
-              <div class="model-btn">
-                <div class="play-icon">
+        <div class="content">
+          <div class="title" v-if="content!==''">
+            <span>&nbsp; &nbsp; &nbsp; &nbsp;{{content}}</span>
+          </div>
+          <div class="img" v-if="imgUrl.length>0">
+            <div class="imgMain" v-for="item in imgUrl" :key="index">
+              <img :src="item"/>
+            </div>
+          </div>
+          <div class="up-video" v-if="video">
+            <video id="myVideo" v-if="videoFlag" :src="video" @play="playA()"  @ended=" end()" autoplay objectFit="fill" class="cover-hw"></video>
+            <div v-else class="cover-view" >
+              <div @click="videoPlay">
+                <!--<i class="delete-img iconfont iconshanchu-copy" @click="deleteVideo"></i>-->
+                <img class="FMimg" :src="video + '?x-oss-process=video/snapshot,t_5000,f_jpg,w_750,m_fast'" mode="scaleToFill" />
+                <div class="model-btn">
+                  <div class="play-icon">
+                  </div>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+      <div v-else>
+        <div class="head">
+          <h1 class="title">{{title}}</h1>
+          <div class="info">
+            <span class="source js-source">{{author}}</span>
+            <span class="time js-time">{{time}}</span>
+          </div>
+        </div>
+        <div class="content">
+          <!-- <wx-parse :content="newscontent" /> -->
+          <div v-for="(item,index) in newscontent" :key="index">
+            <!-- 文字 -->
+            <textWan :data="item.data" v-if="item.name==='wText'"></textWan>
+            <!-- 图片单个 -->
+            <imgWan :data="item.data" v-if="item.name==='wImg'"></imgWan>
+            <!-- 视频 -->
+            <videoWan :data="item.data" v-if="item.name==='wVideo'"></videoWan>
           </div>
         </div>
       </div>
@@ -36,7 +58,8 @@
           <span class="iconfont iconchakan1"></span>
           <span class="news-view view-text">{{count}}</span>
         </p>
-        <p @click="clickPraise(isLike,2,id)">
+        <!--@click="clickPraise(isLike,2,id)"-->
+        <p>
           <span class="iconfont icondianzan1" :class="isLike > 0? 'praise':''"></span>
           <span class="news-view view-text">{{praiseNum}}</span>
         </p>
@@ -86,7 +109,9 @@ export default {
       category: {},
       author: {},
       newsList: [],
+      content: '',
       title: '',
+      salesmanId: '',
       time: '',
       newscontent: '',
       apiNews: apiNews,
@@ -133,27 +158,40 @@ export default {
     },
     async getNewsDetail (id) {
       const result = await apiNews.getNewsDetail(id)
-      console.log('result', result)
       const data = result.data
-      this.title = data.text
-      this.author = data.name
-      this.content = data.content
-      this.time = this.moment(data.publishTime).format('YYYY-MM-DD HH:mm')
-      if (this.img !== '' && this.img !== null) {
-        this.img = data.img.split(',')
+      // this.title = data.text
+      if (data.salesmanId) {
+        this.salesmanId = data.salesmanId
+        this.imgUrl = data.imgUrl
+        this.author = data.author
+        this.content = data.content
+        console.log('content', this.content)
+        this.time = this.moment(data.publishTime).format('YYYY-MM-DD HH:mm')
+        // if (this.img !== '' && this.img !== null) {
+        //   this.img = data.img.split(',')
+        // }
+        if (data.videoUrl !== '') {
+          // 'https://oss.tzyizan.com/salesVideo/201908161121381565925698136.mp4'
+          this.video = data.videoUrl
+          // this.videoImg = this.video + '?x-oss-process=video/snapshot,t_t_5000,f_jpg,w_750,m_fast'
+        }
+        //   this.newscontent = data.content
+        this.praiseNum = data.praiseNum
+        this.count = data.browseCount
+        this.isLike = data.isLike
+      } else {
+        this.title = data.title
+        this.author = data.author
+        this.content = data.content
+        this.time = this.moment(data.publishTime).format('YYYY-MM-DD HH:mm')
+        this.newscontent = JSON.parse(JSON.parse(data.content).info)
+        console.log(JSON.parse(JSON.parse(data.content).info))
+        this.imgUrl = data.imgUrl
+        this.praiseNum = data.praiseNum
+        this.count = data.count
+        this.isLike = data.isLike
+        this.insertOpera('查看了新闻', 11, id)
       }
-      if (data.video !== '') {
-        // 'https://oss.tzyizan.com/salesVideo/201908161121381565925698136.mp4'
-        this.video = data.video
-        this.videoImg = this.video + '?x-oss-process=video/snapshot,t_0,f_jpg,w_750,m_fast'
-      }
-      //   this.newscontent = data.content
-      this.newscontent = JSON.parse(JSON.parse(data.content).info)
-      console.log(JSON.parse(JSON.parse(data.content).info))
-      this.imgUrl = data.imgUrl
-      this.praiseNum = data.praiseNum
-      this.count = data.count
-      this.isLike = data.isLike
       this.insertOpera('查看了新闻', 11, id)
     },
     // 获取留言

@@ -4,8 +4,8 @@
       <div class="maintop">
         <div class="studs">
             <span class="title">类型</span>
-            <picker class="choose" mode="selector" :value="indexB" :range="valueB" range-key="type" @change="bindPickerChangeB" >
-              <span class="picker">{{valueB[indexB].type}}<i class="iconfont  iconyouce Down"></i></span>
+            <picker class="choose" mode="selector" :value="indexB" :range="valueB" range-key="typeName" @change="bindPickerChangeB" >
+              <span class="picker">{{valueB[indexB].typeName}}<i class="iconfont  iconyouce Down"></i></span>
             </picker>
         </div>
         <div class="text">
@@ -39,6 +39,7 @@
 <script>
 import uploadImgA from '@/components/uploadImgA'
 import uploadVideo from '@/components/uploadVideo'
+import { UPLOAD_API } from '@/api/uploadFile'
 export default {
   name: 'index',
   components: {
@@ -77,7 +78,7 @@ export default {
       const businessId = wx.getStorageSync('businessId')
       this.$fly.request({
         method: 'get', // post/get 请求方式
-        url: '/goodsStyleType/selectAllForUser',
+        url: '/dynamicCategory/selectAll',
         body: {
           'businessId': businessId
         }
@@ -101,15 +102,28 @@ export default {
           'userId': userId
         }
       }).then(res => {
-        if (res.data.imgUrlList[0] !== '') {
-          this.imgUrlList = res.data.imgUrlList
+        // console.log('res', res.data)
+        if (res.data) {
+          if (res.data.imgUrl !== null) {
+            const imgUrl = res.data.imgUrl
+            this.imgUrlList = imgUrl
+          }
+          this.title = res.data.content
+          // console.log('aaa', this.imgUrlList)
+          if (res.data.address) {
+            this.location = res.data.address
+          }
+          const type = res.data.type
+          console.log('typeName', type)
+          console.log('valueB', this.valueB)
+          this.valueB.map((item, index) => {
+            if (item.id === type) {
+              console.log('aaa', index)
+              this.indexB = index
+            }
+          })
+          this.video = res.data.videoUrl
         }
-        console.log('aaa', this.imgUrlList)
-        this.title = res.data.title
-        if (res.data.address) {
-          this.location = res.data.address
-        }
-        this.video = res.data.video
       }).catch(err => {
         console.log(err)
       })
@@ -124,11 +138,13 @@ export default {
     },
     // 选择图片
     choosed (val) {
+      // console.log('vaaaaal', this.imgUrlList)
       if (val.all) {
         this.imgUrlList = val.all
       } else {
         this.imgUrlList = ''
       }
+      // console.log('val', this.imgUrlList)
     },
     txtInput (e) {
     },
@@ -194,10 +210,14 @@ export default {
     },
     // 更新动态
     update (id) {
-      // console.log(id)
+      // console.log('this.imgUrlList', this.imgUrlList)
       const salesmanId = wx.getStorageSync('salesmanId')
       const businessId = wx.getStorageSync('businessId')
       const tradeId = wx.getStorageSync('tradeId')
+      // if (this.imgUrlList !== '') {
+      //   this.imgUrlList = this.imgUrlList.join(',')
+      // }
+      // console.log('imgUrlList', this.imgUrlList)
       if (this.location === '定位') {
         this.address = ''
       } else {
@@ -211,12 +231,13 @@ export default {
             'id': id,
             'salesmanId': salesmanId,
             'businessId': businessId,
-            'title': this.title,
+            'content': this.title,
             'imgUrlListOut': this.imgUrlList,
             'address': this.address,
             'longitude': this.longitude,
             'latitude': this.latitude,
-            'tradeId': tradeId
+            'tradeId': tradeId,
+            'type': this.goodsStyleTypeId
           }
         }).then(res => {
           if (res.code === 200) {
@@ -235,22 +256,27 @@ export default {
           console.log(err)
         })
       } else if (this.photoId === 0) {
-        this.$fly.request({
-          method: 'post',
-          url: '/dynamic/update',
-          body: {
+        const token = wx.getStorageSync('token')
+        wx.request({
+          method: 'POST', // post/get 请求方式
+          url: UPLOAD_API + '/dynamic/update',
+          data: {
             'id': id,
             'salesmanId': salesmanId,
             'businessId': businessId,
-            'title': this.title,
-            'video': this.video,
+            'content': this.title,
+            'videoUrl': this.video,
             'address': this.address,
             'longitude': this.longitude,
             'latitude': this.latitude,
-            'tradeId': tradeId
-          }
-        }).then(res => {
-          if (res.code === 200) {
+            'tradeId': tradeId,
+            'type': this.goodsStyleTypeId
+          },
+          header: {
+            'token': token
+          },
+          success: function (res) {
+            console.log('res', res)
             wx.showToast({
               title: '更新成功',
               icon: 'none',
@@ -262,9 +288,38 @@ export default {
               }, 2000)
             }, 2000)
           }
-        }).catch(err => {
-          console.log(err)
         })
+      //   this.$fly.request({
+      //     method: 'post',
+      //     url: '/dynamic/update',
+      //     body: {
+      //       'id': id,
+      //       'salesmanId': salesmanId,
+      //       'businessId': businessId,
+      //       'content': this.title,
+      //       'videoUrl': this.video,
+      //       'address': this.address,
+      //       'longitude': this.longitude,
+      //       'latitude': this.latitude,
+      //       'tradeId': tradeId,
+      //       'type': this.goodsStyleTypeId
+      //     }
+      //   }).then(res => {
+      //     if (res.code === 200) {
+      //       wx.showToast({
+      //         title: '更新成功',
+      //         icon: 'none',
+      //         duration: 2000
+      //       })
+      //       setTimeout(function () {
+      //         setTimeout(function () {
+      //           wx.navigateBack(-1)
+      //         }, 2000)
+      //       }, 2000)
+      //     }
+      //   }).catch(err => {
+      //     console.log(err)
+      //   })
       }
     },
     // 添加动态
@@ -272,6 +327,9 @@ export default {
       const salesmanId = wx.getStorageSync('salesmanId')
       const businessId = wx.getStorageSync('businessId')
       const tradeId = wx.getStorageSync('tradeId')
+      // if (this.imgUrlList !== '') {
+      //   this.imgUrlList = this.imgUrlList.join(',')
+      // }
       if (this.location === '定位') {
         this.address = ''
       } else {
@@ -283,13 +341,14 @@ export default {
         body: {
           'salesmanId': salesmanId,
           'businessId': businessId,
-          'title': this.title,
+          'content': this.title,
           'imgUrlListOut': this.imgUrlList,
-          'video': this.video,
+          'videoUrl': this.video,
           'address': this.address,
           'longitude': this.longitude,
           'latitude': this.latitude,
-          'tradeId': tradeId
+          'tradeId': tradeId,
+          'type': this.goodsStyleTypeId
         }
       }).then(res => {
         if (res.code === 200) {
@@ -309,6 +368,7 @@ export default {
   },
   onLoad (option) {
     this.getGoodB()
+    // console.log('option', option)
     if (option.status !== false) {
       if (option.id) {
         this.getEditMain(option.id)
@@ -332,8 +392,8 @@ export default {
       this.video = ''
       this.imgUrlList = ''
       this.location = ''
-      this.latitude = ''
-      this.longitude = ''
+      this.latitude = wx.getStorageSync('latitude')
+      this.longitude = wx.getStorageSync('longitude')
       this.status = false
     }
   },
@@ -346,6 +406,8 @@ export default {
     this.title = ''
     this.video = ''
     this.imgUrlList = ''
+    this.goodsStyleTypeId = ''
+    this.indexB = 0
   }
 }
 </script>

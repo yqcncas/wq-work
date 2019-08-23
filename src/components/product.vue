@@ -96,7 +96,7 @@
               <i class="name" v-if="item.salesmanName !== null">{{item.salesmanName}}</i>
             </span>
           </div>
-          <image  v-if="item.imgUrl" @click="routeTo(item.id)" class="pro-img" :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
+          <image @click="routeTo(item.id)" class="pro-img" :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
                  mode="aspectFill"></image>
           <p class="bot-des" @click="routeTo(item.id)">{{item.name}}</p>
           <div class="price-brow" @click="routeTo(item.id)">
@@ -256,10 +256,10 @@
       this.getInfo()
     },
     onShow () {
-      this.getProduct({ type: 0 })
+      // this.getProduct({ type: 0 })
     },
     onPageScroll: function (ev) {
-      console.log('ev', ev)
+      // console.log('ev', ev)
       // var _this = this
       /* 当滚动的top值最大或者最小时，为什么要做这一步是由于在手机实测小程序的时候会发生滚动条回弹，所以为了解决回弹，设置默认最大最小值   */
       if (ev.scrollTop <= 0) {
@@ -319,13 +319,13 @@
     },
     async onPullDownRefresh () {
       this.pageNum = 1
-      this.getProduct({ type: 0 })
+      this.getProduct(0)
       // 停止下拉刷新
       wx.stopPullDownRefresh()
     },
-    onTabItemTap (item) {
-      this.getProduct({ type: 0 })
-    },
+    // onTabItemTap (item) {
+    //   this.getProduct({ type: 0 })
+    // },
     // onLoad () {
     //   this.getCategory()
     //   this.getProduct({ type: 0 })
@@ -506,11 +506,11 @@
         if (type === 0) {
           this.productList = productData.list
         } else {
-          productData.list.forEach(e => {
+          result.data.list.forEach(e => {
             this.productList.push(e)
           })
         }
-        // console.log('productList', this.productList)
+        console.log('productList', this.productList)
         this.lastPage = productData.lastPage
         this.pageNum = productData.pageNum
         this.nextPage = productData.nextPage
@@ -520,7 +520,7 @@
         let businessId = getExt().shopId
         const result = await product.getCategory({ businessId })
         const category = result.data
-        console.log('categoryA', category)
+        // console.log('categoryA', category)
         category.unshift({
           business_id: businessId,
           id: '',
@@ -548,7 +548,7 @@
         })
         this.categoryId = 0
         this.sortingType = obj.sortingType
-        this.getProduct(0)
+        this.getProduct({type: 0})
       }
     }
   }

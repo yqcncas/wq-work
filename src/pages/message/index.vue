@@ -71,13 +71,13 @@
             selectedIconPath: '/static/images/message-se.png',
             text: '消息'
           },
-          {
-            selectNavIndex: 2,
-            pagePath: '/pages/pageA/custom/main',
-            iconPath: '/static/images/personcard.png',
-            selectedIconPath: '/static/images/personcard-se.png',
-            text: '客户'
-          },
+          // {
+          //   selectNavIndex: 2,
+          //   pagePath: '/pages/pageA/custom/main',
+          //   iconPath: '/static/images/personcard.png',
+          //   selectedIconPath: '/static/images/personcard-se.png',
+          //   text: '客户'
+          // },
           {
             selectNavIndex: 3,
             pagePath: '/pages/personal/main',

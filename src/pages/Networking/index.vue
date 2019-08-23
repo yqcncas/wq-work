@@ -7,14 +7,14 @@
         <div class="infoA">
           <div class="inputClass">
             <i class="iconsousuo iconfont"></i>
-            <input placeholder="搜索关键字">
+            <input placeholder="搜索关键字" v-model="TypeName" @confirm="searchTypeName(TypeName)">
           </div>
         </div>
         <div class="Ndata">
           <div class="Ndata-main">
-            <span>帖子112</span>
-            <span>人气119</span>
-            <span>成员112</span>
+            <span>帖子 {{newsCount}}</span>
+            <span>人气 {{browseCount}}</span>
+            <span>成员 {{memberCount}}</span>
           </div>
         </div>
         <div class="banner">
@@ -26,11 +26,11 @@
             </block>
           </swiper>
         </div>
-        <div class="NewClass">
+        <div class="NewClass" v-if="tradeStatus !== 0">
           <div class="NewClass-main">
-            <div class="NewChoose" v-for="item in categoryA" :key="index" @click="goToSN(item.typeName)">
+            <div class="NewChoose" v-for="item in typeList" :key="index" @click="goToSN(item.id)">
              <p class="NewImg">
-               <img :src="item.src">
+               <img :src="item.icon">
              </p>
               <p class="NewName">
                 {{item.typeName}}
@@ -40,7 +40,7 @@
         </div>
       </div>
       <!--新闻动态-->
-      <div class="Netmain">
+      <div class="Netmain" v-if=" tradeStatus !== 0">
         <div class="Netmain-top">
           <div class="testNav">
             <div
@@ -69,10 +69,13 @@
           <div class="news-item-wrap" v-for="(item,index) in newsList" :key="index">
             <div class="news-header flexRow">
               <div class="avatar-wrp">
-                <img class="img" :src="item.imgUrl" />
+                <img class="img" :src="item.salesmanImgUrl" />
               </div>
               <div class="author-info">
-                <div class="author-name">
+                <div v-if="item.salesmanId"  class="author-name">
+                  {{item.name?item.name:'未填'}}
+                </div>
+                <div v-else class="author-name">
                   {{item.author?item.author:'未填'}}
                 </div>
                 <div class="author-date">
@@ -81,26 +84,29 @@
               </div>
               <div class="right-side">
                 <button @click.stop open-type="share" :data-item="item" class="forward">转发</button>
-                <i class="iconfont iconliaotian1" @click="routerTo(`/pages/msgcenter/main?id=${item.id}`)"></i>
+                <i v-if="item.salesmanId" class="iconfont iconliaotian1" @click="routerTo(`/pages/msgcenter/main?id=${item.id}`)"></i>
               </div>
             </div>
-            <div class="news-item" @click="routerTo(`/pages/Networking/detail/main?id=${item.id}`)">
-              <p class="item-title">
-                <span class="title">{{item.text}}</span>
+            <div class="news-item" @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
+              <p class="item-title" v-if="item.content!==''">
+                <span v-if="item.salesmanId" class="title">{{item.content}}</span>
               </p>
-              <div class="news-cover" v-if="item.img">
-                <image :src="item.img[0]" class="img" mode="widthFix"></image>
+              <div class="news-cover" v-if="item.imgUrl">
+                <image :src="item.imgUrl[0]" class="img" mode="widthFix"></image>
                 <p class="news-desc" v-if="item.abstractText">{{item.abstractText}}</p>
               </div>
+              <div class="news-cover" v-if="item.videoUrl">
+                <image :src="item.videoUrl + '?x-oss-process=video/snapshot,t_5000,f_jpg,w_750,m_fast'" class="img" mode="widthFix"></image>
+              </div>
               <div class="news-view flexRow">
-                <div class="flexRow watch" v-if="item.count">
+                <div class="flexRow watch">
                   <p>
                     <i class="iconfont iconchakan1"></i>
-                    <span>{{item.count}}</span>
+                    <span>{{item.browseCount}}</span>
                   </p>
                   <p>
                     <i class="iconfont iconaixin"></i>
-                    <span>{{item.count}}</span>
+                    <span>{{item.praiseCount}}</span>
                   </p>
                 </div>
                 <!--<p class="flexRow watch" v-if="item.count">-->
@@ -108,16 +114,16 @@
                   <!--<span>{{item.count}}</span>-->
                 <!--</p>-->
                 <div class="btn-group-ab flexRow" :class="{'trans':item.showBtn}">
-                  <p class="flexRow common-p" @click.stop="clickPraise(item.isPraise,status,item.id)">
-                    <i class="iconfont iconaixin"></i>
-                    <span>{{item.isPraise===1?'取消':'赞'}}</span>
-                  </p>
-                  <i class="line"></i>
-                  <p class="flexRow common-p" @click.stop="showComment(item)">
-                    <i class="iconfont iconpinglun1"></i>
-                    <span>评论</span>
-                  </p>
-                </div>
+                <p class="flexRow common-p" @click.stop="clickPraise(item.isPraise,statusA,item.id,item.salesmanId)">
+                  <i class="iconfont iconaixin"></i>
+                  <span>{{item.isPraise===1?'取消':'赞'}}</span>
+                </p>
+                <i class="line"></i>
+                <p class="flexRow common-p" @click.stop="showComment(item)">
+                  <i class="iconfont iconpinglun1"></i>
+                  <span>评论</span>
+                </p>
+              </div>
                 <!--<div class="wrap-btn" @click.stop="showbtnGroup(index,item)">-->
                   <!--<p class="btn-click flexRow">-->
                     <!--<span></span>-->
@@ -126,12 +132,12 @@
                 <!--</div>-->
               </div>
             </div>
-            <!-- 点赞评论 -->
-            <div v-if="item.praiseUser.length > 0 || item.comment.length > 0" class="comment-map">
+             <!--点赞评论 -->
+            <div v-if="item.newsCommentList.length > 0 || item.nameMapList.length > 0" class="comment-map">
               <div class="praise-wrap">
-                <span v-if="item.praiseUser.length>0"><i class="iconfont iconaixin"></i>{{item.praiseName}}</span>
+                <span v-if="item.nameMapList.length>0"><i class="iconfont iconaixin"></i>{{item.praiseName}}</span>
                 <div>
-                  <p v-for="(child,i) in item.comment" :key="i" class="comment-wrap-s">
+                  <p v-for="(child,i) in item.newsCommentList" :key="i" class="comment-wrap-s">
                     <span class="name">{{child.name?child.name:'未知'}}:</span>
                     <span class="detail">{{child.content}}</span>
                   </p>
@@ -146,6 +152,11 @@
         <div class="input-bottom" v-if="showTextarea">
         <textarea :auto-focus="true" @confirm="addLeaveMsg" v-model="msgContent" :class="areaType" placeholder="评论"
                   :auto-height="true" :fixed="true" cursor-spacing="10"></textarea>
+        </div>
+      </div>
+      <div v-else>
+        <div class="Main-Img">
+          <img src="https://oss.tzyizan.com/salesInfo/201908231552121566546732906.jpg"/>
         </div>
       </div>
       <!--名片-->
@@ -239,6 +250,7 @@
         newsList: [],
         typeList: [],
         tab: 1,
+        TypeName: '',
         imgUrls: [{
           src: 'https://images.unsplash.com/photo-1551334787-21e6bd3ab135?w=640'
         }, {
@@ -276,14 +288,14 @@
         circular: true,
         Grade: 'V1',
         tabs: 1,
-        lastPage: '',
+        lastPage: 1,
         apiproducts: apiproducts,
         nextPage: '',
         cards: [],
         num: 0,
         businessId: '',
         count: 0,
-        pageNum: 0,
+        pageNum: 1,
         pageSize: 5,
         Check: 0,
         windowHeight: '',
@@ -292,66 +304,58 @@
         tradeStatus: 1,
         typeId: 0,
         latitude: '',
-        longitude: ''
+        longitude: '',
+        memberCount: '',
+        browseCount: '',
+        newsCount: ''
+      }
+    },
+    onShareAppMessage (res) {
+      console.log('me', res)
+      if (res.target) {
+        let item = res.target.dataset.item
+        this.insertOpera('分享了新闻', 13, item.id)
+        if (item.imgUrl === null) {
+          let video = item.videoUrl + '?x-oss-process=video/snapshot,t_5000,f_jpg,w_750,m_fast'
+          return {
+            title: item.content,
+            path: 'pages/loading/main?fromWay=4&param=news&newsId=' + item.id,
+            imageUrl: video
+          }
+        } else if (item.imgUrl.length > 0) {
+          return {
+            title: item.content,
+            path: 'pages/loading/main?fromWay=4&param=news&newsId=' + item.id,
+            imageUrl: item.imgUrl[0]
+          }
+        } else {
+          let imgUrl = 'https://oss.tzyizan.com/salesInfo/201908231441551566542515010.png?x-oss-process=style/c400'
+          return {
+            title: item.content,
+            path: 'pages/loading/main?fromWay=4&param=news&newsId=' + item.id,
+            imageUrl: imgUrl
+          }
+        }
       }
     },
     onLoad (options) {
+      // this.pageNum = 1
+      // this.getNews({})
+      this.tradeStatus = wx.getStorageSync('tradeStatus')
       if (options.newsId) {
         wx.navigateTo({
-          url: `../news/detail/main?id=${options.newsId}`
+          url: `/pages/Networking/detail/main?id=` + options.newsId
         })
       }
       this.businessId = wx.getStorageSync('businessId')
-      this.pageNum = 1
       this.getType()
       this.longitude = wx.getStorageSync('longitude')
       this.latitude = wx.getStorageSync('latitude')
-      // const screenHeight = wx.getSystemInfoSync().screenHeight
-      // const windowHeight = wx.getSystemInfoSync().windowHeight
-      // const tarbar = screenHeight - windowHeight
-      // this.windowHeight = screenHeight - 278 - tarbar
-      // if (screenHeight < 569) {
-      //   this.windowHeight = screenHeight - 199 - tarbar
-      // } else if (screenHeight > 569 && screenHeight < 668) {
-      //   this.windowHeight = screenHeight - 233 - tarbar
-      // } else if (screenHeight > 668 && screenHeight < 737) {
-      //   this.windowHeight = screenHeight - 256 - tarbar
-      // } else if (screenHeight > 738 && screenHeight < 813) {
-      //   this.windowHeight = screenHeight - 233 - tarbar
-      // } else if (screenHeight > 813 && screenHeight < 897) {
-      //   this.windowHeight = screenHeight - 256 - tarbar
-      // } else if (screenHeight > 1023 && screenHeight < 1025) {
-      //   this.windowHeight = windowHeight - 480
-      // } else if (screenHeight > 1025 && screenHeight < 1113) {
-      //   this.windowHeight = windowHeight - 520
-      // } else if (screenHeight > 1113 && screenHeight < 1367) {
-      //   this.windowHeight = windowHeight - 640
-      // } else if (screenHeight > 1367) {
-      //   this.windowHeight = windowHeight - screenHeight / 2
-      // }
-      // if (windowHeight < 569) {
-      //   this.windowHeight = (wx.getSystemInfoSync().screenHeight - 215) * 2
-      //   this.windowHeightA = (wx.getSystemInfoSync().screenHeight - 215) * 2
-      // } else if (windowHeight > 569 && windowHeight < 668) {
-      //   this.windowHeight = (wx.getSystemInfoSync().screenHeight - 305) * 2
-      //   this.windowHeightA = (wx.getSystemInfoSync().screenHeight - 305) * 2
-      //   console.log('height', wx.getSystemInfoSync().screenHeight)
-      // } else if (windowHeight > 668 && windowHeight < 737) {
-      //   this.windowHeight = (wx.getSystemInfoSync().screenHeight - 300) * 2
-      //   this.windowHeightA = (wx.getSystemInfoSync().screenHeight - 300) * 2
-      //   console.log('height', wx.getSystemInfoSync().screenHeight)
-      // } else if (windowHeight > 738 && windowHeight < 813) {
-      //   this.windowHeight = (wx.getSystemInfoSync().screenHeight - 335) * 2
-      //   this.windowHeightA = (wx.getSystemInfoSync().screenHeight - 335) * 2
-      //   console.log('height', wx.getSystemInfoSync().screenHeight)
-      // } else if (windowHeight > 1023 && windowHeight < 1024) {
-      //   this.windowHeight = (wx.getSystemInfoSync().screenHeight - 100) * 2
-      //   this.windowHeightA = (wx.getSystemInfoSync().screenHeight - 100) * 2
-      // }
+      this.getNum()
+      this.changTab(1)
     },
     onShow () {
-      this.tradeStatus = wx.getStorageSync('tradeStatus')
-      this.pageNum = 1
+      this.TypeName = ''
       // this.getCard()
     },
     async onReachBottom () {
@@ -373,21 +377,33 @@
       wx.stopPullDownRefresh()
     },
     methods: {
-      // 分类检索
-      goToSN (name) {
+      // 插入雷达
+      async insertOpera (info, recordType, newsId) {
+        let businessId = wx.getStorageSync('businessId')
+        let salesmanId = wx.getStorageSync('salesManId')
+        let userId = wx.getStorageSync('userId')
+        await personApi.OperationInsert({ businessId, newsId, info, recordType, salesmanId, userId })
+      },
+      // 名称检索
+      searchTypeName (name) {
         wx.navigateTo({
-          url: '/pages/SNetworking/main?name=' + name
+          url: '/pages/SNetworking/main?name=' + name + '&diffA=0'
+        })
+      },
+      // 分类检索
+      goToSN (id) {
+        wx.navigateTo({
+          url: '/pages/SNetworking/main?id=' + id + '&diffA=1'
         })
       },
       // 选择
       changTab (index) {
-        this.newsList = []
         if (index === 1) {
           this.tab = index
           this.status = index
           this.typeId = 0
           this.pageNum = 1
-          this.getNews({})
+          this.getNews({type: 0})
         } else if (index === 2) {
           this.tab = index
           this.status = index
@@ -420,6 +436,27 @@
       goToCard (id) {
         wx.navigateTo({
           url: `../OthersCard/main?id=` + id
+        })
+      },
+      // 获取人脉即使热门名片
+      getNum () {
+        const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
+        const userId = wx.getStorageSync('userId') // 获取本地userId
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/dynamic/selectCount',
+          body: {
+            'businessId': businessId,
+            'userId': userId
+          }
+        }).then(res => {
+          if (res.data) {
+            this.memberCount = res.data.memberCount
+            this.browseCount = res.data.browseCount
+            this.newsCount = res.data.newsCount
+          }
+        }).catch(err => {
+          console.log(err.status, err.message)
         })
       },
       // // 监测滚动到底部加载分页
@@ -499,36 +536,32 @@
       //     console.log(err.status, err.message)
       //   })
       // },
-      // 插入雷达
-      async insertOpera (info, recordType, newsId) {
-        let businessId = wx.getStorageSync('businessId')
-        let salesmanId = wx.getStorageSync('salesManId')
-        let userId = wx.getStorageSync('userId')
-        await personApi.OperationInsert({ businessId, newsId, info, recordType, salesmanId, userId })
-      },
       //   点赞
-      clickPraise (isPraise, status, id) {
+      clickPraise (isPraise, status, id, salesmanId) {
         this.closeBtnShow()
+        console.log('this.name', this.name)
         this.newsList.map(async item => {
           if (item.id === id) {
             if (isPraise > 0) {
-              await apiNews.deleteNews({ status, id: id })
+              await apiNews.deleteNews({ status, id: id, salesmanId })
               item.isPraise = 0
-              item.praiseUser.map((m, n) => {
+              item.praiseCount = item.praiseCount - 1
+              item.nameMapList.map((m, n) => {
                 if (m.name === this.name) {
-                  item.praiseUser.splice(n, 1)
+                  item.nameMapList.splice(n, 1)
                 }
               })
             } else {
-              await apiNews.addNews({ status, id: id })
+              await apiNews.addNews({ status, id: id, salesmanId })
               this.insertOpera('点赞了新闻', 12, id)
+              item.praiseCount = item.praiseCount + 1
               item.isPraise = 1
-              item.praiseUser.push({ name: this.name })
+              item.nameMapList.push({ name: this.name })
             }
           }
           // 拼凑
           item.praiseName = ''
-          item.praiseUser.map(child => {
+          item.nameMapList.map(child => {
             if (item.praiseName.length > 0 && item.praiseName) {
               item.praiseName = item.praiseName + ',' + child.name
             } else {
@@ -558,9 +591,11 @@
           icon: 'loading',
           mask: true
         })
-        await apiNews.addNews({
+        let userId = wx.getStorageSync('userId')
+        await apiNews.addNewsA({
           commentType: 0,
-          commentnewsid: this.commentId,
+          commentUserId: userId,
+          commentNewsId: this.commentId,
           content: this.msgContent
         })
         this.newsList.map(item => {
@@ -592,6 +627,12 @@
       routerTo (url) {
         wx.navigateTo({ url })
       },
+      routerToA (url) {
+        this.newsList.map(async item => {
+          item.browseCount = item.browseCount + 1
+        })
+        wx.navigateTo({ url })
+      },
       bindViewTap () {
         const url = '../logs/index'
         wx.navigateTo({ url })
@@ -604,10 +645,10 @@
       async getType () {
         const { code, data, message } = await apiNews.getType(this.businessId)
         if (code === 200) {
-          // this.typeList = data
+          this.typeList = data
           // this.typeId = data[0].id
           console.log('this.typeId', data)
-          this.getNews({})
+          // this.getNews({})
         } else {
           wx.showToast({
             title: message,
@@ -617,21 +658,21 @@
         }
       },
       async getNews ({ type = 0, name = '' }) {
-        this.name = wx.getStorageSync('nickName')
-        const result = await apiNews.getNews({ businessId: this.businessId, pageNum: this.pageNum, pageSize: this.pageSize, typeId: this.typeId, latitude: this.latitude, longitude: this.longitude })
+        // this.name = wx.getStorageSync('nickName')
+        const that = this
+        const result = await apiNews.getNews({ businessId: that.businessId, pageNum: that.pageNum, pageSize: that.pageSize, typeId: that.typeId, latitude: that.latitude, longitude: that.longitude })
         const code = result.code
         const data = result.data
-        console.log('dataA', data)
         if (code === 200) {
           data.list.map(item => {
             item.publishTime = this.moment(item.publishTime).format('MM月DD日')
-            if (item.img !== '' && item.img !== null) {
-              const img = item.img.split(',')
-              item.img = img
-            }
+            // if (item.img !== '' && item.img !== null) {
+            //   const img = item.img.split(',')
+            //   item.img = img
+            // }
             item.praiseName = ''
-            item.imgUrl += '?x-oss-process=style/w750'
-            item.praiseUser.map(child => {
+            // item.imgUrl += '?x-oss-process=style/w750'
+            item.nameMapList.map(child => {
               if (item.praiseName.length > 0 && item.praiseName) {
                 item.praiseName = item.praiseName + ',' + child.name
               } else {
@@ -641,13 +682,13 @@
           })
           if (type === 0) {
             this.newsList = data.list
-          } else {
+          } else if (type === 1) {
             data.list.forEach(e => {
               this.newsList.push(e)
             })
           }
-          this.lastPage = data.lastPage
           this.pageNum = data.pageNum
+          this.lastPage = data.lastPage
           this.nextPage = data.nextPage
         } else {
           wx.showToast({

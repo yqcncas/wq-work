@@ -364,11 +364,13 @@
         }).then(res => {
           const Member = wx.getStorageSync('vipId')
           console.log('Member', Member)
-          if (Member === 0 || Member === null) {
+          if (Member === 0 || Member === null || Member === '') {
             this.Member = '无会员'
+            wx.setStorageSync('vipId', 0)
           } else {
             // this.Member = Member
             this.silver = res.data
+            console.log('this.silver', this.silver)
             this.silver.map((item) => {
               if (Member === item.id) {
                 this.Member = item.levelName

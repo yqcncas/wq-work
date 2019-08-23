@@ -136,10 +136,10 @@ fly.interceptors.response.use(
             url: '/pages/loading/main'
           })
         } else {
-          wx.showToast({
-            title: `Status Code:${err.status}`,
-            icon: 'none'
-          })
+          // wx.showToast({
+          //   title: `Status Code:${err.status}`,
+          //   icon: 'none'
+          // })
         }
       }
     }

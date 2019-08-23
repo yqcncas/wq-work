@@ -1,9 +1,9 @@
 {
   "extEnable": true,
-  "extAppid": "wx2e3ab31dae91d019",
+  "extAppid": "wx3f1e71e9ef9aaabf",
   "directCommit": false,
   "ext": {
-    "shopId": 156,
+    "shopId": 1,
     "baseUrl": "https://api.tzyizan.com/server",
     "ossUrl": "https://oss.wq1516.com/",
     "wssUrl": "wss://api.tzyizan.com/websocket/"

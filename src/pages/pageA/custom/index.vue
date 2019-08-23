@@ -71,33 +71,7 @@ export default {
       searchContent: '',
       isFocus: false,
       index: 0,
-      persons: [{
-        avatarUrl: 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png?x-oss-process=style/c400',
-        remarks: '李松阳',
-        message: '李总考虑的如何',
-        phone: '15988993797',
-        sendTime: '2016-08-09',
-        tagList: [{
-          tag: '未婚'
-        }, {
-          tag: '90后'
-        }, {
-          tag: '哈哈'
-        }]
-      }, {
-        avatarUrl: 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png?x-oss-process=style/c400',
-        remarks: '李松阳 a',
-        message: '李总考虑的如何',
-        phone: '15988993797',
-        sendTime: '2016-08-09',
-        tagList: [{
-          tag: '未婚'
-        }, {
-          tag: '90后'
-        }, {
-          tag: '哈哈'
-        }]
-      }],
+      persons: [],
       navList: [
         {
           selectNavIndex: 0,
@@ -113,13 +87,13 @@ export default {
           selectedIconPath: '/static/images/message-se.png',
           text: '消息'
         },
-        {
-          selectNavIndex: 2,
-          pagePath: '/pages/pageA/custom/main',
-          iconPath: '/static/images/personcard.png',
-          selectedIconPath: '/static/images/personcard-se.png',
-          text: '客户'
-        },
+        // {
+        //   selectNavIndex: 2,
+        //   pagePath: '/pages/pageA/custom/main',
+        //   iconPath: '/static/images/personcard.png',
+        //   selectedIconPath: '/static/images/personcard-se.png',
+        //   text: '客户'
+        // },
         {
           selectNavIndex: 3,
           pagePath: '/pages/personal/main',

@@ -22,8 +22,9 @@
         <div class="product" v-if="tab === 1">
           <div class="manage" v-for="(item, index) in productsA" :key="index">
           <div class="main">
-            <span @click="modify(item.id)" class="img">
-              <img :src="item.imgUrl">
+            <span class="img">
+              <img :src="item.imgUrl" @click="modify(item.id)">
+              <i class="iconfont iconshanchu-copy" @click="deleteA(item.id, 0)"></i>
             </span>
               <p class="text">{{ item.name }}</p>
               <p class="introduce">￥{{ item.price }}</p>
@@ -37,8 +38,9 @@
         <div class="product" v-else-if="tab === 2">
           <div class="manage" v-for="(item, index) in productsB" :key="index">
             <div class="main">
-            <span  @click="modify(item.id)" class="img">
-              <img :src="item.imgUrl">
+            <span class="img">
+              <img :src="item.imgUrl" @click="modify(item.id)">
+               <i class="iconfont iconshanchu-copy" @click="deleteA(item.id, 1)"></i>
             </span>
               <p class="text">{{ item.name }}</p>
               <p class="introduce">￥{{ item.price }}</p>
@@ -51,7 +53,7 @@
         </div>
         <div class="product" v-else-if="tab === 3">
           <div class="manage" v-for="(item, index) in productsC" :key="index">
-            <div @click="modify(item.id)"  class="main">
+            <div @click="modify(item.id)" class="main">
             <span class="img">
               <img :src="item.imgUrl">
             </span>
@@ -95,9 +97,31 @@
       }
     },
     onShow () {
-      this.getInfoA(1)
+      this.changTab(1)
     },
     methods: {
+      // 删除
+      deleteA (id, num) {
+        this.$fly.request({
+          method: 'post', // post/get 请求方式
+          url: '/platformGoods/delete',
+          body: {
+            'id': id
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            if (num === 0) {
+              this.getInfoA(1)
+            } else if (num === 1) {
+              this.getInfoB(0)
+            }
+            console.log('id', res)
+          }
+          // console.log(res)
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      },
       // 上架
       upStatus (id) {
         this.$fly.request({

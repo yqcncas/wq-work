@@ -186,8 +186,8 @@
                   <p>{{postForm.job}}</p>
                 </div>
                 <div class="type-company">
-                  <p class="type">{{postForm.organizeType}}</p>
-                  <p>{{postForm.organizeName}}</p>
+                  <p class="type">{{postForm.phone}}</p>
+                  <p>{{postForm.address}}</p>
                 </div>
               </div>
             </div>
@@ -597,6 +597,7 @@
           console.log('Member', Member)
           if (Member === 0 || Member === null) {
             this.Member = '无会员'
+            wx.setStorageSync('vipId', 0)
           } else {
             // this.Member = Member
             this.silver = res.data
@@ -605,7 +606,7 @@
                 this.Member = item.levelName
               }
             })
-            console.log('啊啊啊啊', this.Member)
+            // console.log('啊啊啊啊', this.Member)
           }
         }).catch(err => {
           console.log('err', err)
@@ -960,6 +961,7 @@
               this.unionId = JSON.parse(data).unionId
               userInfo.unionId = this.unionId
               wx.setStorageSync('nickName', JSON.parse(data).nickName)
+              wx.setStorageSync('avatarUrl', JSON.parse(data).avatarUrl)
               // await home.updateUser(userInfo)
               // await personApi.updateRemarksNew({ remarks: userInfo.nickName, userId: this.id })
             }
@@ -1064,7 +1066,9 @@
               this.voiceTime = this.formatSeconds(this.num)
               console.log(this.num)
             }, 100)
-            this.getOpA()
+            setTimeout(() => {
+              this.getOpA()
+            }, 2000)
           } else if (res.data === null) {
             // this.modalFlag = true
           }

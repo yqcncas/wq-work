@@ -68,7 +68,7 @@
                 <!--<span>{{item.count}}</span>-->
                 <!--</p>-->
                 <div class="btn-group-ab flexRow" :class="{'trans':item.showBtn}">
-                  <p class="flexRow common-p" @click.stop="clickPraise(item.isPraise,status,item.id)">
+                  <p class="flexRow common-p" @click.stop="clickPraise(item.isPraise,status,item.id,item.salesmanId)">
                     <i class="iconfont iconaixin"></i>
                     <span>{{item.isPraise===1?'取消':'赞'}}</span>
                   </p>
@@ -87,11 +87,11 @@
               </div>
             </div>
             <!-- 点赞评论 -->
-            <div v-if="item.praiseUser.length > 0 || item.comment.length > 0" class="comment-map">
+            <div v-if="item.newsCommentList.length > 0 || item.nameMapList.length > 0" class="comment-map">
               <div class="praise-wrap">
-                <span v-if="item.praiseUser.length>0"><i class="iconfont iconaixin"></i>{{item.praiseName}}</span>
+                <span v-if="item.nameMapList.length>0"><i class="iconfont iconaixin"></i>{{item.praiseName}}</span>
                 <div>
-                  <p v-for="(child,i) in item.comment" :key="i" class="comment-wrap-s">
+                  <p v-for="(child,i) in item.newsCommentList" :key="i" class="comment-wrap-s">
                     <span class="name">{{child.name?child.name:'未知'}}:</span>
                     <span class="detail">{{child.content}}</span>
                   </p>
@@ -146,15 +146,28 @@
         tradeStatus: 1,
         typeId: 0,
         latitude: '',
-        longitude: ''
+        longitude: '',
+        keywords: ''
       }
     },
-    onload () {
-      this.getType()
+    onLoad (options) {
+      this.pageNum = 1
+      console.log('options', options)
+      if (options.id && options.diffA === '1') {
+        this.typeId = options.id
+        this.getNews({})
+      } else if (options.name && options.diffA === '0') {
+        this.keywords = options.name
+        this.getNewsName({})
+      }
+      // this.getType()
+    },
+    onUnload () {
+      this.keywords = ''
+      this.typeId = ''
     },
     onShow () {
       this.tradeStatus = wx.getStorageSync('tradeStatus')
-      this.pageNum = 1
     },
     methods: {
       // 插入雷达
@@ -165,28 +178,29 @@
         await personApi.OperationInsert({ businessId, newsId, info, recordType, salesmanId, userId })
       },
       //   点赞
-      clickPraise (isPraise, status, id) {
+      clickPraise (isPraise, status, id, salesmanId) {
         this.closeBtnShow()
+        console.log('this.name', this.name)
         this.newsList.map(async item => {
           if (item.id === id) {
             if (isPraise > 0) {
-              await apiNews.deleteNews({ status, id: id })
+              await apiNews.deleteNews({ status, id: id, salesmanId })
               item.isPraise = 0
-              item.praiseUser.map((m, n) => {
+              item.nameMapList.map((m, n) => {
                 if (m.name === this.name) {
-                  item.praiseUser.splice(n, 1)
+                  item.nameMapList.splice(n, 1)
                 }
               })
             } else {
-              await apiNews.addNews({ status, id: id })
+              await apiNews.addNews({ status, id: id, salesmanId })
               this.insertOpera('点赞了新闻', 12, id)
               item.isPraise = 1
-              item.praiseUser.push({ name: this.name })
+              item.nameMapList.push({ name: this.name })
             }
           }
           // 拼凑
           item.praiseName = ''
-          item.praiseUser.map(child => {
+          item.nameMapList.map(child => {
             if (item.praiseName.length > 0 && item.praiseName) {
               item.praiseName = item.praiseName + ',' + child.name
             } else {
@@ -216,9 +230,11 @@
           icon: 'loading',
           mask: true
         })
-        await apiNews.addNews({
+        let userId = wx.getStorageSync('userId')
+        await apiNews.addNewsA({
           commentType: 0,
-          commentnewsid: this.commentId,
+          commentUserId: userId,
+          commentNewsId: this.commentId,
           content: this.msgContent
         })
         this.newsList.map(item => {
@@ -250,15 +266,6 @@
       routerTo (url) {
         wx.navigateTo({ url })
       },
-      bindViewTap () {
-        const url = '../logs/index'
-        wx.navigateTo({ url })
-      },
-      tabChange (data) {
-        this.typeId = data.categoryId
-        this.pageNum = 1
-        this.getNews({})
-      },
       async getType () {
         const { code, data, message } = await apiNews.getType(this.businessId)
         if (code === 200) {
@@ -276,20 +283,16 @@
       },
       async getNews ({ type = 0, name = '' }) {
         this.name = wx.getStorageSync('nickName')
-        const result = await apiNews.getNews({ businessId: this.businessId, pageNum: this.pageNum, pageSize: this.pageSize, typeId: this.typeId, latitude: this.latitude, longitude: this.longitude })
+        const result = await apiNews.getNewsType({ businessId: this.businessId, pageNum: this.pageNum, pageSize: this.pageSize, type: this.typeId })
         const code = result.code
         const data = result.data
         console.log('dataA', data)
         if (code === 200) {
           data.list.map(item => {
             item.publishTime = this.moment(item.publishTime).format('MM月DD日')
-            if (item.img !== '' && item.img !== null) {
-              const img = item.img.split(',')
-              item.img = img
-            }
             item.praiseName = ''
-            item.imgUrl += '?x-oss-process=style/w750'
-            item.praiseUser.map(child => {
+            // item.imgUrl += '?x-oss-process=style/w750'
+            item.nameMapList.map(child => {
               if (item.praiseName.length > 0 && item.praiseName) {
                 item.praiseName = item.praiseName + ',' + child.name
               } else {
@@ -304,6 +307,45 @@
               this.newsList.push(e)
             })
           }
+          console.log('newsList', this.newsList)
+          this.lastPage = data.lastPage
+          this.pageNum = data.pageNum
+          this.nextPage = data.nextPage
+        } else {
+          wx.showToast({
+            title: '失败',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      },
+      async getNewsName ({ type = 0, name = '' }) {
+        this.name = wx.getStorageSync('nickName')
+        const result = await apiNews.getNewsTypeName({ businessId: this.businessId, pageNum: this.pageNum, pageSize: this.pageSize, type: this.keywords })
+        const code = result.code
+        const data = result.data
+        console.log('dataB', data)
+        if (code === 200) {
+          data.list.map(item => {
+            item.publishTime = this.moment(item.publishTime).format('MM月DD日')
+            item.praiseName = ''
+            // item.imgUrl += '?x-oss-process=style/w750'
+            item.nameMapList.map(child => {
+              if (item.praiseName.length > 0 && item.praiseName) {
+                item.praiseName = item.praiseName + ',' + child.name
+              } else {
+                item.praiseName = child.name
+              }
+            })
+          })
+          if (type === 0) {
+            this.newsList = data.list
+          } else {
+            data.list.forEach(e => {
+              this.newsList.push(e)
+            })
+          }
+          console.log('newsList', this.newsList)
           this.lastPage = data.lastPage
           this.pageNum = data.pageNum
           this.nextPage = data.nextPage
@@ -333,7 +375,6 @@ width: 100%;
       justify-content: center;
       display: flex;
       background: #ffffff;
-      padding-bottom: ~'20rpx';
       .testNav {
         width: ~'660rpx';
         margin:  0;
@@ -381,7 +422,6 @@ width: 100%;
       //position: relative;
       //left: 0;
       //top: 0;
-      margin-top: ~'10rpx';
       margin-bottom: ~'2rpx';
       overflow: auto;
       -webkit-overflow-scrolling: touch;

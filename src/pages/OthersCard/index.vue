@@ -704,6 +704,7 @@
               this.unionId = JSON.parse(data).unionId
               userInfo.unionId = this.unionId
               wx.setStorageSync('nickName', JSON.parse(data).nickName)
+              wx.setStorageSync('avatarUrl', JSON.parse(data).avatarUrl)
               // await home.updateUser(userInfo)
               // await personApi.updateRemarksNew({ remarks: userInfo.nickName, userId: this.id })
             }
@@ -819,6 +820,11 @@
             // } else {
             //   this.modalFlag = false
             // }
+            if (res.data.length === 0 || res.data === null) {
+              wx.setStorageSync('Card', false)
+            } else {
+              wx.setStorageSync('Card', true)
+            }
             this.setUp = 1
           } else {
             this.setUp = 0

@@ -12,34 +12,34 @@
           <div class="time">
             <a>{{ item.createDate.date }}</a>{{ item.createDate.months + 1}}月
           </div>
-          <div class="middle" v-if="item.imgUrlList !== null && item.imgUrlList[0] !== ''">
+          <div class="middle" v-if="item.imgUrl !== null && item.imgUrl[0] !== ''">
             <span class="Img">
-              <img :src="item.imgUrlList[0]">
+              <img :src="item.imgUrl[0]">
             </span>
             <span class="title">
-             {{ item.title }}
+             {{ item.content }}
             </span>
           </div>
-          <div class="middleVideo" v-else-if="item.video !== null">
+          <div class="middleVideo" v-else-if="item.videoUrl !== null && item.videoUrl !==''">
             <span class="video">
               <img
                 id="myVideo"
-                :src="item.video +  '?x-oss-process=video/snapshot,t_0,f_jpg,w_750,m_fast'"
+                :src="item.videoUrl +  '?x-oss-process=video/snapshot,t_0,f_jpg,w_750,m_fast'"
                 controls
               >
             </span>
             <span class="title">
-             {{ item.title }}
+             {{ item.content }}
             </span>
           </div>
           <div class="middleTitle" v-else>
             <span class="title">
-             {{ item.title }}
+             {{ item.content }}
             </span>
           </div>
           <div class="rightA">
             <p class="look">{{ item.browseCount }}次浏览</p>
-            <p class="edit" @click="goEdit(item.id,item.video,item.imgUrlList)">编辑</p>
+            <p class="edit" @click="goEdit(item.id,item.videoUrl,item.imgUrl)">编辑</p>
           </div>
         </div>
       </div>
@@ -88,7 +88,7 @@ export default {
         wx.navigateTo({
           url: `../resEdit/main?id=` + id + '&video=1' + '&status=' + this.status
         })
-      } else if (photo !== null && photo !== '') {
+      } else if (photo !== null && photo[0] !== '') {
         wx.navigateTo({
           url: `../resEdit/main?id=` + id + '&photo=1' + '&status=' + this.status
         })

@@ -106,7 +106,7 @@
               })
             } else {
               that.urls.splice(index, 1)
-              that.$emit('choosed', that.urls)
+              that.$emit('choosed', { all: that.urls })
             }
           }
         })

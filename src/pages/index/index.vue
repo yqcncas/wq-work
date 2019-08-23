@@ -312,6 +312,7 @@ export default {
       Yid: '', // 业务员id
       animal: '',
       region: '北京市北京市东城区',
+      // region: [],
       regionA: [],
       multiIndex: [0, 0],
       voiceUrl: '',
@@ -691,12 +692,21 @@ export default {
           if (this.richTextList) {
             this.richTextList = res.data.richText !== '' ? res.data.richText.split(',') : []
           }
-          if (lab === 'string') {
-            this.region = JSON.parse(res.data.salesAddress)
-            this.address = this.region
-          } else {
-            this.region = JSON.parse(res.data.salesAddress)
-            this.address = this.region.join('')
+          // if (lab === 'string') {
+          //   this.region = JSON.parse(res.data.salesAddress)
+          //   this.address = this.region
+          // } else {
+          //   this.region = JSON.parse(res.data.salesAddress)
+          //   this.address = this.region.join('')
+          // }      this.region = JSON.parse(usermsg.address)
+          if (res.data.salesAddress !== null) {
+            if (lab === 'string') {
+              this.region = JSON.parse(res.data.salesAddress)
+              this.address = this.region
+            } else {
+              this.region = JSON.parse(res.data.salesAddress)
+              this.address = this.region.join('')
+            }
           }
           if (this.voice !== '') {
             this.voiceTxt = '重录'
@@ -1208,8 +1218,8 @@ export default {
     bindRegionChange (e) {
       var value = e.mp.detail.value
       this.address = value[0] + '' + value[1] + '' + value[2]
-      console.log('value', value)
       this.region = value
+      console.log('value', value)
     }
   },
   created () {

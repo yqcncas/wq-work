@@ -199,7 +199,7 @@
                       </p>
                     </div>
 
-                    <div class="cardData-main" @click="goToCard(items.salesmanId)">
+                    <div class="cardData-main" @click="goToCard(items.id)">
                       <p class="top">
                         <span class="icon">企</span>
                         <span class="name">{{items.name}}</span>
@@ -385,17 +385,17 @@
       this.searchName = ''
       // wx.hideTabBar()
       this.showpop = false
-      this.pageNum = 1
     },
     onLoad (options) {
+      this.pageNum = 1
       this.getInfomation()
-      this.getCardInfo(0, this.pageNum)
       // this.getInfo()
       this.getSun()
       this.getSalesmanId()
       this.getCard()
       this.getLogo()
       this.getMy()
+      this.changTab(1)
       setInterval(() => {
         const that = this
         const num = wx.getStorageSync('msgNum')
@@ -526,7 +526,6 @@
             'sortingType': id
           }
         }).then(res => {
-          this.postform = []
           if (res.code === 200) {
             const data = res.data.list
             data.map(item => {
@@ -555,16 +554,19 @@
           this.pageNum = 1
           this.tab = index
           this.status = 0
+          this.postform = []
           this.getCardInfo(0, 1)
         } else if (index === 2) {
           this.pageNum = 1
           this.tab = index
           this.status = 2
+          this.postform = []
           this.getCardInfo(2, 1)
         } else if (index === 3) {
           this.pageNum = 1
           this.tab = index
           this.status = 3
+          this.postform = []
           this.getCardInfo(3, 1)
         }
       },
