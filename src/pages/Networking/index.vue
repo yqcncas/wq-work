@@ -538,6 +538,7 @@
       // },
       //   点赞
       clickPraise (isPraise, status, id, salesmanId) {
+        this.name = wx.getStorageSync('nickName')
         this.closeBtnShow()
         console.log('this.name', this.name)
         this.newsList.map(async item => {
@@ -578,6 +579,7 @@
         this.commentId = item.id
       },
       async addLeaveMsg () {
+        this.name = wx.getStorageSync('nickName')
         if (this.msgContent === '') {
           this.showTextarea = false
           wx.showToast({
@@ -658,7 +660,7 @@
         }
       },
       async getNews ({ type = 0, name = '' }) {
-        // this.name = wx.getStorageSync('nickName')
+        this.name = wx.getStorageSync('nickName')
         const that = this
         const result = await apiNews.getNews({ businessId: that.businessId, pageNum: that.pageNum, pageSize: that.pageSize, typeId: that.typeId, latitude: that.latitude, longitude: that.longitude })
         const code = result.code
