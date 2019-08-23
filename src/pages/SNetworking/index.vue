@@ -29,10 +29,13 @@
           <div class="news-item-wrap" v-for="(item,index) in newsList" :key="index">
             <div class="news-header flexRow">
               <div class="avatar-wrp">
-                <img class="img" :src="item.imgUrl" />
+                <img class="img" :src="item.salesmanImgUrl" />
               </div>
               <div class="author-info">
-                <div class="author-name">
+                <div v-if="item.salesmanId"  class="author-name">
+                  {{item.name?item.name:'未填'}}
+                </div>
+                <div v-else class="author-name">
                   {{item.author?item.author:'未填'}}
                 </div>
                 <div class="author-date">
@@ -44,23 +47,26 @@
                 <i class="iconfont iconliaotian1" @click="routerTo(`/pages/msgcenter/main?id=${item.id}`)"></i>
               </div>
             </div>
-            <div class="news-item" @click="routerTo(`/pages/Networking/detail/main?id=${item.id}`)">
-              <p class="item-title">
-                <span class="title">{{item.text}}</span>
+            <div class="news-item" @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
+              <p class="item-title" v-if="item.content!==''">
+                <span v-if="item.salesmanId" class="title">{{item.content}}</span>
               </p>
-              <div class="news-cover" v-if="item.img">
-                <image :src="item.img[0]" class="img" mode="widthFix"></image>
+              <div class="news-cover" v-if="item.imgUrl">
+                <image :src="item.imgUrl[0]" class="img" mode="widthFix"></image>
                 <p class="news-desc" v-if="item.abstractText">{{item.abstractText}}</p>
               </div>
+              <div class="news-cover" v-if="item.videoUrl">
+                <image :src="item.videoUrl + '?x-oss-process=video/snapshot,t_5000,f_jpg,w_750,m_fast'" class="img" mode="widthFix"></image>
+              </div>
               <div class="news-view flexRow">
-                <div class="flexRow watch" v-if="item.count">
+                <div class="flexRow watch">
                   <p>
                     <i class="iconfont iconchakan1"></i>
-                    <span>{{item.count}}</span>
+                    <span>{{item.browseCount}}</span>
                   </p>
                   <p>
                     <i class="iconfont iconaixin"></i>
-                    <span>{{item.count}}</span>
+                    <span>{{item.praiseCount}}</span>
                   </p>
                 </div>
                 <!--<p class="flexRow watch" v-if="item.count">-->
@@ -68,7 +74,7 @@
                 <!--<span>{{item.count}}</span>-->
                 <!--</p>-->
                 <div class="btn-group-ab flexRow" :class="{'trans':item.showBtn}">
-                  <p class="flexRow common-p" @click.stop="clickPraise(item.isPraise,status,item.id,item.salesmanId)">
+                  <p class="flexRow common-p" @click.stop="clickPraise(item.isPraise,statusA,item.id,item.salesmanId)">
                     <i class="iconfont iconaixin"></i>
                     <span>{{item.isPraise===1?'取消':'赞'}}</span>
                   </p>
@@ -170,6 +176,15 @@
       this.tradeStatus = wx.getStorageSync('tradeStatus')
     },
     methods: {
+      routerTo (url) {
+        wx.navigateTo({ url })
+      },
+      routerToA (url) {
+        this.newsList.map(async item => {
+          item.browseCount = item.browseCount + 1
+        })
+        wx.navigateTo({ url })
+      },
       // 插入雷达
       async insertOpera (info, recordType, newsId) {
         let businessId = wx.getStorageSync('businessId')
@@ -262,9 +277,6 @@
           temp = true
         }
         this.$set(child, 'showBtn', temp)
-      },
-      routerTo (url) {
-        wx.navigateTo({ url })
       },
       async getType () {
         const { code, data, message } = await apiNews.getType(this.businessId)

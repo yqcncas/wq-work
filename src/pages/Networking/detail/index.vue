@@ -163,9 +163,9 @@ export default {
       if (data.salesmanId) {
         this.salesmanId = data.salesmanId
         this.imgUrl = data.imgUrl
-        this.author = data.author
+        this.author = data.name
         this.content = data.content
-        console.log('content', this.content)
+        console.log('content', data)
         this.time = this.moment(data.publishTime).format('YYYY-MM-DD HH:mm')
         // if (this.img !== '' && this.img !== null) {
         //   this.img = data.img.split(',')

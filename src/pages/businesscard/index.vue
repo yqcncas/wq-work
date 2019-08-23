@@ -119,9 +119,9 @@
           <div class="cards-radar" @click="goRadar">
             <div class="main">
               <swiper class="swiper" :autoplay="autoplay" :circular= 'circular' :vertical="vertical" :interval="interval" :duration="duration" :easing-function="easeInOutCubic">
-                <block v-for="(item, index) in infoMation" :key="index" @click="routerTo(item.id)">
+                <block v-for="(item, index) in infoMation" :key="index">
                   <swiper-item>
-                    <div class="top">
+                    <div class="top"  @click="routerTo(item.id)">
                         <div class="imgUrl" v-if="item.avatarUrl"><img :src= item.avatarUrl /></div>
                         <div class="name">{{item.userName}}</div>
                         <div class="date">{{item.browseDate}}</div>
@@ -131,21 +131,21 @@
                 </block>
               </swiper>
               <div class="title">数据中心</div>
-              <div class="Member" v-if="Member == '无会员'" @click="goToMember">
+              <div class="Member" v-if="Member == '无会员'">
                 <span class="left">成 为 VIP 会 员 , 获 得 更 多 精 准 用 户</span>
-                <span class="right">立即开通</span>
+                <span class="right" @click="goToMember">立即开通</span>
               </div>
               <div class="Member" v-else-if="Member == '白银会员'">
                 <span class="left">尊 贵 的 白 银 会 员 , 升 级 获 取 更 多 权 限</span>
-                <span class="right">立即升级</span>
+                <span class="right" @click="goToMember">立即升级</span>
               </div>
               <div class="Member" v-else-if="Member == '黄金会员'">
                 <span class="left">尊 贵 的 黄 金 会 员 , 升 级 获 取 更 多 权 限</span>
-                <span class="right">立即升级</span>
+                <span class="right" @click="goToMember">立即升级</span>
               </div>
               <div class="Member" v-else-if="Member == '钻石会员'">
                 <span class="left">尊 贵 的 钻 石 会 员 , 已 升 级 至 最 高 权 限</span>
-                <span class="right">最高权限</span>
+                <span class="right" @click="goToMember">最高权限</span>
               </div>
             </div>
           </div>
@@ -453,6 +453,11 @@
           <span class="num" v-else-if="num >=99">99</span>
         </div>
       </div>
+
+      <div class="tips" v-if="tips === true">
+          <img src="https://oss.tzyizan.com/salesInfo/201908231701111566550871338.png">
+      </div>
+
     </div>
   <form name='pushMsgFm' report-submit='true' @submit='getFormID' class="">
     <div v-if="modalFlag" catchtouchmove="true" class="window">
@@ -493,6 +498,7 @@
         interval: 5000,
         videoFlag: false,
         video: '',
+        tips: true,
         voiceTime: '00',
         videoImg: '',
         vertical: true,
@@ -542,10 +548,14 @@
       this.CardId = options.id
       this.getMap()
       this.getMerber()
+      setTimeout(() => {
+        this.tips = false
+      }, 5000)
     },
     async onPullDownRefresh () {
       this.getInfo()
       this.getLogo()
+      this.getSalesmanId()
       this.getMerber()
       this.getSun()
       this.getOpA()
@@ -562,6 +572,7 @@
     },
     onShow () {
       // wx.hideTabBar()
+      this.getSalesmanId()
       this.getInfo()
       this.getLogo()
       this.getSun()
@@ -775,6 +786,22 @@
         this.videoFlag = true
         // const videoContext = wx.createVideoContext('myVideo')
         // videoContext.play()
+      },
+      getSalesmanId () {
+        const userId = wx.getStorageSync('userId') // 获取本地userId
+        this.$fly.request({
+          method: 'get',
+          url: '/platformSalesman/selectSelfInfo',
+          body: {
+            'userId': userId
+          }
+        }).then(res => {
+          const salesmanId = res.data.id
+          wx.setStorageSync('salesmanId', salesmanId)
+          console.log('salesmanId', salesmanId)
+        }).catch(err => {
+          console.log(err)
+        })
       },
       // 获取操作动态
       getOpA () {
