@@ -321,8 +321,6 @@
               this.title = '开通'
               this.classA = 'open'
             }
-            // console.log('upType', this.upType)
-            // console.log('tabA', this.tabA)
           } else {
             this.tabA = ''
           }
@@ -345,15 +343,9 @@
               this.upgrade = 1
             }
           }
-          // console.log('upType', this.upType)
-          // console.log('tabA', this.tabA)
-          // console.log('levelId', this.levelId)
         } else if (this.isBuy === 3) {
           this.tabA = id
           this.upType = upType
-          // console.log('upType', this.upType)
-          // console.log('tabA', this.tabA)
-          // console.log('levelId', this.levelId)
           if (this.levelId > id) {
             this.title = '已开通更高级别'
             this.classA = 'openA'
@@ -367,15 +359,14 @@
             this.classA = 'open'
             this.num = 2
           }
-          // console.log('upType', this.upType)
-          // console.log('tabA', this.tabA)
-          // console.log('levelId', this.levelId)
         }
         // this.tabA = id
       },
       // 返回上一页
       back () {
-        wx.navigateBack(-1)
+        wx.switchTab({
+          url: '/pages/personal/main'
+        })
       },
       // 开通推客
       open () {

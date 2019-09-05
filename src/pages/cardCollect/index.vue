@@ -29,7 +29,8 @@
       <!--</div>-->
       <div class="cardHold">
         <!--顶部-->
-        <scroll-view class="scroll" scroll-y  :scroll-into-view="toView" :style="'height:' + windowHeight + 'px'"  :scroll-top="scrollTop"  >
+        <!--:style="'height:' + windowHeight + 'px'"-->
+        <scroll-view class="scroll" scroll-y  :scroll-into-view="toView" :scroll-top="scrollTop"  >
           <div class="cardHold-top">
             <div class="cardHold-top-input">
             <p>
@@ -85,7 +86,7 @@
                               动态:<span v-if="item.dynamic"> {{item.dynamic.title}}</span><span v-else> 无</span>
                             </p>
                             <p class="product">
-                              产品: <span class="number">无</span>
+                              产品: <span v-if="items.goods"> {{items.goods.name}} <span class="number"> {{items.goods.price}}元</span></span><span v-else> 无</span>
                             </p>
                           </div>
 
@@ -216,6 +217,9 @@
     },
     onShow () {
       this.searchName = ''
+    },
+    async onPullDownRefresh () {
+      this.searchName = ''
       this.getLogo()
       this.getMy()
       // wx.hideTabBar()
@@ -226,6 +230,14 @@
       this.getCard()
     },
     onLoad (options) {
+      this.getLogo()
+      this.getMy()
+      // wx.hideTabBar()
+      this.showpop = false
+      this.getInfo()
+      this.getSun()
+      this.getSalesmanId()
+      this.getCard()
       if (options.goodsId) {
         this.goToFen('../OthersCard/main?id=' + options.id + '&fromWay=1&userId=' + options.userId + '&goodsId=' + options.goodsId)
       } else {
@@ -233,6 +245,7 @@
           this.goToFen('../OthersCard/main?id=' + options.id + '&fromWay=1&userId=' + options.userId)
         }
       }
+      this.getInfo()
       var that = this
       wx.getSystemInfo({
         success: function (res) {

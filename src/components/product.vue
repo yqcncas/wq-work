@@ -107,13 +107,13 @@
             </p>
           </div>
           <div class="look-Num" @click="routeTo(item.id)">
-            <p class="browseCount"><i class="iconfont iconyanjing"></i><span class="num">浏览{{ item.browseCount}}次</span></p>
-            <p class="pushCount"><i class="iconfont iconfeiji1"></i><span class="num">分享{{item.forwardCount}} 次</span></p>
+            <p class="browseCount"><i class="iconfont iconyanjing"></i><span v-if="item.browseCount < 99" class="num">浏览{{ item.browseCount}}次</span><span v-else class="num">浏览99+次</span></p>
+            <p class="pushCount"><i class="iconfont iconfeiji1"></i><span v-if="item.forwardCount < 99" class="num">分享{{item.forwardCount}} 次</span><span v-else class="num">分享99+次</span></p>
             <p class="renZ"><i class="iconfont iconrenzheng"></i><span class="num">已认证</span></p>
           </div>
           <div class="Forward">
             <button open-type="share" :data-item="item" class="share-btn" @click="openInfo">
-              <i class="iconfont iconfenxiang3"></i>
+              <i class="iconfont iconfenxiang3" @click="shareGoods"></i>
             </button>
           </div>
           <div class="purchase" @click="routeTo(item.id)">
@@ -236,7 +236,8 @@
         goodsType: 0,
         url: '',
         sortingType: '',
-        cardStatus: false
+        cardStatus: false,
+        card: false
       }
     },
 
@@ -256,6 +257,7 @@
       this.getInfo()
     },
     onShow () {
+      this.getInfo()
       // this.getProduct({ type: 0 })
     },
     onPageScroll: function (ev) {
@@ -388,6 +390,9 @@
           const data = wx.getStorageSync('Card')
           if (res.data !== null) {
             this.postForm = res.data
+            this.card = true
+          } else {
+            this.card = false
           }
           if (data !== true) {
             this.url = '../businesscard/main'
@@ -401,13 +406,24 @@
         })
       },
       goProduct () {
-        wx.navigateTo({
-          url: '/pages/prod/product/main'
-        })
+        if (this.cardStatus === true) {
+          wx.navigateTo({
+            url: '/pages/prod/product/main'
+          })
+        } else {
+          wx.showToast({
+            title: '请先注册名片',
+            duration: 2000,
+            icon: 'none'
+          })
+        }
       },
       openInfo () {
         // this.getProduct({ type: 0 })
         // console.log('info', this.info)
+        this.productList.map(async item => {
+          item.forwardCount = item.forwardCount + 1
+        })
       },
       getType () {
         const businessId = wx.getStorageSync('businessId') // 获取本地userId
@@ -457,9 +473,17 @@
         })
       },
       getInto (e) {
-        wx.navigateTo({
-          url: `../message/main`
-        })
+        if (this.card === true) {
+          wx.navigateTo({
+            url: `../message/main`
+          })
+        } else {
+          wx.showToast({
+            title: '请先注册名片',
+            duration: 2000,
+            icon: 'none'
+          })
+        }
       },
       cancel (val) {
         this.$nextTick(() => {
@@ -469,12 +493,8 @@
         })
       },
       //   分享
-      // shareGoods () {
-      //   wx.updateShareMenu({
-      //     withShareTicket: true,
-      //     success () { }
-      //   })
-      // },
+      shareGoods () {
+      },
       confirm (e) {
         this.searchContent = e.mp.detail.value
         this.isFocus = false
@@ -483,6 +503,9 @@
       routeTo (id) {
         // console.log('aaa')
         this.insertOperaA('查看了产品', 3, id)
+        this.productList.map(async item => {
+          item.browseCount = item.browseCount + 1
+        })
         wx.navigateTo({
           url: '../productA/detail/main?id=' + id
         })
@@ -546,9 +569,9 @@
         wx.pageScrollTo({
           scrollTop: 290
         })
-        this.categoryId = 0
+        this.categoryId = ''
         this.sortingType = obj.sortingType
-        this.getProduct({type: 0})
+        this.getProduct(0)
       }
     }
   }
@@ -1012,7 +1035,7 @@
       font-weight: 600;
       width: 400rpx;
       height: 70rpx;
-      margin: 20rpx 15rpx 10rpx;
+      margin: 20rpx 15rpx 0rpx;
       padding-left: 15rpx;
       display: inline-block;
       display: -webkit-box;
@@ -1021,29 +1044,34 @@
       overflow: hidden;
     }
     .look-Num{
+      position: absolute;
+      top: 155rpx;
+      left: 170rpx;
       font-size: 22rpx;
-      margin: 4rpx 30rpx 0rpx 28rpx;
+      padding: 4rpx 30rpx 0rpx 28rpx;
       color: #9d9d9d;
-      width: 100%;
-      display: block;
       text-align: left;
       .browseCount{
         display: inline-block;
-        margin-right: 20rpx;
-        margin-left: 15rpx;
+        margin-right: 10rpx;
+        margin-left: 10rpx;
         .iconyanjing{
           display: inline-block;
           color: #cccccc;
-          font-size: 30rpx;
+          font-size: 26rpx;
+          vertical-align: top;
           margin-right: 10rpx;
         }
       }
       .pushCount{
         display: inline-block;
+        margin-right: 10rpx;
+        margin-left: 10rpx;
         .iconfeiji1{
           display: inline-block;
           color: #CCCCCC;
-          font-size: 28rpx;
+          font-size: 26rpx;
+          vertical-align: top;
           margin-right: 10rpx;
         }
       }
@@ -1051,17 +1079,18 @@
         display: inline-block;
         .iconrenzheng{
           display: inline-block;
+          vertical-align: top;
           color: #CCCCCC;
-          font-size: 28rpx;
+          font-size: 26rpx;
           margin-right: 10rpx;
         }
       }
     }
     .price-brow {
-      width: 100%;
       font-size: 22rpx;
       display: block;
       height: 50rpx;
+      width: 400rpx;
       margin: 0rpx 16rpx;
       color: #9d9d9d;
       text-align: left;
@@ -1136,7 +1165,7 @@
       color: #4A4A4A;
       position: absolute;
       right: 20rpx;
-      bottom: 22rpx;
+      bottom: 12rpx;
       border-radius: 10rpx;
       .iconiconjia{
         color:#FF8331;

@@ -11,20 +11,6 @@
         <span class="member">{{Member}}</span>
       </div>
       <div class="test">
-        <!--<div class="testNav">-->
-          <!--<div-->
-            <!--:class="{'selected':tab === 1,'testTitle':true}"-->
-            <!--@click="changTab(1)"-->
-          <!--&gt;白银会员</div>-->
-          <!--<div-->
-            <!--:class="{'selected':tab === 2,'testTitle':true}"-->
-            <!--@click="changTab(2)"-->
-          <!--&gt;白金会员</div>-->
-          <!--<div-->
-            <!--:class="{'selected':tab === 3,'testTitle':true}"-->
-            <!--@click="changTab(3)"-->
-          <!--&gt;钻石会员</div>-->
-        <!--</div>-->
         <div class="cont">
           <div class="cont-main">
               <div class="silver">
@@ -40,32 +26,6 @@
               <button :class="classA" @click="Opening(tabA,num)">{{title}}</button>
             </div>
           </div>
-          <!--<div  v-else-if="tab===2" class="cont-main">-->
-            <!--<div class="silver">-->
-                  <!--<span v-for="(item,index) in gold" :key="index" :class="{'selected':tabB === item.id,'testTitle':true}" @click="changTabMeberB(item.id)">-->
-                    <!--<p class="date">{{ item.date }}</p>-->
-                    <!--<p class="money">￥{{ item.money }}</p>-->
-                    <!--<p class="title">{{ item.title }}</p>-->
-                    <!--<p class="info">{{ item.info }}</p>-->
-                  <!--</span>-->
-            <!--</div>-->
-            <!--<div class="footer">-->
-              <!--<button class="bt" @click="Opening">立即开通</button>-->
-            <!--</div>-->
-          <!--</div>-->
-          <!--<div  v-else-if="tab===3" class="cont-main">-->
-            <!--<div class="silver">-->
-                  <!--<span v-for="(item,index) in Diamonds" :key="index" :class="{'selected':tabC === item.id,'testTitle':true}" @click="changTabMeberC(item.id)">-->
-                    <!--<p class="date">{{ item.date }}</p>-->
-                    <!--<p class="money">￥{{ item.money }}</p>-->
-                    <!--<p class="title">{{ item.title }}</p>-->
-                    <!--<p class="info">{{ item.info }}</p>-->
-                  <!--</span>-->
-            <!--</div>-->
-            <!--<div class="footer">-->
-              <!--<button class="bt" @click="Opening">立即开通</button>-->
-            <!--</div>-->
-          <!--</div>-->
         </div>
         <div class="MeberTitle">
           <p class="top">会员特权</p>
@@ -87,7 +47,7 @@
                 <span v-else class="imgUrl"><img :src="item.meber"></span>
                 <span><a>{{item.dateNum}}</a></span>
                 <span><a>{{item.style}}</a></span>
-                <span><a>{{item.person}}人</a></span>
+                <span><a>{{item.person}}</a></span>
                 <span><a>{{item.auto}}</a></span>
                 <span><a>{{item.group}}</a></span>
                 <span><a>{{item.number}}</a></span>
@@ -114,7 +74,7 @@ export default {
         meber: '非会员',
         dateNum: '10个',
         style: '无折扣',
-        person: 10,
+        person: '10人',
         auto: '*',
         group: 1,
         number: 1,
@@ -124,7 +84,7 @@ export default {
         meber: '../../../static/images/v1.png',
         dateNum: '50个',
         style: '8.00折',
-        person: 100,
+        person: '100人',
         auto: '8.00折',
         group: 3,
         number: 1,
@@ -135,7 +95,7 @@ export default {
         meber: '../../../static/images/v2.png',
         dateNum: '200个',
         style: '6.00折',
-        person: 500,
+        person: '500人',
         auto: '6.00折',
         group: 50,
         number: 1,
@@ -144,7 +104,7 @@ export default {
       },
       {
         meber: '../../../static/images/v3.png',
-        dateNum: '10个',
+        dateNum: '无限制',
         style: '5.00折',
         person: '无限制',
         auto: '5.00折',

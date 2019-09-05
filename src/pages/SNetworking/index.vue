@@ -28,44 +28,55 @@
         <div class="new-list shadow" v-if="newsList.length > 0">
           <div class="news-item-wrap" v-for="(item,index) in newsList" :key="index">
             <div class="news-header flexRow">
-              <div class="avatar-wrp">
+              <div class="avatar-wrp" @click="goToCard(item.salesmanId)">
                 <img class="img" :src="item.salesmanImgUrl" />
               </div>
               <div class="author-info">
-                <div v-if="item.salesmanId"  class="author-name">
+                <div v-if="item.salesmanId"  class="author-name" @click="goToCard(item.salesmanId)">
                   {{item.name?item.name:'未填'}}
                 </div>
-                <div v-else class="author-name">
+                <div v-else class="author-name" @click="goToCard(item.salesmanId)">
                   {{item.author?item.author:'未填'}}
                 </div>
-                <div class="author-date">
+                <div class="author-date" @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
                   {{item.publishTime}}
                 </div>
               </div>
               <div class="right-side">
                 <button @click.stop open-type="share" :data-item="item" class="forward">转发</button>
-                <i class="iconfont iconliaotian1" @click="routerTo(`/pages/msgcenter/main?id=${item.id}`)"></i>
+                <i v-if="item.salesmanId" class="iconfont iconliaotian1" @click="routerTo(`/pages/msgcenter/main?id=${item.id}`)"></i>
               </div>
             </div>
-            <div class="news-item" @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
-              <p class="item-title" v-if="item.content!==''">
+            <div class="news-item">
+              <p class="item-title" v-if="item.content!==''" @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
                 <span v-if="item.salesmanId" class="title">{{item.content}}</span>
+                <span v-else class="title">{{item.title}}</span>
               </p>
               <div class="news-cover" v-if="item.imgUrl">
-                <image :src="item.imgUrl[0]" class="img" mode="widthFix"></image>
-                <p class="news-desc" v-if="item.abstractText">{{item.abstractText}}</p>
+                <div class="news" v-if="item.salesmanId">
+                  <i v-for="(items,indexs) in item.imgUrl"  :key="indexs">
+                    <image v-if="item.imgUrl.length >1" :src="items" class="img" @click="previewImg(item.imgUrl,indexs)"  mode=""></image>
+                    <image v-else :src="item.imgUrl" class="imgA" @click="previewImg(item.imgUrl,indexs)"  mode="widthFix"></image>
+                  </i>
+                </div>
+                <div class="JiuImg" v-else @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
+                  <image :src="item.imgUrl[0]" class="img" mode="widthFix"></image>
+                  <p class="news-desc" v-if="item.abstractText">{{item.abstractText}}</p>
+                </div>
               </div>
-              <div class="news-cover" v-if="item.videoUrl">
-                <image :src="item.videoUrl + '?x-oss-process=video/snapshot,t_5000,f_jpg,w_750,m_fast'" class="img" mode="widthFix"></image>
+              <div class="news-cover" v-if="item.videoUrl" @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
+                <image :src="item.videoUrl + '?x-oss-process=video/snapshot,t_5000,f_jpg,w_750,m_fast'" class="imgB" mode="scaleToFill"></image>
               </div>
               <div class="news-view flexRow">
                 <div class="flexRow watch">
                   <p>
-                    <i class="iconfont iconchakan1"></i>
+                    <i v-if="item.isChan == false" class="iconfont iconliulan1"></i>
+                    <i v-else class="iconfont iconyanjing1"></i>
                     <span>{{item.browseCount}}</span>
                   </p>
                   <p>
-                    <i class="iconfont iconaixin"></i>
+                    <i v-if="item.isPraise!==1" class="iconfont iconkongaixinfuzhi"></i>
+                    <i v-else class="iconfont iconxin"></i>
                     <span>{{item.praiseCount}}</span>
                   </p>
                 </div>
@@ -92,7 +103,7 @@
                 <!--</div>-->
               </div>
             </div>
-            <!-- 点赞评论 -->
+            <!--点赞评论 -->
             <div v-if="item.newsCommentList.length > 0 || item.nameMapList.length > 0" class="comment-map">
               <div class="praise-wrap">
                 <span v-if="item.nameMapList.length>0"><i class="iconfont iconaixin"></i>{{item.praiseName}}</span>
@@ -111,7 +122,7 @@
         </div>
         <div class="input-bottom" v-if="showTextarea">
         <textarea :auto-focus="true" @confirm="addLeaveMsg" v-model="msgContent" :class="areaType" placeholder="评论"
-                  :auto-height="true" :fixed="true" cursor-spacing="10"></textarea>
+                  :auto-height="true" :fixed="true" maxlength="120" cursor-spacing="10" :show-confirm-bar="true" @blur="deleteMsg"></textarea>
         </div>
       </div>
     </div>
@@ -153,11 +164,13 @@
         typeId: 0,
         latitude: '',
         longitude: '',
-        keywords: ''
+        keywords: '',
+        postForm: false
       }
     },
     onLoad (options) {
       this.pageNum = 1
+      this.getInfo()
       console.log('options', options)
       if (options.id && options.diffA === '1') {
         this.typeId = options.id
@@ -175,13 +188,80 @@
     onShow () {
       this.tradeStatus = wx.getStorageSync('tradeStatus')
     },
+    async onReachBottom () {
+      if (this.pageNum < this.lastPage) {
+        this.pageNum = this.nextPage
+        this.getNews({type: 1})
+      } else {
+        wx.showToast({
+          title: '没有更多了',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    },
+    async onPullDownRefresh () {
+      this.pageNum = 1
+      this.getNews({ type: 0 })
+      // 停止下拉刷新
+      wx.stopPullDownRefresh()
+    },
     methods: {
+      // 预览图片
+      previewImg (e, A) {
+        var imgs = e
+        var temp = []
+        imgs.map(res => {
+          temp.push(res)
+        })
+        wx.previewImage({
+          current: temp[A],
+          urls: temp
+        })
+      },
+      // 页面加载信息
+      getInfo () {
+        const userId = wx.getStorageSync('userId') // 获取本地userId
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/platformSalesman/selectSelfInfo',
+          body: {
+            'userId': userId
+          }
+        }).then(res => {
+          if (res.data !== null) {
+            this.postForm = true
+          } else {
+            this.postForm = false
+          }
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      },
+      deleteMsg () {
+        this.msgContent = ''
+        this.showTextarea = false
+      },
+      goToCard (id) {
+        wx.navigateTo({
+          url: `../OthersCard/main?id=` + id
+        })
+      },
       routerTo (url) {
-        wx.navigateTo({ url })
+        if (this.postForm === true) {
+          wx.navigateTo({ url })
+        } else {
+          wx.showToast({
+            title: '请先注册名片',
+            duration: 2000,
+            icon: 'none'
+          })
+        }
       },
       routerToA (url) {
         this.newsList.map(async item => {
           item.browseCount = item.browseCount + 1
+          item.isChan = true
         })
         wx.navigateTo({ url })
       },
@@ -192,8 +272,8 @@
         let userId = wx.getStorageSync('userId')
         await personApi.OperationInsert({ businessId, newsId, info, recordType, salesmanId, userId })
       },
-      //   点赞
       clickPraise (isPraise, status, id, salesmanId) {
+        this.name = wx.getStorageSync('nickName')
         this.closeBtnShow()
         console.log('this.name', this.name)
         this.newsList.map(async item => {
@@ -201,6 +281,7 @@
             if (isPraise > 0) {
               await apiNews.deleteNews({ status, id: id, salesmanId })
               item.isPraise = 0
+              item.praiseCount = item.praiseCount - 1
               item.nameMapList.map((m, n) => {
                 if (m.name === this.name) {
                   item.nameMapList.splice(n, 1)
@@ -209,6 +290,7 @@
             } else {
               await apiNews.addNews({ status, id: id, salesmanId })
               this.insertOpera('点赞了新闻', 12, id)
+              item.praiseCount = item.praiseCount + 1
               item.isPraise = 1
               item.nameMapList.push({ name: this.name })
             }
@@ -302,6 +384,7 @@
         if (code === 200) {
           data.list.map(item => {
             item.publishTime = this.moment(item.publishTime).format('MM月DD日')
+            item.isChan = false
             item.praiseName = ''
             // item.imgUrl += '?x-oss-process=style/w750'
             item.nameMapList.map(child => {
@@ -319,7 +402,7 @@
               this.newsList.push(e)
             })
           }
-          console.log('newsList', this.newsList)
+          console.log('newsListA', data)
           this.lastPage = data.lastPage
           this.pageNum = data.pageNum
           this.nextPage = data.nextPage
@@ -357,7 +440,7 @@
               this.newsList.push(e)
             })
           }
-          console.log('newsList', this.newsList)
+          console.log('newsList', data)
           this.lastPage = data.lastPage
           this.pageNum = data.pageNum
           this.nextPage = data.nextPage
@@ -434,6 +517,7 @@ width: 100%;
       //position: relative;
       //left: 0;
       //top: 0;
+      /*margin-top: ~'10rpx';*/
       margin-bottom: ~'2rpx';
       overflow: auto;
       -webkit-overflow-scrolling: touch;
@@ -455,8 +539,8 @@ width: 100%;
           align-items: center;
           justify-content: center;
           .iconliaotian1{
-            margin-top: ~'5rpx';
-            font-size: ~'40rpx';
+            margin-top: ~'15rpx';
+            font-size: ~'35rpx';
             text-align: right;
             color: #566A95;
           }
@@ -484,10 +568,12 @@ width: 100%;
             .author-name {
               font-size: ~'28rpx';
               font-weight: bold;
+              margin-top: ~'-5rpx';
             }
 
             .author-date {
               font-size: ~'24rpx';
+              margin-top: ~'15rpx';
               color: rgba(157, 157, 157, 1);
             }
           }
@@ -516,7 +602,7 @@ width: 100%;
             margin: 0 auto;
             padding: ~'26rpx' 0 ~'21rpx' 0;
             color: #4A4A4A;
-            font-size: ~'28rpx';
+            font-size: ~'32rpx';
 
             .title {
               width: ~'658rpx';
@@ -529,32 +615,63 @@ width: 100%;
 
           //新闻封面
           .news-cover {
-            height: ~'376rpx';
+            //height: ~'376rpx';
             width: 100%;
             overflow: hidden;
             position: relative;
-
-            .img {
+            .news{
+              i{
+                float: left;
+                margin-right: ~'13rpx';
+                margin-top: ~'10rpx';
+                margin-bottom: ~'10rpx';
+                width: ~'210rpx';
+                //border: ~'1rpx' solid #cccccc;
+                .img{
+                  display: inline-block;
+                  width: ~'210rpx';
+                  height: ~'210rpx';
+                }
+                .imgA{
+                  width: 100%;
+                }
+              }
+              i:nth-child(3){
+                margin-right: 0;
+              }
+               i:nth-child(6){
+                margin-right: 0;
+              }
+               i:nth-child(9){
+                margin-right: 0;
+              }
+            }
+            .imgB{
               width: 100%;
             }
+            .JiuImg{
+              .img {
+                width: 100%;
+              }
 
-            .news-desc {
-              width: 100%;
-              max-height: ~'100rpx';
-              position: absolute;
-              left: 0;
-              bottom: 0;
-              background: rgba(0, 0, 0, 0.47);
-              padding: ~'21rpx' ~'26rpx';
-              font-size: ~'26rpx';
-              font-weight: 400;
-              box-sizing: border-box;
-              color: #ffffff;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              display: -webkit-box;
-              -webkit-line-clamp: 2; // 控制多行的行数
-              -webkit-box-orient: vertical;
+              .news-desc {
+                width: 100%;
+                max-height: ~'100rpx';
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.47);
+                padding: ~'10rpx' ~'26rpx' 0;
+                font-size: ~'26rpx';
+                font-weight: 400;
+                box-sizing: border-box;
+                color: #ffffff;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 2; // 控制多行的行数
+                -webkit-box-orient: vertical;
+              }
             }
           }
 
@@ -589,18 +706,29 @@ width: 100%;
               margin-right: ~'4rpx';
             }
 
-            .iconaixin {
+            .iconkongaixinfuzhi {
+              display: inline-block;
+              font-size: ~'22rpx';
+            }
+            .iconliulan1{
+              display: inline-block;
+              font-size: ~'22rpx';
+            }
+            .iconaixin{
               display: inline-block;
             }
-            .iconchakan1{
+            .iconyanjing1{
               display: inline-block;
-              font-size: ~'36rpx';
+              font-size: ~'22rpx';
+            }
+            .iconxin{
+              display: inline-block;
+              font-size: ~'22rpx';
             }
             .iconpinglun1{
               display: inline-block;
             }
             .icon-chakan {
-              font-size: ~'36rpx';
             }
 
             // 点击展开点在评论

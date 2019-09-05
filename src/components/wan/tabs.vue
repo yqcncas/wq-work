@@ -17,12 +17,12 @@
     <div class="CatalogA" @click="toCA">
       <i class="iconfont iconsousuo"></i>
     </div>
-    <div class="Catalog" @click="routerTo('/pages/pageA/cart/main')" >
-      <i class="iconfont icongouwuche">
-        <span class="num" v-if="allnumber>0 && allnumber<99">{{allnumber}}</span>
-        <span class="num" v-else-if="allnumber>=99">99</span>
-      </i>
-    </div>
+    <!--<div class="Catalog" @click="routerTo('/pages/pageA/cart/main')" >-->
+      <!--<i class="iconfont icongouwuche">-->
+        <!--<span class="num" v-if="allnumber>0 && allnumber<99">{{allnumber}}</span>-->
+        <!--<span class="num" v-else-if="allnumber>=99">99</span>-->
+      <!--</i>-->
+    <!--</div>-->
     <div class="tabs-content">
       <slot />
     </div>
@@ -189,7 +189,7 @@ export default {
 }
 .CatalogA{
   position: absolute;
-  right:70rpx;
+  right:0rpx;
   top: 20rpx;
   width: 70rpx;
   height: 48rpx ;

@@ -3,7 +3,11 @@
     <ul class="tab-box">
       <li v-for="(item,index) in category" :key="index" :class="{'active':typeId==item.typeId}" @click='tabChange(item.typeId)'>{{item.typeName}}</li>
     </ul>
-    <div class="order-list">
+    <!--<ul class="tab-boxA" v-if="typeId == 2 || typeId == 3">-->
+      <!--<li v-for="(item,index) in categoryA" :key="index" :class="{'active':typeIdA==item.typeId}" @click='tabChangeA(item.typeId)'>{{item.typeName}}</li>-->
+    <!--</ul>-->
+    <!--<div :class="{'order-listA':typeId== 2 || typeId == 3, 'order-list': typeId !== 2 && typeId !== 3}">-->
+      <div class="order-list">
       <div class="order-item" v-for="(item, index) of orderList" :key="item.id" :data-index="index">
         <div @click="routeTo(`../orderdetail/main?id=${item.id}`)">
           <p class="top-text">
@@ -77,7 +81,16 @@ export default {
           typeName: '待评价',
           typeId: 6
         }],
+      categoryA: [
+        {
+          typeName: '我购买的',
+          typeId: 0
+        }, {
+          typeName: '我卖出的',
+          typeId: 1
+        }],
       typeId: 0,
+      typeIdA: 0,
       orderList: [],
       typeName: '',
       pageNum: 1,
@@ -96,6 +109,7 @@ export default {
       this.typeId = 0
       this.getOrderList()
     }
+    this.typeIdA = 0
   },
   methods: {
     routeTo (url) {
@@ -168,6 +182,12 @@ export default {
     tabChange (id) {
       this.pageNum = 1
       this.typeId = id
+      console.log('type', this.typeId)
+      this.getOrderList()
+    },
+    tabChangeA (id) {
+      this.pageNum = 1
+      this.typeIdA = id
       this.getOrderList()
     }
   },
@@ -230,6 +250,24 @@ export default {
       color: #FF903F;
     }
   }
+  .tab-boxA{
+    margin-top: 90rpx;
+    width: 100%;
+    color: #9b9b9b;
+    font-size: 30rpx;
+    height: 90rpx;
+    line-height: 90rpx;
+    z-index: 1000;
+    text-align: center;
+    li {
+      display: inline-block;
+      width: 25%;
+      text-align: center;
+    }
+    .active {
+      color: #FF903F;
+    }
+  }
 }
 /* tab */
 .order-list {
@@ -237,6 +275,31 @@ export default {
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   padding: 112rpx 25rpx;
+  box-sizing: border-box;
+  .order-item {
+    width: 700rpx;
+    // min-height: 440rpx;
+    background-color: #fff;
+    border-radius: 8rpx;
+    margin-top: 20rpx;
+    box-sizing: border-box;
+    padding: 26rpx 24rpx 23rpx;
+    font-size: 28rpx;
+    color: #9b9b9b;
+    .top-text {
+      @extend %flexRow;
+      justify-content: space-between;
+    }
+    .order-status {
+      color: #FF903F;
+    }
+  }
+}
+.order-listA {
+  width: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0rpx 25rpx 112rpx;
   box-sizing: border-box;
   .order-item {
     width: 700rpx;

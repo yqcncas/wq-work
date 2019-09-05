@@ -39,7 +39,11 @@
           </div>
           <div class="rightA">
             <p class="look">{{ item.browseCount }}次浏览</p>
-            <p class="edit" @click="goEdit(item.id,item.videoUrl,item.imgUrl)">编辑</p>
+            <p class="bottom">
+              <span class="edit" @click="goEdit(item.id,item.videoUrl,item.imgUrl)">编辑</span>
+              <span class="line"></span>
+              <span class="delete" @click="goDelete(item.id)">删除</span>
+            </p>
           </div>
         </div>
       </div>
@@ -61,6 +65,28 @@ export default {
     this.getDynamic()
   },
   methods: {
+    // 删除动态
+    goDelete (id) {
+      this.$fly.request({
+        method: 'post',
+        url: '/news/delete',
+        body: {
+          'id': id
+        }
+      }).then(res => {
+        console.log(res)
+        if (res.code === 200) {
+          this.getDynamic()
+          wx.showToast({
+            title: '删除成功',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
     // 选择发布何种类型
     preview (index) {
       wx.showActionSheet({

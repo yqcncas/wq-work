@@ -132,29 +132,31 @@
                   <P class="cardHold-blok-J">邀请微信好友加入</P>
                 </div>
               </div>
-              <div  v-if ="name === '' && job == ''"  @click="ArouterTo(`../businesscard/main`)" class="cardHold-blok" >
-                <div class="cardHold-Img2">
-                  <img src="../../../static/images/card.png">
+              <div v-if=" tradeStatus !== 0">
+                <div  v-if ="name === '' && job == ''"  @click="ArouterTo(`../businesscard/main`)" class="cardHold-blok" >
+                  <div class="cardHold-Img2">
+                    <img src="../../../static/images/card.png">
+                  </div>
+                  <div class="cardHold-blok-right cardHold-blok-right-bt" >
+                    <p class="cardHold-blok-name">名片夹</p>
+                    <P class="cardHold-blok-J">通讯录 查看我关注的人</P>
+                  </div>
                 </div>
-                <div class="cardHold-blok-right cardHold-blok-right-bt" >
-                  <p class="cardHold-blok-name">名片夹</p>
-                  <P class="cardHold-blok-J">通讯录 查看我关注的人</P>
-                </div>
-              </div>
-              <div v-else class="cardHold-blok" @click="goCollect">
-                <div class="cardHold-Img2">
-                  <img src="../../../static/images/card.png">
-                </div>
-                <div class="cardHold-blok-right cardHold-blok-right-bt">
-                  <p class="cardHold-blok-name">名片夹</p>
-                  <P class="cardHold-blok-J">通讯录 查看我关注的人</P>
+                <div v-else class="cardHold-blok" @click="goCollect">
+                  <div class="cardHold-Img2">
+                    <img src="../../../static/images/card.png">
+                  </div>
+                  <div class="cardHold-blok-right cardHold-blok-right-bt">
+                    <p class="cardHold-blok-name">名片夹</p>
+                    <P class="cardHold-blok-J">通讯录 查看我关注的人</P>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
         <!--人脉信息-->
-        <div class="connections">
+        <div class="connections" v-if=" tradeStatus !== 0">
             <div class="con-top">
               <div class="testNav">
                 <div
@@ -209,10 +211,10 @@
                         <span v-if="items.salesCompanyName">{{items.salesCompanyName}}</span><span v-else>无公司</span>
                       </p>
                       <p class="DoT">
-                        动态:<span v-if="items.dynamic">{{items.dynamic.title}}</span><span v-else>无</span>
+                        动态: <span v-if="items.dynamic"> {{items.dynamic.content}}</span><span v-else>无</span>
                       </p>
                       <p class="product">
-                        产品: <span class="number">无</span>
+                        产品: <span v-if="items.goods"> {{items.goods.name}} <span class="number"> {{items.goods.price}}元</span></span><span v-else> 无</span>
                       </p>
                     </div>
 
@@ -235,7 +237,11 @@
               </div>
             </div>
         </div>
-
+        <div v-else>
+          <div class="Main-Img">
+            <img src="https://oss.tzyizan.com/salesInfo/201908290855021567040102395.jpg"/>
+          </div>
+        </div>
         <div class="message">
           <div class="bt" @click="goToMessage()">
             <i class="iconfont iconwodexiaoxi"></i>
@@ -378,15 +384,31 @@
         lastPage: '',
         nextPage: '',
         status: 0,
-        number: ''
+        number: '',
+        tradeStatus: ''
       }
     },
     onShow () {
       this.searchName = ''
       // wx.hideTabBar()
       this.showpop = false
+      this.getInfoA()
+    },
+    async onPullDownRefresh () {
+      this.tradeStatus = wx.getStorageSync('tradeStatus')
+      this.pageNum = 1
+      this.getInfomation()
+      // this.getInfo()
+      this.getSun()
+      this.getSalesmanId()
+      this.getCard()
+      this.getLogo()
+      this.getMy()
+      this.changTab(1)
     },
     onLoad (options) {
+      this.tradeStatus = wx.getStorageSync('tradeStatus')
+      // this.tradeStatus = 1
       this.pageNum = 1
       this.getInfomation()
       // this.getInfo()
@@ -446,6 +468,25 @@
       // console.log(this.toView)
     },
     methods: {
+      // 页面加载信息
+      getInfoA () {
+        const userId = wx.getStorageSync('userId') // 获取本地userId
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/platformSalesman/selectSelfInfo',
+          body: {
+            'userId': userId
+          }
+        }).then(res => {
+          if (res.data !== null) {
+            this.card = true
+          } else {
+            this.card = false
+          }
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      },
       // 如果申请过 获取认证信息
       getInfomation () {
         const userId = wx.getStorageSync('userId') // 获取本地userId
@@ -474,42 +515,66 @@
       },
       // 进入聊天信息页面
       goToMessage () {
-        wx.navigateTo({
-          url: '../message/main'
-        })
+        if (this.card === true) {
+          wx.navigateTo({
+            url: '../message/main'
+          })
+        } else {
+          wx.showToast({
+            title: '请先注册名片',
+            duration: 2000,
+            icon: 'none'
+          })
+        }
       },
       // 名片跳转聊天界面
       talk (id) {
-        wx.navigateTo({
-          url: '../msgcenter/main?id=' + id
-        })
+        if (this.card === true) {
+          wx.navigateTo({
+            url: '../msgcenter/main?id=' + id
+          })
+        } else {
+          wx.showToast({
+            title: '请先注册名片',
+            duration: 2000,
+            icon: 'none'
+          })
+        }
       },
       // 获取收藏
       getCollect (id, index) {
-        const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
-        const userId = wx.getStorageSync('userId') // 获取本地userId
-        this.$fly.request({
-          method: 'post', // post/get 请求方式
-          url: '/platformUserSalesman/insert',
-          body: {
-            'salesmanId': id,
-            'userId': userId,
-            'businessId': businessId
-          }
-        }).then(res => {
-          if (res.code === 200) {
-            const that = this
-            this.number = this.lastPage
-            that.postform[index].isCollect = 1
-            wx.showToast({
-              title: '收藏成功',
-              icon: 'none',
-              duration: 2000
-            })
-          }
-        }).catch(err => {
-          console.log(err.status, err.message)
-        })
+        if (this.card === true) {
+          const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
+          const userId = wx.getStorageSync('userId') // 获取本地userId
+          this.$fly.request({
+            method: 'post', // post/get 请求方式
+            url: '/platformUserSalesman/insert',
+            body: {
+              'salesmanId': id,
+              'userId': userId,
+              'businessId': businessId
+            }
+          }).then(res => {
+            if (res.code === 200) {
+              const that = this
+              this.number = this.lastPage
+              that.postform[index].isCollect = 1
+              wx.showToast({
+                title: '收藏成功',
+                icon: 'none',
+                duration: 2000
+              })
+            }
+          }).catch(err => {
+            console.log(err.status, err.message)
+          })
+        } else {
+          wx.showToast({
+            title: '请先注册名片',
+            duration: 2000,
+            icon: 'none'
+          })
+        }
       },
       // 获取人脉即使热门名片
       getCardInfo (id, pageNum) {
@@ -843,14 +908,14 @@
       },
       // 跳转群组
       goGroup () {
-        // wx.showToast({
-        //   title: '功能还在开发中哦',
-        //   duration: 2000,
-        //   icon: 'none'
-        // })
-        wx.navigateTo({
-          url: '/pages/GroupCard/main'
+        wx.showToast({
+          title: '功能还在开发中哦',
+          duration: 2000,
+          icon: 'none'
         })
+        // wx.navigateTo({
+        //   url: '/pages/GroupCard/main'
+        // })
       },
       // 跳转到名片夹
       goCollect () {
@@ -871,9 +936,17 @@
       },
       // 挑战
       routerTo (url) {
-        wx.navigateTo({
-          url
-        })
+        if (this.card === true) {
+          wx.navigateTo({
+            url
+          })
+        } else {
+          wx.showToast({
+            title: '请先注册名片',
+            duration: 2000,
+            icon: 'none'
+          })
+        }
       }
     }
   }

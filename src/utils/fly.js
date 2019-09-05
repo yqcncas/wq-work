@@ -22,8 +22,9 @@ function request (url, method, data, header = {}) {
         wx.hideLoading()
         reject(error)
       },
-      complete: function () {
+      complete: function (res) {
         wx.hideLoading()
+        reject(res)
       }
     })
   })

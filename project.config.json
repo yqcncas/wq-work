@@ -256,6 +256,19 @@
 					"pathName": "pages/pageA/release/main",
 					"query": "",
 					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "我的订单",
+					"pathName": "pages/pageA/orderlist/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "我的发布",
+					"pathName": "pages/pageA/release/main",
+					"scene": null
 				}
 			]
 		}

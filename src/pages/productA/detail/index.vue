@@ -1,6 +1,7 @@
 <template>
   <div class="pro-detail">
     <!-- 轮播图 -->
+    <div class="top">
     <swiper class="swiper" indicator-dots="true" autoplay="true" interval="5000" duration="500">
       <block v-for="(item,index) in goodsImgList" :key="index">
         <swiper-item class="swiper-item">
@@ -18,10 +19,45 @@
         <i class="iconfont icon31zhuanfa" @click="shareGoods"></i>
       </button>
     </div>
+    <div class="Member-main">
+      <div class="Member"  @click="goToMember" v-if="Member == '无会员'">
+        <span class="left">成 为 VIP 会 员 , 获 得 更 多 精 准 用 户</span>
+        <span class="right">立即开通</span>
+      </div>
+      <div class="Member"  @click="goToMember" v-else-if="Member == '白银会员'">
+        <span class="left">尊 贵 的 白 银 会 员 , 升 级 获 取 更 多 权 限</span>
+        <span class="right">立即升级</span>
+      </div>
+      <div class="Member"  @click="goToMember" v-else-if="Member == '黄金会员'">
+        <span class="left">尊 贵 的 黄 金 会 员 , 升 级 获 取 更 多 权 限</span>
+        <span class="right">立即升级</span>
+      </div>
+      <div class="Member"  @click="goToMember" v-else-if="Member == '钻石会员'">
+        <span class="left">尊 贵 的 钻 石 会 员 , 已 升 级 至 最 高 权 限</span>
+        <span class="right">最高权限</span>
+      </div>
+    </div>
+    </div>
+    <!--购买产品信息轮播-->
+    <!--<div class="product">-->
+      <!--<swiper class="swiper" :indicator-dots="indicator" display-multiple-items="3" autoplay="true" interval="3000" duration="500">-->
+        <!--<block v-for="(item,index) in product" :key="index">-->
+          <!--<swiper-item class="swiper-item">-->
+            <!--<span>{{item.name}}</span>-->
+          <!--</swiper-item>-->
+        <!--</block>-->
+      <!--</swiper>-->
+    <!--</div>-->
     <!-- 标题 -->
     <div class="pro-d-title">
       <p class="price" v-if="priceStatus!==0"><span class="small-p">￥</span>{{price}}</p>
       <p class="name">{{name}}</p>
+      <p class="liwu">
+        <i class="iconliwu iconfont"></i>
+        <span>
+          分享有礼
+        </span>
+      </p>
     </div>
     <!-- 选择型号 -->
     <div class="choose-model" @click="showType" v-if="goodmodel.length>0">
@@ -42,6 +78,25 @@
         </p>
       </div>
     </div>
+    <!--产品保证-->
+    <div class="ensure">
+      <span>
+        <i class="iconfont icontiexinshouhou"></i>
+        贴心售后
+      </span>
+      <span>
+      <i class="iconfont iconliucheng"></i>
+        流程把控
+      </span>
+      <span>
+        <i class="iconfont iconzhengpinbaozhang"></i>
+        正品保障
+      </span>
+      <span>
+        <i class="iconfont icontousujianyi"></i>
+        投诉建议
+      </span>
+    </div>
     <!-- 富文本 -->
     <div class="rich-content">
        <!--<wx-parse :content="info" :imageProp="{mode:'widthFix'}" /> -->
@@ -54,7 +109,7 @@
         <!-- 视频 -->
         <videoWan :data="item.data" v-if="item.name==='wVideo'"></videoWan>
         <!-- 最近购买 -->
-        <buyJust :total="total" :data="buyList" v-if="item.name==='buyHis'&&total>0" @checkBuyDetail="checkBuyDetail"></buyJust>
+        <!--<buyJust :total="total" :data="buyList" v-if="item.name==='buyHis'&&total>0" @checkBuyDetail="checkBuyDetail"></buyJust>-->
         <!-- tabbar导航 -->
         <navBtn @productId="getJumpWay" :data="item.data" v-if="item.name==='wNav'" :marginB="true"></navBtn>
       </div>
@@ -114,21 +169,21 @@
     <!-- 加入购物车 -->
     <div class="add-cart" v-if="buyStatus !== 0 || buyStatus == null">
       <div class="icon-box">
-        <div class="icon-btn" @click="routerTo('../../pageA/cart/main')">
-          <i class="iconfont iconshop-cart"><span class="tip-num" v-if="allnumber>0">{{allnumber}}</span></i>
-          <p>购物车</p>
-        </div>
-        <div class="icon-btn" @click="routerTo(url)">
+        <!--<div class="icon-btn" @click="routerTo('../../pageA/cart/main')">-->
+          <!--<i class="iconfont iconshop-cart"><span class="tip-num" v-if="allnumber>0">{{allnumber}}</span></i>-->
+          <!--<p>购物车</p>-->
+        <!--</div>-->
+        <div class="icon-btn" @click="routerToA('/pages/msgcenter/main?id=' + userIdA)">
           <i class="iconfont iconpinglun"><span class="tip-num" v-if="msgNum>0">{{msgNum}}</span></i>
           <p>客服</p>
         </div>
       </div>
-      <div class="add-btn common-btn" :class="{'disabled-bg':buyStatus===0}" @click="addCart">加入购物车</div>
+      <!--<div class="add-btn common-btn" :class="{'disabled-bg':buyStatus===0}" @click="addCart">加入购物车</div>-->
       <div class="buy-now common-btn" :class="{'disabled-bg':buyStatus===0}" @click="buy">立即购买</div>
     </div>
     <div v-else class="add-cart">
       <div class="icon-box">
-        <div class="icon-btn" @click="routerTo('/pages/OthersCard/main?id=' + salesmanIdA)">
+        <div class="icon-btn" @click="routerToA('/pages/OthersCard/main?id=' + salesmanIdA)">
           <!--<i class="iconfont iconshop-cart"><span class="tip-num" v-if="allnumber>0">{{allnumber}}</span></i>-->
           <i><img :src="salesmanHeadUrl"></i>
           <p>更多</p>
@@ -153,7 +208,19 @@ export default {
   data () {
     return {
       modelText: '请选择型号',
+      product: [{
+        name: 'aah kja '
+      }, {
+        name: 'ada a'
+      }, {
+        name: 'kajhkjahj'
+      }, {
+        name: 'duiauwjh'
+      }, {
+        name: 'kjahkjak'
+      }],
       orderAddressId: '',
+      indicator: false,
       goodsIdList: [],
       numList: [],
       goodsModelIdList: [],
@@ -215,7 +282,10 @@ export default {
       priceStatus: 0,
       buyStatus: null,
       browseCount: null,
-      avatarUrlList: []
+      avatarUrlList: [],
+      Member: '无会员',
+      silver: '',
+      postForm: false
     }
   },
   components: {
@@ -227,6 +297,41 @@ export default {
     addressApi
   },
   methods: {
+    // 跳转会员中心
+    goToMember () {
+      wx.navigateTo({
+        url: '/pages/pageA/Member/main'
+      })
+    },
+    // 查询会员等级信息
+    getMerber () {
+      const businessId = wx.getStorageSync('businessId')
+      this.$fly.request({
+        method: 'get',
+        url: 'vip/findList',
+        body: {
+          'businessId': businessId
+        }
+      }).then(res => {
+        const Member = wx.getStorageSync('vipId')
+        if (Member === 0 || Member === null) {
+          this.Member = '无会员'
+          wx.setStorageSync('vipId', 0)
+          console.log('Member', this.Member)
+        } else {
+          // this.Member = Member
+          this.silver = res.data
+          this.silver.map((item) => {
+            if (Member === item.id) {
+              this.Member = item.levelName
+            }
+          })
+          // console.log('啊啊啊啊', this.Member)
+        }
+      }).catch(err => {
+        console.log('err', err)
+      })
+    },
     getJumpWay (data) {
       if (data[1] === 1) {
         wx.navigateTo({
@@ -262,10 +367,37 @@ export default {
         url
       })
     },
-    routerToA (url) {
-      wx.navigateTo({
-        url
+    // 页面加载信息
+    getInfo () {
+      const userId = wx.getStorageSync('userId') // 获取本地userId
+      this.$fly.request({
+        method: 'get', // post/get 请求方式
+        url: '/platformSalesman/selectSelfInfo',
+        body: {
+          'userId': userId
+        }
+      }).then(res => {
+        if (res.data !== null) {
+          this.postForm = true
+        } else {
+          this.postForm = false
+        }
+      }).catch(err => {
+        console.log(err.status, err.message)
       })
+    },
+    routerToA (url) {
+      if (this.postForm === true) {
+        wx.navigateTo({
+          url
+        })
+      } else {
+        wx.showToast({
+          title: '请先注册名片',
+          duration: 2000,
+          icon: 'none'
+        })
+      }
     },
     // 获取未读消息
     async getUnReadCount () {
@@ -306,15 +438,23 @@ export default {
     },
     // 收藏按钮的逻辑，如果标志位false表明没有加入收藏夹
     collect (id, flag) {
-      if (flag === 0) {
-        // this.praiseCount = 1
-        const isCollect = 1
-        this.getCollect(this.goodsId, this.goodsModelId, isCollect)
+      if (this.postForm === true) {
+        if (flag === 0) {
+          // this.praiseCount = 1
+          const isCollect = 1
+          this.getCollect(this.goodsId, this.goodsModelId, isCollect)
+        } else {
+          // this.deleteComment({ commentType: 2, commentgoodsid: id })
+          // this.praiseCount = 0
+          const isCollect = 0
+          this.getCollect(this.goodsId, this.goodsModelId, isCollect)
+        }
       } else {
-        // this.deleteComment({ commentType: 2, commentgoodsid: id })
-        // this.praiseCount = 0
-        const isCollect = 0
-        this.getCollect(this.goodsId, this.goodsModelId, isCollect)
+        wx.showToast({
+          title: '请先注册名片',
+          duration: 2000,
+          icon: 'none'
+        })
       }
     },
     // 添加 取消 收藏
@@ -347,74 +487,90 @@ export default {
     },
     async buy () {
       if (this.buyStatus === 0) return
-      if (this.modelText !== '请选择型号' || this.goodmodel.length === 0) {
-        if (this.number === 0) {
-          wx.showToast({
-            title: '请选择商品数量', // 提示的内容,
-            duration: 2000, // 延迟时间,
-            icon: 'none',
-            mask: true // 显示透明蒙层，防止触摸穿透,
+      if (this.postForm === true) {
+        if (this.modelText !== '请选择型号' || this.goodmodel.length === 0) {
+          if (this.number === 0) {
+            wx.showToast({
+              title: '请选择商品数量', // 提示的内容,
+              duration: 2000, // 延迟时间,
+              icon: 'none',
+              mask: true // 显示透明蒙层，防止触摸穿透,
+            })
+            return false
+          }
+          wx.showLoading({
+            mask: true
           })
-          return false
-        }
-        wx.showLoading({
-          mask: true
-        })
-        this.goodsIdList = [{ id: this.goodsId, goodsModelId: this.modelId, buyCount: this.number }]
-        wx.setStorageSync('setgoodsList', this.goodsIdList)
-        const { code, data, message } = await cartApi.unified({ goodsList: this.goodsIdList })
-        wx.hideLoading()
-        if (code === 200) {
-          this.showpop = false
-          let addressDes = { name: data.userName, phone: data.phone, address: data.orderAddress, addressDetail: data.addressDetail }
-          wx.setStorageSync('orderId', data.id)
-          wx.setStorageSync('addressDes', addressDes)
-          wx.setStorageSync('allprice', JSON.stringify(data.totalFee))
-          wx.setStorageSync('goodsList', JSON.stringify(data.goodsList))
-          wx.setStorageSync('payInfo', JSON.stringify(data.payInfo))
-          wx.navigateTo({
-            url: '/pages/pageA/order/main?buyWay=0&id=' + this.id
-          })
+          this.goodsIdList = [{ id: this.goodsId, goodsModelId: this.modelId, buyCount: this.number }]
+          wx.setStorageSync('setgoodsList', this.goodsIdList)
+          const { code, data, message } = await cartApi.unified({ goodsList: this.goodsIdList })
+          wx.hideLoading()
+          if (code === 200) {
+            this.showpop = false
+            let addressDes = { name: data.userName, phone: data.phone, address: data.orderAddress, addressDetail: data.addressDetail }
+            wx.setStorageSync('orderId', data.id)
+            wx.setStorageSync('addressDes', addressDes)
+            wx.setStorageSync('allprice', JSON.stringify(data.totalFee))
+            wx.setStorageSync('goodsList', JSON.stringify(data.goodsList))
+            wx.setStorageSync('payInfo', JSON.stringify(data.payInfo))
+            wx.navigateTo({
+              url: '/pages/pageA/order/main?buyWay=0&id=' + this.id
+            })
+          } else {
+            wx.showToast({
+              title: message,
+              duration: 2000,
+              icon: 'none'
+            })
+          }
         } else {
           wx.showToast({
-            title: message,
-            duration: 2000,
+            title: '请选择型号', // 提示的内容,
+            duration: 2000, // 延迟时间,
             icon: 'none'
           })
+          this.showpop = true
         }
       } else {
         wx.showToast({
-          title: '请选择型号', // 提示的内容,
-          duration: 2000, // 延迟时间,
+          title: '请先注册名片',
+          duration: 2000,
           icon: 'none'
         })
-        this.showpop = true
       }
     },
     // 加入购物的逻辑
     async addCart () {
       if (this.buyStatus === 0) return
-      if (this.modelText !== '请选择型号' || this.goodmodel.length === 0) {
-        // this.getProdDetail(this.id).then(res => {
-        const result = cartApi.addCart({ 'goodsId': this.goodsId, 'number': this.number, 'modelId': this.modelId, 'modelName': this.modelName })
-        if (result) {
-          this.allnumber = this.allnumber + this.number
+      if (this.postForm === true) {
+        if (this.modelText !== '请选择型号' || this.goodmodel.length === 0) {
+          // this.getProdDetail(this.id).then(res => {
+          const result = cartApi.addCart({ 'goodsId': this.goodsId, 'number': this.number, 'modelId': this.modelId, 'modelName': this.modelName })
+          if (result) {
+            this.allnumber = this.allnumber + this.number
+            wx.showToast({
+              title: '添加购物车成功',
+              icon: 'success',
+              duration: 1500
+            })
+            this.showpop = false
+            this.insertOpera('加入购物车', 4)
+          }
+          // })
+        } else {
           wx.showToast({
-            title: '添加购物车成功',
-            icon: 'success',
-            duration: 1500
+            title: '请选择型号', // 提示的内容,
+            duration: 2000, // 延迟时间,
+            icon: 'none'
           })
-          this.showpop = false
-          this.insertOpera('加入购物车', 4)
+          this.showpop = true
         }
-        // })
       } else {
         wx.showToast({
-          title: '请选择型号', // 提示的内容,
-          duration: 2000, // 延迟时间,
+          title: '请先注册名片',
+          duration: 2000,
           icon: 'none'
         })
-        this.showpop = true
       }
     },
     // 插入雷达
@@ -523,6 +679,8 @@ export default {
     this.collectFlag = false
     this.buyStatus = null
     this.getBuyDetail()
+    this.getMerber()
+    this.getInfo()
   },
   onShow () {
     this.getCartCount()

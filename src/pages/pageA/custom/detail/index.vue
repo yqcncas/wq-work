@@ -3,10 +3,10 @@
     <div class="custom-top shadow">
       <!-- 头部 -->
       <div class="top-one flexRow">
-        <image mode="aspectFill" :src="params.avatar_url||'https://oss.wq1516.com/default-avatar.png'" class="avatar-img"></image>
+        <image mode="aspectFill"  :src="params.avatar_url||'https://oss.wq1516.com/default-avatar.png'" class="avatar-img"></image>
         <div class="flexColumn top-center">
           <p class="name">
-            <span>{{params.remarks}}</span>
+            <span>{{params.name || params.nickName}}</span>
           </p>
           <p @click="routerTo(`../chooseTag/main?id=${params.user_id}&&list=${JSON.stringify(params.remarksTagList)}`)">
             <!--<span class="tag" v-for="(item,i) in params.remarksTagList" :key="index">{{item.tag}}</span>-->
@@ -154,6 +154,7 @@ export default {
       const { code, data, message } = await apicustom.selectOneUserRemarks({ userId: this.params.id })
       if (code === 200) {
         this.params = data
+        console.log('params', this.params)
         this.params.id = data.user_id
         if (this.params.remarksTagList.length < 3) {
           this.flag = true

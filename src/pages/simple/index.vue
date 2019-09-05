@@ -56,6 +56,27 @@
           </div>
         </div>
       </div>
+
+      <!--名片授权-->
+      <form name='pushMsgFm' report-submit='true' @submit='getFormID' class="">
+        <div v-if="modalFlag" catchtouchmove="true" class="window">
+          <div class="window-mian">
+            <div class="window-title">
+              <img src="https://oss.tzyizan.com/salesInfo/201909021625371567412737209.png">
+              <i>
+                <p>为了提供优质服务,请您授权后</p>
+                <p>放心使用,您的信息将受到保护</p>
+                <span>
+              <button form-type="submit" class="look-just" lang="zh_CN" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">允许授权</button>
+            </span>
+                <span class="quxiao" @click="deleteModel()">
+              取消
+            </span>
+              </i>
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
 </template>
 
@@ -79,7 +100,8 @@
         disabled: false,
         Member: '',
         latitude: '',
-        longitude: ''
+        longitude: '',
+        modalFlag: false
       }
     },
     onShow () {
@@ -91,6 +113,11 @@
       }
       if (nickName) {
         this.name = nickName
+      }
+      if (nickName === '' || nickName === null) {
+        this.modalFlag = true
+      } else {
+        this.modalFlag = false
       }
       // console.log('imgurl', imgurl)
       // console.log('nickName', nickName)
@@ -112,6 +139,52 @@
       this.company = ''
     },
     methods: {
+      // 授权
+      async bindGetUserInfo (e) {
+        // 解密
+        const userInfo = e.target.userInfo
+        if (e.target.userInfo) {
+          wx.setStorageSync('userNameS', userInfo.nickName)
+          wx.getUserInfo({
+            success: async (res) => {
+              console.log(res)
+              this.encryptedData = res.encryptedData
+              this.iv = res.iv
+              const { data } = await personApi.getPhone({
+                iv: this.iv,
+                encryptedData: this.encryptedData
+              })
+              this.unionId = JSON.parse(data).unionId
+              userInfo.unionId = this.unionId
+              this.name = JSON.parse(data).nickName
+              this.imgUrl = JSON.parse(data).avatarUrl
+              wx.setStorageSync('nickName', JSON.parse(data).nickName)
+              wx.setStorageSync('avatarUrl', JSON.parse(data).avatarUrl)
+              // await home.updateUser(userInfo)
+              // await personApi.updateRemarksNew({ remarks: userInfo.nickName, userId: this.id })
+            }
+          })
+        } else {
+          this.modalFlag = false
+          wx.showToast({
+            title: '取消授权',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+        wx.setStorageSync('avatarUrl', e.target.userInfo.avatarUrl)
+        wx.setStorageSync('nickName', e.target.userInfo.nickName)
+        this.$nextTick(() => {
+          this.modalFlag = false
+        })
+        this.insertOpera('授权了信息', 9)
+        if (this.phoneAuthorStatus === 1) {
+          this.phoneModal = true
+        }
+      },
+      deleteModel () {
+        this.modalFlag = false
+      },
       // 完善名片
       goToIndex () {
         wx.navigateTo({

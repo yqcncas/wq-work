@@ -502,7 +502,7 @@ font-size: ~'26rpx';
               margin:0 3%;
               margin-top:~'20rpx';
               display: flex;
-              z-index: 9999!important;
+              z-index: 99999999!important;
               align-items: center;
               justify-content: space-around;
               margin-top: ~'20rpx';
@@ -711,7 +711,7 @@ font-size: ~'26rpx';
               min-width: ~'300rpx';
               height: ~'60rpx';
               max-width: ~'448rpx';
-              background-color: #2A94EC;
+              background-color: #ff8848;
               border-top-right-radius: ~'67rpx';
               border-bottom-right-radius: ~'67rpx';
               color: #fff;
@@ -731,7 +731,7 @@ font-size: ~'26rpx';
               bottom: ~'-10rpx';
               width: 0;
               height: 0;
-              border-top: ~'10rpx' solid #2A94EC;
+              border-top: ~'10rpx' solid #ff8848;
               border-left: ~'6rpx' solid transparent;
             }
             .r-top-w{
@@ -1417,11 +1417,139 @@ font-size: ~'26rpx';
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+// 我的动态
+.dynamic {
+  width: ~'656rpx';
+  display: block;
+  margin: ~'50rpx' auto;
+
+  .dynamic-top {
+    width: 100%;
+    height: ~'60rpx';
+    margin-bottom: ~'20rpx';
+
+    .dynamic-icont {
+      width: ~'44rpx';
+      height: ~'44rpx';
+
+      img {
+        width: ~'44rpx';
+        height: ~'44rpx';
+        vertical-align: middle;
+      }
+    }
+
+    .dynamic-title {
+      font-size: ~'30rpx';
+      font-weight: 600;
+      margin-left: ~'30rpx';
+    }
+
+    .dynamic-right {
+      float: right;
+      margin-top: ~'10rpx';
+      vertical-align: middle;
+      font-size: ~'24rpx';
+      color: #9d9d9d;
+
+      img {
+        width: ~'20rpx';
+        height: ~'20rpx';
+      }
+    }
+  }
+
+
+  .dynamic-main{
+    background: #ffffff;
+    padding: ~'20rpx';
+    border-radius: ~'10rpx';
+    .content{
+      width: 100%;
+      height: ~'150rpx';
+      position: relative;
+      display: flex;
+      align-items: center;
+      .border{
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        left: 0;
+        display: inline-block;
+        border: ~'1rpx' dashed #979797;
+        z-index: 99!important;
+      }
+      .left{
+        float: left;
+        width: ~'175rpx';
+        height: ~'133rpx';
+        border-radius: ~'10rpx';
+        .img{
+          width: 100%;
+          height: 100%;
+          display: inline-block;
+        }
+      }
+      .right{
+        float: right;
+        width: 70%;
+        .top{
+          display: flex;
+          justify-content: space-between;
+          .title{
+            color: #333333;
+            font-size:~'26rpx';
+            width: ~'200rpx';
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+          .main{
+            height: ~'30rpx';
+            display: flex;
+            align-items: center;
+            .date{
+              color: #989898;
+              font-size: ~'20rpx';
+              vertical-align: middle;
+            }
+            .line{
+              width: ~'1rpx';
+              height: ~'25rpx';
+              display: inline-block;
+              background: #989898;
+              margin: 0  ~'10rpx';
+            }
+            .count{
+              color: #989898;
+              vertical-align: middle;
+              font-size: ~'20rpx';
+            }
+          }
+        }
+        // 动态内容
+        .substance{
+          width: 100%;
+          height: ~'65rpx';
+          color: #878787;
+          font-weight: normal;
+          font-size: ~'22rpx';
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+          margin: ~'18rpx' 0;
+        }
+      }
+    }
+  }
+}
+
 
 // 公司介绍
 .company{
   width: ~'656rpx';
-  height: ~'500rpx';
+  //height: ~'500rpx';
   display: block;
   margin: ~'50rpx' auto;
   .company-top{
@@ -1445,21 +1573,22 @@ font-size: ~'26rpx';
   }
   .company-main{
     width: 100%;
-    height: ~'420rpx';
+    //height: ~'420rpx';
     background: #ffffff;
     border-radius: ~'10rpx';
     .company-bg{
       width: 100%;
-      height: ~'190rpx';
+      //height: ~'190rpx';
       img{
         border-top-left-radius: ~'10rpx';
         border-top-right-radius: ~'10rpx';
         width: 100%;
-        height: 100%;
+        //height: 100%;
       }
     }
     .company-title{
-      height: ~'200rpx';
+      //height: ~'200rpx';
+      padding-bottom: ~'30rpx';
       span{
         padding: 0 ~'40rpx';
         font-size: ~'24rpx';
@@ -1580,13 +1709,15 @@ font-size: ~'26rpx';
     .product-details{
       display: inline-block;
       width: ~'300rpx';
+      //width: 100%;
       background: #ffffff;
       border-radius: ~'10rpx';
       margin-bottom: ~'20rpx';
+      //margin-top: ~'8rpx';
       .product-details-img{
         width: 100%;
         height: ~'300rpx';
-        background: #CCCCCC;
+        background: #ffffff;
         border-top-left-radius: ~'10rpx';
         border-top-right-radius: ~'10rpx';
         img{
@@ -1597,15 +1728,65 @@ font-size: ~'26rpx';
         }
       }
       .product-details-imgA {
+        margin: 0!important;
         width: 100%;
-        height: ~'222rpx';
-        background: #CCCCCC;
-        border-radius: ~'10rpx';
+        //height: ~'222rpx';
+        //background: #ffffff;
+        //border-radius: ~'10rpx';
 
-        img {
-          border-radius: ~'10rpx';
+        .imgA {
+          //border-radius: ~'10rpx';
           width: 100%;
           height: 100%;
+          //margin-top: ~'-rpx';
+        }
+      }
+
+      .product-details-title{
+        font-size: ~'24rpx';
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+        font-weight: 600;
+        margin: ~'20rpx' ~'20rpx' ~'10rpx';
+      }
+      .product-details-click{
+        font-size: ~'26rpx';
+        color: #d82a10;
+        display: inline-block;
+        padding: ~'0rpx' ~'20rpx' ~'20rpx';
+        font-weight: 600;
+      }
+    }
+    .product-details:nth-child(even){
+      float: right;
+    }
+  }
+
+
+  .product-mainA{
+    width: 100%;
+    height: 100%;
+    .product-details{
+      display: inline-block;
+      //width: ~'300rpx';
+      width: 100%;
+      //background: #ffffff;
+      //border-radius: ~'10rpx';
+      //margin-bottom: ~'20rpx';
+      margin-top: ~'10rpx';
+      .product-details-imgA {
+        margin: 0!important;
+        width: 100%;
+        //height: ~'222rpx';
+        //background: #ffffff;
+        //border-radius: ~'10rpx';
+
+        .imgA {
+          //border-radius: ~'10rpx';
+          width: 100%;
+          height: 100%;
+          margin-top: ~'-10rpx';
         }
       }
 
@@ -1631,60 +1812,60 @@ font-size: ~'26rpx';
   }
 }
 
-
-// 信息授权
-.window{
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  z-index: 999999!important;
-  background: rgba(0,0,0,0.5);
-  .window-mian{
-    width: ~'556rpx';
-    height: ~'638rpx';
-    .window-title{
-      width: ~'556rpx';
-      height: ~'638rpx';
-      border-radius: ~'10rpx';
-      position: relative;
-      //background: url("https://oss.tzyizan.com/salesInfo/201907251327481564032468239.png") no-repeat ~'556rpx' ~'638rpx';
-      img{
-        width: ~'556rpx';
-        height: ~'638rpx';
-        display: inline-block;
-      }
-      i{
-        position: absolute;
-        top: ~'360rpx';
-        width: 100%;
-        text-align: center;
-        p{
-          font-size: ~'32rpx';
-        }
-        span{
-          width: 100%;
-          display: flex;
-          justify-content: center;
-          text-align: center;
-          margin-top: ~'60rpx';
-          .look-just{
-            width: ~'284rpx';
-            height: ~'64rpx';
-            font-size: ~'28rpx';
-            line-height: ~'64rpx';
-            background: #2190EA;
-            color: #ffffff;
-          }
-        }
-      }
-    }
-  }
-}
+//
+//// 信息授权
+//.window{
+//  position: fixed;
+//  top: 0;
+//  width: 100%;
+//  height: 100%;
+//  display: flex;
+//  align-items: center;
+//  justify-content: center;
+//  text-align: center;
+//  z-index: 999999!important;
+//  background: rgba(0,0,0,0.5);
+//  .window-mian{
+//    width: ~'556rpx';
+//    height: ~'638rpx';
+//    .window-title{
+//      width: ~'556rpx';
+//      height: ~'638rpx';
+//      border-radius: ~'10rpx';
+//      position: relative;
+//      //background: url("https://oss.tzyizan.com/salesInfo/201907251327481564032468239.png") no-repeat ~'556rpx' ~'638rpx';
+//      img{
+//        width: ~'556rpx';
+//        height: ~'638rpx';
+//        display: inline-block;
+//      }
+//      i{
+//        position: absolute;
+//        top: ~'360rpx';
+//        width: 100%;
+//        text-align: center;
+//        p{
+//          font-size: ~'32rpx';
+//        }
+//        span{
+//          width: 100%;
+//          display: flex;
+//          justify-content: center;
+//          text-align: center;
+//          margin-top: ~'60rpx';
+//          .look-just{
+//            width: ~'284rpx';
+//            height: ~'64rpx';
+//            font-size: ~'28rpx';
+//            line-height: ~'64rpx';
+//            background: #2190EA;
+//            color: #ffffff;
+//          }
+//        }
+//      }
+//    }
+//  }
+//}
 
 
 // 消息
@@ -1784,15 +1965,20 @@ font-size: ~'26rpx';
           display: flex;
           justify-content: center;
           text-align: center;
-          margin-top: ~'60rpx';
+          margin-top: ~'40rpx';
           .look-just{
             width: ~'284rpx';
             height: ~'64rpx';
             font-size: ~'28rpx';
             line-height: ~'64rpx';
-            background: #2190EA;
+            background: #FFBA51;
             color: #ffffff;
           }
+        }
+        .quxiao{
+          margin-top: ~'20rpx'!important;
+          font-size: ~'28rpx';
+          color: #9B9B9B;
         }
       }
     }

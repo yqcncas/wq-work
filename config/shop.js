@@ -27,3 +27,14 @@ module.exports = {
 //    "wssUrl": "wss://api.tzyizan.com/websocket/"
 //  }
 
+// {
+//   "extEnable": true,
+//   "extAppid": "wx3f1e71e9ef9aaabf",
+//   "directCommit": false,
+//   "ext": {
+//   "shopId": 1,
+//     "baseUrl": "https://api.tzyizan.com/server",
+//     "ossUrl": "https://oss.wq1516.com/",
+//     "wssUrl": "wss://api.tzyizan.com/websocket/"
+// }
+// }

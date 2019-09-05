@@ -1,5 +1,6 @@
 {
     "navigationBarTitleText": "动态中心",
     "navigationBarTextStyle": "white",
-    "navigationBarBackgroundColor": "#FFBA51"
+    "navigationBarBackgroundColor": "#FFBA51",
+    "enablePullDownRefresh":true
 }

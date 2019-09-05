@@ -122,6 +122,11 @@
           } else {
             this.headImg = 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png'
           }
+          if (res.data !== null) {
+            this.postForm = true
+          } else {
+            this.postForm = false
+          }
         }).catch(err => {
           console.log(err.status, err.message)
         })
@@ -154,9 +159,17 @@
       backClick () {
       },
       homeClick () {
-        wx.navigateTo({
-          url: this.homePath
-        })
+        if (this.postForm === true) {
+          wx.navigateTo({
+            url: this.homePath
+          })
+        } else {
+          wx.showToast({
+            title: '请先注册名片',
+            duration: 2000,
+            icon: 'none'
+          })
+        }
       }
     }
   }

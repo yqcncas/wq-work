@@ -75,13 +75,16 @@
         <div v-if="modalFlag" catchtouchmove="true" class="window">
           <div class="window-mian">
             <div class="window-title">
-              <img src="https://oss.tzyizan.com/salesInfo/201907251327481564032468239.png">
+              <img src="https://oss.tzyizan.com/salesInfo/201909021625371567412737209.png">
               <i>
                 <p>为了提供优质服务,请您授权后</p>
                 <p>放心使用,您的信息将受到保护</p>
                 <span>
                         <button form-type="submit" class="look-just" lang="zh_CN" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">允许授权</button>
                 </span>
+                <span class="quxiao" @click="deleteModel()">
+              取消
+            </span>
               </i>
             </div>
           </div>
@@ -183,10 +186,10 @@
           <!-- 标签 -->
           <div class="over-grid">
             <div class="grid">
-              <div class="col-1" @click="makePhoneCall" v-if="postForm.fixedPhone">
+              <div class="col-1" @click="makePhoneCall" v-if="postForm.phone">
                 <div class="desc-wrap">
                   <span class="icon-wrap"><img class="icon-4" src="../../../static/images/phone.png"></span>
-                  <text class="txt">{{ postForm.fixedPhone }}</text>
+                  <text class="txt">{{ postForm.phone }}</text>
                 </div>
               </div>
               <div class="col-1" @click="textPaste" v-if="postForm.weChat">
@@ -283,7 +286,39 @@
                 </div>
               </div>
             </div>
-
+            <!--我的动态-->
+            <!--<div class="dynamic">-->
+              <!--<div class="dynamic-top">-->
+                <!--<span class="dynamic-icont">-->
+                <!--<img src="../../../static/images/dynamic.png" mode="widthFix">-->
+                <!--</span>-->
+                <!--<span class="dynamic-title">我的动态</span>-->
+                <!--<span class="dynamic-right">-->
+                  <!--&lt;!&ndash;更多<img src="../../../static/images/right-cc.png" mode="widthFix">&ndash;&gt;-->
+                <!--</span>-->
+              <!--</div>-->
+              <!--<div class="dynamic-main">-->
+                <!--<div class="content" v-for="(item,index) in dynamic" :key="index">-->
+                  <!--<div class="left">-->
+                    <!--<img class="img" :src="item.imgUrl  + '?x-oss-process=style/c400'" mode="" alt="">-->
+                  <!--</div>-->
+                  <!--<div class="right">-->
+                    <!--<div class="top">-->
+                      <!--<div class="title">{{item.title}}</div>-->
+                      <!--<div class="main">-->
+                        <!--<span class="date">{{item.date}}</span>-->
+                        <!--<span class="line"></span>-->
+                        <!--<span class="count">{{item.count}}次</span>-->
+                      <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="substance">-->
+                      <!--{{item.content}}-->
+                    <!--</div>-->
+                  <!--</div>-->
+                  <!--<div class="border" v-if="index - 1 !== dynamic.length - 2 && dynamic.length > 1"></div>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
             <!--公司介绍-->
             <div class="company" v-if="postForm.companyInfo">
               <div class="company-top">
@@ -294,7 +329,7 @@
               </div>
               <div class="company-main">
                 <div class="company-bg" v-if="postForm.companyImgUrl">
-                  <img :src="postForm.companyImgUrl"/>
+                  <img :src="postForm.companyImgUrl"  mode="widthFix"/>
                 </div>
                 <div class="company-title" v-if="postForm.companyInfo">
                   <span>{{ postForm.companyInfo }}</span>
@@ -309,14 +344,14 @@
                 <img src="../../../static/images/morebox.png">
                 </span>
                 <span class="product-title">公司产品</span>
-                <span class="product-right">
+                <span class="product-right" @click="goToProductA(postForm.id)">
                   更多<img src="../../../static/images/right-cc.png">
                 </span>
               </div>
               <div class="product-main">
-                <div class="product-details" v-for="(item,index) in goodsList" :key="index" @click="goToProduct(goodsList[index].id)">
+                <div class="product-details" v-if="index < 4" v-for="(item,index) in goodsList" :key="index" @click="goToProduct(goodsList[index].id)">
                     <div class="product-details-img">
-                      <img :src="item.imgUrl + '?x-oss-process=style/c400'"/>
+                      <img :src="item.imgUrl + '?x-oss-process=style/c400'"  mode="widthFix"/>
                     </div>
                   <div class="product-details-title">
                     {{ item.name }}
@@ -328,26 +363,6 @@
                     ￥  {{ item.price }}
                   </div>
 
-                </div>
-              </div>
-            </div>
-
-            <!--我的照片-->
-            <div class="product" v-if="imgUrlList.length !== 0 && imgUrlList[0] !== ''">
-              <div class="product-top">
-                <span class="product-icont">
-                <img src="../../../static/images/imgUrl.png">
-                </span>
-                <span class="product-title">照片</span>
-                <span class="product-right">
-                  更多<img src="../../../static/images/right-cc.png">
-                </span>
-              </div>
-              <div class="product-main">
-                <div class="product-details" v-for="(item,index) in imgUrlList" :key="index">
-                  <div class="product-details-imgA">
-                    <img :src="item +'?x-oss-process=style/c400'" @click="previewImg(imgUrlList,index)"/>
-                  </div>
                 </div>
               </div>
             </div>
@@ -381,6 +396,29 @@
                 </div>
               </div>
             </div>
+
+
+            <!--我的照片-->
+            <div class="product" v-if="imgUrlList.length !== 0 && imgUrlList[0] !== ''">
+              <div class="product-top">
+                <span class="product-icont">
+                <img src="../../../static/images/imgUrl.png">
+                </span>
+                <span class="product-title">照片</span>
+                <span class="product-right">
+                  <!--更多<img src="../../../static/images/right-cc.png">-->
+                </span>
+              </div>
+              <div class="product-mainA">
+                <div class="product-details">
+                  <div class="product-details-imgA" v-for="(item,index) in imgUrlList" :key="index">
+                    <img :src="item" @click="previewImg(imgUrlList,index)" class="imgA" mode="widthFix"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
 
           </div>
           <!--v-if="setUp === 0"-->
@@ -419,6 +457,19 @@
     },
     data () {
       return {
+        dynamic: [{
+          imgUrl: 'https://oss.tzyizan.com/companyInfo/201908261714351566810875900.png',
+          title: '咨询标题',
+          date: '2018-06-24',
+          count: 100,
+          content: '啊考六级了卡开机打开辣椒酱时间来得及了就阿喀琉斯解决绿卡就困了睡觉绿卡了手机链接阿拉斯加垃圾垃圾啦'
+        }, {
+          imgUrl: 'https://oss.tzyizan.com/companyInfo/201908261714351566810875900.png',
+          title: '咨询标题',
+          date: '2018-06-24',
+          count: 100,
+          content: '啊考六级了卡开机打开辣椒酱时间来得及了就阿喀琉斯解决绿卡就困了睡觉绿卡了手机链接阿拉斯加垃圾垃圾啦'
+        }],
         CardId: '',
         fotter: 'card-footer',
         cardM: 'card-ma',
@@ -449,7 +500,7 @@
         imgUrl: 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png',
         showpop: false,
         changeVoiceFlag: false,
-        fixedPhone: '15988993797',
+        fixedPhone: '',
         weChat: 'Williamchen',
         qrCodeUrl: 'https://oss.wq1516.com/default.png',
         address: '浙江温岭',
@@ -465,7 +516,8 @@
         isBuy: '',
         setUp: '',
         salesManId: '',
-        animal: ''
+        animal: '',
+        card: false
       }
     },
     onLoad: function (options) {
@@ -519,6 +571,15 @@
       }
     },
     methods: {
+      deleteModel () {
+        this.modalFlag = false
+      },
+      // 查看产品
+      goToProductA (id) {
+        wx.navigateTo({
+          url: '/pages/moreProduct/main?id=' + id
+        })
+      },
       // 复制微信
       BweChat () {
         if (this.weChat !== '' || this.weChat !== null) {
@@ -676,7 +737,7 @@
       // 呼叫电话
       makePhoneCall () {
         wx.makePhoneCall({
-          phoneNumber: this.fixedPhone,
+          phoneNumber: this.postForm.phone,
           success: () => {
             this.insertOpera('拨打了电话', 20)
           }
@@ -755,7 +816,7 @@
           job: this.postForm.job,
           tagList: this.tagPraiseMapList,
           logo: this.postForm.logo,
-          fixedPhone: this.postForm.fixedPhone,
+          fixedPhone: this.postForm.phone,
           weChat: this.postForm.weChat,
           address: this.postForm.salesAddDetailed,
           email: this.postForm.email,
@@ -788,13 +849,21 @@
       // 跳转
       goInto () {
         wx.navigateTo({
-          url: '../index/main'
+          url: '/pages/simple/main'
         })
       },
       goMsg (id) {
-        wx.navigateTo({
-          url: '../msgcenter/main?id=' + this.user
-        })
+        if (this.card === true) {
+          wx.navigateTo({
+            url: '../msgcenter/main?id=' + this.user
+          })
+        } else {
+          wx.showToast({
+            title: '请先注册名片',
+            duration: 2000,
+            icon: 'none'
+          })
+        }
       },
       // 跳转
       routerTo (url) {
@@ -829,6 +898,11 @@
           } else {
             this.setUp = 0
             // this.modalFlag = true
+          }
+          if (res.data !== null) {
+            this.card = true
+          } else {
+            this.card = false
           }
         }).catch(err => {
           console.log(err.status, err.message)
@@ -915,49 +989,65 @@
       },
       // 添加收藏
       getCollect (id) {
-        const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
-        const userId = wx.getStorageSync('userId') // 获取本地userId
-        this.$fly.request({
-          method: 'post', // post/get 请求方式
-          url: '/platformUserSalesman/insert',
-          body: {
-            'salesmanId': id,
-            'userId': userId,
-            'businessId': businessId
-          }
-        }).then(res => {
-          if (res.code === 200) {
-            const that = this
-            that.postForm.isCollect = 1
-            that.postForm.collectCount++
-            that.getInfo()
-            // this.insertOpera('添加了收藏', 22)
-          }
-        }).catch(err => {
-          console.log(err.status, err.message)
-        })
+        if (this.card === true) {
+          const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
+          const userId = wx.getStorageSync('userId') // 获取本地userId
+          this.$fly.request({
+            method: 'post', // post/get 请求方式
+            url: '/platformUserSalesman/insert',
+            body: {
+              'salesmanId': id,
+              'userId': userId,
+              'businessId': businessId
+            }
+          }).then(res => {
+            if (res.code === 200) {
+              const that = this
+              that.postForm.isCollect = 1
+              that.postForm.collectCount++
+              that.getInfo()
+              // this.insertOpera('添加了收藏', 22)
+            }
+          }).catch(err => {
+            console.log(err.status, err.message)
+          })
+        } else {
+          wx.showToast({
+            title: '请先注册名片',
+            duration: 2000,
+            icon: 'none'
+          })
+        }
       },
       // 取消收藏
       cancelCollect (id) {
-        const userId = wx.getStorageSync('userId') // 获取本地userId
-        this.$fly.request({
-          method: 'post', // post/get 请求方式
-          url: '/platformUserSalesman/deleteBySalesmanId',
-          body: {
-            'salesmanId': id,
-            'userId': userId
-          }
-        }).then(res => {
-          console.log('取消', res)
-          if (res.code === 200) {
-            const that = this
-            that.postForm.isCollect = 0
-            that.postForm.collectCount--
-            that.getInfo()
-          }
-        }).catch(err => {
-          console.log(err.status, err.message)
-        })
+        if (this.card === true) {
+          const userId = wx.getStorageSync('userId') // 获取本地userId
+          this.$fly.request({
+            method: 'post', // post/get 请求方式
+            url: '/platformUserSalesman/deleteBySalesmanId',
+            body: {
+              'salesmanId': id,
+              'userId': userId
+            }
+          }).then(res => {
+            console.log('取消', res)
+            if (res.code === 200) {
+              const that = this
+              that.postForm.isCollect = 0
+              that.postForm.collectCount--
+              that.getInfo()
+            }
+          }).catch(err => {
+            console.log(err.status, err.message)
+          })
+        } else {
+          wx.showToast({
+            title: '请先注册名片',
+            duration: 2000,
+            icon: 'none'
+          })
+        }
       },
       // 旋转音频
       changeVoice () {

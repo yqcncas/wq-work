@@ -116,9 +116,9 @@
       <el-form ref="postForm" :model="postForm">
         <div class="mainA">
         <div class="cards">
-          <div class="cards-radar" @click="goRadar">
+          <div class="cards-radar">
             <div class="main">
-              <swiper class="swiper" :autoplay="autoplay" :circular= 'circular' :vertical="vertical" :interval="interval" :duration="duration" :easing-function="easeInOutCubic">
+              <swiper class="swiper" :autoplay="autoplay" :circular= 'circular' :vertical="vertical" :interval="interval" :duration="duration" :easing-function="easeInOutCubic" @click="goRadar">
                 <block v-for="(item, index) in infoMation" :key="index">
                   <swiper-item>
                     <div class="top"  @click="routerTo(item.id)">
@@ -130,22 +130,22 @@
                   </swiper-item>
                 </block>
               </swiper>
-              <div class="title">数据中心</div>
-              <div class="Member" v-if="Member == '无会员'">
+              <div class="title">谁在看我</div>
+              <div class="Member" @click="goToMember" v-if="Member == '无会员'">
                 <span class="left">成 为 VIP 会 员 , 获 得 更 多 精 准 用 户</span>
-                <span class="right" @click="goToMember">立即开通</span>
+                <span class="right" >立即开通</span>
               </div>
-              <div class="Member" v-else-if="Member == '白银会员'">
+              <div class="Member" @click="goToMember" v-else-if="Member == '白银会员'">
                 <span class="left">尊 贵 的 白 银 会 员 , 升 级 获 取 更 多 权 限</span>
-                <span class="right" @click="goToMember">立即升级</span>
+                <span class="right" >立即升级</span>
               </div>
-              <div class="Member" v-else-if="Member == '黄金会员'">
+              <div class="Member" @click="goToMember" v-else-if="Member == '黄金会员'">
                 <span class="left">尊 贵 的 黄 金 会 员 , 升 级 获 取 更 多 权 限</span>
-                <span class="right" @click="goToMember">立即升级</span>
+                <span class="right" >立即升级</span>
               </div>
-              <div class="Member" v-else-if="Member == '钻石会员'">
+              <div class="Member" @click="goToMember" v-else-if="Member == '钻石会员'">
                 <span class="left">尊 贵 的 钻 石 会 员 , 已 升 级 至 最 高 权 限</span>
-                <span class="right" @click="goToMember">最高权限</span>
+                <span class="right">最高权限</span>
               </div>
             </div>
           </div>
@@ -239,10 +239,10 @@
         <!-- 标签 -->
         <div class="over-grid">
           <div class="grid">
-            <div class="col-1" @click="makePhoneCall" v-if="postForm.fixedPhone">
+            <div class="col-1" @click="makePhoneCall" v-if="postForm.phone">
               <div class="desc-wrap">
                 <span class="icon-wrap"><img class="icon-4" src="../../../static/images/phone.png"></span>
-                <text class="txt">{{ postForm.fixedPhone }}</text>
+                <text class="txt">{{ postForm.phone }}</text>
               </div>
             </div>
             <div class="col-1" @click="textPaste" v-if="postForm.weChat">
@@ -340,18 +340,50 @@
               </div>
             </div>
           </div>
-
+          <!--我的动态-->
+          <!--<div class="dynamic">-->
+            <!--<div class="dynamic-top">-->
+                <!--<span class="dynamic-icont">-->
+                <!--<img src="../../../static/images/dynamic.png" mode="widthFix">-->
+                <!--</span>-->
+              <!--<span class="dynamic-title">我的动态</span>-->
+              <!--<span class="dynamic-right">-->
+                  <!--&lt;!&ndash;更多<img src="../../../static/images/right-cc.png" mode="widthFix">&ndash;&gt;-->
+                <!--</span>-->
+            <!--</div>-->
+            <!--<div class="dynamic-main">-->
+              <!--<div class="content" v-for="(item,index) in dynamic" :key="index">-->
+                <!--<div class="left">-->
+                  <!--<img class="img" :src="item.imgUrl  + '?x-oss-process=style/c400'" mode="" alt="">-->
+                <!--</div>-->
+                <!--<div class="right">-->
+                  <!--<div class="top">-->
+                    <!--<div class="title">{{item.title}}</div>-->
+                    <!--<div class="main">-->
+                      <!--<span class="date">{{item.date}}</span>-->
+                      <!--<span class="line"></span>-->
+                      <!--<span class="count">{{item.count}}次</span>-->
+                    <!--</div>-->
+                  <!--</div>-->
+                  <!--<div class="substance">-->
+                    <!--{{item.content}}-->
+                  <!--</div>-->
+                <!--</div>-->
+                <!--<div class="border" v-if="index - 1 !== dynamic.length - 2 && dynamic.length > 1"></div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
           <!--公司介绍-->
           <div class="company" v-if="postForm.companyInfo">
             <div class="company-top">
                 <span class="company-icont">
-                  <img src="../../../static/images/lou.png">
+                  <img src="../../../static/images/lou.png" mode="widthFix">
                 </span>
               <span class="company-title">公司介绍</span>
             </div>
             <div class="company-main">
               <div class="company-bg" v-if="postForm.companyImgUrl">
-                <img :src="postForm.companyImgUrl"/>
+                <img :src="postForm.companyImgUrl" mode="widthFix"/>
               </div>
               <div class="company-title" v-if="postForm.companyInfo">
                 <span>{{ postForm.companyInfo }}</span>
@@ -363,17 +395,17 @@
           <div class="product" v-if="postForm.goodsList.length !== 0">
             <div class="product-top">
                 <span class="product-icont">
-                <img src="../../../static/images/morebox.png">
+                <img src="../../../static/images/morebox.png" mode="widthFix">
                 </span>
               <span class="product-title">公司产品</span>
-              <span class="product-right">
-                  更多<img src="../../../static/images/right-cc.png">
-                </span>
+              <span class="product-right" @click="goToProductA(postForm.id)">
+                  更多<img src="../../../static/images/right-cc.png" mode="widthFix">
+              </span>
             </div>
             <div class="product-main">
-              <div class="product-details" v-for="(item,index) in postForm.goodsList" :key="index" @click="goToProduct(postForm.goodsList[index].id)">
+              <div class="product-details" v-if='index < 4' v-for="(item,index) in postForm.goodsList" :key="index" @click="goToProduct(postForm.goodsList[index].id)">
                 <div class="product-details-img">
-                  <img :src="item.imgUrl + '?x-oss-process=style/c400'"/>
+                  <img :src="item.imgUrl + '?x-oss-process=style/c400'" mode="widthFix"/>
                 </div>
                 <div class="product-details-title">
                   {{ item.name }}
@@ -388,6 +420,36 @@
             </div>
           </div>
 
+
+        <!--我的视频 v-if="videoList !== ''"-->
+        <div class="product" v-if=" video !== ''">
+          <div class="product-top">
+                <span class="product-icont">
+                <img src="../../../static/images/video.png">
+                </span>
+            <span class="product-title">视频</span>
+            <!--<span class="product-right">-->
+            <!--更多<img src="../../../static/images/right-cc.png">-->
+            <!--</span>-->
+          </div>
+          <div class="product-main">
+            <div class="product-details-video">
+              <div class="up-video">
+                <video id="myVideo" v-if="videoFlag" :src="video" @play="playA()"  @ended=" end()" autoplay objectFit="fill" class="cover-hw"></video>
+                <div v-else class="cover-view" >
+                  <div @click="videoPlay">
+                    <!--<i class="delete-img iconfont iconshanchu-copy" @click="deleteVideo"></i>-->
+                    <img class="FMimg" :src="videoImg" mode="scaleToFill" />
+                    <div class="model-btn">
+                      <div class="play-icon">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
           <!--我的照片-->
           <div class="product" v-if="imgUrlList.length !== 0 && imgUrlList[0] !== ''">
             <div class="product-top">
@@ -396,54 +458,24 @@
                 </span>
               <span class="product-title">照片</span>
               <span class="product-right">
-                  更多<img src="../../../static/images/right-cc.png">
-                </span>
-            </div>
-            <div class="product-main">
-              <div class="product-details" v-for="(item,index) in imgUrlList" :key="index">
-                <div class="product-details-imgA">
-                  <img :src="item + '?x-oss-process=style/c400'" @click="previewImg(imgUrlList,index)"/>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-
-          <!--我的视频 v-if="videoList !== ''"-->
-          <div class="product" v-if=" video !== ''">
-            <div class="product-top">
-                <span class="product-icont">
-                <img src="../../../static/images/video.png">
-                </span>
-              <span class="product-title">视频</span>
-              <!--<span class="product-right">-->
                   <!--更多<img src="../../../static/images/right-cc.png">-->
-                <!--</span>-->
+                </span>
             </div>
-            <div class="product-main">
-                <div class="product-details-video">
-                  <div class="up-video">
-                    <video id="myVideo" v-if="videoFlag" :src="video" @play="playA()"  @ended=" end()" autoplay objectFit="fill" class="cover-hw"></video>
-                    <div v-else class="cover-view" >
-                      <div @click="videoPlay">
-                        <!--<i class="delete-img iconfont iconshanchu-copy" @click="deleteVideo"></i>-->
-                        <img class="FMimg" :src="videoImg" mode="scaleToFill" />
-                        <div class="model-btn">
-                          <div class="play-icon">
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+            <div class="product-mainA">
+              <div class="product-details">
+                <div class="product-details-imgA" v-for="(item,index) in imgUrlList" :key="index">
+                  <img :src="item" @click="previewImg(imgUrlList,index)" class="imgA" mode="widthFix"/>
                 </div>
               </div>
             </div>
           </div>
+
+
       </el-form>
     </div>
 
       <div class="message">
-        <div class="bt" @click="goToProductA()">
+        <div class="bt" @click="goToProductA(postForm.id)">
           <span class="product">查看<br/>产品</span>
         </div>
         <div class="bt" @click="goToMessage()">
@@ -459,22 +491,25 @@
       </div>
 
     </div>
-  <form name='pushMsgFm' report-submit='true' @submit='getFormID' class="">
-    <div v-if="modalFlag" catchtouchmove="true" class="window">
-      <div class="window-mian">
-        <div class="window-title">
-          <img src="https://oss.tzyizan.com/salesInfo/201907251327481564032468239.png">
-          <i>
-            <p>为了提供优质服务,请您授权后</p>
-            <p>放心使用,您的信息将受到保护</p>
-            <span>
-                        <button form-type="submit" class="look-just" lang="zh_CN" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">允许授权</button>
-                </span>
-          </i>
-        </div>
-      </div>
-    </div>
-  </form>
+  <!--<form name='pushMsgFm' report-submit='true' @submit='getFormID' class="">-->
+    <!--<div v-if="modalFlag" catchtouchmove="true" class="window">-->
+      <!--<div class="window-mian">-->
+        <!--<div class="window-title">-->
+          <!--<img src="https://oss.tzyizan.com/salesInfo/201909021625371567412737209.png">-->
+          <!--<i>-->
+            <!--<p>为了提供优质服务,请您授权后</p>-->
+            <!--<p>放心使用,您的信息将受到保护</p>-->
+            <!--<span>-->
+              <!--<button form-type="submit" class="look-just" lang="zh_CN" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">允许授权</button>-->
+            <!--</span>-->
+            <!--<span class="quxiao" @click="deleteModel()">-->
+              <!--取消-->
+            <!--</span>-->
+          <!--</i>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</form>-->
 </div>
 </template>
 
@@ -490,6 +525,19 @@
     },
     data () {
       return {
+        dynamic: [{
+          imgUrl: 'https://oss.tzyizan.com/companyInfo/201908261714351566810875900.png',
+          title: '咨询标题',
+          date: '2018-06-24',
+          count: 100,
+          content: '啊考六级了卡开机打开辣椒酱时间来得及了就阿喀琉斯解决绿卡就困了睡觉绿卡了手机链接阿拉斯加垃圾垃圾啦'
+        }, {
+          imgUrl: 'https://oss.tzyizan.com/companyInfo/201908261714351566810875900.png',
+          title: '咨询标题',
+          date: '2018-06-24',
+          count: 100,
+          content: '啊考六级了卡开机打开辣椒酱时间来得及了就阿喀琉斯解决绿卡就困了睡觉绿卡了手机链接阿拉斯加垃圾垃圾啦'
+        }],
         fotter: 'card-footer',
         cardM: 'card-ma',
         CardId: '',
@@ -524,7 +572,7 @@
         imgUrl: 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png',
         showpop: false,
         changeVoiceFlag: false,
-        fixedPhone: '15988993797',
+        fixedPhone: '',
         weChat: 'Williamchen',
         qrCodeUrl: 'https://oss.wq1516.com/default.png',
         address: '浙江温岭',
@@ -563,12 +611,12 @@
       this.showpop = false
       this.selectNavIndex = 0
       wx.stopPullDownRefresh()
-      const nickName = wx.getStorageSync('nickName')
-      if (nickName === '' || nickName === null) {
-        this.modalFlag = true
-      } else {
-        this.modalFlag = false
-      }
+      // const nickName = wx.getStorageSync('nickName')
+      // if (nickName === '' || nickName === null) {
+      //   this.modalFlag = true
+      // } else {
+      //   this.modalFlag = false
+      // }
     },
     onShow () {
       // wx.hideTabBar()
@@ -579,12 +627,12 @@
       this.showpop = false
       this.selectNavIndex = 0
       this.getType()
-      const nickName = wx.getStorageSync('nickName')
-      if (nickName === '' || nickName === null) {
-        this.modalFlag = true
-      } else {
-        this.modalFlag = false
-      }
+      // const nickName = wx.getStorageSync('nickName')
+      // if (nickName === '' || nickName === null) {
+      //   this.modalFlag = true
+      // } else {
+      //   this.modalFlag = false
+      // }
     },
     onShareAppMessage () {
       this.insertOpera('分享了名片', 21)
@@ -594,6 +642,9 @@
       }
     },
     methods: {
+      deleteModel () {
+        this.modalFlag = false
+      },
       // 查询会员等级信息
       getMerber () {
         const businessId = wx.getStorageSync('businessId')
@@ -630,9 +681,9 @@
         })
       },
       // 查看产品
-      goToProductA () {
+      goToProductA (id) {
         wx.navigateTo({
-          url: '/pages/prod/product/main'
+          url: '/pages/moreProduct/main?id=' + id
         })
       },
       // 进入聊天信息页面
@@ -862,7 +913,9 @@
         }).then(res => {
           this.logo = res.data.logo
           const tradeStatus = res.data.tradeStatus
+          const dynamicStatus = res.data.dynamicStatus
           wx.setStorageSync('tradeStatus', tradeStatus)
+          wx.setStorageSync('dynamicStatus', dynamicStatus)
         }).catch(err => {
           console.log(err)
         })
@@ -891,7 +944,7 @@
           job: this.postForm.job,
           tagList: this.tagPraiseMapList,
           logo: this.postForm.logo,
-          fixedPhone: this.postForm.fixedPhone,
+          fixedPhone: this.postForm.phone,
           weChat: this.postForm.weChat,
           address: this.postForm.salesAddDetailed,
           email: this.postForm.email,
@@ -964,7 +1017,7 @@
       // 呼叫电话
       makePhoneCall () {
         wx.makePhoneCall({
-          phoneNumber: this.fixedPhone,
+          phoneNumber: this.postForm.phone,
           success: () => {
             this.insertOpera('拨打了电话', 20)
           }
@@ -1046,7 +1099,7 @@
             'userId': this.userId
           }
         }).then(res => {
-          console.log('res', this.modalFlag)
+          console.log('res', res.data)
           if (res.data) {
             // if (res.data.nickName === '' || res.data.nickName == null) {
             //   this.modalFlag = true

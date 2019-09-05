@@ -179,7 +179,7 @@
       goToCard (id) {
         if (id) {
           wx.navigateTo({
-            url: `../../OthersCard/main?id=` + id
+            url: `/pages/OthersCard/main?id=` + id
           })
         } else {
           wx.showToast({
@@ -362,5 +362,5 @@
 </script>
 
 <style lang="less" scoped>
-  @import "./style.less";
+  @import "style.less";
 </style>

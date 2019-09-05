@@ -9,13 +9,13 @@
             <span class="time js-time">{{time}}</span>
           </div>
         </div>
-        <div class="content">
+        <div class="contentA">
           <div class="title" v-if="content!==''">
             <span>&nbsp; &nbsp; &nbsp; &nbsp;{{content}}</span>
           </div>
-          <div class="img" v-if="imgUrl.length>0">
-            <div class="imgMain" v-for="item in imgUrl" :key="index">
-              <img :src="item"/>
+          <div class="imgA" v-if="imgUrl.length>0">
+            <div class="imgMainA" v-for="item in imgUrl" :key="index">
+              <image :src="item" class="imgB"  @click="previewImg(imgUrl,index)"  mode=""></image>
             </div>
           </div>
           <div class="up-video" v-if="video">
@@ -54,15 +54,17 @@
         </div>
       </div>
       <div class="bottom-icon">
-        <p>
-          <span class="iconfont iconchakan1"></span>
-          <span class="news-view view-text">{{count}}</span>
-        </p>
-        <!--@click="clickPraise(isLike,2,id)"-->
-        <p>
-          <span class="iconfont icondianzan1" :class="isLike > 0? 'praise':''"></span>
-          <span class="news-view view-text">{{praiseNum}}</span>
-        </p>
+        <div class="bottom-main">
+          <p>
+            <span class="iconfont iconchakan1"></span>
+            <span class="news-view view-text">{{count}}</span>
+          </p>
+          <!--@click="clickPraise(isLike,2,id)"-->
+          <p>
+            <span class="iconfont icondianzan1" :class="isLike > 0? 'praise':''"></span>
+            <span class="news-view view-text">{{praiseNum}}</span>
+          </p>
+        </div>
       </div>
     </div>
 
@@ -130,6 +132,18 @@ export default {
     videoWan
   },
   methods: {
+    // 预览图片
+    previewImg (e, A) {
+      var imgs = e
+      var temp = []
+      imgs.map(res => {
+        temp.push(res)
+      })
+      wx.previewImage({
+        current: temp[A],
+        urls: temp
+      })
+    },
     // 播放开始
     playA () {
       this.videoFlag = true
@@ -264,7 +278,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 %common {
   display: flex;
   justify-content: space-between;
@@ -291,7 +305,7 @@ export default {
 .news-wrap {
   width: 100%;
   background-color: #fff;
-  padding-bottom: 20rpx;
+  /*padding-bottom: 20rpx;*/
   display: inline-block;
   .head {
     padding: 40rpx 30rpx 0;
@@ -322,88 +336,50 @@ export default {
   .content {
     padding: 40rpx 30rpx 0;
     font-size: 0.32rem;
-    word-break: break-all;
+    /*word-break: break-all;*/
     color: #4a4a4a;
-    overflow: hidden;
+    /*overflow: hidden;*/
     padding-top: 0.4rem;
     .p + .p {
       margin-top: 0.2rem;
     }
     .imgMain{
+      //新闻封面
+      width: 100%;
+      overflow: hidden;
       img{
         width: 100%;
-        margin-top: 20rpx;
-        display: inline-block;
-      }
-    }
-    .up-video {
-      width: 100%;
-      height: 400rpx;
-      border-radius: 10rpx;
-      margin-top: 20rpx;
-      .cover-hw {
-        width: 100%;
-        height: 400rpx;
-        position: relative;
-      }
-      /*视频样式接口*/
-      .cover-view {
-        display: inline-block;
-        width: 100%;
-        height: 100%;
-        position: relative;
-        .delete-img {
-          position: absolute;
-          width: 60rpx;
-          right: 6rpx;
-          height: 60rpx;
-          top: 6rpx;
-        }
-        .FMimg{
-          width: 100%;
-          height: 400rpx;
-          display: inline-block;
-        }
-        .model-btn {
-          position: absolute;
-          left: 0;
-          top: 0rpx;
-          bottom: 0;
-          right: 0;
-          margin: 140rpx auto 0;
-          width: 140rpx;
-          height: 130rpx;
-          border: 4rpx solid #fff;
-          border-radius: 50%;
-          background-color: rgba(0, 0, 0, 0.3);
-        }
-
-        .play-icon {
-          margin: 38rpx 50rpx;
-          border-top: 33rpx solid transparent;
-          border-left: 54rpx solid #fff;
-          border-bottom: 33rpx solid transparent;
-        }
-
-        image {
-          width: 100%;
-          height: 100%;
-          border-radius: 10rpx;
-        }
-        position: relative;
-        width: 100%;
-        height: 100%;
+        /*margin-top: 20rpx;*/
+        /*display: inline-block;*/
       }
     }
   }
   //   点赞
-  .bottom-icon {
-    @extend %common, %zan;
-    padding: 30rpx 30rpx 0;
+  .bottom-icon{
+    width: 100%;
+    display: inline-block;
+    .bottom-main {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row;
+      align-items: center;
+      color: #9d9d9d;
+      padding: 40rpx 30rpx;
+      p{
+        display: inline-block;
+        .iconfont {
+          font-size: 0.3rem;
+        }
+        .view-text {
+          padding-left: 0.1rem;
+          font-size: 0.28rem;
+        }
+      }
+    }
   }
 }
 .praise {
-  color: #2a94ec !important;
+  color: #ff8848 !important;
 }
 // 留言
 .message-box {
@@ -468,6 +444,100 @@ export default {
     height: 0.01rem;
     background-color: #ddd;
     margin: 0 0.08rem 0;
+  }
+}
+
+.contentA {
+  padding: 40rpx 30rpx 0;
+  font-size: 0.32rem;
+  word-break: break-all;
+  color: #4a4a4a;
+  padding-top: 0.4rem;
+  .imgA{
+    width: 100%;
+    margin-top: 20rpx;
+    .imgMainA {
+      float: left;
+      //新闻封面
+      margin-right:15rpx;
+      width: 220rpx;
+      height: 220rpx;
+      .imgB {
+        width: 220rpx;
+        height: 220rpx;
+        display: inline-block;
+        /*margin-top: 20rpx;*/
+        /*display: inline-block;*/
+      }
+    }
+    .imgMainA:nth-child(3){
+      margin-right: 0;
+    }
+    .imgMainA:nth-child(6){
+      margin-right: 0;
+    }
+    .imgMainA:nth-child(9){
+      margin-right: 0;
+    }
+  }
+  .up-video {
+    width: 100%;
+    /*height: 400rpx;*/
+    border-radius: 10rpx;
+    margin-top: 20rpx;
+    .cover-hw {
+      width: 100%;
+      /*height: 400rpx;*/
+      position: relative;
+    }
+    /*视频样式接口*/
+    .cover-view {
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      .delete-img {
+        position: absolute;
+        width: 60rpx;
+        right: 6rpx;
+        height: 60rpx;
+        top: 6rpx;
+      }
+      .FMimg{
+        width: 100%;
+        height: 400rpx;
+        display: inline-block;
+      }
+      .model-btn {
+        position: absolute;
+        left: 0;
+        top: 0rpx;
+        bottom: 0;
+        right: 0;
+        margin: 140rpx auto 0;
+        width: 140rpx;
+        height: 130rpx;
+        border: 4rpx solid #fff;
+        border-radius: 50%;
+        background-color: rgba(0, 0, 0, 0.3);
+      }
+
+      .play-icon {
+        margin: 38rpx 50rpx;
+        border-top: 33rpx solid transparent;
+        border-left: 54rpx solid #fff;
+        border-bottom: 33rpx solid transparent;
+      }
+
+      /*image {*/
+      /*width: 100%;*/
+      /*height: 100%;*/
+      /*border-radius: 10rpx;*/
+      /*}*/
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
   }
 }
 </style>

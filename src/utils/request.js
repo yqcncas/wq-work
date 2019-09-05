@@ -112,22 +112,22 @@ fly.interceptors.response.use(
   },
   (err, promise) => {
     const data = err.response.data
-    // console.log('aaaaaaaaaaa', data)
+    console.log('aaaaaaaaaaa', err)
     // // 请求出错，根据返回状态码判断出错原因
-    // console.log(err)
+    console.log('data', data)
     // wx.hideLoading()
     // if (err) {
     //   return '请求失败'
     // };
     if (err.status !== 200) {
       wx.showToast({
-        title: `Status Code:${err.status}`,
+        title: `${data.message}`,
         icon: 'none'
       })
       if (err.status === 500) {
         if (data.code && data.code !== 401) {
           wx.showToast({
-            title: `Status Code:${err.status},message:${data.code}${data.message}`,
+            title: `${data.message}`,
             icon: 'none'
           })
         } else if (data.code === 401) {
@@ -136,10 +136,10 @@ fly.interceptors.response.use(
             url: '/pages/loading/main'
           })
         } else {
-          // wx.showToast({
-          //   title: `Status Code:${err.status}`,
-          //   icon: 'none'
-          // })
+          wx.showToast({
+            title: `${data.message}`,
+            icon: 'none'
+          })
         }
       }
     }

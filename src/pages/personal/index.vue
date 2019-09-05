@@ -306,7 +306,8 @@
           title: '反馈中心',
           url: '/pages/pageA/Opinion/main'
         }],
-        silver: []
+        silver: [],
+        card: false
       }
     },
 
@@ -340,10 +341,18 @@
       },
       // 签到
       check () {
-        this.deleteShow = true
-        this.Check = 1
-        this.numA = this.numA + 5
-        this.count = this.count + 1
+        if (this.cardStatus === true) {
+          this.deleteShow = true
+          this.Check = 1
+          this.numA = this.numA + 5
+          this.count = this.count + 1
+        } else {
+          wx.showToast({
+            title: '请先注册名片',
+            duration: 2000,
+            icon: 'none'
+          })
+        }
       },
       checkA () {
         wx.showToast({
@@ -401,9 +410,17 @@
       },
       // 进入消息中心,
       goMessage () {
-        wx.navigateTo({
-          url: '/pages/message/main'
-        })
+        if (this.card === true) {
+          wx.navigateTo({
+            url: '/pages/message/main'
+          })
+        } else {
+          wx.showToast({
+            title: '请先注册名片',
+            duration: 2000,
+            icon: 'none'
+          })
+        }
       },
       // 获取分销商信息
       getShop () {
@@ -440,11 +457,11 @@
       goStats () {
         if (this.cardStatus === true) {
           wx.navigateTo({
-            url: '../pageA/stats/main'
+            url: '/pages/stats/main'
           })
         } else {
           wx.showToast({
-            title: '请先创建名片',
+            title: '请先注册名片',
             icon: 'none',
             duration: 3000
           })
@@ -463,6 +480,9 @@
           const data = wx.getStorageSync('Card')
           if (res.data !== null) {
             this.postForm = res.data
+            this.card = true
+          } else {
+            this.card = false
           }
           if (data !== true) {
             this.chooseBlue.map((item) => {

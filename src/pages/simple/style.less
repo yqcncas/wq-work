@@ -1,6 +1,65 @@
 .simple{
   width: 100%;
   height: 100%;
+  // 信息授权
+  .window{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 999999!important;
+    background: rgba(0,0,0,0.5);
+    .window-mian{
+      width: ~'556rpx';
+      height: ~'638rpx';
+      .window-title{
+        width: ~'556rpx';
+        height: ~'638rpx';
+        border-radius: ~'10rpx';
+        position: relative;
+        //background: url("https://oss.tzyizan.com/salesInfo/201907251327481564032468239.png") no-repeat ~'556rpx' ~'638rpx';
+        img{
+          width: ~'556rpx';
+          height: ~'638rpx';
+          display: inline-block;
+        }
+        i{
+          position: absolute;
+          top: ~'360rpx';
+          width: 100%;
+          text-align: center;
+          p{
+            font-size: ~'32rpx';
+          }
+          span{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            margin-top: ~'40rpx';
+            .look-just{
+              width: ~'284rpx';
+              height: ~'64rpx';
+              font-size: ~'28rpx';
+              line-height: ~'64rpx';
+              background: #FFBA51;
+              color: #ffffff;
+            }
+          }
+          .quxiao{
+            margin-top: ~'20rpx'!important;
+            font-size: ~'28rpx';
+            color: #9B9B9B;
+          }
+        }
+      }
+    }
+  }
+
   .vipTop{
     width: 100%;
     padding: ~'20rpx' ~'0rpx';

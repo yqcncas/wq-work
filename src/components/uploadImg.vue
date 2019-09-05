@@ -239,7 +239,7 @@
     height: ~'120rpx';
     display: inline-block;
     position: relative;
-    border: ~'2rpx' solid #2a94ec!important;
+    border: ~'2rpx' solid #FFA325!important;
     margin-left: ~'10rpx';
     img{
     }

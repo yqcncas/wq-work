@@ -26,7 +26,7 @@
             </block>
           </swiper>
         </div>
-        <div class="NewClass" v-if="tradeStatus !== 0">
+        <div class="NewClass" v-if="dynamicStatus !== 0">
           <div class="NewClass-main">
             <div class="NewChoose" v-for="item in typeList" :key="index" @click="goToSN(item.id)">
              <p class="NewImg">
@@ -40,7 +40,7 @@
         </div>
       </div>
       <!--新闻动态-->
-      <div class="Netmain" v-if=" tradeStatus !== 0">
+      <div class="Netmain" v-if=" dynamicStatus !== 0">
         <div class="Netmain-top">
           <div class="testNav">
             <div
@@ -68,17 +68,17 @@
         <div class="new-list shadow" v-if="newsList.length > 0">
           <div class="news-item-wrap" v-for="(item,index) in newsList" :key="index">
             <div class="news-header flexRow">
-              <div class="avatar-wrp">
+              <div class="avatar-wrp" @click="goToCard(item.salesmanId)">
                 <img class="img" :src="item.salesmanImgUrl" />
               </div>
               <div class="author-info">
-                <div v-if="item.salesmanId"  class="author-name">
+                <div v-if="item.salesmanId"  class="author-name" @click="goToCard(item.salesmanId)">
                   {{item.name?item.name:'未填'}}
                 </div>
-                <div v-else class="author-name">
+                <div v-else class="author-name" @click="goToCard(item.salesmanId)">
                   {{item.author?item.author:'未填'}}
                 </div>
-                <div class="author-date">
+                <div class="author-date" @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
                   {{item.publishTime}}
                 </div>
               </div>
@@ -87,25 +87,36 @@
                 <i v-if="item.salesmanId" class="iconfont iconliaotian1" @click="routerTo(`/pages/msgcenter/main?id=${item.id}`)"></i>
               </div>
             </div>
-            <div class="news-item" @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
-              <p class="item-title" v-if="item.content!==''">
+            <div class="news-item">
+              <p class="item-title" v-if="item.content!==''" @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
                 <span v-if="item.salesmanId" class="title">{{item.content}}</span>
+                <span v-else class="title">{{item.title}}</span>
               </p>
               <div class="news-cover" v-if="item.imgUrl">
-                <image :src="item.imgUrl[0]" class="img" mode="widthFix"></image>
-                <p class="news-desc" v-if="item.abstractText">{{item.abstractText}}</p>
+                <div class="news" v-if="item.salesmanId">
+                  <i v-for="(items,indexs) in item.imgUrl"  :key="indexs">
+                    <image v-if="item.imgUrl.length >1" :src="items" class="img" @click="previewImg(item.imgUrl,indexs)"  mode=""></image>
+                    <image v-else :src="item.imgUrl" class="imgA" @click="previewImg(item.imgUrl,indexs)"  mode="widthFix"></image>
+                  </i>
+                </div>
+                <div class="JiuImg" v-else @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
+                  <image :src="item.imgUrl[0]" class="img" mode="widthFix"></image>
+                  <p class="news-desc" v-if="item.abstractText">{{item.abstractText}}</p>
+                </div>
               </div>
-              <div class="news-cover" v-if="item.videoUrl">
-                <image :src="item.videoUrl + '?x-oss-process=video/snapshot,t_5000,f_jpg,w_750,m_fast'" class="img" mode="widthFix"></image>
+              <div class="news-cover" v-if="item.videoUrl" @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
+                <image :src="item.videoUrl + '?x-oss-process=video/snapshot,t_5000,f_jpg,w_750,m_fast'" class="imgB" mode="scaleToFill"></image>
               </div>
               <div class="news-view flexRow">
                 <div class="flexRow watch">
                   <p>
-                    <i class="iconfont iconchakan1"></i>
+                    <i v-if="item.isChan == false" class="iconfont iconliulan1"></i>
+                    <i v-else class="iconfont iconyanjing1"></i>
                     <span>{{item.browseCount}}</span>
                   </p>
                   <p>
-                    <i class="iconfont iconaixin"></i>
+                    <i v-if="item.isPraise!==1" class="iconfont iconkongaixinfuzhi"></i>
+                    <i v-else class="iconfont iconxin"></i>
                     <span>{{item.praiseCount}}</span>
                   </p>
                 </div>
@@ -151,13 +162,16 @@
         </div>
         <div class="input-bottom" v-if="showTextarea">
         <textarea :auto-focus="true" @confirm="addLeaveMsg" v-model="msgContent" :class="areaType" placeholder="评论"
-                  :auto-height="true" :fixed="true" cursor-spacing="10"></textarea>
+                  :auto-height="true" :fixed="true" maxlength="120" cursor-spacing="10" :show-confirm-bar="true" @blur="deleteMsg"></textarea>
         </div>
-      </div>
+    </div>
       <div v-else>
         <div class="Main-Img">
-          <img src="https://oss.tzyizan.com/salesInfo/201908231552121566546732906.jpg"/>
+          <img src="https://oss.tzyizan.com/salesInfo/201908290855021567040102395.jpg"/>
         </div>
+      </div>
+      <div class="footer" @click="goNet" v-if=" dynamicStatus !== 0">
+        <span>发布</span>
       </div>
       <!--名片-->
       <!--<div class="NetCard" v-if="tradeStatus !== 0">-->
@@ -301,13 +315,14 @@
         windowHeight: '',
         windowHeightA: '',
         deleteShow: false,
-        tradeStatus: 1,
+        dynamicStatus: 1,
         typeId: 0,
         latitude: '',
         longitude: '',
         memberCount: '',
         browseCount: '',
-        newsCount: ''
+        newsCount: '',
+        postForm: false
       }
     },
     onShareAppMessage (res) {
@@ -329,11 +344,13 @@
             imageUrl: item.imgUrl[0]
           }
         } else {
-          let imgUrl = 'https://oss.tzyizan.com/salesInfo/201908231441551566542515010.png?x-oss-process=style/c400'
+          let imgUrl = [{
+            url: 'https://oss.tzyizan.com/salesInfo/201908231441551566542515010.png'
+          }]
           return {
             title: item.content,
             path: 'pages/loading/main?fromWay=4&param=news&newsId=' + item.id,
-            imageUrl: imgUrl
+            imageUrl: imgUrl[0].url
           }
         }
       }
@@ -341,7 +358,9 @@
     onLoad (options) {
       // this.pageNum = 1
       // this.getNews({})
-      this.tradeStatus = wx.getStorageSync('tradeStatus')
+      // 动态开关
+      this.dynamicStatus = wx.getStorageSync('dynamicStatus')
+      // this.tradeStatus = 1
       if (options.newsId) {
         wx.navigateTo({
           url: `/pages/Networking/detail/main?id=` + options.newsId
@@ -356,6 +375,7 @@
     },
     onShow () {
       this.TypeName = ''
+      this.getInfo()
       // this.getCard()
     },
     async onReachBottom () {
@@ -377,6 +397,51 @@
       wx.stopPullDownRefresh()
     },
     methods: {
+      // 预览图片
+      previewImg (e, A) {
+        var imgs = e
+        var temp = []
+        imgs.map(res => {
+          temp.push(res)
+        })
+        wx.previewImage({
+          current: temp[A],
+          urls: temp
+        })
+      },
+      // 页面加载信息
+      getInfo () {
+        const userId = wx.getStorageSync('userId') // 获取本地userId
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/platformSalesman/selectSelfInfo',
+          body: {
+            'userId': userId
+          }
+        }).then(res => {
+          if (res.data !== null) {
+            this.postForm = true
+          } else {
+            this.postForm = false
+          }
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      },
+      // 跳转发布动态
+      goNet () {
+        if (this.postForm === true) {
+          wx.navigateTo({
+            url: '/pages/pageA/release/main'
+          })
+        } else {
+          wx.showToast({
+            title: '请先注册名片',
+            duration: 2000,
+            icon: 'none'
+          })
+        }
+      },
       // 插入雷达
       async insertOpera (info, recordType, newsId) {
         let businessId = wx.getStorageSync('businessId')
@@ -578,6 +643,10 @@
         this.showTextarea = true
         this.commentId = item.id
       },
+      deleteMsg () {
+        this.msgContent = ''
+        this.showTextarea = false
+      },
       async addLeaveMsg () {
         this.name = wx.getStorageSync('nickName')
         if (this.msgContent === '') {
@@ -627,11 +696,20 @@
         this.$set(child, 'showBtn', temp)
       },
       routerTo (url) {
-        wx.navigateTo({ url })
+        if (this.postForm === true) {
+          wx.navigateTo({ url })
+        } else {
+          wx.showToast({
+            title: '请先注册名片',
+            duration: 2000,
+            icon: 'none'
+          })
+        }
       },
       routerToA (url) {
         this.newsList.map(async item => {
           item.browseCount = item.browseCount + 1
+          item.isChan = true
         })
         wx.navigateTo({ url })
       },
@@ -673,6 +751,7 @@
             //   item.img = img
             // }
             item.praiseName = ''
+            item.isChan = false
             // item.imgUrl += '?x-oss-process=style/w750'
             item.nameMapList.map(child => {
               if (item.praiseName.length > 0 && item.praiseName) {
