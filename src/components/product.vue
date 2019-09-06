@@ -74,13 +74,13 @@
 
       <!--样式一-->
       <div class="product-listA" v-if="goodsType === 0">
-        <div class="item-pro" v-for="(item,index) in productList" :key="index" @click="routeTo(item.id)">
+        <div class="item-pro" v-for="(item,index) in productList" :key="index" @click="routeTo(item.id,index)">
           <image v-if="item.imgUrl" class="pro-img"  :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
                  mode="aspectFill"></image>
           <p class="bot-des">{{item.name}}</p>
           <div class="price-brow">
             <p v-if="item.priceStatus!==0"><span>￥</span><span class="price">{{item.price}}</span></p>
-            <p class="box-brow"><i class="iconfont icon-view"></i><span>{{item.browseCount}}</span></p>
+            <p class="box-brow"><i class="iconfont iconyanjing"></i><span>{{item.browseCount}}</span></p>
           </div>
         </div>
       </div>
@@ -96,27 +96,27 @@
               <i class="name" v-if="item.salesmanName !== null">{{item.salesmanName}}</i>
             </span>
           </div>
-          <image @click="routeTo(item.id)" class="pro-img" :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
+          <image @click="routeTo(item.id, index)" class="pro-img" :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
                  mode="aspectFill"></image>
-          <p class="bot-des" @click="routeTo(item.id)">{{item.name}}</p>
-          <div class="price-brow" @click="routeTo(item.id)">
+          <p class="bot-des" @click="routeTo(item.id,index)">{{item.name}}</p>
+          <div class="price-brow" @click="routeTo(item.id,index)">
             <p v-if="item.priceStatus!==0" class="price-brow-main"><span class="yang">￥</span><span class="price">{{item.price}}</span></p>
             <p class="box-brow" v-if="item.getMoney>= 0">
               <span class="getMoney">赚</span>
               <span class="Money">￥ {{item.getMoney}}</span>
             </p>
           </div>
-          <div class="look-Num" @click="routeTo(item.id)">
+          <div class="look-Num" @click="routeTo(item.id ,index)">
             <p class="browseCount"><i class="iconfont iconyanjing"></i><span v-if="item.browseCount < 99" class="num">浏览{{ item.browseCount}}次</span><span v-else class="num">浏览99+次</span></p>
             <p class="pushCount"><i class="iconfont iconfeiji1"></i><span v-if="item.forwardCount < 99" class="num">分享{{item.forwardCount}} 次</span><span v-else class="num">分享99+次</span></p>
             <p class="renZ"><i class="iconfont iconrenzheng"></i><span class="num">已认证</span></p>
           </div>
           <div class="Forward">
-            <button open-type="share" :data-item="item" class="share-btn" @click="openInfo">
+            <button open-type="share" :data-item="item" class="share-btn" @click="openInfo(index)">
               <i class="iconfont iconfenxiang3" @click="shareGoods"></i>
             </button>
           </div>
-          <div class="purchase" @click="routeTo(item.id)">
+          <div class="purchase" @click="routeTo(item.id, index)">
             <i class="iconfont iconiconjia"></i>
           </div>
         </div>
@@ -127,10 +127,10 @@
       <!--样式三-->
       <div class="product-listB" v-if="goodsType === 2">
         <div class="item-pro" v-for="(item,index) in productList" :key="index">
-          <button open-type="share" :data-item="item" class="share-btn" @click="openInfo">
+          <button open-type="share" :data-item="item" class="share-btn" @click="openInfo(index)">
               <i @click="shareGoods" class="iconfont icon31zhuanfa"></i>
           </button>
-          <p  @click="routeTo(item.id)">
+          <p  @click="routeTo(item.id,index )">
             <image  v-if="item.imgUrl" class="pro-img" :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
                    mode="aspectFill"></image>
           </p>
@@ -146,7 +146,7 @@
             <p class="browseCount"><i class="iconfont iconyanjing"></i><span class="num">浏览{{ item.browseCount}}次</span></p>
             <p class="pushCount"><i class="iconfont iconfeiji1"></i><span class="num">已推{{item.forwardCount}}次</span></p>
           </div>
-          <div class="purchase" @click="routeTo(item.id)">
+          <div class="purchase" @click="routeTo(item.id, index)">
             <span>抢购</span>
           </div>
         </div>
@@ -418,12 +418,13 @@
           })
         }
       },
-      openInfo () {
+      openInfo (index) {
         // this.getProduct({ type: 0 })
         // console.log('info', this.info)
-        this.productList.map(async item => {
-          item.forwardCount = item.forwardCount + 1
-        })
+        this.productList[index].forwardCount = this.productList[index].forwardCount + 1
+        // this.productList.map(async item => {
+        //   item.forwardCount = item.forwardCount + 1
+        // })
       },
       getType () {
         const businessId = wx.getStorageSync('businessId') // 获取本地userId
@@ -500,15 +501,17 @@
         this.isFocus = false
         this.getProduct(0)
       },
-      routeTo (id) {
+      routeTo (id, index) {
         // console.log('aaa')
         this.insertOperaA('查看了产品', 3, id)
-        this.productList.map(async item => {
-          item.browseCount = item.browseCount + 1
-        })
         wx.navigateTo({
           url: '../productA/detail/main?id=' + id
         })
+        console.log('index', index)
+        this.productList[index].browseCount = this.productList[index].browseCount + 1
+        // this.productList.map(async item => {
+        //   item.browseCount = item.browseCount + 1
+        // })
       },
       // 插入雷达
       async insertOperaA (info, recordType, id) {
