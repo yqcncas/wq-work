@@ -65,7 +65,10 @@
                 </div>
               </div>
               <div class="news-cover" v-if="item.videoUrl" @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
-                <image :src="item.videoUrl + '?x-oss-process=video/snapshot,t_5000,f_jpg,w_750,m_fast'" class="imgB" mode="scaleToFill"></image>
+                <image :src="item.videoUrl + '?x-oss-process=video/snapshot,t_5000,f_jpg,w_750,m_fast'" class="imgB" mode="scaleToFill">
+                  <i class="iconbofang iconfont"></i>
+                </image>
+
               </div>
               <div class="news-view flexRow">
                 <div class="flexRow watch">
@@ -165,7 +168,8 @@
         latitude: '',
         longitude: '',
         keywords: '',
-        postForm: false
+        postForm: false,
+        pushName: ''
       }
     },
     onLoad (options) {
@@ -231,6 +235,7 @@
         }).then(res => {
           if (res.data !== null) {
             this.postForm = true
+            this.pushName = res.data.name
           } else {
             this.postForm = false
           }
@@ -273,7 +278,16 @@
         await personApi.OperationInsert({ businessId, newsId, info, recordType, salesmanId, userId })
       },
       clickPraise (isPraise, status, id, salesmanId) {
-        this.name = wx.getStorageSync('nickName')
+        if (this.postForm === true) {
+          this.name = this.pushName
+        } else {
+          const nickName = wx.getStorageSync('nickName')
+          if (nickName !== '') {
+            this.name = wx.getStorageSync('nickName')
+          } else {
+            this.name = '游客'
+          }
+        }
         this.closeBtnShow()
         console.log('this.name', this.name)
         this.newsList.map(async item => {
@@ -376,7 +390,16 @@
         }
       },
       async getNews ({ type = 0, name = '' }) {
-        this.name = wx.getStorageSync('nickName')
+        if (this.postForm === true) {
+          this.name = this.pushName
+        } else {
+          const nickName = wx.getStorageSync('nickName')
+          if (nickName !== '') {
+            this.name = wx.getStorageSync('nickName')
+          } else {
+            this.name = '游客'
+          }
+        }
         const result = await apiNews.getNewsType({ businessId: this.businessId, pageNum: this.pageNum, pageSize: this.pageSize, type: this.typeId })
         const code = result.code
         const data = result.data
@@ -415,7 +438,16 @@
         }
       },
       async getNewsName ({ type = 0, name = '' }) {
-        this.name = wx.getStorageSync('nickName')
+        if (this.postForm === true) {
+          this.name = this.pushName
+        } else {
+          const nickName = wx.getStorageSync('nickName')
+          if (nickName !== '') {
+            this.name = wx.getStorageSync('nickName')
+          } else {
+            this.name = '游客'
+          }
+        }
         const result = await apiNews.getNewsTypeName({ businessId: this.businessId, pageNum: this.pageNum, pageSize: this.pageSize, type: this.keywords })
         const code = result.code
         const data = result.data
@@ -648,6 +680,14 @@ width: 100%;
             }
             .imgB{
               width: 100%;
+              position: relative;
+              .iconbofang{
+                color: #ffffff;
+                position: absolute;
+                top: 45%;
+                left: 45%;
+                font-size: ~'80rpx';
+              }
             }
             .JiuImg{
               .img {

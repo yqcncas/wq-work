@@ -101,7 +101,7 @@
           <p class="bot-des" @click="routeTo(item.id)">{{item.name}}</p>
           <div class="price-brow" @click="routeTo(item.id)">
             <p v-if="item.priceStatus!==0" class="price-brow-main"><span class="yang">￥</span><span class="price">{{item.price}}</span></p>
-            <p v-if="item.getMoney >= 0" class="box-brow" >
+            <p class="box-brow" v-if="item.getMoney>= 0">
               <span class="getMoney">赚</span>
               <span class="Money">￥ {{item.getMoney}}</span>
             </p>
@@ -1090,7 +1090,7 @@
       font-size: 22rpx;
       display: block;
       height: 50rpx;
-      width: 400rpx;
+      /*width: 400rpx;*/
       margin: 0rpx 16rpx;
       color: #9d9d9d;
       text-align: left;
@@ -1117,7 +1117,7 @@
           text-align: center;
           float: left;
           width: 43rpx;
-          height: 35rpx;
+          height: 36rpx;
           margin-left: 10rpx;
           background: #FF424E;
           color: #ffffff;
@@ -1127,7 +1127,7 @@
         }
         .Money {
           width: 108rpx;
-          height: 32rpx;
+          height: 34rpx;
           display: inline-block;
           text-align: center;
           border: 1rpx solid #FF424E;
@@ -1261,7 +1261,7 @@
           text-align: center;
           float: left;
           width: 43rpx;
-          height: 35rpx;
+          height: 36rpx;
           margin-left: 10rpx;
           background: #FF424E;
           color: #ffffff;
@@ -1271,7 +1271,7 @@
         }
         .Money{
           width: 108rpx;
-          height: 32rpx;
+          height: 34rpx;
           display: inline-block;
           text-align: center;
           border:1rpx solid #FF424E;

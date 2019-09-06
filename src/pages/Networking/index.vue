@@ -105,7 +105,9 @@
                 </div>
               </div>
               <div class="news-cover" v-if="item.videoUrl" @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
-                <image :src="item.videoUrl + '?x-oss-process=video/snapshot,t_5000,f_jpg,w_750,m_fast'" class="imgB" mode="scaleToFill"></image>
+                <image :src="item.videoUrl + '?x-oss-process=video/snapshot,t_5000,f_jpg,w_750,m_fast'" class="imgB" mode="scaleToFill">
+                  <i class="iconbofang iconfont"></i>
+                </image>
               </div>
               <div class="news-view flexRow">
                 <div class="flexRow watch">
@@ -322,7 +324,8 @@
         memberCount: '',
         browseCount: '',
         newsCount: '',
-        postForm: false
+        postForm: false,
+        pushName: ''
       }
     },
     onShareAppMessage (res) {
@@ -421,6 +424,7 @@
         }).then(res => {
           if (res.data !== null) {
             this.postForm = true
+            this.pushName = res.data.name
           } else {
             this.postForm = false
           }
@@ -603,7 +607,16 @@
       // },
       //   点赞
       clickPraise (isPraise, status, id, salesmanId) {
-        this.name = wx.getStorageSync('nickName')
+        if (this.postForm === true) {
+          this.name = this.pushName
+        } else {
+          const nickName = wx.getStorageSync('nickName')
+          if (nickName !== '') {
+            this.name = wx.getStorageSync('nickName')
+          } else {
+            this.name = '游客'
+          }
+        }
         this.closeBtnShow()
         console.log('this.name', this.name)
         this.newsList.map(async item => {
@@ -648,7 +661,16 @@
         this.showTextarea = false
       },
       async addLeaveMsg () {
-        this.name = wx.getStorageSync('nickName')
+        if (this.postForm === true) {
+          this.name = this.pushName
+        } else {
+          const nickName = wx.getStorageSync('nickName')
+          if (nickName !== '') {
+            this.name = wx.getStorageSync('nickName')
+          } else {
+            this.name = '游客'
+          }
+        }
         if (this.msgContent === '') {
           this.showTextarea = false
           wx.showToast({
@@ -738,7 +760,16 @@
         }
       },
       async getNews ({ type = 0, name = '' }) {
-        this.name = wx.getStorageSync('nickName')
+        if (this.postForm === true) {
+          this.name = this.pushName
+        } else {
+          const nickName = wx.getStorageSync('nickName')
+          if (nickName !== '') {
+            this.name = wx.getStorageSync('nickName')
+          } else {
+            this.name = '游客'
+          }
+        }
         const that = this
         const result = await apiNews.getNews({ businessId: that.businessId, pageNum: that.pageNum, pageSize: that.pageSize, typeId: that.typeId, latitude: that.latitude, longitude: that.longitude })
         const code = result.code

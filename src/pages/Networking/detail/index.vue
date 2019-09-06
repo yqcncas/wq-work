@@ -15,11 +15,11 @@
           </div>
           <div class="imgA" v-if="imgUrl.length>0">
             <div class="imgMainA" v-for="item in imgUrl" :key="index">
-              <image :src="item" class="imgB"  @click="previewImg(imgUrl,index)"  mode=""></image>
+              <image :src="item" class="imgB"  @click="previewImg(imgUrl,index)"  mode="widthFix"></image>
             </div>
           </div>
           <div class="up-video" v-if="video">
-            <video id="myVideo" v-if="videoFlag" :src="video" @play="playA()"  @ended=" end()" autoplay objectFit="fill" class="cover-hw"></video>
+            <video id="myVideo" v-if="videoFlag" :src="video" @play="playA()"  @ended=" end()" autoplay objectFit="contain" class="cover-hw"></video>
             <div v-else class="cover-view" >
               <div @click="videoPlay">
                 <!--<i class="delete-img iconfont iconshanchu-copy" @click="deleteVideo"></i>-->
@@ -147,14 +147,14 @@ export default {
     // 播放开始
     playA () {
       this.videoFlag = true
-      // const videoContext = wx.createVideoContext('myVideo')
-      // videoContext.play()
+      const videoContext = wx.createVideoContext('myVideo')
+      videoContext.requestFullScreen()
     },
     // 播放结束
     end () {
       this.videoFlag = false
-      // const videoContext = wx.createVideoContext('myVideo')
-      // videoContext.seek(0)
+      const videoContext = wx.createVideoContext('myVideo')
+      videoContext.exitFullScreen()
       // videoContext.stop()
     },
     // 播放视频
@@ -455,19 +455,20 @@ export default {
   padding-top: 0.4rem;
   .imgA{
     width: 100%;
-    margin-top: 20rpx;
+    height: 100%;
+    margin-top: 30rpx;
     .imgMainA {
-      float: left;
+      /*float: left;*/
       //新闻封面
-      margin-right:15rpx;
-      width: 220rpx;
-      height: 220rpx;
+      /*margin-right:15rpx;*/
+      margin-top: -8rpx;
+      width: 100%;
+      /*height: 220rpx;*/
       .imgB {
-        width: 220rpx;
-        height: 220rpx;
-        display: inline-block;
+        width: 100%;
+        /*height: 220rpx;*/
         /*margin-top: 20rpx;*/
-        /*display: inline-block;*/
+        display: inline-block;
       }
     }
     .imgMainA:nth-child(3){
@@ -487,14 +488,15 @@ export default {
     margin-top: 20rpx;
     .cover-hw {
       width: 100%;
-      /*height: 400rpx;*/
+      height: 500rpx;
+      display: inline-block;
       position: relative;
     }
     /*视频样式接口*/
     .cover-view {
       display: inline-block;
       width: 100%;
-      height: 100%;
+      /*height: 100%;*/
       position: relative;
       .delete-img {
         position: absolute;
@@ -505,7 +507,7 @@ export default {
       }
       .FMimg{
         width: 100%;
-        height: 400rpx;
+        height: 500rpx;
         display: inline-block;
       }
       .model-btn {
