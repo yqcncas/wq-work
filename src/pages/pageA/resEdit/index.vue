@@ -9,7 +9,7 @@
             </picker>
         </div>
         <div class="text">
-          <textarea v-model="title" class="inputMsg" placeholder="请输入内容" @input="txtInput"></textarea>
+          <textarea v-model="title" class="inputMsg" placeholder="请输入内容" maxlength="300" @input="txtInput"></textarea>
         </div>
         <div class="upload" v-if="photoId == 1">
           <uploadImgA ref="imgUrlList" :srcs="imgUrlList" width="207rpx" height="207rpx" max="9" @choosed="choosed" @delete=""></uploadImgA>

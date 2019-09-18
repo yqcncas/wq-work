@@ -33,7 +33,7 @@
               <swiper :indicator-dots="indicatorDots" :autoplay="autoplay" indicator-color= "#ffffff" :interval="interval" :duration="duration" :circular ="circular" class="bannerMain">
                 <block v-for="item in imgUrls" :key="index">
                   <swiper-item class="swiper">
-                    <img :src="item.src" class="slide-image"/>
+                    <img :src="item.image" class="slide-image"/>
                   </swiper-item>
                 </block>
               </swiper>
@@ -44,7 +44,7 @@
               <img v-else @click="ToMessage()" src="https://oss.tzyizan.com/salesInfo/201908081456201565247380716.png">
             </div>
             <!--<div class="Tuik" @click="ToMessage()" v-else>-->
-              <!--<img src="https://oss.tzyizan.com/salesInfo/201908081456201565247380716.png">-->
+            <!--<img src="https://oss.tzyizan.com/salesInfo/201908081456201565247380716.png">-->
             <!--</div>-->
             <div class="ification">
               <wan-taba @change='tabChange' :tabs="category"></wan-taba>
@@ -89,7 +89,8 @@
 
       <!--样式二-->
       <div class="product-listC" v-if="goodsType === 1">
-        <div class="item-pro" v-for="(item,index) in productList" :key="index">
+        <div class="" v-for="(item,index) in productList" :key="index">
+          <div class="item-pro" v-if="!item.image">
           <div class="topA">
             <span class="info">
               <i class="HeadImg" v-if="item.headUrl"><img :src="item.headUrl"></i>
@@ -101,7 +102,7 @@
           <p class="bot-des" @click="routeTo(item.id,index)">{{item.name}}</p>
           <div class="price-brow" @click="routeTo(item.id,index)">
             <p v-if="item.priceStatus!==0" class="price-brow-main"><span class="yang">￥</span><span class="price">{{item.price}}</span></p>
-            <p class="box-brow" v-if="item.getMoney>= 0">
+            <p class="box-brow">
               <span class="getMoney">赚</span>
               <span class="Money">￥ {{item.getMoney}}</span>
             </p>
@@ -120,34 +121,43 @@
             <i class="iconfont iconiconjia"></i>
           </div>
         </div>
+          <div v-else class="banner">
+            <img class="imgMain" :src="item.image" mode="widthFix" />
+          </div>
+        </div>
       </div>
 
 
 
       <!--样式三-->
       <div class="product-listB" v-if="goodsType === 2">
-        <div class="item-pro" v-for="(item,index) in productList" :key="index">
-          <button open-type="share" :data-item="item" class="share-btn" @click="openInfo(index)">
-              <i @click="shareGoods" class="iconfont icon31zhuanfa"></i>
-          </button>
-          <p  @click="routeTo(item.id,index )">
-            <image  v-if="item.imgUrl" class="pro-img" :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
-                   mode="aspectFill"></image>
-          </p>
-          <p class="bot-des">{{item.name}}</p>
-          <div class="price-brow">
-            <p v-if="item.priceStatus!==0" class="price-brow-main"><span class="yang">￥</span><span class="price">{{item.price}}</span></p>
-            <p class="box-brow" v-if="item.getMoney>= 0">
-              <span class="getMoney">赚</span>
-              <span class="Money">￥ {{item.getMoney}}</span>
+        <div class="" v-for="(item,index) in productList" :key="index">
+          <div class="item-pro"  v-if="!item.image">
+            <button open-type="share" :data-item="item" class="share-btn" @click="openInfo(index)">
+                <i @click="shareGoods" class="iconfont icon31zhuanfa"></i>
+            </button>
+            <p  @click="routeTo(item.id,index )">
+              <image  v-if="item.imgUrl" class="pro-img" :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
+                     mode="aspectFill"></image>
             </p>
+            <p class="bot-des">{{item.name}}</p>
+            <div class="price-brow">
+              <p v-if="item.priceStatus!==0" class="price-brow-main"><span class="yang">￥</span><span class="price">{{item.price}}</span></p>
+              <p class="box-brow">
+                <span class="getMoney">赚</span>
+                <span class="Money">￥ {{item.getMoney}}</span>
+              </p>
+            </div>
+            <div class="look-Num">
+              <p class="browseCount"><i class="iconfont iconyanjing"></i><span class="num">浏览{{ item.browseCount}}次</span></p>
+              <p class="pushCount"><i class="iconfont iconfeiji1"></i><span class="num">已推{{item.forwardCount}}次</span></p>
+            </div>
+            <div class="purchase" @click="routeTo(item.id, index)">
+              <span>抢购</span>
+            </div>
           </div>
-          <div class="look-Num">
-            <p class="browseCount"><i class="iconfont iconyanjing"></i><span class="num">浏览{{ item.browseCount}}次</span></p>
-            <p class="pushCount"><i class="iconfont iconfeiji1"></i><span class="num">已推{{item.forwardCount}}次</span></p>
-          </div>
-          <div class="purchase" @click="routeTo(item.id, index)">
-            <span>抢购</span>
+          <div v-else class="banner">
+            <img class="imgMain" :src="item.image" mode="widthFix" />
           </div>
         </div>
       </div>
@@ -254,6 +264,7 @@
       this.getCategory()
       this.getProduct({ type: 0 })
       this.getType()
+      this.getNews()
       this.getInfo()
     },
     onShow () {
@@ -279,13 +290,13 @@
         } else if (ev.scrollTop < 245) {
           this.show = false
         }
-        if (ev.scrollTop > 283) {
+        if (ev.scrollTop > 260) {
           this.Active = true
         }
-        // console.log('向下滚动')
+        // console.log('向下滚动'283)
       } else {
         this.showA = false
-        if (ev.scrollTop < 265) {
+        if (ev.scrollTop < 255) {
           this.showB = false
         }
         if (ev.scrollTop < 245) {
@@ -293,7 +304,7 @@
         } else if (ev.scrollTop > 245) {
           this.show = true
         }
-        if (ev.scrollTop < 285) {
+        if (ev.scrollTop < 260) {
           this.Active = false
           // this.show = false
         }
@@ -344,6 +355,25 @@
     //   }
     // },
     methods: {
+      // 获取广告
+      getNews () {
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/advert/list',
+          body: {
+            pageNum: 1,
+            pageSize: 5,
+            position: 0
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            this.imgUrls = res.data.list
+          }
+          // console.log('News', res)
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      },
       // 进入推客页面
       ToMessage () {
         wx.showToast({
@@ -547,13 +577,13 @@
         const result = await product.getCategory({ businessId })
         const category = result.data
         // console.log('categoryA', category)
-        category.unshift({
-          business_id: businessId,
-          id: '',
-          typeId: 0,
-          iconUrl: 'https://oss.tzyizan.com/goodsTypeIcon/微信图片_20190815083453.png',
-          typeName: '全部'
-        })
+        // category.unshift({
+        //   business_id: businessId,
+        //   id: '',
+        //   typeId: 0,
+        //   iconUrl: 'https://oss.tzyizan.com/goodsTypeIcon/微信图片_20190815083453.png',
+        //   typeName: '全部'
+        // })
         this.category = category
       },
       // 滚动bar，可以根据类别来查找每一类商品
@@ -570,7 +600,7 @@
         this.pageNum = 1
         this.searchContent = ''
         wx.pageScrollTo({
-          scrollTop: 290
+          scrollTop: 260
         })
         this.categoryId = ''
         this.sortingType = obj.sortingType
@@ -979,6 +1009,16 @@
     justify-items: center;
     align-items: center;
     text-align: center;
+    .banner{
+      width: 694rpx;
+      display: block;
+      margin: 30rpx auto 0;
+      .imgMain{
+        width: 100%;
+        display: inline-block;
+        border-radius: 10rpx;
+      }
+    }
     .item-pro {
       width: 694rpx;
       height: 200rpx;
@@ -1049,7 +1089,7 @@
     .look-Num{
       position: absolute;
       top: 155rpx;
-      left: 170rpx;
+      left: 180rpx;
       font-size: 22rpx;
       padding: 4rpx 30rpx 0rpx 28rpx;
       color: #9d9d9d;
@@ -1198,6 +1238,16 @@
     justify-items: center;
     align-items: center;
     text-align: center;
+    .banner{
+      width: 694rpx;
+      display: block;
+      margin: 30rpx auto 0;
+      .imgMain{
+        width: 100%;
+        display: inline-block;
+        border-radius: 10rpx;
+      }
+    }
     .item-pro{
       width: 694rpx;
       height: 862rpx;

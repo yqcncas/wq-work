@@ -6,6 +6,7 @@
     "pages/cardCollect/main",
     "pages/moreProduct/main",
     "pages/SNetworking/main",
+    "pages/activation/main",
     "pages/Networking/detail/main",
     "pages/Networking/leaveMessage/main",
     "pages/index/main",
@@ -108,7 +109,7 @@
         "text": "主页",
         "pagePath": "pages/businesscard/main",
         "iconPath": "static/images/my.png",
-        "selectedIconPath": "static/images/my-se1.png"
+        "selectedIconPath": "static/images/my-se.png"
       },{
       "text": "动态",
       "pagePath": "pages/Networking/main",
@@ -118,18 +119,18 @@
         "text": "人脉",
         "pagePath": "pages/logs/main",
         "iconPath": "static/images/net.png",
-        "selectedIconPath": "static/images/net-se1.png"
+        "selectedIconPath": "static/images/net-se.png"
       },{
       "text": "集市",
       "pagePath": "pages/navigation/main",
       "iconPath": "static/images/more.png",
-      "selectedIconPath": "static/images/more-se1.png"
+      "selectedIconPath": "static/images/more-se.png"
     },
       {
       "text": "个人中心",
       "pagePath": "pages/personal/main",
       "iconPath": "static/images/person.png",
-      "selectedIconPath": "/static/images/person-se1.png"
+      "selectedIconPath": "/static/images/person-se.png"
       }],
     "position": "bottom"
   }

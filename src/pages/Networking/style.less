@@ -309,6 +309,16 @@
         border-bottom: ~'2rpx' solid #eee;
         padding: ~'28rpx' ~'20rpx' ~'57rpx';
         box-sizing: border-box;
+        .banner{
+          width: ~'658'rpx;
+          margin:  0 auto;
+          display: block;
+          .imgMain{
+            width: 100%;
+            display: inline-block;
+            border-radius: ~'10rpx';
+          }
+        }
         //新闻item 头部
         .news-header {
           height: ~'88rpx';
@@ -379,7 +389,7 @@
           .item-title {
             width: 100%;
             margin: 0 auto;
-            padding: ~'26rpx' 0 ~'21rpx' 0;
+            //padding: ~'26rpx' 0 ~'21rpx' 0;
             color: #4A4A4A;
             font-size: ~'32rpx';
 
@@ -431,7 +441,7 @@
               .iconbofang{
                 color: #ffffff;
                 position: absolute;
-                top: 45%;
+                top: 40%;
                 left: 45%;
                 font-size: ~'80rpx';
               }
@@ -975,5 +985,110 @@
     display: inline-block;
     width: 100%;
     height: 100%;
+  }
+}
+
+
+// 收起展开
+.total-introduce {
+  height: auto;
+  overflow: hidden;
+  font-size: ~'28rpx';
+  color: #434343;
+  margin: ~'20rpx';
+  .intro-content {
+    .merchant-desc {
+      width: 100%;
+      line-height: ~'42rpx';
+    }
+  }
+}
+.unfold {
+  display: block;
+  z-index: 11;
+  //float: right;
+  width: ~'80rpx';
+  height: ~'42rpx';
+  p {
+    margin: 0;
+    line-height: ~'42rpx';
+    color: #566A95;
+  }
+}
+.detailed-introduce {
+  font-size: ~'28rpx';
+  color: #434343;
+  position: relative;
+  overflow: hidden;
+  margin: ~'20rpx';
+
+  .intro-content {
+    // 最大高度设为4倍的行间距
+    max-height: ~'168rpx';
+    line-height: 21px;
+    word-wrap: break-word;
+    /*强制打散字符*/
+    word-break: break-all;
+    background: #ffffff;
+    /*同背景色*/
+    //color: #ffffff;
+    overflow: hidden;
+    margin-bottom: ~'50rpx';
+    .merchant-desc {
+      width: 100%;
+      line-height: ~'42rpx';
+    }
+
+    &:after,
+      // 这是展开前实际显示的内容
+    &:before {
+      content: attr(title);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      color: #434343
+      // overflow: hidden;
+    }
+
+    // 把最后最后一行自身的上面三行遮住
+    &:before {
+      display: block;
+      overflow: hidden;
+      z-index: 1;
+      max-height: 63px;
+      background: #ffffff;
+    }
+
+    &:after {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      height: 81px;
+      /*截取行数*/
+      -webkit-line-clamp: 4;
+      text-overflow: ellipsis;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      /*行首缩进字符数，值为[(截取行数-1)*尾部留空字符数]*/
+      //text-indent: -12em;
+      /*尾部留空字符数*/
+      //padding-right: 4em;
+    }
+  }
+  .unfold {
+    z-index: 11;
+    width: 40px;
+    height: 21px;
+    outline: 0;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    p {
+      margin: 0;
+      line-height: 21px;
+      color: #566A95;
+    }
   }
 }

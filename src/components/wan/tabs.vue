@@ -77,7 +77,7 @@ export default {
     },
     toCA () {
       wx.pageScrollTo({
-        scrollTop: 291
+        scrollTop: 262
       })
     },
     // 获取所有的购物车里的数量

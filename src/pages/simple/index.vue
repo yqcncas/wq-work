@@ -38,10 +38,12 @@
         </div>
       </div>
       <div class="footer">
-        <!--<button @click="True()">确定</button>-->
         <button v-if="isBuy === 0" class="save" @click="getSalesmanUpdate()">确定</button>
         <button v-else @click="getBuyCard()">确定</button>
       </div>
+      <!--<div class="activation" @click="goToAction()">-->
+        <!--<span>拥有激活码点击前往激活<i class="iconfont iconyouce"></i> </span>-->
+      <!--</div>-->
 
       <div class="NetSucces" v-if="deleteShow === true">
         <div class="NetSucces-main">
@@ -139,6 +141,12 @@
       this.company = ''
     },
     methods: {
+      // 跳转进入激活码页面
+      goToAction () {
+        wx.navigateTo({
+          url: '/pages/activation/main'
+        })
+      },
       // 授权
       async bindGetUserInfo (e) {
         // 解密

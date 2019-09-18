@@ -219,6 +219,11 @@
           src: '../../static/images/release.png',
           title: '我的发布',
           url: '../pageA/release/main'
+        },
+        {
+          src: '../../static/images/map.png',
+          title: '地址管理',
+          url: '/pages/pageA/addressSelect/main'
         }],
         chooseOrange: [ {
           src: '../../static/images/pifu.png',
@@ -255,6 +260,11 @@
           src: '../../static/images/release.png',
           title: '我的发布',
           url: '../pageA/release/main'
+        },
+        {
+          src: '../../static/images/map.png',
+          title: '地址管理',
+          url: '/pages/pageA/addressSelect/main'
         }],
         chooseOrangeA: [ {
           src: '../../static/images/pifu.png',
@@ -291,6 +301,10 @@
           src: '../../static/images/release.png',
           title: '我的发布',
           url: '../pageA/release/main'
+        }, {
+          src: '../../static/images/map.png',
+          title: '地址管理',
+          url: '/pages/pageA/addressSelect/main'
         }],
         chooseOrangeB: [ {
           src: '../../static/images/pifu.png',
@@ -373,6 +387,9 @@
         }).then(res => {
           const Member = wx.getStorageSync('vipId')
           console.log('Member', Member)
+
+          this.silver = res.data
+          console.log('this.silver', this.silver)
           if (Member === 0 || Member === null || Member === '') {
             this.Member = '无会员'
             wx.setStorageSync('vipId', 0)

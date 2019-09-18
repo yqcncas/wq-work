@@ -1,32 +1,6 @@
 <template>
   <div>
     <scroll-view :scroll-y="isScroll">
-      <!--<vue-tab-bar-->
-      <!--@fetch-index="clickIndexNav"-->
-      <!--:selectNavIndex=selectNavIndex-->
-      <!--:needButton="needButton"-->
-      <!--:handButton="handButton"-->
-      <!--:btnText="btnText">-->
-      <!--</vue-tab-bar>-->
-      <!--分享的bar-->
-      <!--<div class="attr-pop" :class="[showpop ? 'fadeup' : 'fadedown']">-->
-        <!--<div class="top">-->
-          <!--<div class="left">-->
-            <!--<button class="wxhy-btn" open-type="share">-->
-              <!--<span class="wx-fri iconfont iconweixin1"></span>-->
-              <!--<span class="font-26">微信好友</span>-->
-            <!--</button>-->
-          <!--</div>-->
-          <!--<div class="right" @click='posterRouer'>-->
-            <!--<div class="wxhy-btn">-->
-              <!--<span class="wx-qr iconfont iconcardcode"></span>-->
-
-              <!--<span class="font-26">名片码</span>-->
-            <!--</div>-->
-          <!--</div>-->
-        <!--</div>-->
-        <!--<div @click="showType" class="cancel-btn">取消</div>-->
-      <!--</div>-->
       <div class="cardHold">
         <!--顶部-->
         <!--:style="'height:' + windowHeight + 'px'"-->
@@ -100,51 +74,6 @@
                           </div>
                           <div class="border" v-if="index - 1 !== items.length - 2 && items.length > 1"></div>
                         </div>
-                        <!--<div class="cardHold-ftMain-ct-img" @click="goToCard(item.salesmanId)" >-->
-                          <!--<img :src="item.imgUrl +'?x-oss-process=style/c400'"/>-->
-                        <!--</div>-->
-                        <!--<div v-if="item.grade === 'V1' && item.grade === null "  class="cardHold-ftMain-rt" @click="recover(index,items)">-->
-                          <!--<div @click="goToCard(item.salesmanId)">-->
-                            <!--<span class="icon">企</span>-->
-                            <!--<span class="name">{{ item.name }}</span>-->
-                            <!--<span class="job">{{ item.job }}</span>-->
-                            <!--<span class="status">{{ item.status }}</span>-->
-                            <!--<span class="grade">{{ item.grade }}</span>-->
-                            <!--<p class="company">{{ item.salesCompanyName }}</p>-->
-                          <!--</div>-->
-                          <!--<div class="phone" @click="makePhoneCall(item.phone)">-->
-                            <!--<img src="../../../static/images/call.png"/>-->
-                          <!--</div>-->
-                          <!--<div class="border" v-if="index - 1 !== items.length - 2 && items.length > 1"></div>-->
-                        <!--</div>-->
-                        <!--<div v-else-if="item.grade === 'V2' " class="cardHold-ftMain-rt2 " @click="recover(index,items)">-->
-                          <!--<div @click="goToCard(item.salesmanId)">-->
-                            <!--<span class="icon">企</span>-->
-                            <!--<span class="name">{{ item.name }}</span>-->
-                            <!--<span class="job">{{ item.job }}</span>-->
-                            <!--<span class="status">{{ item.status }}</span>-->
-                            <!--<span class="grade">{{ item.grade }}</span>-->
-                            <!--<p class="company">{{ item.salesCompanyName }}</p>-->
-                          <!--</div>-->
-                          <!--<div class="phone"  @click="makePhoneCall(item.phone)">-->
-                            <!--<img src="../../../static/images/call.png"/>-->
-                          <!--</div>-->
-                          <!--<div class="border" v-if="index - 1 !== items.length - 2 && items.length > 1"></div>-->
-                        <!--</div>-->
-                        <!--<div v-else class="cardHold-ftMain-rt3" @click="recover(index,items)">-->
-                          <!--<div @click="goToCard(item.salesmanId)">-->
-                            <!--<span class="icon">企</span>-->
-                            <!--<span class="name">{{ item.name }}</span>-->
-                            <!--<span class="job">{{ item.job }}</span>-->
-                            <!--<span class="status">{{ item.status }}</span>-->
-                            <!--<span class="grade">{{ item.grade }}</span>-->
-                            <!--<p class="company">{{ item.salesCompanyName }}</p>-->
-                          <!--</div>-->
-                          <!--<div class="phone"  @click="makePhoneCall(item.phone)">-->
-                            <!--<img src="../../../static/images/call.png"/>-->
-                          <!--</div>-->
-                          <!--<div class="border" v-if="index - 1 !== items.length - 2 && items.length > 1"></div>-->
-                        <!--</div>-->
                       <div class="delete" @click="delect(index,items,item.salesmanId)">
                         删除
                       </div>

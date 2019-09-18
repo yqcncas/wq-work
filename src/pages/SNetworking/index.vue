@@ -27,6 +27,7 @@
         </div>
         <div class="new-list shadow" v-if="newsList.length > 0">
           <div class="news-item-wrap" v-for="(item,index) in newsList" :key="index">
+            <div v-if="!item.image" class="">
             <div class="news-header flexRow">
               <div class="avatar-wrp" @click="goToCard(item.salesmanId)">
                 <img class="img" :src="item.salesmanImgUrl" />
@@ -48,10 +49,25 @@
               </div>
             </div>
             <div class="news-item">
-              <p class="item-title" v-if="item.content!==''" @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
-                <span v-if="item.salesmanId" class="title">{{item.content}}</span>
-                <span v-else class="title">{{item.title}}</span>
-              </p>
+              <div class="item-title" v-if="item.content!==''">
+                <div :class="item.showTotal ? 'total-introduce' : 'detailed-introduce'">
+                  <div v-if="item.salesmanId" class="intro-content" :title="item.content" ref="desc"  @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
+                    <!--<span class="merchant-desc" v-if="introduce">-->
+                    <!--{{introduce}}-->
+                    <!--</span>      -->
+                            <span class="merchant-desc" :id="'mydesc' + index" @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">{{item.content}}</span>
+                  </div>
+                  <div v-else class="intro-content" :title="item.title" ref="desc"  @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
+                    <!--<span class="merchant-desc" v-if="introduce">-->
+                    <!--{{introduce}}-->
+                    <!--</span>      -->
+                    <span class="merchant-desc" :id="'mydesc' + index" @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">{{item.title}}</span>
+                  </div>
+                  <div class="unfold" @click="showTotalIntro(index,item)" v-if="item.showExchangeButton">
+                    <p>{{item.exchangeButton ? '展开' : '收起'}}</p>
+                  </div>
+                </div>
+              </div>
               <div class="news-cover" v-if="item.imgUrl">
                 <div class="news" v-if="item.salesmanId">
                   <i v-for="(items,indexs) in item.imgUrl"  :key="indexs">
@@ -65,7 +81,7 @@
                 </div>
               </div>
               <div class="news-cover" v-if="item.videoUrl" @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
-                <image :src="item.videoUrl + '?x-oss-process=video/snapshot,t_5000,f_jpg,w_750,m_fast'" class="imgB" mode="scaleToFill">
+                <image :src="item.videoUrl + '?x-oss-process=video/snapshot,t_1000,f_jpg,w_750,m_fast'" class="imgB" mode="scaleToFill">
                   <i class="iconbofang iconfont"></i>
                 </image>
 
@@ -119,6 +135,10 @@
               </div>
             </div>
           </div>
+            <div class="banner" v-else>
+              <img class="imgMain" :src="item.image" mode="widthFix" />
+            </div>
+          </div>
         </div>
         <div v-else class="new-listBottom">
           <span>暂无数据</span>
@@ -139,6 +159,15 @@
     name: 'index',
     data () {
       return {
+        introduce: '',
+        // 是否展示所有文本内容
+        showTotal: true,
+        // 显示展开还是收起
+        exchangeButton: true,
+        // 是否显示展开收起按钮
+        showExchangeButton: false,
+        descHeight: '',
+        rem: '',
         newsList: [],
         typeList: [],
         tab: 1,
@@ -210,7 +239,66 @@
       // 停止下拉刷新
       wx.stopPullDownRefresh()
     },
+    watch: {
+      newsList: function () {
+        this.$nextTick(function () {
+          this.newsList.map((item, index) => {
+            // console.log('nextTick')
+            // 判断介绍是否超过四行
+            // let rem = parseFloat(this.getRem())
+            // console.log('watch 中的rem', rem)
+            if (!this.$refs.desc) {
+              // console.log('desc null')
+              return
+            }
+            var query = wx.createSelectorQuery()
+            // var that = this
+            // console.log('\'#mydesc\' + index', '#mydesc' + index)
+            query.select('#mydesc' + index).boundingClientRect(function (rect) {
+              // that.setData({
+              //   height: rect.width + 'px'
+              // })
+              // console.log('rect', rect)
+              this.descHeight = rect.height
+              // const remA = rem + 'rpx'
+              // console.log('descHeight:' + this.descHeight)
+              // console.log('如果 descHeight 超过' + (rem) + '就要显示展开按钮')
+              if (this.descHeight >= 84) {
+                // console.log('超过了四行')
+                // 显示展开收起按钮
+                item.showExchangeButton = true
+                item.exchangeButton = true
+                // 不是显示所有
+                item.showTotal = false
+                // console.log('showExchangeButton', item.showExchangeButton)
+                // console.log('showTotal', item.showTotal)
+              } else {
+                // 不显示展开收起按钮
+                item.showExchangeButton = false
+                // 没有超过四行就显示所有
+                item.showTotal = true
+                // console.log('showExchangeButton', item.showExchangeButton)
+                // console.log('showTotal', item.showTotal)
+              }
+            }).exec()
+          })
+        }.bind(this))
+      }
+    },
     methods: {
+      showTotalIntro (index) {
+        this.newsList[index].showTotal = !this.newsList[index].showTotal
+        this.newsList[index].exchangeButton = !this.newsList[index].exchangeButton
+        console.log(this.newsList[index].exchangeButton)
+      },
+      getRem () {
+        // console.log('getRem')
+        // const defaultRem = 16
+        let winWidth = wx.getSystemInfoSync().windowHeight
+        // console.log('winWidth:' + winWidth)
+        let rem = winWidth / 5
+        return rem
+      },
       // 预览图片
       previewImg (e, A) {
         var imgs = e
@@ -406,17 +494,22 @@
         console.log('dataA', data)
         if (code === 200) {
           data.list.map(item => {
-            item.publishTime = this.moment(item.publishTime).format('MM月DD日')
-            item.isChan = false
-            item.praiseName = ''
-            // item.imgUrl += '?x-oss-process=style/w750'
-            item.nameMapList.map(child => {
-              if (item.praiseName.length > 0 && item.praiseName) {
-                item.praiseName = item.praiseName + ',' + child.name
-              } else {
-                item.praiseName = child.name
-              }
-            })
+            if (!item.image) {
+              item.showTotal = true
+              item.showExchangeButton = false
+              item.exchangeButton = true
+              item.publishTime = this.moment(item.publishTime).format('MM月DD日')
+              item.isChan = false
+              item.praiseName = ''
+              // item.imgUrl += '?x-oss-process=style/w750'
+              item.nameMapList.map(child => {
+                if (item.praiseName.length > 0 && item.praiseName) {
+                  item.praiseName = item.praiseName + ',' + child.name
+                } else {
+                  item.praiseName = child.name
+                }
+              })
+            }
           })
           if (type === 0) {
             this.newsList = data.list
@@ -562,6 +655,17 @@ width: 100%;
         border-bottom: ~'2rpx' solid #eee;
         padding: ~'28rpx' ~'20rpx' ~'57rpx';
         box-sizing: border-box;
+        .banner{
+          width: ~'658'rpx;
+          margin:  0 auto;
+          display: block;
+          padding: 0!important;
+          .imgMain{
+            width: 100%;
+            display: inline-block;
+            border-radius: ~'10rpx';
+          }
+        }
         //新闻item 头部
         .news-header {
           height: ~'88rpx';
@@ -632,7 +736,7 @@ width: 100%;
           .item-title {
             width: 100%;
             margin: 0 auto;
-            padding: ~'26rpx' 0 ~'21rpx' 0;
+            /*padding: ~'26rpx' 0 ~'21rpx' 0;*/
             color: #4A4A4A;
             font-size: ~'32rpx';
 
@@ -684,7 +788,7 @@ width: 100%;
               .iconbofang{
                 color: #ffffff;
                 position: absolute;
-                top: 45%;
+                top: 40%;
                 left: 45%;
                 font-size: ~'80rpx';
               }
@@ -941,4 +1045,111 @@ width: 100%;
     }
   }
 }
+
+
+// 收起展开
+.total-introduce {
+  height: auto;
+  overflow: hidden;
+  font-size: ~'28rpx';
+  color: #434343;
+  margin: ~'20rpx';
+  .intro-content {
+    .merchant-desc {
+      width: 100%;
+      line-height: ~'42rpx';
+    }
+  }
+}
+.unfold {
+  display: block;
+  z-index: 11;
+  //float: right;
+  width: ~'80rpx';
+  height: ~'42rpx';
+  p {
+    margin: 0;
+    line-height: ~'42rpx';
+    color: #566A95;
+  }
+}
+.detailed-introduce {
+  font-size: ~'28rpx';
+  color: #434343;
+  position: relative;
+  overflow: hidden;
+  margin: ~'20rpx';
+
+  .intro-content {
+    // 最大高度设为4倍的行间距
+    max-height: ~'168rpx';
+    line-height: 21px;
+    word-wrap: break-word;
+    /*强制打散字符*/
+    word-break: break-all;
+    background: #ffffff;
+    /*同背景色*/
+    //color: #ffffff;
+    overflow: hidden;
+    margin-bottom: ~'50rpx';
+    .merchant-desc {
+      width: 100%;
+      line-height: ~'42rpx';
+    }
+
+    &:after,
+      // 这是展开前实际显示的内容
+    &:before {
+      content: attr(title);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      color: #434343
+      // overflow: hidden;
+    }
+
+    // 把最后最后一行自身的上面三行遮住
+    &:before {
+      display: block;
+      overflow: hidden;
+      z-index: 1;
+      max-height: 63px;
+      background: #ffffff;
+    }
+
+    &:after {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      height: 81px;
+      /*截取行数*/
+      -webkit-line-clamp: 4;
+      text-overflow: ellipsis;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      /*行首缩进字符数，值为[(截取行数-1)*尾部留空字符数]*/
+      //text-indent: -12em;
+      /*尾部留空字符数*/
+      //padding-right: 4em;
+    }
+  }
+
+  .unfold {
+    z-index: 11;
+    width: 40px;
+    height: 21px;
+    outline: 0;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    p {
+      margin: 0;
+      line-height: 21px;
+      color: #566A95;
+    }
+  }
+}
+
 </style>

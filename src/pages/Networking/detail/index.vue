@@ -53,6 +53,10 @@
           </div>
         </div>
       </div>
+      <!--广告-->
+      <div class="banner" v-if="banner.length > 0">
+        <img class="imgMain" :src="banner[0].image" mode="widthFix" />
+      </div>
       <div class="bottom-icon">
         <div class="bottom-main">
           <p>
@@ -123,7 +127,8 @@ export default {
       isLike: '',
       msgList: [],
       video: '',
-      img: []
+      img: [],
+      banner: []
     }
   },
   components: {
@@ -132,6 +137,25 @@ export default {
     videoWan
   },
   methods: {
+    // 获取广告
+    getNewsA () {
+      this.$fly.request({
+        method: 'get', // post/get 请求方式
+        url: '/advert/list',
+        body: {
+          pageNum: 1,
+          pageSize: 5,
+          position: 6
+        }
+      }).then(res => {
+        if (res.code === 200) {
+          this.banner = res.data.list
+        }
+        // console.log('News', res)
+      }).catch(err => {
+        console.log(err.status, err.message)
+      })
+    },
     // 预览图片
     previewImg (e, A) {
       var imgs = e
@@ -261,6 +285,7 @@ export default {
     this.videoFlag = false
     this.id = +options.id
     this.getNewsDetail(this.id)
+    this.getNewsA()
   },
   async onPullDownRefresh () {
     // to doing..
@@ -279,7 +304,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-%common {
+  // 广告图片
+  .banner {
+    margin: 40rpx 30rpx 0;
+    .imgMain{
+      width: 100%;
+      display: inline-block;
+      border-radius: 10rpx;
+    }
+  }
+
+  %common {
   display: flex;
   justify-content: space-between;
   flex-direction: row;

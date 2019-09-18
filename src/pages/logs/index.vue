@@ -1,35 +1,7 @@
 <template>
   <div class="log">
-    <!--<scroll-view :scroll-y="isScroll">-->
-    <!--<vue-tab-bar-->
-    <!--@fetch-index="clickIndexNav"-->
-    <!--:selectNavIndex=selectNavIndex-->
-    <!--:needButton="needButton"-->
-    <!--:handButton="handButton"-->
-    <!--:btnText="btnText">-->
-    <!--</vue-tab-bar>-->
-    <!--分享的bar-->
-    <!--<div class="attr-pop" :class="[showpop ? 'fadeup' : 'fadedown']">-->
-      <!--<div class="top">-->
-        <!--<div class="left">-->
-          <!--<button class="wxhy-btn" open-type="share">-->
-            <!--<span class="wx-fri iconfont iconweixin1"></span>-->
-            <!--<span class="font-26">微信好友</span>-->
-          <!--</button>-->
-        <!--</div>-->
-        <!--<div class="right" @click='posterRouer'>-->
-          <!--<div class="wxhy-btn">-->
-            <!--<span class="wx-qr iconfont iconcardcode"></span>-->
-
-            <!--<span class="font-26">名片码</span>-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</div>-->
-      <!--<div @click="showType" class="cancel-btn">取消</div>-->
-    <!--</div>-->
     <div class="cardHold">
       <!--顶部-->
-      <!--<scroll-view class="scroll" scroll-y  :scroll-into-view="toView"  :style="'height:' + windowHeight + 'px'" :scroll-top="scrollTop"  >-->
         <div class="cardHold-top">
           <div class="cardHold-top-img">
             <img src="https://oss.wq1516.com/salesInfo/201906181129151560828555097.jpg"/>
@@ -37,12 +9,6 @@
           <div class="cardHold-top-text">
             <span>人脉</span>
           </div>
-          <!--<div class="cardHold-top-input">-->
-            <!--<p>-->
-              <!--<input placeholder="搜索关键词" v-model="searchName" placeholder-style="color: #cccccc;"/>-->
-              <!--<span @click="Search(searchName)" class="cardHold-top-button"><img src="../../../static/images/search.png"></span>-->
-            <!--</p>-->
-          <!--</div>-->
           <div class="cardHold-top-I">
             <div class="cardHold-top-me">
               <div class="cardHold-top-main">
@@ -114,24 +80,24 @@
                   <P class="cardHold-blok-J">客户数据追踪、统计、AI分析</P>
                 </div>
               </div>
-              <div  v-if ="name === '' && job == ''"  @click="ArouterTo(`../businesscard/main`)" class="cardHold-blok" >
-                <div class="cardHold-Img1">
-                  <img src="../../../static/images/qun.png">
-                </div>
-                <div class="cardHold-blok-right cardHold-blok-right-bt" >
-                  <p class="cardHold-blok-name">群名片</p>
-                  <P class="cardHold-blok-J">邀请微信好友加入</P>
-                </div>
-              </div>
-              <div v-else class="cardHold-blok" @click="goGroup">
-                <div class="cardHold-Img1">
-                  <img src="../../../static/images/qun.png">
-                </div>
-                <div class="cardHold-blok-right cardHold-blok-right-bt">
-                  <p class="cardHold-blok-name">群名片</p>
-                  <P class="cardHold-blok-J">邀请微信好友加入</P>
-                </div>
-              </div>
+              <!--<div  v-if ="name === '' && job == ''"  @click="ArouterTo(`../businesscard/main`)" class="cardHold-blok" >-->
+                <!--<div class="cardHold-Img1">-->
+                  <!--<img src="../../../static/images/qun.png">-->
+                <!--</div>-->
+                <!--<div class="cardHold-blok-right cardHold-blok-right-bt" >-->
+                  <!--<p class="cardHold-blok-name">群名片</p>-->
+                  <!--<P class="cardHold-blok-J">邀请微信好友加入</P>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div v-else class="cardHold-blok" @click="goGroup">-->
+                <!--<div class="cardHold-Img1">-->
+                  <!--<img src="../../../static/images/qun.png">-->
+                <!--</div>-->
+                <!--<div class="cardHold-blok-right cardHold-blok-right-bt">-->
+                  <!--<p class="cardHold-blok-name">群名片</p>-->
+                  <!--<P class="cardHold-blok-J">邀请微信好友加入</P>-->
+                <!--</div>-->
+              <!--</div>-->
               <div v-if=" tradeStatus !== 0">
                 <div  v-if ="name === '' && job == ''"  @click="ArouterTo(`../businesscard/main`)" class="cardHold-blok" >
                   <div class="cardHold-Img2">
@@ -179,7 +145,7 @@
             <div class="con-main">
               <div class="cardA" v-if="postform.length > 0 ">
                 <div class="cardData" v-for="(items,indexs) in postform" :key="indexs">
-                  <div class="cardTitle" v-if="items.status === null">
+                  <div class="cardTitle" v-if="!items.image">
                     <div class="cardData-left" @click="goToCard(items.id)">
                       <div class="headImg">
                         <img :src="items.imgUrl">
@@ -227,9 +193,9 @@
                       <p class="distance">{{items.distance}} km</p>
                     </div>
                   </div>
-                  <!--<div v-else class="Gao">-->
-                    <!--<img :src="items.src"/>-->
-                  <!--</div>-->
+                  <div v-else class="Gao">
+                    <img :src="items.image"/>
+                  </div>
                 </div>
               </div>
               <div class="noS" v-else>
@@ -238,8 +204,27 @@
             </div>
         </div>
         <div v-else>
-          <div class="Main-Img">
-            <img src="https://oss.tzyizan.com/salesInfo/201908290855021567040102395.jpg"/>
+          <!--<div class="Main-Img">-->
+            <!--<img src="https://oss.tzyizan.com/salesInfo/201908290855021567040102395.jpg"/>-->
+          <!--</div>-->
+          <div class="BTop">
+            <div class="banner">
+              <swiper :indicator-dots="indicatorDots" :autoplay="autoplay" indicator-color= "#ffffff" :interval="interval" :duration="duration" :circular ="circular" class="bannerMain">
+                <block v-for="item in imgUrls" :key="index">
+                  <swiper-item class="swiper">
+                    <img :src="item.src" class="slide-image"/>
+                  </swiper-item>
+                </block>
+              </swiper>
+            </div>
+
+            <div class="Tuik">
+              <img v-if="cardStatus === true"  @click="goToTui()" src="https://oss.tzyizan.com/salesInfo/201908081456201565247380716.png">
+              <img v-else @click="ToMessage()" src="https://oss.tzyizan.com/salesInfo/201908081456201565247380716.png">
+            </div>
+            <!--<div class="Tuik" @click="ToMessage()" v-else>-->
+            <!--<img src="https://oss.tzyizan.com/salesInfo/201908081456201565247380716.png">-->
+            <!--</div>-->
           </div>
         </div>
         <div class="message">
@@ -249,82 +234,7 @@
             <span class="num" v-else-if="num >=99">99</span>
           </div>
         </div>
-        <!--底部查找-->
-        <!--<div class="padds">-->
-          <!--<div class="cardHold-ft" v-for="(items,indexs) in commitInfo" :key="indexs">-->
-            <!--<div class="cardHold-ftM" >-->
-              <!--<div class="cardHold-ftName" :id = 'indexs' v-if="items.length !== 0">-->
-                <!--<p>{{indexs}}</p>-->
-              <!--</div>-->
-              <!--<div class="cardHold-ftMain">-->
-                <!--<div class="cardHold-ftMain-ct" v-for="(item,index) in items" :key="index">-->
-                  <!--&lt;!&ndash;<div class="center" :data-type="item.type"  >&ndash;&gt;-->
-                    <!--<div class="center" @touchstart="touchStart($event)" @touchend="touchEnd($event,index,items)" :data-type="item.type"  >-->
-                    <!--<div>-->
-                      <!--<div class="cardHold-ftMain-ct-img" @click="goToCard(item.salesmanId)" >-->
-                        <!--<img :src="item.imgUrl +'?x-oss-process=style/c400'"/>-->
-                      <!--</div>-->
-                      <!--<div v-if="item.grade === 'V1' && item.grade === null "  class="cardHold-ftMain-rt" @click="recover(index,items)">-->
-                        <!--<div @click="goToCard(item.salesmanId)">-->
-                          <!--<span class="icon">企</span>-->
-                          <!--<span class="name">{{ item.name }}</span>-->
-                          <!--<span class="job">{{ item.job }}</span>-->
-                          <!--<span class="status">{{ item.status }}</span>-->
-                          <!--<span class="grade">{{ item.grade }}</span>-->
-                          <!--<p class="company">{{ item.salesCompanyName }}</p>-->
-                        <!--</div>-->
-                        <!--<div class="phone" @click="makePhoneCall(item.phone)">-->
-                          <!--<img src="../../../static/images/call.png"/>-->
-                        <!--</div>-->
-                        <!--<div class="border" v-if="index - 1 !== items.length - 2 && items.length > 1"></div>-->
-                      <!--</div>-->
-                      <!--<div v-else-if="item.grade === 'V2' " class="cardHold-ftMain-rt2 " @click="recover(index,items)">-->
-                        <!--<div @click="goToCard(item.salesmanId)">-->
-                          <!--<span class="icon">企</span>-->
-                          <!--<span class="name">{{ item.name }}</span>-->
-                          <!--<span class="job">{{ item.job }}</span>-->
-                          <!--<span class="status">{{ item.status }}</span>-->
-                          <!--<span class="grade">{{ item.grade }}</span>-->
-                          <!--<p class="company">{{ item.salesCompanyName }}</p>-->
-                        <!--</div>-->
-                        <!--<div class="phone"  @click="makePhoneCall(item.phone)">-->
-                          <!--<img src="../../../static/images/call.png"/>-->
-                        <!--</div>-->
-                        <!--<div class="border" v-if="index - 1 !== items.length - 2 && items.length > 1"></div>-->
-                      <!--</div>-->
-                      <!--<div v-else class="cardHold-ftMain-rt3" @click="recover(index,items)">-->
-                        <!--<div @click="goToCard(item.salesmanId)">-->
-                          <!--<span class="icon">企</span>-->
-                          <!--<span class="name">{{ item.name }}</span>-->
-                          <!--<span class="job">{{ item.job }}</span>-->
-                          <!--<span class="status">{{ item.status }}</span>-->
-                          <!--<span class="grade">{{ item.grade }}</span>-->
-                          <!--<p class="company">{{ item.salesCompanyName }}</p>-->
-                        <!--</div>-->
-                        <!--<div class="phone"  @click="makePhoneCall(item.phone)">-->
-                          <!--<img src="../../../static/images/call.png"/>-->
-                        <!--</div>-->
-                        <!--<div class="border" v-if="index - 1 !== items.length - 2 && items.length > 1"></div>-->
-                      <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="delete" @click="delect(index,items,item.salesmanId)">-->
-                      <!--删除-->
-                    <!--</div>-->
-                  <!--</div>-->
-                <!--</div>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</scroll-view>-->
     </div>
-    <!--&lt;!&ndash;右侧检索字母&ndash;&gt;-->
-    <!--<div class="index-english">-->
-      <!--<div v-for="(itemA,index) in commitInfo"  class="index-zi" :key="index"  @touchstart="touchstartL($event)" :id="index" @touchmove="touchmoveL" @touchend="touchendL">{{ index }}</div>-->
-    <!--</div>-->
-    <!--&lt;!&ndash;检索显示字母&ndash;&gt;-->
-    <!--<div v-if="indexShow" class="index-name" >{{indexEnglish}}</div>-->
-    <!--</scroll-view>-->
   </div>
 </template>
 
@@ -342,6 +252,11 @@
         userInfo: {},
         tab: 1,
         company: '',
+        indicatorDots: true,
+        autoplay: true,
+        interval: 3000,
+        duration: 1000,
+        circular: true,
         companyName: '',
         id: '',
         job: '',
@@ -355,6 +270,7 @@
         indexShow: false,
         indexId: '',
         showpop: false,
+        cardStatus: false,
         indexy: '',
         qrCodeUrl: '',
         postForm: '',
@@ -364,7 +280,14 @@
         scrollTop: 0,
         indexEnglish: '',
         btnText: '名片夹',
-        indicatorDots: true,
+        imgUrls: [{
+          src: 'https://images.unsplash.com/photo-1551334787-21e6bd3ab135?w=640'
+        }, {
+          src: 'https://images.unsplash.com/photo-1551214012-84f95e060dee?w=640'
+        }, {
+          src: 'https://images.unsplash.com/photo-1551446591-142875a901a1?w=640'
+        }
+        ],
         indexTop: '',
         Vie2: '',
         windowHeight: '',
@@ -407,6 +330,7 @@
       this.changTab(1)
     },
     onLoad (options) {
+      // this.getNews()
       this.tradeStatus = wx.getStorageSync('tradeStatus')
       // this.tradeStatus = 1
       this.pageNum = 1
@@ -468,6 +392,52 @@
       // console.log(this.toView)
     },
     methods: {
+      // // 获取广告
+      // getNews () {
+      //   this.$fly.request({
+      //     method: 'get', // post/get 请求方式
+      //     url: '/advert/list',
+      //     body: {
+      //     }
+      //   }).then(res => {
+      //     // console.log('News', res)
+      //   }).catch(err => {
+      //     console.log(err.status, err.message)
+      //   })
+      // },
+      // 获取分销商信息
+      goToTui () {
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/distributor/selectOne',
+          body: {
+          }
+        }).then(res => {
+          const isDistributor = res.data.isDistributor
+          // console.log('isDistributor', isDistributor)
+          if (isDistributor === 1) {
+            wx.redirectTo({
+              url: '/pages/pageA/agencyCenter/main'
+            })
+            wx.setStorageSync('BuyId', 3)
+            // console.log('resAAA', this.choose[6].url)
+          } else {
+            wx.redirectTo({
+              url: '/pages/pageA/Pusher/main'
+            })
+          }
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      },
+      // 进入推客页面
+      ToMessage () {
+        wx.showToast({
+          title: '请先注册名片',
+          icon: 'none',
+          duration: 2000
+        })
+      },
       // 页面加载信息
       getInfoA () {
         const userId = wx.getStorageSync('userId') // 获取本地userId

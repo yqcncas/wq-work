@@ -10,7 +10,13 @@
           <div class="studs">
             <span class="title">产品价格</span>
             <span class="choose">
-              <input  v-model="price" placeholder="填写价格"/>
+              <input  v-model="price" placeholder="填写价格" type="digit"/>
+            </span>
+          </div>
+          <div class="studs">
+            <span class="title">分销金额</span>
+            <span class="choose">
+              <input  v-model="distributorAmount" placeholder="填写金额" type="digit"/>
             </span>
           </div>
           <div class="studs" v-if="edit !== '1'">
@@ -134,6 +140,7 @@
         }],
         goodsImgUrlList: [],
         price: '',
+        distributorAmount: '',
         name: '',
         info: '',
         typeId: 0,
@@ -153,6 +160,7 @@
       this.name = ''
       this.price = ''
       this.guiName = ''
+      this.distributorAmount = ''
       this.stylesName = ''
       this.productId = ''
       this.coverImg = ''
@@ -185,6 +193,7 @@
       } else {
         this.name = ''
         this.price = ''
+        this.distributorAmount = ''
         this.info = ''
         this.productId = ''
         this.goodsImgUrlList = []
@@ -391,6 +400,7 @@
           this.getStyles(res.data.goods.type)
           this.getMu(res.data.goods.goodsStyleTypeId)
           this.price = res.data.goods.price
+          this.distributorAmount = res.data.goods.distributorAmount
           this.goodsImgUrlList = res.data.goodsImgList
           this.imgUrl = res.data.goods.imgUrl
           this.infoImgList = JSON.parse(JSON.parse(res.data.goods.info).info)
@@ -457,6 +467,7 @@
               'goodsImgUrlList': this.goodsImgUrlList,
               'name': this.name,
               'price': this.price,
+              'distributorAmount': this.distributorAmount,
               'info': this.info,
               'imgUrl': this.imgUrl
             }
@@ -527,6 +538,7 @@
               'goodsImgUrlList': this.goodsImgUrlList,
               'name': this.name,
               'price': this.price,
+              'distributorAmount': this.distributorAmount,
               'info': this.info,
               'imgUrl': this.imgUrl,
               'goodsStyleTypeId': that.goodsStyleTypeId

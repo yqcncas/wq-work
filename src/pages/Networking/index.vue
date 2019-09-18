@@ -21,7 +21,7 @@
           <swiper :indicator-dots="indicatorDots" :autoplay="autoplay" indicator-color= "#ffffff" :interval="interval" :duration="duration" :circular ="circular" class="bannerMain">
             <block v-for="item in imgUrls" :key="index">
               <swiper-item class="swiper">
-                <img :src="item.src" class="slide-image"/>
+                <img :src="item.image" class="slide-image"/>
               </swiper-item>
             </block>
           </swiper>
@@ -67,95 +67,108 @@
         </div>
         <div class="new-list shadow" v-if="newsList.length > 0">
           <div class="news-item-wrap" v-for="(item,index) in newsList" :key="index">
-            <div class="news-header flexRow">
-              <div class="avatar-wrp" @click="goToCard(item.salesmanId)">
-                <img class="img" :src="item.salesmanImgUrl" />
+            <div v-if="!item.image" class="">
+              <div class="news-header flexRow">
+                <div class="avatar-wrp" @click="goToCard(item.salesmanId)">
+                  <img class="img" :src="item.salesmanImgUrl" />
+                </div>
+                <div class="author-info">
+                  <div v-if="item.salesmanId"  class="author-name" @click="goToCard(item.salesmanId)">
+                    {{item.name?item.name:'未填'}}
+                  </div>
+                  <div v-else class="author-name" @click="goToCard(item.salesmanId)">
+                    {{item.author?item.author:'未填'}}
+                  </div>
+                  <div class="author-date" @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
+                    {{item.publishTime}}
+                  </div>
+                </div>
+                <div class="right-side">
+                  <button @click.stop open-type="share" :data-item="item" class="forward">转发</button>
+                  <i v-if="item.salesmanId" class="iconfont iconliaotian1" @click="routerTo(`/pages/msgcenter/main?id=${item.id}`)"></i>
+                </div>
               </div>
-              <div class="author-info">
-                <div v-if="item.salesmanId"  class="author-name" @click="goToCard(item.salesmanId)">
-                  {{item.name?item.name:'未填'}}
+              <div class="news-item">
+                <div class="item-title" v-if="item.content!==''" >
+                  <!--<span v-if="item.salesmanId" class="title">{{item.content}}</span>-->
+                  <!--<span v-else class="title">{{item.title}}</span>-->
+
+                  <div :class="item.showTotal ? 'total-introduce' : 'detailed-introduce'">
+                    <div v-if="item.salesmanId" class="intro-content" :title="item.content" ref="desc" @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
+                    <!--<span class="merchant-desc" v-if="introduce">-->
+                      <!--{{introduce}}-->
+                    <!--</span>      -->
+                          <span class="merchant-desc" :id="'mydesc' + index" @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">{{item.content}}</span>
+                    </div>
+                    <div v-else class="intro-content" :title="item.title" ref="desc"  @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
+                      <!--<span class="merchant-desc" v-if="introduce">-->
+                      <!--{{introduce}}-->
+                      <!--</span>      -->
+                      <span class="merchant-desc" :id="'mydesc' + index" @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">{{item.title}}</span>
+                    </div>
+                    <div class="unfold" @click="showTotalIntro(index,item)" v-if="item.showExchangeButton">
+                      <p>{{item.exchangeButton ? '展开' : '收起'}}</p>
+                    </div>
+                  </div>
                 </div>
-                <div v-else class="author-name" @click="goToCard(item.salesmanId)">
-                  {{item.author?item.author:'未填'}}
+                <div class="news-cover" v-if="item.imgUrl">
+                  <div class="news" v-if="item.salesmanId">
+                    <i v-for="(items,indexs) in item.imgUrl"  :key="indexs">
+                      <image v-if="item.imgUrl.length >1" :src="items" class="img" @click="previewImg(item.imgUrl,indexs)"  mode=""></image>
+                      <image v-else :src="item.imgUrl" class="imgA" @click="previewImg(item.imgUrl,indexs)"  mode="widthFix"></image>
+                    </i>
+                  </div>
+                  <div class="JiuImg" v-else @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
+                    <image :src="item.imgUrl[0]" class="img" mode="widthFix"></image>
+                    <p class="news-desc" v-if="item.abstractText">{{item.abstractText}}</p>
+                  </div>
                 </div>
-                <div class="author-date" @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
-                  {{item.publishTime}}
+                <div class="news-cover" v-if="item.videoUrl" @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
+                  <image :src="item.videoUrl + '?x-oss-process=video/snapshot,t_1000,f_jpg,w_750,m_fast'" class="imgB" mode="scaleToFill">
+                    <i class="iconbofang iconfont"></i>
+                  </image>
+                </div>
+                <div class="news-view flexRow">
+                  <div class="flexRow watch">
+                    <p>
+                      <i v-if="item.isChan == false" class="iconfont iconliulan1"></i>
+                      <i v-else class="iconfont iconyanjing1"></i>
+                      <span>{{item.browseCount}}</span>
+                    </p>
+                    <p>
+                      <i v-if="item.isPraise!==1" class="iconfont iconkongaixinfuzhi"></i>
+                      <i v-else class="iconfont iconxin"></i>
+                      <span>{{item.praiseCount}}</span>
+                    </p>
+                  </div>
+                  <div class="btn-group-ab flexRow" :class="{'trans':item.showBtn}">
+                  <p class="flexRow common-p" @click.stop="clickPraise(item.isPraise,statusA,item.id,item.salesmanId)">
+                    <i class="iconfont iconaixin"></i>
+                    <span>{{item.isPraise===1?'取消':'赞'}}</span>
+                  </p>
+                  <i class="line"></i>
+                  <p class="flexRow common-p" @click.stop="showComment(item)">
+                    <i class="iconfont iconpinglun1"></i>
+                    <span>评论</span>
+                  </p>
+                </div>
                 </div>
               </div>
-              <div class="right-side">
-                <button @click.stop open-type="share" :data-item="item" class="forward">转发</button>
-                <i v-if="item.salesmanId" class="iconfont iconliaotian1" @click="routerTo(`/pages/msgcenter/main?id=${item.id}`)"></i>
+               <!--点赞评论 -->
+              <div v-if="item.newsCommentList.length > 0 || item.nameMapList.length > 0" class="comment-map">
+                <div class="praise-wrap">
+                  <span v-if="item.nameMapList.length>0"><i class="iconfont iconaixin"></i>{{item.praiseName}}</span>
+                  <div>
+                    <p v-for="(child,i) in item.newsCommentList" :key="i" class="comment-wrap-s">
+                      <span class="name">{{child.name?child.name:'未知'}}:</span>
+                      <span class="detail">{{child.content}}</span>
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="news-item">
-              <p class="item-title" v-if="item.content!==''" @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
-                <span v-if="item.salesmanId" class="title">{{item.content}}</span>
-                <span v-else class="title">{{item.title}}</span>
-              </p>
-              <div class="news-cover" v-if="item.imgUrl">
-                <div class="news" v-if="item.salesmanId">
-                  <i v-for="(items,indexs) in item.imgUrl"  :key="indexs">
-                    <image v-if="item.imgUrl.length >1" :src="items" class="img" @click="previewImg(item.imgUrl,indexs)"  mode=""></image>
-                    <image v-else :src="item.imgUrl" class="imgA" @click="previewImg(item.imgUrl,indexs)"  mode="widthFix"></image>
-                  </i>
-                </div>
-                <div class="JiuImg" v-else @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
-                  <image :src="item.imgUrl[0]" class="img" mode="widthFix"></image>
-                  <p class="news-desc" v-if="item.abstractText">{{item.abstractText}}</p>
-                </div>
-              </div>
-              <div class="news-cover" v-if="item.videoUrl" @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
-                <image :src="item.videoUrl + '?x-oss-process=video/snapshot,t_5000,f_jpg,w_750,m_fast'" class="imgB" mode="scaleToFill">
-                  <i class="iconbofang iconfont"></i>
-                </image>
-              </div>
-              <div class="news-view flexRow">
-                <div class="flexRow watch">
-                  <p>
-                    <i v-if="item.isChan == false" class="iconfont iconliulan1"></i>
-                    <i v-else class="iconfont iconyanjing1"></i>
-                    <span>{{item.browseCount}}</span>
-                  </p>
-                  <p>
-                    <i v-if="item.isPraise!==1" class="iconfont iconkongaixinfuzhi"></i>
-                    <i v-else class="iconfont iconxin"></i>
-                    <span>{{item.praiseCount}}</span>
-                  </p>
-                </div>
-                <!--<p class="flexRow watch" v-if="item.count">-->
-                  <!--<i class="iconfont iconaixin"></i>-->
-                  <!--<span>{{item.count}}</span>-->
-                <!--</p>-->
-                <div class="btn-group-ab flexRow" :class="{'trans':item.showBtn}">
-                <p class="flexRow common-p" @click.stop="clickPraise(item.isPraise,statusA,item.id,item.salesmanId)">
-                  <i class="iconfont iconaixin"></i>
-                  <span>{{item.isPraise===1?'取消':'赞'}}</span>
-                </p>
-                <i class="line"></i>
-                <p class="flexRow common-p" @click.stop="showComment(item)">
-                  <i class="iconfont iconpinglun1"></i>
-                  <span>评论</span>
-                </p>
-              </div>
-                <!--<div class="wrap-btn" @click.stop="showbtnGroup(index,item)">-->
-                  <!--<p class="btn-click flexRow">-->
-                    <!--<span></span>-->
-                    <!--<span></span>-->
-                  <!--</p>-->
-                <!--</div>-->
-              </div>
-            </div>
-             <!--点赞评论 -->
-            <div v-if="item.newsCommentList.length > 0 || item.nameMapList.length > 0" class="comment-map">
-              <div class="praise-wrap">
-                <span v-if="item.nameMapList.length>0"><i class="iconfont iconaixin"></i>{{item.praiseName}}</span>
-                <div>
-                  <p v-for="(child,i) in item.newsCommentList" :key="i" class="comment-wrap-s">
-                    <span class="name">{{child.name?child.name:'未知'}}:</span>
-                    <span class="detail">{{child.content}}</span>
-                  </p>
-                </div>
-              </div>
+            <div class="banner" v-else>
+              <img class="imgMain" :src="item.image" mode="widthFix" />
             </div>
           </div>
         </div>
@@ -175,83 +188,6 @@
       <div class="footer" @click="goNet" v-if=" dynamicStatus !== 0">
         <span>发布</span>
       </div>
-      <!--名片-->
-      <!--<div class="NetCard" v-if="tradeStatus !== 0">-->
-        <!--<div class="NetCard-top">-->
-            <!--<span class="title">热门名片</span>-->
-            <!--<span class="fire"><i class="iconfont iconremen"></i>我要上热门</span>-->
-        <!--</div>-->
-        <!--<div class="NetCard-main" >-->
-          <!--<scroll-view class="scroll-view" scroll-y @scrolltolower = "getScroll()" :style="'height:' + windowHeight + 'px'">-->
-          <!--<div class="conts-main">-->
-            <!--<div v-if="cards !== ''|| cards !== null">-->
-              <!--<div class="card" v-for="(item,index) in cards" :key="index">-->
-                <!--<div @click="goToCard(item.id)">-->
-                  <!--<span>-->
-                    <!--<img class="imga" :src="item.imgUrl + '?x-oss-process=style/c400'">-->
-                    <!--<div class="grade">-->
-                       <!--<i v-if="item.leavelNum === 1">-->
-                          <!--<img src="../../../static/images/v1.png">-->
-                       <!--</i>-->
-                       <!--<i v-else-if="Grade === 2">-->
-                          <!--<img src="../../../static/images/v2.png">-->
-                       <!--</i>-->
-                       <!--<i v-else-if="Grade === 3">-->
-                          <!--<img src="../../../static/images/v3.png">-->
-                       <!--</i>-->
-                      <!--<i v-else></i>-->
-                    <!--</div>-->
-                  <!--</span>-->
-                  <!--<div class="card-main">-->
-                    <!--<div class="qiye">-->
-                      <!--<span class="img"><s>企</s></span>-->
-                      <!--<b>{{ item.name }}</b>-->
-                      <!--<span class="job">{{ item.job }}</span>-->
-                      <!--&lt;!&ndash;<span v-if="item.isCertification === 0" class="status">已认证</span>&ndash;&gt;-->
-                      <!--&lt;!&ndash;<span v-else class="status">无状态</span>&ndash;&gt;-->
-                    <!--</div>-->
-                    <!--<p class="comyname" v-if="item.salesCompanyName === null">无公司</p>-->
-                    <!--<p class="comyname" v-else>{{ item.salesCompanyName}}</p>-->
-                  <!--</div>-->
-                <!--</div>-->
-                <!--<div class="card-right">-->
-                  <!--<p class="eye"><img src="../../../static/images/eye.png"/><span>{{ item.browseCount }}</span> </p>-->
-                  <!--<p class="star"><img src="../../../static/images/star.png"/><span>{{ item.praiseCount }}</span> </p>-->
-                  <!--<i v-if="item.isCollect === 0" @click="getCollect(item.id, index)"><img src="../../../static/images/addpersonal.png"/></i>-->
-                  <!--<i v-else></i>-->
-                <!--</div>-->
-              <!--</div>-->
-            <!--</div>-->
-            <!--<div v-else class="no">-->
-              <!--<p class="title">暂无热门名片</p>-->
-            <!--</div>-->
-          <!--</div>-->
-          <!--</scroll-view>-->
-        <!--</div>-->
-      <!--</div>-->
-      <!--<div class=" NetCard" v-else>-->
-        <!--<div class="NetCard-mainA" :style="'height:' + windowHeight + 'px'">-->
-          <!--<img  class="img" src="https://oss.tzyizan.com/audit-img.jpg?x-oss-process=style/w750">-->
-        <!--</div>-->
-      <!--</div>-->
-
-
-      <!--<div class="NetSucces" v-if="deleteShow === true">-->
-        <!--<div class="NetSucces-main">-->
-          <!--<div class="img">-->
-            <!--<img src="https://oss.tzyizan.com/salesInfo/201907231449301563864570184.png">-->
-            <!--<div class="main">-->
-              <!--<p class="suc">签到成功</p>-->
-              <!--<p class="title">恭 喜 你 获 得 5 积 分</p>-->
-              <!--<p class="info">积 分 可 用 于 名 片 置 顶 等 服 务</p>-->
-            <!--</div>-->
-            <!--<div class="delete">-->
-              <!--<p class="line"></p>-->
-              <!--<i class="iconfont iconshanchu-copy" @click="checkDelete()"></i>-->
-            <!--</div>-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</div>-->
     </div>
 </template>
 
@@ -263,6 +199,15 @@
     name: 'index',
     data () {
       return {
+        introduce: '',
+        // 是否展示所有文本内容
+        showTotal: true,
+        // 显示展开还是收起
+        exchangeButton: true,
+        // 是否显示展开收起按钮
+        showExchangeButton: false,
+        descHeight: '',
+        rem: '',
         newsList: [],
         typeList: [],
         tab: 1,
@@ -375,6 +320,7 @@
       this.latitude = wx.getStorageSync('latitude')
       this.getNum()
       this.changTab(1)
+      this.getNewsA()
     },
     onShow () {
       this.TypeName = ''
@@ -399,7 +345,88 @@
       // 停止下拉刷新
       wx.stopPullDownRefresh()
     },
+    mounted () {
+      // this.init()
+    },
+    watch: {
+      newsList: function () {
+        this.$nextTick(function () {
+          this.newsList.map((item, index) => {
+            // console.log('nextTick')
+            // 判断介绍是否超过四行
+            // let rem = parseFloat(this.getRem())
+            // console.log('watch 中的rem', rem)
+            if (!this.$refs.desc) {
+              // console.log('desc null')
+              return
+            }
+            var query = wx.createSelectorQuery()
+            // var that = this
+            // console.log('\'#mydesc\' + index', '#mydesc' + index)
+            query.select('#mydesc' + index).boundingClientRect(function (rect) {
+              // that.setData({
+              //   height: rect.width + 'px'
+              // })
+              // console.log('rect', rect)
+              this.descHeight = rect.height
+              // const remA = rem + 'rpx'
+              // console.log('descHeight:' + this.descHeight)
+              // console.log('如果 descHeight 超过' + (rem) + '就要显示展开按钮')
+              if (this.descHeight >= 84) {
+                // console.log('超过了四行')
+                // 显示展开收起按钮
+                item.showExchangeButton = true
+                item.exchangeButton = true
+                // 不是显示所有
+                item.showTotal = false
+                // console.log('showExchangeButton', item.showExchangeButton)
+                // console.log('showTotal', item.showTotal)
+              } else {
+                // 不显示展开收起按钮
+                item.showExchangeButton = false
+                // 没有超过四行就显示所有
+                item.showTotal = true
+                // console.log('showExchangeButton', item.showExchangeButton)
+                // console.log('showTotal', item.showTotal)
+              }
+            }).exec()
+          })
+        }.bind(this))
+      }
+    },
     methods: {
+      // 获取广告
+      getNewsA () {
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/advert/list',
+          body: {
+            pageNum: 1,
+            pageSize: 5,
+            position: 1
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            this.imgUrls = res.data.list
+          }
+          // console.log('News', res)
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      },
+      showTotalIntro (index) {
+        this.newsList[index].showTotal = !this.newsList[index].showTotal
+        this.newsList[index].exchangeButton = !this.newsList[index].exchangeButton
+        console.log(this.newsList[index].exchangeButton)
+      },
+      getRem () {
+        console.log('getRem')
+        // const defaultRem = 16
+        let winWidth = wx.getSystemInfoSync().windowHeight
+        console.log('winWidth:' + winWidth)
+        let rem = winWidth / 5
+        return rem
+      },
       // 预览图片
       previewImg (e, A) {
         var imgs = e
@@ -528,83 +555,6 @@
           console.log(err.status, err.message)
         })
       },
-      // // 监测滚动到底部加载分页
-      // getScroll () {
-      //   if (this.pageNum < this.lastPage) {
-      //     this.pageNum = this.nextPage
-      //     this.getCard(this.pageNum)
-      //   } else {
-      //     wx.showToast({
-      //       title: '没有更多了',
-      //       icon: 'none',
-      //       duration: 2000
-      //     })
-      //   }
-      // },
-      // // 获取人脉即使热门名片
-      // getCard () {
-      //   const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
-      //   const userId = wx.getStorageSync('userId') // 获取本地userId
-      //   this.$fly.request({
-      //     method: 'get', // post/get 请求方式
-      //     url: '/platformSalesman/getByCode',
-      //     body: {
-      //       'pageNum': this.pageNum,
-      //       'pageSize': 10,
-      //       'businessId': businessId,
-      //       'userId': userId
-      //     }
-      //   }).then(res => {
-      //     if (res.code === 200) {
-      //       const data = res.data.list
-      //       data.map(item => {
-      //         this.cards.push(item)
-      //         if (item.imgUrl === '') {
-      //           item.imgUrl = 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png'
-      //         }
-      //       })
-      //       console.log('data', this.cards)
-      //       this.lastPage = res.data.lastPage
-      //       this.pageNum = res.data.pageNum
-      //       this.nextPage = res.data.nextPage
-      //     } else {
-      //       wx.showToast({
-      //         title: '加载失败',
-      //         icon: 'none',
-      //         duration: 2000
-      //       })
-      //     }
-      //   }).catch(err => {
-      //     console.log(err.status, err.message)
-      //   })
-      // },
-      // // 获取收藏
-      // getCollect (id, index) {
-      //   const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
-      //   const userId = wx.getStorageSync('userId') // 获取本地userId
-      //   this.$fly.request({
-      //     method: 'post', // post/get 请求方式
-      //     url: '/platformUserSalesman/insert',
-      //     body: {
-      //       'salesmanId': id,
-      //       'userId': userId,
-      //       'businessId': businessId
-      //     }
-      //   }).then(res => {
-      //     if (res.code === 200) {
-      //       const that = this
-      //       this.number = this.lastPage
-      //       that.cards[index].isCollect = 1
-      //       wx.showToast({
-      //         title: '收藏成功',
-      //         icon: 'none',
-      //         duration: 2000
-      //       })
-      //     }
-      //   }).catch(err => {
-      //     console.log(err.status, err.message)
-      //   })
-      // },
       //   点赞
       clickPraise (isPraise, status, id, salesmanId) {
         if (this.postForm === true) {
@@ -774,23 +724,30 @@
         const result = await apiNews.getNews({ businessId: that.businessId, pageNum: that.pageNum, pageSize: that.pageSize, typeId: that.typeId, latitude: that.latitude, longitude: that.longitude })
         const code = result.code
         const data = result.data
+        // console.log('newList', result)
         if (code === 200) {
+          console.log('newList', result)
           data.list.map(item => {
-            item.publishTime = this.moment(item.publishTime).format('MM月DD日')
-            // if (item.img !== '' && item.img !== null) {
-            //   const img = item.img.split(',')
-            //   item.img = img
-            // }
-            item.praiseName = ''
-            item.isChan = false
-            // item.imgUrl += '?x-oss-process=style/w750'
-            item.nameMapList.map(child => {
-              if (item.praiseName.length > 0 && item.praiseName) {
-                item.praiseName = item.praiseName + ',' + child.name
-              } else {
-                item.praiseName = child.name
-              }
-            })
+            if (!item.image) {
+              item.showTotal = true
+              item.showExchangeButton = false
+              item.exchangeButton = true
+              item.publishTime = this.moment(item.publishTime).format('MM月DD日')
+              // if (item.img !== '' && item.img !== null) {
+              //   const img = item.img.split(',')
+              //   item.img = img
+              // }
+              item.praiseName = ''
+              item.isChan = false
+              // item.imgUrl += '?x-oss-process=style/w750'
+              item.nameMapList.map(child => {
+                if (item.praiseName.length > 0 && item.praiseName) {
+                  item.praiseName = item.praiseName + ',' + child.name
+                } else {
+                  item.praiseName = child.name
+                }
+              })
+            }
           })
           if (type === 0) {
             this.newsList = data.list
@@ -799,6 +756,7 @@
               this.newsList.push(e)
             })
           }
+          console.log('newList', this.newsList)
           this.pageNum = data.pageNum
           this.lastPage = data.lastPage
           this.nextPage = data.nextPage

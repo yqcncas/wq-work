@@ -277,7 +277,7 @@
     font-size: 28rpx;
     position: relative;
     color: #333;
-    line-height: 88rpx;
+    /*line-height: 88rpx;*/
     text-align: center;
     box-sizing: border-box;
     background-color: #fff;
@@ -319,6 +319,11 @@
       /*display: inline-block;*/
       font-size: 30rpx;
       color: #9B9B9B;
+      margin-top: 20rpx;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      width: 120rpx;
     }
   }
 </style>

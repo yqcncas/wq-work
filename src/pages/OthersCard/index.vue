@@ -319,6 +319,11 @@
                 <!--</div>-->
               <!--</div>-->
             <!--</div>-->
+
+            <!--广告-->
+            <div class="banner" v-if="banner.length > 0">
+              <img class="imgMain" :src="banner[0].image" mode="widthFix" />
+            </div>
             <!--公司介绍-->
             <div class="company" v-if="postForm.companyInfo">
               <div class="company-top">
@@ -381,7 +386,7 @@
               <div class="product-main">
                 <div class="product-details-video">
                   <div class="up-video">
-                    <video id="myVideo" v-if="videoFlag" :src="video" @play="playA()"  @ended=" end()" autoplay objectFit="fill" class="cover-hw"></video>
+                    <video id="myVideo" v-if="videoFlag" :src="video" @play="playA()"  @ended=" end()" autoplay objectFit="contain" class="cover-hw"></video>
                     <div v-else class="cover-view" >
                       <div @click="videoPlay">
                         <!--<i class="delete-img iconfont iconshanchu-copy" @click="deleteVideo"></i>-->
@@ -517,7 +522,8 @@
         setUp: '',
         salesManId: '',
         animal: '',
-        card: false
+        card: false,
+        banner: []
       }
     },
     onLoad: function (options) {
@@ -532,6 +538,7 @@
         this.CardId = options.id
       }
       this.getInfo()
+      this.getNewsA()
     },
     onShow () {
       this.getInfo()
@@ -571,6 +578,25 @@
       }
     },
     methods: {
+      // 获取广告
+      getNewsA () {
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/advert/list',
+          body: {
+            pageNum: 1,
+            pageSize: 5,
+            position: 6
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            this.banner = res.data.list
+          }
+          // console.log('News', res)
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      },
       deleteModel () {
         this.modalFlag = false
       },
