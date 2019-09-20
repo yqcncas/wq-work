@@ -24,9 +24,10 @@
             <span class="video">
               <img
                 id="myVideo"
-                :src="item.videoUrl +  '?x-oss-process=video/snapshot,t_0,f_jpg,w_750,m_fast'"
+                :src="item.videoUrl +  '?x-oss-process=video/snapshot,t_2000,f_jpg,w_800,h_600'"
                 controls
               >
+              <i class="iconbofang1 iconfont"></i>
             </span>
             <span class="title">
              {{ item.content }}

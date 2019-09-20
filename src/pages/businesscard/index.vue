@@ -369,7 +369,7 @@
 
         <!--广告-->
           <div class="banner" v-if="banner.length > 0">
-            <img class="imgMain" :src="banner[0].image" mode="widthFix" />
+            <img class="imgMain" :src="banner[0].image" mode="scaleToFill	" />
           </div>
           <!--公司介绍-->
           <div class="company" v-if="postForm.companyInfo">
@@ -1132,10 +1132,13 @@
               wx.setStorageSync('myPhone', phone)
             }
             this.postForm = res.data
-            if (res.data.richText !== null) {
+            if (res.data.richText !== null && res.data.richText !== '') {
               this.imgUrlList = res.data.richText.split(',')
+              // console.log('this.imgUrlList', this.imgUrlList)
+            } else {
+              this.imgUrlList = ['https://oss.tzyizan.com/salesManImg/201908221423521566455032299.png']
+              // console.log('imgUrl', this.imgUrlList)
             }
-            // console.log('imgUrl', this.imgUrlList)
             if (res.data.video !== '') {
               this.video = res.data.video
               this.videoImg = this.video + '?x-oss-process=video/snapshot,t_0,f_jpg,w_750,m_fast'

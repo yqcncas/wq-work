@@ -21,100 +21,115 @@
     <!--</div>-->
     <!-- 雷达 -->
     <div class="new-radar">
-      <div class="top-nav flexRow">
-        <span :class="{'active':active===0}" @click="navTab(0)">时间</span>
-        <span :class="{'active':active===1}" @click="navTab(1)">行为</span>
-        <span :class="{'active':active===2}" @click="navTab(2)">互动</span>
-      </div>
+      <div v-if="radarStatus === 1">
+        <div class="top-nav flexRow">
+          <span :class="{'active':active===0}" @click="navTab(0)">时间</span>
+          <span :class="{'active':active===1}" @click="navTab(1)">行为</span>
+          <span :class="{'active':active===2}" @click="navTab(2)">互动</span>
+        </div>
       <!-- 时间 -->
-      <div class="radar-time common-pad" v-if="active===0">
-        <div v-for="(item,i) in list" :key="i" @click="routeTo(`../custom/detail/main?id=${item.userId}`)">
-          <p class="time" v-if="i===0">{{item.dataTime}}</p>
-          <p class="time" v-if="i>0&&item.dataTime!==list[i-1].dataTime">{{item.dataTime}}</p>
-          <div class="time-wrap">
-            <p class="flexRow">
-              <image class="head-img" mode="aspectFill" :src="item.avatarUrl"></image>
-              <span class="name">{{item.userName||'未知'}}</span>
-              <span class="min-time">{{item.time}}</span>
-            </p>
-            <div class="bottom-txt">
-              <span v-if="item.recordType===4">将产品<span class="blue">{{item.goodsName}}</span><span class="red">{{item.info}}</span></span>
-              <span v-else-if="item.recordType===5">
-                <span class="red">{{item.info}}</span>了产品<span class="blue">{{item.goodsName}}</span>
-              </span>
-              <span v-else>
-                <span class="blue">第{{item.browseTime}}次</span>{{item.info}}<span class="blue" v-show="item.goodsName||item.title">{{item.goodsName?item.goodsName:item.title}}</span>
-              </span>
-              <span>，赶快主动沟通吧</span>
-            </div>
-            <p class="right-top">TA的详情></p>
-            <div class="icon-wrap" @click.stop="routeTo(`../../msgcenter/main?id=${item.userId}`)">
-              <i class="iconfont iconliaotian"></i>
+        <div class="radar-time common-pad" v-if="active===0">
+          <div v-for="(item,i) in list" :key="i" @click="routeTo(`../custom/detail/main?id=${item.userId}`)">
+            <p class="time" v-if="i===0">{{item.dataTime}}</p>
+            <p class="time" v-if="i>0&&item.dataTime!==list[i-1].dataTime">{{item.dataTime}}</p>
+            <div class="time-wrap">
+              <p class="flexRow">
+                <image class="head-img" mode="aspectFill" :src="item.avatarUrl"></image>
+                <span class="name">{{item.userName||'未知'}}</span>
+                <span class="min-time">{{item.time}}</span>
+              </p>
+              <div class="bottom-txt">
+                <span v-if="item.recordType===4">将产品<span class="blue">{{item.goodsName}}</span><span class="red">{{item.info}}</span></span>
+                <span v-else-if="item.recordType===5">
+                  <span class="red">{{item.info}}</span>了产品<span class="blue">{{item.goodsName}}</span>
+                </span>
+                <span v-else>
+                  <span class="blue">第{{item.browseTime}}次</span>{{item.info}}<span class="blue" v-show="item.goodsName||item.title">{{item.goodsName?item.goodsName:item.title}}</span>
+                </span>
+                <span>，赶快主动沟通吧</span>
+              </div>
+              <p class="right-top">TA的详情></p>
+              <div class="icon-wrap" @click.stop="routeTo(`../../msgcenter/main?id=${item.userId}`)">
+                <i class="iconfont iconliaotian"></i>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <!-- 行为 -->
-      <div class="radar-behavior common-pad" v-if="active===1">
-        <div class="flexRow behavior-top">
-          <p><span :class="{'time-active':timeActive===0}" @click="timeTab(0)">汇总</span></p>
-          <p><span :class="{'time-active':timeActive===1}" @click="timeTab(1)">昨日</span></p>
-          <p><span :class="{'time-active':timeActive===2}" @click="timeTab(2)">近七天</span></p>
-          <p><span :class="{'time-active':timeActive===3}" @click="timeTab(3)">近一个月</span></p>
-        </div>
-        <div class="flexRow nine-child">
-          <div class="flex-one" v-for="(m,n) in behaviorArr" :key="n">
-            <p class="count">{{m.count}}</p>
-            <p>{{m.txt}}</p>
+        <!-- 行为 -->
+        <div class="radar-behavior common-pad" v-if="active===1">
+          <div class="flexRow behavior-top">
+            <p><span :class="{'time-active':timeActive===0}" @click="timeTab(0)">汇总</span></p>
+            <p><span :class="{'time-active':timeActive===1}" @click="timeTab(1)">昨日</span></p>
+            <p><span :class="{'time-active':timeActive===2}" @click="timeTab(2)">近七天</span></p>
+            <p><span :class="{'time-active':timeActive===3}" @click="timeTab(3)">近一个月</span></p>
           </div>
-        </div>
-        <div class="bottom-list">
-          <div v-for="(m,n) in behaviorArrTwo" class="list-child flexRow" :key="n">
-            <div class="flexRow">
-              <s v-if="m.txt==='浏览名片'" class="iconfont box-icon" :class="m.icon" :style="m.color"></s>
-              <i v-else class="iconfont common-style" :class="m.icon" :style="m.color"></i>
-              <span>{{m.txt}}</span>
+          <div class="flexRow nine-child">
+            <div class="flex-one" v-for="(m,n) in behaviorArr" :key="n">
+              <p class="count">{{m.count}}</p>
+              <p>{{m.txt}}</p>
             </div>
-            <span>{{m.count}}</span>
           </div>
-        </div>
-      </div>
-      <!-- 互动 -->
-      <div class="radar-behavior radar-interaction common-pad" v-if="active===2">
-        <div class="flexRow behavior-top">
-          <p><span :class="{'time-active':timeActive===0}" @click="timeTab(0)">汇总</span></p>
-          <p><span :class="{'time-active':timeActive===1}" @click="timeTab(1)">昨日</span></p>
-          <p><span :class="{'time-active':timeActive===2}" @click="timeTab(2)">近七天</span></p>
-          <p><span :class="{'time-active':timeActive===3}" @click="timeTab(3)">近一个月</span></p>
-        </div>
-        <div class="interaction-bottom">
-          <div class="child-one" v-for="(m,n) in list" :key="n">
-            <div class="child-top flexRow" @click="openList(m)">
+          <div class="bottom-list">
+            <div v-for="(m,n) in behaviorArrTwo" class="list-child flexRow" :key="n">
               <div class="flexRow">
-                <image :src="m.avatarUrl||'https://oss.wq1516.com/default-avatar.png'" class="img-url" mode="aspectFill"></image>
-                <div>
-                  <p class="color-p">
-                    <span class="name">{{m.userName||'未知'}}</span>
-                    <span>和你互动了<span class="blue">{{m.totalNum}}</span>次</span>
-                  </p>
-                  <p>{{m.dataTime}}最后一次{{m.info}}</p>
+                <s v-if="m.txt==='浏览名片'" class="iconfont box-icon" :class="m.icon" :style="m.color"></s>
+                <i v-else class="iconfont common-style" :class="m.icon" :style="m.color"></i>
+                <span>{{m.txt}}</span>
+              </div>
+              <span>{{m.count}}</span>
+            </div>
+          </div>
+        </div>
+        <!-- 互动 -->
+        <div class="radar-behavior radar-interaction common-pad" v-if="active===2">
+          <div class="flexRow behavior-top">
+            <p><span :class="{'time-active':timeActive===0}" @click="timeTab(0)">汇总</span></p>
+            <p><span :class="{'time-active':timeActive===1}" @click="timeTab(1)">昨日</span></p>
+            <p><span :class="{'time-active':timeActive===2}" @click="timeTab(2)">近七天</span></p>
+            <p><span :class="{'time-active':timeActive===3}" @click="timeTab(3)">近一个月</span></p>
+          </div>
+          <div class="interaction-bottom">
+            <div class="child-one" v-for="(m,n) in list" :key="n">
+              <div class="child-top flexRow" @click="openList(m)">
+                <div class="flexRow">
+                  <image :src="m.avatarUrl||'https://oss.wq1516.com/default-avatar.png'" class="img-url" mode="aspectFill"></image>
+                  <div>
+                    <p class="color-p">
+                      <span class="name">{{m.userName||'未知'}}</span>
+                      <span>和你互动了<span class="blue">{{m.totalNum}}</span>次</span>
+                    </p>
+                    <p>{{m.dataTime}}最后一次{{m.info}}</p>
+                  </div>
+                </div>
+                <i class="iconfont iconxiajiantou" :class="{'open':m.visible}"></i>
+              </div>
+              <div class="box-double" v-show="m.visible">
+                <div class="flexRow ma-top" v-for="(item,i) in m.OperationRecordDetail" :key="i">
+                  <span v-if="item.recordType===21">分享名片</span>
+                  <span v-else-if="item.recordType===22">收藏名片</span>
+                  <span v-else-if="item.recordType===23">浏览名片</span>
+                  <span v-else-if="item.recordType===3">浏览商品</span>
+                  <!--<span>{{item.recordType===23?'浏览名片':'点赞名片'}}</span>-->
+                  <span class="common-line praise-line" :class="{'praise-line':item.recordType===21,'sc-line':item.recordType===22,'watch-line':item.recordType===23,'look-line': item.recordType ===3}"></span>
+                  <span>{{item.browseTime}}</span>
                 </div>
               </div>
-              <i class="iconfont iconxiajiantou" :class="{'open':m.visible}"></i>
-            </div>
-            <div class="box-double" v-show="m.visible">
-              <div class="flexRow ma-top" v-for="(item,i) in m.OperationRecordDetail" :key="i">
-                <span v-if="item.recordType===21">分享名片</span>
-                <span v-else-if="item.recordType===22">收藏名片</span>
-                <span v-else-if="item.recordType===23">浏览名片</span>
-                <span v-else-if="item.recordType===3">浏览商品</span>
-                <!--<span>{{item.recordType===23?'浏览名片':'点赞名片'}}</span>-->
-                <span class="common-line praise-line" :class="{'praise-line':item.recordType===21,'sc-line':item.recordType===22,'watch-line':item.recordType===23,'look-line': item.recordType ===3}"></span>
-                <span>{{item.browseTime}}</span>
-              </div>
             </div>
           </div>
         </div>
+        <div class="foundA" @click="goIndex()">
+          <span>回到<br />首页</span>
+        </div>
+      </div>
+      <div v-else>
+          <div class="noMeber">
+            <div class="ImgA">
+              <img src="https://oss.tzyizan.com/salesInfo/201909181424241568787864255.png" mode="widthFix"/>
+            </div>
+            <div class="bt" @click="goToMember()">
+              <button>成为VIP访客,查看访客</button>
+            </div>
+          </div>
       </div>
       <div class="footTabar">
         <section class="tabBar-wrap">
@@ -135,9 +150,6 @@
             </ul>
           </article>
         </section>
-      </div>
-      <div class="foundA" @click="goIndex()">
-        <span>回到<br />首页</span>
       </div>
     </div>
   </div>
@@ -189,10 +201,18 @@
         selectNavIndex: 0,
         behaviorArr: [],
         behaviorArrTwo: [],
-        recordTypeList: [22, 23, 21, 24, 3]
+        recordTypeList: [22, 23, 21, 24, 3],
+        radarStatus: 0,
+        vipId: 0
       }
     },
     methods: {
+      // 跳转会员页面
+      goToMember () {
+        wx.navigateTo({
+          url: '/pages/pageA/Member/main'
+        })
+      },
       // 返回首页
       goIndex () {
         wx.switchTab({
@@ -404,9 +424,20 @@
       }
     },
     onLoad (options) {
+      const radar = wx.getStorageSync('radarStatus')
+      if (radar === 1) {
+        this.radarStatus = radar
+      } else {
+        this.vipId = wx.getStorageSync('vipId')
+        if (this.vipId !== 0) {
+          this.radarStatus = 1
+        } else {
+          this.radarStatus = 0
+        }
+      }
+      console.log('this.radarStatus', this.radarStatus)
       this.pageNum = 1
       this.salesmanId = wx.getStorageSync('salesmanId')
-      console.log('this.salesmanId', this.salesmanId)
       if (options.self === '1') {
         this.self = true
         this.searchOp()
@@ -417,6 +448,7 @@
         this.timeActive = 0
         this.radarTime()
       }
+      // console.log('radarStatus', this.radarStatus)
     },
     onShow () {
       this.getSalesmanId()
@@ -457,6 +489,7 @@
     },
     // 下拉刷新
     async onPullDownRefresh () {
+      this.radarStatus = wx.getStorageSync('radarStatus')
       this.pageNum = 1
       if (this.self) {
         this.searchOp()

@@ -71,7 +71,7 @@
     methods: {
       // 调用登录接口
       doLogin (salesmanId, param, FX) {
-        console.log('fromWay:' + this.fromWay)
+        // console.log('fromWay:' + this.fromWay)
         wx.login({
           success: async (res) => {
             let shopId = getExt().shopId
@@ -104,10 +104,13 @@
           if (res.data) {
             this.isBuy = res.data.isBuy
             wx.setStorageSync('isBuy', this.isBuy)
+            const radarStatus = res.data.radarStatus
+            wx.setStorageSync('radarStatus', radarStatus)
           } else {
             wx.setStorageSync('isBuy', 0)
+            wx.setStorageSync('radarStatus', 0)
           }
-          // console.log('isBuy', this.isBuy)
+          // console.log('isBuy', res.data)
         }).catch(err => {
           console.log(err)
         })
@@ -159,7 +162,7 @@
         }).then(res => {
           const salesmanId = res.data.id
           wx.setStorageSync('salesmanId', salesmanId)
-          console.log('salesmanId', salesmanId)
+          // console.log('salesmanId', salesmanId)
         }).catch(err => {
           console.log(err)
         })
@@ -170,7 +173,7 @@
         // console.log(wx.getSystemInfoSync().windowWidth)
         wx.setStorageSync('screenHeight', wx.getSystemInfoSync().screenHeight)
         wx.setStorageSync('windowHeight', wx.getSystemInfoSync().windowHeight)
-        console.log('login', res)
+        // console.log('login', res)
         // console.log('login', res.data.avatarUrl)
         if (res.msg) {
           this.getUnReadCount()

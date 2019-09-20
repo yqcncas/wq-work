@@ -82,7 +82,7 @@
               </div>
               <div class="news-cover" v-if="item.videoUrl" @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
                 <image :src="item.videoUrl + '?x-oss-process=video/snapshot,t_1000,f_jpg,w_750,m_fast'" class="imgB" mode="scaleToFill">
-                  <i class="iconbofang iconfont"></i>
+                  <i class="iconbofang1 iconfont"></i>
                 </image>
 
               </div>
@@ -263,7 +263,7 @@
               // const remA = rem + 'rpx'
               // console.log('descHeight:' + this.descHeight)
               // console.log('如果 descHeight 超过' + (rem) + '就要显示展开按钮')
-              if (this.descHeight >= 84) {
+              if (this.descHeight > 86) {
                 // console.log('超过了四行')
                 // 显示展开收起按钮
                 item.showExchangeButton = true
@@ -785,8 +785,8 @@ width: 100%;
             .imgB{
               width: 100%;
               position: relative;
-              .iconbofang{
-                color: #ffffff;
+              .iconbofang1{
+                color: #b8b8b8;
                 position: absolute;
                 top: 40%;
                 left: 45%;

@@ -1,7 +1,7 @@
 <template>
   <div class="j-pic-upload">
     <div class="up-video" v-if="video !== '' ">
-      <video id="myVideo" v-if="videoFlag" :src="video" @ended=" end()" objectFit="fill" class="cover-hw"></video>
+      <video id="myVideo" v-if="videoFlag" :src="video" @ended=" end()" objectFit="contain" class="cover-hw"></video>
       <div v-else class="cover-view" >
         <div v-if="video!== ''" @click="videoPlay">
           <i class="delete-img iconfont iconshanchu-copy" @click="deleteVideo"></i>
@@ -35,7 +35,7 @@
         if (newValue) {
           this.urls = newValue
           this.video = this.urls
-          this.videoImg = this.video + '?x-oss-process=video/snapshot,t_0,f_jpg,w_750,m_fast'
+          this.videoImg = this.video + '?x-oss-process=video/snapshot,t_2000,f_jpg,w_800,h_600'
         } else {
           this.video = ''
         }

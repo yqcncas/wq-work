@@ -55,7 +55,7 @@
       </div>
       <!--广告-->
       <div class="banner" v-if="banner.length > 0">
-        <img class="imgMain" :src="banner[0].image" mode="widthFix" />
+        <img class="imgMain" :src="banner[0].image" mode="scaleToFill" />
       </div>
       <div class="bottom-icon">
         <div class="bottom-main">
@@ -307,8 +307,10 @@ export default {
   // 广告图片
   .banner {
     margin: 40rpx 30rpx 0;
+    height: 258rpx;
     .imgMain{
       width: 100%;
+      height: 100%;
       display: inline-block;
       border-radius: 10rpx;
     }
@@ -548,18 +550,19 @@ export default {
       .model-btn {
         position: absolute;
         left: 0;
-        top: 0rpx;
+        top: 42rpx;
         bottom: 0;
         right: 0;
         margin: 140rpx auto 0;
         width: 140rpx;
         height: 130rpx;
-        border: 4rpx solid #fff;
+        /*border: 4rpx solid #fff;*/
         border-radius: 50%;
-        background-color: rgba(0, 0, 0, 0.3);
+        background-color: rgba(0, 0, 0, 0.1);
       }
 
       .play-icon {
+        color: #b8b8b8;
         margin: 38rpx 50rpx;
         border-top: 33rpx solid transparent;
         border-left: 54rpx solid #fff;

@@ -194,7 +194,7 @@
                     </div>
                   </div>
                   <div v-else class="Gao">
-                    <img :src="items.image"/>
+                    <img :src="items.image" mode="scaleToFill"/>
                   </div>
                 </div>
               </div>

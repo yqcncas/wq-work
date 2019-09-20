@@ -322,7 +322,7 @@
 
             <!--广告-->
             <div class="banner" v-if="banner.length > 0">
-              <img class="imgMain" :src="banner[0].image" mode="widthFix" />
+              <img class="imgMain" :src="banner[0].image" mode="scaleToFill	" />
             </div>
             <!--公司介绍-->
             <div class="company" v-if="postForm.companyInfo">
@@ -349,7 +349,7 @@
                 <img src="../../../static/images/morebox.png">
                 </span>
                 <span class="product-title">公司产品</span>
-                <span class="product-right" @click="goToProductA(postForm.id)">
+                <span class="product-right" @click="goToProductA(goodsList.id)">
                   更多<img src="../../../static/images/right-cc.png">
                 </span>
               </div>
@@ -947,8 +947,12 @@
           // console.log('aa', res)
           this.latitude = res.data.latitude
           this.longitude = res.data.longitude
-          if (res.data.richText !== null) {
+          if (res.data.richText !== null && res.data.richText !== '') {
             this.imgUrlList = res.data.richText.split(',')
+            // console.log('this.imgUrlList', this.imgUrlList)
+          } else {
+            this.imgUrlList = ['https://oss.tzyizan.com/salesManImg/201908221423521566455032299.png']
+            // console.log('imgUrl', this.imgUrlList)
           }
           if (res.data.video !== null && res.data.video) {
             this.video = res.data.video

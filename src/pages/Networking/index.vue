@@ -125,7 +125,7 @@
                 </div>
                 <div class="news-cover" v-if="item.videoUrl" @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
                   <image :src="item.videoUrl + '?x-oss-process=video/snapshot,t_1000,f_jpg,w_750,m_fast'" class="imgB" mode="scaleToFill">
-                    <i class="iconbofang iconfont"></i>
+                    <i class="iconbofang1 iconfont"></i>
                   </image>
                 </div>
                 <div class="news-view flexRow">
@@ -167,8 +167,8 @@
                 </div>
               </div>
             </div>
-            <div class="banner" v-else>
-              <img class="imgMain" :src="item.image" mode="widthFix" />
+            <div class="banner" v-else-if="item.image">
+              <img class="imgMain" :src="item.image" mode="scaleToFill" />
             </div>
           </div>
         </div>
@@ -341,6 +341,7 @@
     },
     async onPullDownRefresh () {
       this.pageNum = 1
+      this.getNewsA()
       this.getNews({ type: 0 })
       // 停止下拉刷新
       wx.stopPullDownRefresh()
@@ -372,7 +373,7 @@
               // const remA = rem + 'rpx'
               // console.log('descHeight:' + this.descHeight)
               // console.log('如果 descHeight 超过' + (rem) + '就要显示展开按钮')
-              if (this.descHeight >= 84) {
+              if (this.descHeight > 86) {
                 // console.log('超过了四行')
                 // 显示展开收起按钮
                 item.showExchangeButton = true
