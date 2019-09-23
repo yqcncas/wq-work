@@ -1,8 +1,8 @@
 <template>
   <div class="opinion">
     <div class="problem">
-      <p class="title">反馈问题</p>
-      <textarea class="input" placeholder="请输入需要反馈的问题" width="100%" height="250rpx"></textarea>
+      <p class="title">反馈问题（必填）</p>
+      <textarea class="input" placeholder="请输入需要反馈的问题" width="100%" height="250rpx" v-model="feedback"></textarea>
     </div>
     <div class="PIMG">
       <p class="title">相关截图 （选填）</p>
@@ -20,8 +20,8 @@
       </div>
     </div>
     <div class="phone">
-      <p class="title">联系方式 （选填）</p>
-      <input placeholder="邮箱/手机号">
+      <p class="title">联系方式 （必填）</p>
+      <input placeholder="邮箱/手机号" v-model="phoneNumber">
     </div>
     <div class="fotter" @click="save">
       <button>提交</button>
@@ -31,20 +31,62 @@
 
 <script>
   import { UPLOAD_FILE } from '@/api/uploadFile'
+  
   export default {
     name: 'index',
     data () {
       return {
-        richTextList: []
+        // 图片
+        richTextList: [],
+        // 反馈
+        feedback: '',
+        // 联系方式
+        phoneNumber: "",
       }
     },
     methods: {
       save () {
-        wx.showToast({
-          title: '功能还在开发中哦',
+        // 发请求传给后端
+        if(this.feedback.trim() !== "" && this.phoneNumber.trim() !== ""){
+          this.$fly.request('/suggestions/add',{
+          text:this.feedback,
+          contactWay:this.phoneNumber,
+          imgUrls:this.richTextList}
+          ,{
+          method:'post',
+          timeout:5000,
+        })
+        .then(d =>{
+           console.log(d)
+          wx.showToast({
+          title: '反馈成功',
           duration: 2000,
           icon: 'none'
         })
+          this.richTextList = [];
+          this.feedback = "";
+          this.phoneNumber = ""
+          setTimeout(() => {
+            wx.switchTab({url:'/pages/personal/main'})
+          }, 2000);
+        })
+        .catch(function(d){
+         
+          wx.showToast({
+            title: '反馈失败，请检查网络',
+            duration: 2000,
+            icon: 'none'
+           })
+        })
+        }else{
+          wx.showToast({
+            title: '必填项不能为空',
+            duration: 2000,
+            icon: 'none'
+           })
+        }
+    
+    
       },
       // 删除图片
       deleteImgList (i) {
@@ -70,10 +112,18 @@
             let length = res.tempFilePaths.length // 总数
             let count = 0 // 第几张
             this.uploadOneByOne(res.tempFilePaths, successUp, failUp, count, length)
+           
           },
           fail: function () {
+             wx.showModal({
+              title: '提示',
+              content: '上传失败',
+              showCancel: false
+            })
+
           },
           complete: function () {
+            wx.hideToast()
           }
         })
       },
