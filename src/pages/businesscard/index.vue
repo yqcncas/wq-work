@@ -368,8 +368,13 @@
           <!--</div>-->
 
         <!--广告-->
-          <div class="banner" v-if="banner.length > 0">
-            <img class="imgMain" :src="banner[0].image" mode="scaleToFill	" />
+          <div v-if="banner.length > 0">
+            <div v-if="banner[0].appId" class="banner" @click="goToClassBanner(banner[0])">
+              <img class="imgMain" :src="banner[0].image" mode="scaleToFill	" />
+            </div>
+            <div class="excitation" v-else>
+              <ad :unit-id="banner[0].appId"></ad>
+            </div>
           </div>
           <!--公司介绍-->
           <div class="company" v-if="postForm.companyInfo">
@@ -487,27 +492,7 @@
       <div class="tips" v-if="tips === true">
           <img src="https://oss.tzyizan.com/salesInfo/201908231701111566550871338.png">
       </div>
-
     </div>
-  <!--<form name='pushMsgFm' report-submit='true' @submit='getFormID' class="">-->
-    <!--<div v-if="modalFlag" catchtouchmove="true" class="window">-->
-      <!--<div class="window-mian">-->
-        <!--<div class="window-title">-->
-          <!--<img src="https://oss.tzyizan.com/salesInfo/201909021625371567412737209.png">-->
-          <!--<i>-->
-            <!--<p>为了提供优质服务,请您授权后</p>-->
-            <!--<p>放心使用,您的信息将受到保护</p>-->
-            <!--<span>-->
-              <!--<button form-type="submit" class="look-just" lang="zh_CN" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">允许授权</button>-->
-            <!--</span>-->
-            <!--<span class="quxiao" @click="deleteModel()">-->
-              <!--取消-->
-            <!--</span>-->
-          <!--</i>-->
-        <!--</div>-->
-      <!--</div>-->
-    <!--</div>-->
-  <!--</form>-->
 </div>
 </template>
 
@@ -545,6 +530,7 @@
         videoFlag: false,
         video: '',
         tips: true,
+        dataA: 'adunit-622b7b5f3511fe6a',
         voiceTime: '00',
         videoImg: '',
         vertical: true,
@@ -599,8 +585,10 @@
         this.tips = false
       }, 5000)
       this.getNewsA()
+      this.getTitle()
     },
     async onPullDownRefresh () {
+      this.getTitle()
       this.getInfo()
       this.getLogo()
       this.getSalesmanId()
@@ -608,15 +596,10 @@
       this.getSun()
       this.getOpA()
       this.getType()
+      this.getNewsA()
       this.showpop = false
       this.selectNavIndex = 0
       wx.stopPullDownRefresh()
-      // const nickName = wx.getStorageSync('nickName')
-      // if (nickName === '' || nickName === null) {
-      //   this.modalFlag = true
-      // } else {
-      //   this.modalFlag = false
-      // }
     },
     onShow () {
       // wx.hideTabBar()
@@ -627,6 +610,8 @@
       this.showpop = false
       this.selectNavIndex = 0
       this.getType()
+      this.getTitle()
+      this.getNewsA()
       // const nickName = wx.getStorageSync('nickName')
       // if (nickName === '' || nickName === null) {
       //   this.modalFlag = true
@@ -642,6 +627,57 @@
       }
     },
     methods: {
+      // 跳转小程序 或 查看大图
+      goToClassBanner (res) {
+        // console.log('banner', res)
+        if (res.type === 0) {
+          wx.previewImage({
+            current: res.image,
+            urls: [res.image]
+          })
+        } else if (res.type === 2) {
+          wx.navigateToMiniProgram({
+            appId: res.appId,
+            path: 'pages/loading/main',
+            extraData: {
+              fromWay: 0
+            },
+            envVersion: 'release',
+            success (res) {
+              // 打开其他小程序成功同步触发
+              wx.showToast({
+                title: '跳转成功'
+              })
+            }
+          })
+        }
+      },
+      // 自定义标题栏
+      getTitle () {
+        const businessId = wx.getStorageSync('businessId')
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/busiPageTitle/selectOne',
+          body: {
+            'businessId': businessId,
+            'pageType': 1
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            // this.title = res.data.list
+            wx.setNavigationBarTitle({
+              title: res.data.name
+            })
+          } else {
+            wx.setNavigationBarTitle({
+              title: '名片'
+            })
+          }
+          // console.log('title', res)
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      },
       // 获取广告
       getNewsA () {
         this.$fly.request({
@@ -841,21 +877,14 @@
       // 播放开始
       playA () {
         this.videoFlag = true
-        // const videoContext = wx.createVideoContext('myVideo')
-        // videoContext.play()
       },
       // 播放结束
       end () {
         this.videoFlag = false
-        // const videoContext = wx.createVideoContext('myVideo')
-        // videoContext.seek(0)
-        // videoContext.stop()
       },
       // 播放视频
       videoPlay () {
         this.videoFlag = true
-        // const videoContext = wx.createVideoContext('myVideo')
-        // videoContext.play()
       },
       getSalesmanId () {
         const userId = wx.getStorageSync('userId') // 获取本地userId
@@ -1118,7 +1147,7 @@
             'userId': this.userId
           }
         }).then(res => {
-          console.log('res', res.data)
+          // console.log('res', res.data)
           if (res.data) {
             // if (res.data.nickName === '' || res.data.nickName == null) {
             //   this.modalFlag = true
@@ -1209,51 +1238,6 @@
         }
         return result
       },
-      // // 添加收藏
-      // getCollect (id) {
-      //   const businessId = wx.getStorageSync('businessId') // 获取本地bussiness
-      //   const userId = wx.getStorageSync('userId') // 获取本地userId
-      //   this.$fly.request({
-      //     method: 'post', // post/get 请求方式
-      //     url: 'server/platformUserSalesman/insert',
-      //     body: {
-      //       'salesmanId': id,
-      //       'userId': userId,
-      //       'businessId': businessId
-      //     }
-      //   }).then(res => {
-      //     if (res.code === 200) {
-      //       const that = this
-      //       that.postForm.isCollect = 1
-      //       that.postForm.collectCount++
-      //       that.getInfo()
-      //     }
-      //   }).catch(err => {
-      //     console.log(err.status, err.message)
-      //   })
-      // },
-      // // 取消收藏
-      // cancelCollect (id) {
-      //   const userId = wx.getStorageSync('userId') // 获取本地userId
-      //   this.$fly.request({
-      //     method: 'post', // post/get 请求方式
-      //     url: 'server/platformUserSalesman/deleteBySalesmanId',
-      //     body: {
-      //       'salesmanId': id,
-      //       'userId': userId
-      //     }
-      //   }).then(res => {
-      //     console.log('取消', res)
-      //     if (res.code === 200) {
-      //       const that = this
-      //       that.postForm.isCollect = 0
-      //       that.postForm.collectCount--
-      //       that.getInfo()
-      //     }
-      //   }).catch(err => {
-      //     console.log(err.status, err.message)
-      //   })
-      // },
       // 选择音频
       changeVoice () {
         this.changeVoiceFlag = !this.changeVoiceFlag

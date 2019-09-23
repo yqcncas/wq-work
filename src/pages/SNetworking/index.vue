@@ -135,8 +135,14 @@
               </div>
             </div>
           </div>
-            <div class="banner" v-else>
-              <img class="imgMain" :src="item.image" mode="widthFix" />
+            <!--广告-->
+            <div v-else-if="item.image">
+              <div v-if="item.appId" class="banner" @click="goToClassBanner(item)">
+                <img class="imgMain" :src="item.image" mode="scaleToFill	" />
+              </div>
+              <div class="excitation" v-else>
+                <ad :unit-id="item.appId"></ad>
+              </div>
             </div>
           </div>
         </div>
@@ -198,12 +204,11 @@
         longitude: '',
         keywords: '',
         postForm: false,
-        pushName: ''
+        pushName: '',
+        commentId: ''
       }
     },
     onLoad (options) {
-      this.pageNum = 1
-      this.getInfo()
       console.log('options', options)
       if (options.id && options.diffA === '1') {
         this.typeId = options.id
@@ -212,6 +217,8 @@
         this.keywords = options.name
         this.getNewsName({})
       }
+      this.pageNum = 1
+      this.getInfo()
       // this.getType()
     },
     onUnload () {
@@ -286,6 +293,31 @@
       }
     },
     methods: {
+      // 跳转小程序 或 查看大图
+      goToClassBanner (res) {
+        // console.log('banner', res)
+        if (res.type === 0) {
+          wx.previewImage({
+            current: res.image,
+            urls: [res.image]
+          })
+        } else if (res.type === 2) {
+          wx.navigateToMiniProgram({
+            appId: res.appId,
+            path: 'pages/loading/main',
+            extraData: {
+              fromWay: 0
+            },
+            envVersion: 'release',
+            success (res) {
+              // 打开其他小程序成功同步触发
+              wx.showToast({
+                title: '跳转成功'
+              })
+            }
+          })
+        }
+      },
       showTotalIntro (index) {
         this.newsList[index].showTotal = !this.newsList[index].showTotal
         this.newsList[index].exchangeButton = !this.newsList[index].exchangeButton
@@ -429,17 +461,18 @@
           icon: 'loading',
           mask: true
         })
+        console.log('item.id', this.commentId)
+        this.newsList.map(item => {
+          if (item.id === this.commentId) {
+            item.newsCommentList.push({ name: this.name, content: this.msgContent })
+          }
+        })
         let userId = wx.getStorageSync('userId')
         await apiNews.addNewsA({
           commentType: 0,
           commentUserId: userId,
           commentNewsId: this.commentId,
           content: this.msgContent
-        })
-        this.newsList.map(item => {
-          if (item.id === this.commentId) {
-            item.newsCommentList.push({ name: this.name, content: this.msgContent })
-          }
         })
         wx.hideToast()
         this.showTextarea = false
@@ -491,7 +524,7 @@
         const result = await apiNews.getNewsType({ businessId: this.businessId, pageNum: this.pageNum, pageSize: this.pageSize, type: this.typeId })
         const code = result.code
         const data = result.data
-        console.log('dataA', data)
+        // console.log('dataA', data)
         if (code === 200) {
           data.list.map(item => {
             if (!item.image) {
@@ -518,7 +551,7 @@
               this.newsList.push(e)
             })
           }
-          console.log('newsListA', data)
+          // console.log('newsListA', data)
           this.lastPage = data.lastPage
           this.pageNum = data.pageNum
           this.nextPage = data.nextPage
@@ -565,7 +598,7 @@
               this.newsList.push(e)
             })
           }
-          console.log('newsList', data)
+          // console.log('newsList', data)
           this.lastPage = data.lastPage
           this.pageNum = data.pageNum
           this.nextPage = data.nextPage
@@ -656,15 +689,22 @@ width: 100%;
         padding: ~'28rpx' ~'20rpx' ~'57rpx';
         box-sizing: border-box;
         .banner{
-          width: ~'658'rpx;
-          margin:  0 auto;
+          width: ~'658rpx';
+          height: ~'258rpx';
+          margin:  ~'29rpx' auto 0;
           display: block;
           padding: 0!important;
           .imgMain{
-            width: 100%;
+            width: ~'658rpx';
+            height: ~'258rpx';
             display: inline-block;
             border-radius: ~'10rpx';
           }
+        }
+        // 流量主
+        .excitation{
+          width: ~'658rpx';
+          margin: ~'29rpx' auto 0;
         }
         //新闻item 头部
         .news-header {

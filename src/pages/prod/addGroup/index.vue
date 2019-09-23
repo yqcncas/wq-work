@@ -8,7 +8,7 @@
         <div class="headImage">
           <span >群头像</span>
           <p class="right">
-            <img src="../../../static/images/addImage.jpg"/>
+            <img src="@/static/images/addImage.jpg"/>
             <i class="iconfont iconyouce"></i>
           </p>
         </div>
@@ -69,12 +69,12 @@
       },
       routeTo (info) {
         wx.navigateTo({
-          url: `../CustomType/main`
+          url: `/pages/pageA//CustomType/main`
         })
       },
       routeTo1 (info) {
         wx.navigateTo({
-          url: `../Introduction/main`
+          url: `/pages/pageA//Introduction/main`
         })
       }
     }

@@ -7,7 +7,7 @@
           :home-path="'/pages/message/main'"></navigation-bar>
       </section>
       <div class="title">
-        <span>产品</span>
+        <span>{{title}}</span>
       </div>
       <div class="nav-control">
         <scroll-view :scroll-y="scrollTop">
@@ -76,26 +76,35 @@
       <div class="product-listA" v-if="goodsType === 0">
         <div class="item-proA" v-for="(item,index) in productList" :key="index">
           <div class="item-pro" v-if="!item.image">
-          <image v-if="item.imgUrl" class="pro-img"  @click="routeTo(item.id,index)" :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
-                 mode="aspectFill"></image>
-          <div class="Forward">
-            <button open-type="share" :data-item="item" class="share-btn" @click="openInfo(index)">
-              <i class="iconfont iconfenxiang3" @click="shareGoods"></i>
-            </button>
+            <image  class="pro-img"  @click="routeTo(item.id,index)" :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
+                   mode="aspectFill"></image>
+            <div class="Forward">
+              <button open-type="share" :data-item="item" class="share-btn" @click="openInfo(index)">
+                <i class="iconfont iconfenxiang3" @click="shareGoods"></i>
+              </button>
+            </div>
+            <p class="bot-des" @click="routeTo(item.id,index)">{{item.name}}</p>
+            <p class="box-browA" @click="routeTo(item.id,index)" v-if="item.getMoney !== null">
+              <span class="getMoney">赚</span>
+              <i class="MoneyA">￥ {{item.getMoney}}</i>
+            </p>
+            <div class="price-brow" @click="routeTo(item.id,index)">
+              <p v-if="item.priceStatus!==0"><span>￥</span><span class="price">{{item.price}}</span></p>
+              <p class="box-brow"><i class="iconfont iconyanjing"></i><span>{{item.browseCount}}</span></p>
+            </div>
           </div>
-          <p class="bot-des" @click="routeTo(item.id,index)">{{item.name}}</p>
-          <p class="box-browA" @click="routeTo(item.id,index)">
-            <span class="getMoney">赚</span>
-            <i class="MoneyA">￥ {{item.getMoney}}</i>
-          </p>
-          <div class="price-brow" @click="routeTo(item.id,index)">
-            <p v-if="item.priceStatus!==0"><span>￥</span><span class="price">{{item.price}}</span></p>
-            <p class="box-brow"><i class="iconfont iconyanjing"></i><span>{{item.browseCount}}</span></p>
+          <!--广告-->
+          <div v-else-if="item.image">
+            <div v-if="item.appId" class="banner" @click="goToClassBanner(item)">
+              <img class="imgMain" :src="item.image" mode="scaleToFill	" />
+            </div>
+            <div class="excitation" v-else>
+              <ad :unit-id="item.appId"></ad>
+            </div>
           </div>
-          </div>
-          <div v-else class="banner">
-            <img class="imgMain" :src="item.image" mode="scaleToFill" />
-          </div>
+          <!--<div v-else class="banner">-->
+            <!--<img class="imgMain" :src="item.image" mode="scaleToFill" />-->
+          <!--</div>-->
         </div>
       </div>
 
@@ -116,7 +125,7 @@
           <p class="bot-des" @click="routeTo(item.id,index)">{{item.name}}</p>
           <div class="price-brow" @click="routeTo(item.id,index)">
             <p v-if="item.priceStatus!==0" class="price-brow-main"><span class="yang">￥</span><span class="price">{{item.price}}</span></p>
-            <p class="box-brow">
+            <p class="box-brow" v-if="item.getMoney !== null">
               <span class="getMoney">赚</span>
               <span class="Money">￥ {{item.getMoney}}</span>
             </p>
@@ -135,9 +144,18 @@
             <i class="iconfont iconiconjia"></i>
           </div>
         </div>
-          <div v-else class="banner">
-            <img class="imgMain" :src="item.image" mode="scaleToFill" />
+        <!--广告-->
+        <div v-else-if="item.image">
+          <div v-if="item.appId" class="banner" @click="goToClassBanner(item)">
+            <img class="imgMain" :src="item.image" mode="scaleToFill	" />
           </div>
+          <div class="excitation" v-else>
+            <ad :unit-id="item.appId"></ad>
+          </div>
+        </div>
+          <!--<div v-else class="banner">-->
+            <!--<img class="imgMain" :src="item.image" mode="scaleToFill" />-->
+          <!--</div>-->
         </div>
       </div>
 
@@ -151,13 +169,13 @@
                 <i @click="shareGoods" class="iconfont icon31zhuanfa"></i>
             </button>
             <p  @click="routeTo(item.id,index )">
-              <image  v-if="item.imgUrl" class="pro-img" :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
+              <image class="pro-img" :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
                      mode="aspectFill"></image>
             </p>
             <p class="bot-des">{{item.name}}</p>
             <div class="price-brow">
               <p v-if="item.priceStatus!==0" class="price-brow-main"><span class="yang">￥</span><span class="price">{{item.price}}</span></p>
-              <p class="box-brow">
+              <p class="box-brow" v-if="item.getMoney !== null">
                 <span class="getMoney">赚</span>
                 <span class="Money">￥ {{item.getMoney}}</span>
               </p>
@@ -170,9 +188,18 @@
               <span>抢购</span>
             </div>
           </div>
-          <div v-else class="banner">
-            <img class="imgMain" :src="item.image" mode="scaleToFill" />
+          <!--广告-->
+          <div v-else-if="item.image">
+            <div v-if="item.appId" class="banner" @click="goToClassBanner(item)">
+              <img class="imgMain" :src="item.image" mode="scaleToFill	" />
+            </div>
+            <div class="excitation" v-else>
+              <ad :unit-id="item.appId"></ad>
+            </div>
           </div>
+          <!--<div v-else class="banner">-->
+            <!--<img class="imgMain" :src="item.image" mode="scaleToFill" />-->
+          <!--</div>-->
         </div>
       </div>
       <!--<FloatBox :home="false" phone="value"></FloatBox>-->
@@ -261,7 +288,8 @@
         url: '',
         sortingType: '',
         cardStatus: false,
-        card: false
+        card: false,
+        title: '产品'
       }
     },
 
@@ -280,9 +308,11 @@
       this.getType()
       this.getNews()
       this.getInfo()
+      this.getTitle()
     },
     onShow () {
       this.getInfo()
+      this.getTitle()
       // this.getProduct({ type: 0 })
     },
     onPageScroll: function (ev) {
@@ -347,6 +377,7 @@
     async onPullDownRefresh () {
       this.pageNum = 1
       this.getNews()
+      this.getTitle()
       this.getProduct(0)
       // 停止下拉刷新
       wx.stopPullDownRefresh()
@@ -370,6 +401,50 @@
     //   }
     // },
     methods: {
+      // 跳转小程序 或 查看大图
+      goToClassBanner (res) {
+        // console.log('banner', res)
+        if (res.type === 0) {
+          wx.previewImage({
+            current: res.image,
+            urls: [res.image]
+          })
+        } else if (res.type === 2) {
+          wx.navigateToMiniProgram({
+            appId: res.appId,
+            path: 'pages/loading/main',
+            extraData: {
+              fromWay: 0
+            },
+            envVersion: 'release',
+            success (res) {
+              // 打开其他小程序成功同步触发
+              wx.showToast({
+                title: '跳转成功'
+              })
+            }
+          })
+        }
+      },
+      // 自定义标题栏
+      getTitle () {
+        const businessId = wx.getStorageSync('businessId')
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/busiPageTitle/selectOne',
+          body: {
+            'businessId': businessId,
+            'pageType': 2
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            this.title = res.data.name
+          }
+          // console.log('title', res)
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      },
       // 获取广告
       getNews () {
         this.$fly.request({
@@ -1028,13 +1103,23 @@
     .banner {
       width: 656rpx;
       height: 258rpx;
-      margin: 50rpx auto;
+      margin: 30rpx auto 0;
       .imgMain{
         width: 100%;
         height: 100%;
         display: inline-block;
         border-radius: 10rpx;
       }
+    }
+    .excitation{
+      width: 656rpx;
+      /*height: 258rpx;*/
+      margin: 30rpx auto 0;
+    }
+    .excitation{
+      width: 656rpx;
+      /*height: 258rpx;*/
+      margin: 20rpx auto;
     }
     .item-pro {
       width: 694rpx;
@@ -1049,7 +1134,7 @@
       .pro-img {
         width: 200rpx;
         height: 200rpx;
-        float: left;
+        /*float: left;*/
         border-top-left-radius: 10rpx;
         border-bottom-left-radius: 10rpx;
       }
@@ -1255,16 +1340,22 @@
     justify-items: center;
     align-items: center;
     text-align: center;
+    // 广告图片
     .banner {
       width: 656rpx;
       height: 258rpx;
-      margin: 50rpx auto;
+      margin: 30rpx auto 0 ;
       .imgMain{
         width: 100%;
         height: 100%;
         display: inline-block;
         border-radius: 10rpx;
       }
+    }
+    .excitation{
+      width: 656rpx;
+      /*height: 258rpx;*/
+      margin: 30rpx auto 0;
     }
     .item-pro{
       width: 694rpx;
@@ -1412,16 +1503,20 @@
       margin-bottom: 24rpx;
       // 广告图片
       .banner {
-        display: block;
         width: 656rpx;
         height: 258rpx;
-        margin: 20rpx auto;
+        margin: 30rpx auto 0;
         .imgMain{
           width: 100%;
           height: 100%;
           display: inline-block;
           border-radius: 10rpx;
         }
+      }
+      .excitation{
+        width: 656rpx;
+        /*height: 258rpx;*/
+        margin: 30rpx auto 0;
       }
       .item-pro {
         width: 364rpx;

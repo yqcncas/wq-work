@@ -7,7 +7,7 @@
             <img src="https://oss.wq1516.com/salesInfo/201906181129151560828555097.jpg"/>
           </div>
           <div class="cardHold-top-text">
-            <span>人脉</span>
+            <span>{{title}}</span>
           </div>
           <div class="cardHold-top-I">
             <div class="cardHold-top-me">
@@ -193,8 +193,13 @@
                       <p class="distance">{{items.distance}} km</p>
                     </div>
                   </div>
-                  <div v-else class="Gao">
-                    <img :src="items.image" mode="scaleToFill"/>
+                  <div v-else>
+                    <div v-if="items.appId == null" class="Gao">
+                      <img :src="items.image" mode="scaleToFill"/>
+                    </div>
+                    <div v-else class="excitation">
+                      <ad :unit-id="items.appId"></ad>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -275,6 +280,7 @@
         qrCodeUrl: '',
         postForm: '',
         searchName: '',
+        title: '人脉',
         y: 0,
         toView: '',
         scrollTop: 0,
@@ -316,6 +322,7 @@
       // wx.hideTabBar()
       this.showpop = false
       this.getInfoA()
+      this.getTitle()
     },
     async onPullDownRefresh () {
       this.tradeStatus = wx.getStorageSync('tradeStatus')
@@ -328,6 +335,8 @@
       this.getLogo()
       this.getMy()
       this.changTab(1)
+      this.getTitle()
+      wx.stopPullDownRefresh()
     },
     onLoad (options) {
       // this.getNews()
@@ -342,6 +351,7 @@
       this.getLogo()
       this.getMy()
       this.changTab(1)
+      this.getTitle()
       setInterval(() => {
         const that = this
         const num = wx.getStorageSync('msgNum')
@@ -392,6 +402,25 @@
       // console.log(this.toView)
     },
     methods: {
+      // 自定义标题栏
+      getTitle () {
+        const businessId = wx.getStorageSync('businessId')
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/busiPageTitle/selectOne',
+          body: {
+            'businessId': businessId,
+            'pageType': 7
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            this.title = res.data.name
+          }
+          // console.log('title', res)
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      },
       // // 获取广告
       // getNews () {
       //   this.$fly.request({
@@ -467,7 +496,6 @@
             'userId': userId
           }
         }).then(res => {
-          console.log('1', res)
           wx.setStorageSync('id', res.data.id)
           this.legalPersonaName = res.data.legalPersonaName
           this.companyName = res.data.companyName
@@ -569,7 +597,7 @@
                 item.imgUrl = 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png'
               }
             })
-            console.log('data', res.data)
+            // console.log('data', res.data)
             this.lastPage = res.data.lastPage
             this.pageNum = res.data.pageNum
             this.nextPage = res.data.nextPage
@@ -884,7 +912,7 @@
           icon: 'none'
         })
         // wx.navigateTo({
-        //   url: '/pages/GroupCard/main'
+        //   url: '/pages/prod/GroupCard/main'
         // })
       },
       // 跳转到名片夹

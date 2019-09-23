@@ -15,7 +15,6 @@
     "pages/profile/main",
     "pages/profileModel/main",
     "pages/businesscard/main",
-    "pages/classify/main",
     "pages/OthersCard/main",
     "pages/businesscard/showQrcode/main",
     "pages/OthersCard/showQrcode/main",
@@ -32,10 +31,10 @@
     "pages/productA/detail/buydetail/main",
     "pages/productA/detail/main",
     "pages/simple/main",
-    "pages/group/main",
-    "pages/addGroup/main",
-    "pages/GroupCard/main",
     "pages/stats/main"
+  ],
+  "navigateToMiniProgramAppIdList": [
+    "wx2e3ab31dae91d019"
   ],
   "subPackages": [
     {
@@ -43,7 +42,11 @@
       "pages": [
         "product/main",
         "addProduct/main",
-        "productModel/main"
+        "productModel/main",
+        "group/main",
+        "addGroup/main",
+        "GroupCard/main",
+        "classify/main"
       ]
     },
     {

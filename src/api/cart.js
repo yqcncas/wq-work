@@ -48,7 +48,7 @@ const cart = {
     goodsList
   }) =>
     request.post(
-      '/order/unified', {
+      '/platformOrder/unified', {
         goodsList
       }, {
         baseURL: baseUrlApi
@@ -67,7 +67,7 @@ const cart = {
     buyWay
   }) =>
     request.post(
-      '/order/unifiedOrder', {
+      '/platformOrder/unifiedOrder', {
         goodsList,
         unifiedOrderRequest: {
           spbillCreateIp,
@@ -96,8 +96,23 @@ const cart = {
     pageSize
   }) =>
     request.get(
-      '/order/selectByStatus', {
+      '/platformOrder/selectByStatus', {
         status,
+        pageNum,
+        pageSize
+      }, {
+        baseURL: baseUrlApi
+      }
+    ),
+  // 新建的查询我卖出所有的订单
+  orderByStatusB: ({
+    orderStatusId,
+    pageNum,
+    pageSize
+  }) =>
+    request.get(
+      '/platformOrder/selectForSalesMan', {
+        orderStatusId,
         pageNum,
         pageSize
       }, {
@@ -109,7 +124,7 @@ const cart = {
     id
   }) =>
     request.get(
-      '/order/selectDeTailOrderInfo', {
+      '/platformOrder/selectDeTailOrderInfo', {
         id: id
       }, {
         baseURL: baseUrlApi
@@ -120,7 +135,7 @@ const cart = {
     id
   }) =>
     request.post(
-      '/order/delete', {
+      '/platformOrder/delete', {
         id
       }, {
         baseURL: baseUrlApi
@@ -129,7 +144,7 @@ const cart = {
   // 修改订单的状态
   updateOrderStatus: (obj) =>
     request.post(
-      '/order/updateOrderStatus',
+      '/platformOrder/updateOrderStatus',
       obj, {
         baseURL: baseUrlApi
       }
@@ -143,7 +158,7 @@ const cart = {
     phone
   }) =>
     request.post(
-      '/order/updateOrderAddress', {
+      '/platformOrder/updateOrderAddress', {
         id,
         orderAddress,
         orderAddressDetail,

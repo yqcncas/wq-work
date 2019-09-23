@@ -54,8 +54,17 @@
         </div>
       </div>
       <!--广告-->
-      <div class="banner" v-if="banner.length > 0">
-        <img class="imgMain" :src="banner[0].image" mode="scaleToFill" />
+      <!--<div class="banner" v-if="banner.length > 0">-->
+        <!--<img class="imgMain" :src="banner[0].image" mode="scaleToFill" />-->
+      <!--</div>-->
+      <!--广告-->
+      <div v-if="banner.length > 0">
+        <div v-if="banner[0].appId" class="banner" @click="goToClassBanner(banner[0])">
+          <img class="imgMain" :src="banner[0].image" mode="scaleToFill	" />
+        </div>
+        <div class="excitation" v-else>
+          <ad :unit-id="banner[0].appId"></ad>
+        </div>
       </div>
       <div class="bottom-icon">
         <div class="bottom-main">
@@ -137,6 +146,31 @@ export default {
     videoWan
   },
   methods: {
+    // 跳转小程序 或 查看大图
+    goToClassBanner (res) {
+      // console.log('banner', res)
+      if (res.type === 0) {
+        wx.previewImage({
+          current: res.image,
+          urls: [res.image]
+        })
+      } else if (res.type === 2) {
+        wx.navigateToMiniProgram({
+          appId: res.appId,
+          path: 'pages/loading/main',
+          extraData: {
+            fromWay: 0
+          },
+          envVersion: 'release',
+          success (res) {
+            // 打开其他小程序成功同步触发
+            wx.showToast({
+              title: '跳转成功'
+            })
+          }
+        })
+      }
+    },
     // 获取广告
     getNewsA () {
       this.$fly.request({
@@ -314,6 +348,9 @@ export default {
       display: inline-block;
       border-radius: 10rpx;
     }
+  }
+  .excitation{
+    margin: 40rpx 30rpx 0;
   }
 
   %common {

@@ -4,7 +4,7 @@
       <div class="IfyTop-input">
         <p>
           <input placeholder="搜索关键词" v-model="tradeName" placeholder-style="color: #cccccc;"/>
-          <span class="IfyTop--button" @click="getBySearch(tradeName,pageNum)"><img src="../../../static/images/search.png"></span>
+          <span class="IfyTop--button" @click="getBySearch(tradeName,pageNum)"><img src="../../../../static/images/search.png"></span>
         </p>
       </div>
     </div>
@@ -27,9 +27,9 @@
             <p class="company">{{ item.salesCompanyName }}</p>
           </div>
           <div class="card-right">
-            <p class="eye"><img src="../../../static/images/eye.png"/><span>{{ item.browseCount }}</span> </p>
-            <p class="star"><img src="../../../static/images/star.png"/><span>{{ item.praiseCount }}</span> </p>
-            <i v-if="item.isCollect === 0" @click="getCollect(item.id, index)"><img src="../../../static/images/addpersonal.png"/></i>
+            <p class="eye"><img src="../../../../static/images/eye.png"/><span>{{ item.browseCount }}</span> </p>
+            <p class="star"><img src="../../../../static/images/star.png"/><span>{{ item.praiseCount }}</span> </p>
+            <i v-if="item.isCollect === 0" @click="getCollect(item.id, index)"><img src="../../../../static/images/addpersonal.png"/></i>
             <i v-else></i>
           </div>
         </div>
@@ -211,5 +211,5 @@
 </script>
 
 <style lang="less" scoped>
-@import "./style";
+@import "style";
 </style>

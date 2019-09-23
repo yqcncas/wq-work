@@ -9,7 +9,7 @@
     <!--</vue-tab-bar>-->
     <!--<button class='pop_btn' plain="false" open-type='getPhoneNumber' bindgetphonenumber="getPhoneNumber">获取用户手机号</button>-->
       <div class="top">
-        <div class="title"><a>我的</a></div>
+        <div class="title"><a>{{title}}</a></div>
         <el-form ref="postForm" :model="postForm">
           <div class="top-main">
             <span class="headImg">
@@ -23,7 +23,7 @@
                 </p>
                 <span class="comyname">{{ postForm.salesCompanyName}}</span>
                 <span class="edit" @click="goMessage">
-                  <img src="../../../static/images/消息.png"/>我的消息
+                  <img src="../../../static/images/mes.png"/>我的消息
                   <a class="left" v-if="num !== 0 && num < 99" >{{num}}</a>
                   <a class="right" v-else-if="num > 99" >99<s>+</s></a>
                 </span>
@@ -77,13 +77,13 @@
           </div>
         </div>
         <form report-submit='true' @submit='getFormID' class="form">
-          <div class="Check" v-if="Check===0" @click="check()">
+          <div class="Check" @click="check()">
             <button class="check-inA"><span>签到</span></button>
           </div>
         </form>
-        <div class="CheckA" v-if="Check===1" @click="checkA()">
-          <button class="check-inA"><span>已签</span></button>
-        </div>
+        <!--<div class="CheckA" v-if="Check===1" @click="checkA()">-->
+          <!--<button class="check-inA"><span>已签</span></button>-->
+        <!--</div>-->
       </div>
     </div>
     <div class="meber" @click="goMeber">
@@ -174,6 +174,7 @@
 
     data () {
       return {
+        title: '我的',
         postForm: {
           imgUrl: 'https://oss.wq1516.com/default-avatar.png',
           name: '无姓名',
@@ -186,7 +187,7 @@
           praiseMeNum: 0,
           iLookNum: 0
         },
-        num: '',
+        num: 0,
         numA: 0,
         count: 0,
         selectNavIndex: 3,
@@ -331,6 +332,7 @@
       this.getInfo()
       this.getRecord()
       this.getMerber()
+      this.getTitle()
     },
     onLoad () {
       setInterval(() => {
@@ -339,9 +341,48 @@
         that.num = num
         // console.log('获取消息数量', that.num)
       }, 1000)
+      this.getTitle()
       // this.getShop()
     },
+    async onPullDownRefresh () {
+      this.getInfo()
+      this.getRecord()
+      this.getMerber()
+      this.getTitle()
+      wx.stopPullDownRefresh()
+    },
     methods: {
+      // 查询积分
+      getSkin () {
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/sign/sign',
+          body: {
+          }
+        }).then(res => {
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      },
+      // 自定义标题栏
+      getTitle () {
+        const businessId = wx.getStorageSync('businessId')
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/busiPageTitle/selectOne',
+          body: {
+            'businessId': businessId,
+            'pageType': 5
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            this.title = res.data.name
+          }
+          // console.log('title', res)
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      },
       // 进入积分明细
       goIntegral () {
         wx.navigateTo({
@@ -351,15 +392,26 @@
       // 隐藏
       checkDelete () {
         this.deleteShow = false
-        this.Check = 1
+        // this.Check = 1
       },
       // 签到
       check () {
         if (this.cardStatus === true) {
-          this.deleteShow = true
-          this.Check = 1
-          this.numA = this.numA + 5
-          this.count = this.count + 1
+          this.$fly.request({
+            method: 'post', // post/get 请求方式
+            url: '/sign/sign',
+            body: {
+            }
+          }).then(res => {
+            if (res.code === 200) {
+              this.deleteShow = true
+              this.Check = 1
+              this.numA = this.numA + 5
+              this.count = this.count + 1
+            }
+          }).catch(err => {
+            console.log(err.status, err.message)
+          })
         } else {
           wx.showToast({
             title: '请先注册名片',
@@ -368,13 +420,24 @@
           })
         }
       },
-      checkA () {
-        wx.showToast({
-          title: '已签，明天继续哦',
-          icon: 'none',
-          duration: 2000
-        })
-      },
+      // checkA () {
+      //   this.$fly.request({
+      //     method: 'post', // post/get 请求方式
+      //     url: '/sign/sign',
+      //     body: {
+      //     }
+      //   }).then(res => {
+      //     if (res.code === 200) {
+      //       wx.showToast({
+      //         title: res.message,
+      //         icon: 'none',
+      //         duration: 2000
+      //       })
+      //     }
+      //   }).catch(err => {
+      //     console.log(err.status, err.message)
+      //   })
+      // },
       // 查询会员等级信息
       getMerber () {
         const businessId = wx.getStorageSync('businessId')
@@ -389,7 +452,7 @@
           console.log('Member', Member)
 
           this.silver = res.data
-          console.log('this.silver', this.silver)
+          // console.log('this.silver', this.silver)
           if (Member === 0 || Member === null || Member === '') {
             this.Member = '无会员'
             wx.setStorageSync('vipId', 0)

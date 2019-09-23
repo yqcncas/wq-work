@@ -3,11 +3,17 @@
     <ul class="tab-box">
       <li v-for="(item,index) in category" :key="index" :class="{'active':typeId==item.typeId}" @click='tabChange(item.typeId)'>{{item.typeName}}</li>
     </ul>
-    <!--<ul class="tab-boxA" v-if="typeId == 2 || typeId == 3">-->
-      <!--<li v-for="(item,index) in categoryA" :key="index" :class="{'active':typeIdA==item.typeId}" @click='tabChangeA(item.typeId)'>{{item.typeName}}</li>-->
-    <!--</ul>-->
-    <!--<div :class="{'order-listA':typeId== 2 || typeId == 3, 'order-list': typeId !== 2 && typeId !== 3}">-->
-      <div class="order-list">
+    <ul class="tab-boxA" v-if="typeId == 2">
+      <li v-for="(item,index) in categoryA" :key="index" :class="{'active':typeIdA==item.typeId}" @click='tabChangeA(item.typeId)'>{{item.typeName}}</li>
+    </ul>
+    <ul class="tab-boxA" v-if="typeId == 3">
+      <li v-for="(item,index) in categoryB" :key="index" :class="{'active':typeIdB==item.typeId}" @click='tabChangB(item.typeId)'>{{item.typeName}}</li>
+    </ul>
+    <ul class="tab-boxA" v-if="typeId == 8">
+      <li v-for="(item,index) in categoryC" :key="index" :class="{'active':typeIdC==item.typeId}" @click='tabChangC(item.typeId)'>{{item.typeName}}</li>
+    </ul>
+    <div :class="{'order-listA':typeId== 2 || typeId == 3 || typeId== 8, 'order-list': typeId !== 2 && typeId !== 3 && typeId !== 8}">
+      <!--<div class="order-list">-->
       <div class="order-item" v-for="(item, index) of orderList" :key="item.id" :data-index="index">
         <div @click="routeTo(`../orderdetail/main?id=${item.id}`)">
           <p class="top-text">
@@ -40,13 +46,33 @@
           <button class="common-btn blue-btn" @click="payOrder(item.payInfo,item.totalFee)">去付款</button>
         </div>
         <div class="btn-box" v-if="item.orderStatusId==2">
-          <button class="common-btn blue-btn" @click="routeTo(`../refund/main?id=${item.id}`)">退款</button>
+          <div v-if="typeStaus=== 0">
+            <button class="common-btn blue-btn" @click="routeTo(`../refund/main?id=${item.id}`)">退款</button>
+          </div>
+          <div v-else>
+            <button class="common-btn blue-btn" @click="GoshowPopup(item.id, item.outTradeNo)">发货</button>
+          </div>
         </div>
         <div class="btn-box" v-if="item.orderStatusId==3">
-          <button class="common-btn" @click="routeTo(`../refund/main?id=${item.id}`)">退款</button>
-          <button class="common-btn" @click="routeTo(`../logistics/main?id=${item.id}`)">追踪物流</button>
-          <button class="common-btn blue-btn" @click="confirmReceipt(item.outTradeNo)">确认收货</button>
+          <div v-if="typeStaus=== 0">
+            <button class="common-btn" @click="routeTo(`../refund/main?id=${item.id}`)">退款</button>
+            <button class="common-btn" @click="routeTo(`../logistics/main?id=${item.id}`)">追踪物流</button>
+            <button class="common-btn blue-btn" @click="confirmReceipt(item.outTradeNo)">确认收货</button>
+          </div>
+          <div v-else>
+            <button class="common-btn" @click="routeTo(`../logistics/main?id=${item.id}`)">追踪物流</button>
+          </div>
         </div>
+        <div class="btn-box" v-if="item.orderStatusId==8">
+          <div v-if="typeStaus=== 1">
+            <button v-if="item.refund == 0" class="common-btn" @click="madeRefun(item.outTradeNo,index)">确认退款</button>
+            <button v-else class="common-btn" @click="RefundTime">退款中</button>
+          </div>
+        </div>
+        <!--<div class="btn-box" v-if="item.orderStatusId==3">-->
+          <!--<button class="common-btn" @click="routeTo(`../logistics/main?id=${item.id}`)">追踪物流</button>-->
+        <!--</div>-->
+
         <!-- <div class="btn-box" v-if="item.orderStatusId==2">
           <button class="common-btn blue-btn">提醒发货</button>
         </div>
@@ -55,15 +81,43 @@
         </div> -->
       </div>
     </div>
+    <div class="Popup" v-if="showPopup === true">
+        <div class="mian">
+          <div>
+            <div class="express">
+              <picker class="choose" mode="selector" :value="indexA" :range="valueA" range-key="shipperName" @change="bindPickerChangeA">
+                <span class="picker">{{ valueA[indexA].shipperName}}<i class="iconfont Down iconyouce"></i></span>
+              </picker>
+            </div>
+            <div class="number">
+              <input placeholder="输入快递单号"  v-model="logisticsNum"/>
+            </div>
+            <div class="bt">
+              <button @click="Deliver(PopupId)">确认发货</button>
+            </div>
+          </div>
+          <i class="delete icondel2 iconfont" @click="hideshowPopup"></i>
+        </div>
+    </div>
   </view>
 </template>
 
 <script>
 import apiOrder from '@/api/cart'
 import personApi from '@/api/person'
+import { UPLOAD_API } from '@/api/uploadFile'
 export default {
   data () {
     return {
+      indexA: 0,
+      type: 0,
+      showPopup: false,
+      PopupId: '',
+      outTradeNo: '',
+      logisticsNum: '',
+      valueA: [{
+        shipperName: ''
+      }], // 分类
       category: [
         {
           typeName: '全部',
@@ -80,6 +134,9 @@ export default {
         }, {
           typeName: '待评价',
           typeId: 6
+        }, {
+          typeName: '待退款',
+          typeId: 8
         }],
       categoryA: [
         {
@@ -87,16 +144,35 @@ export default {
           typeId: 0
         }, {
           typeName: '我卖出的',
-          typeId: 1
+          typeId: 2
+        }],
+      categoryB: [
+        {
+          typeName: '我购买的',
+          typeId: 0
+        }, {
+          typeName: '我卖出的',
+          typeId: 3
+        }],
+      categoryC: [
+        {
+          typeName: '我购买的',
+          typeId: 0
+        }, {
+          typeName: '我卖出的',
+          typeId: 8
         }],
       typeId: 0,
       typeIdA: 0,
+      typeIdB: 0,
+      typeIdC: 0,
       orderList: [],
       typeName: '',
       pageNum: 1,
       lastPage: 100,
       nextPage: 1,
-      pageSize: 10
+      pageSize: 10,
+      typeStaus: 0
     }
   },
   onShow () {
@@ -110,8 +186,137 @@ export default {
       this.getOrderList()
     }
     this.typeIdA = 0
+    this.typeIdB = 0
+    this.getGoodA()
   },
   methods: {
+    // 退款中
+    RefundTime () {
+      wx.showToast({
+        icon: 'none',
+        duration: 3000,
+        title: '退款审核中...'
+      })
+    },
+    // 确认退款
+    madeRefun (trade, id) {
+      var that = this
+      wx.showModal({
+        title: '提示',
+        content: '是否确认退款',
+        confirmColor: '#FFAF42',
+        success (res) {
+          if (res.confirm) {
+            const token = wx.getStorageSync('token')
+            wx.request({
+              method: 'POST', // post/get 请求方式
+              url: UPLOAD_API + '/platformOrder/MaRefund',
+              data: {
+                'outTradeNo': trade
+              },
+              header: {
+                'token': token
+              },
+              success: function (res) {
+                console.log('resAAA', res)
+                if (res.statusCode === 200) {
+                  this.pageNum = 1
+                  wx.showToast({
+                    icon: 'none',
+                    duration: 3000,
+                    title: '退款成功'
+                  })
+                  that.orderList[id].refund = 1
+                  // console.log('newsList', that.orderList[id])
+                  // setTimeout(function () {
+                  //   that.tabChangC(8)
+                  // }, 5000)
+                }
+              }
+            })
+          } else if (res.cancel) {
+            wx.showToast({
+              icon: 'none',
+              duration: 3000,
+              title: '取消退款'
+            })
+          }
+        }
+      })
+    },
+    // 显示物流快递发货
+    GoshowPopup (id, trade) {
+      this.showPopup = true
+      this.PopupId = id
+      this.outTradeNo = trade
+    },
+    // 隐藏物流快递发货
+    hideshowPopup () {
+      this.showPopup = false
+      this.logisticsNum = ''
+      this.outTradeNo = ''
+    },
+    // 发货
+    Deliver (id) {
+      const businessId = wx.getStorageSync('businessId')
+      const shipper = this.type
+      this.$fly.request({
+        method: 'post', // post/get 请求方式
+        url: '/platformOrder/updateOrderStatus',
+        body: {
+          'businessId': businessId,
+          'orderStatusId': 3,
+          'shipperCode': shipper,
+          'logisticsNum': this.logisticsNum,
+          'outTradeNo': this.outTradeNo
+        }
+      }).then(res => {
+        if (res.code === 200) {
+          this.showPopup = false
+          if (this.typeId === 2) {
+            this.getOrderListA()
+          } else if (this.typeId === 3) {
+            this.getOrderListB()
+          }
+          wx.showToast({
+            icon: 'none',
+            duration: 3000,
+            title: '发货成功'
+          })
+        }
+        console.log('resAAA', res)
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+
+    // 获取快递公司
+    getGoodA () {
+      const businessId = wx.getStorageSync('businessId')
+      this.$fly.request({
+        method: 'get', // post/get 请求方式
+        url: '/shipper/findList',
+        body: {
+          'businessId': businessId,
+          'pageSize': 0
+        }
+      }).then(res => {
+        // console.log('resAAA', res)
+        if (res.data) {
+          this.valueA = res.data.list
+          this.type = this.valueA[0].id
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    bindPickerChangeA (e) {
+      const that = this
+      this.indexA = parseInt(e.mp.detail.value)
+      that.type = this.valueA[this.indexA].id
+      // wx.setStorageSync('typeId', that.typeId)
+      console.log('tyoeId', that.type)
+    },
     routeTo (url) {
       wx.navigateTo({
         url
@@ -167,13 +372,76 @@ export default {
           n.unitPrice = (+n.unitPrice).toFixed(2)
         })
       })
-      console.log('orderList', this.orderList)
+      // console.log('orderList', this.orderList)
       if (this.pageNum === 1) {
         this.orderList = res.data.list
       } else {
         this.orderList = this.orderList.concat(res.data.list)
       }
-      console.log('orderList', this.orderList)
+      // console.log('orderList', this.orderList)
+      this.lastPage = res.data.lastPage
+      this.pageNum = res.data.pageNum
+      this.nextPage = res.data.nextPage
+    },
+    // 获取我卖出订单数据
+    async getOrderListC () {
+      const res = await apiOrder.orderByStatusB({ orderStatusId: this.typeIdC, pageNum: this.pageNum, pageSize: this.pageSize })
+
+      res.data.list.map(item => {
+        item.refund = 0
+        item.buyDate = this.moment(item.buyDate).format('YYYY-MM-DD HH:mm:ss')
+        item.totalFee = (+item.totalFee).toFixed(2)
+        item.orderDetail.map(n => {
+          n.unitPrice = (+n.unitPrice).toFixed(2)
+        })
+      })
+      // console.log('orderList', this.orderList)
+      if (this.pageNum === 1) {
+        this.orderList = res.data.list
+      } else {
+        this.orderList = this.orderList.concat(res.data.list)
+      }
+      this.lastPage = res.data.lastPage
+      this.pageNum = res.data.pageNum
+      this.nextPage = res.data.nextPage
+    },
+    // 获取我卖出订单数据
+    async getOrderListB () {
+      const res = await apiOrder.orderByStatusB({ orderStatusId: this.typeIdB, pageNum: this.pageNum, pageSize: this.pageSize })
+
+      res.data.list.map(item => {
+        item.buyDate = this.moment(item.buyDate).format('YYYY-MM-DD HH:mm:ss')
+        item.totalFee = (+item.totalFee).toFixed(2)
+        item.orderDetail.map(n => {
+          n.unitPrice = (+n.unitPrice).toFixed(2)
+        })
+      })
+      // console.log('orderList', this.orderList)
+      if (this.pageNum === 1) {
+        this.orderList = res.data.list
+      } else {
+        this.orderList = this.orderList.concat(res.data.list)
+      }
+      this.lastPage = res.data.lastPage
+      this.pageNum = res.data.pageNum
+      this.nextPage = res.data.nextPage
+    },
+    // 获取我卖出订单数据
+    async getOrderListA () {
+      const res = await apiOrder.orderByStatusB({ orderStatusId: this.typeIdA, pageNum: this.pageNum, pageSize: this.pageSize })
+      res.data.list.map(item => {
+        item.buyDate = this.moment(item.buyDate).format('YYYY-MM-DD HH:mm:ss')
+        item.totalFee = (+item.totalFee).toFixed(2)
+        item.orderDetail.map(n => {
+          n.unitPrice = (+n.unitPrice).toFixed(2)
+        })
+      })
+      // console.log('orderListA', this.orderList)
+      if (this.pageNum === 1) {
+        this.orderList = res.data.list
+      } else {
+        this.orderList = this.orderList.concat(res.data.list)
+      }
       this.lastPage = res.data.lastPage
       this.pageNum = res.data.pageNum
       this.nextPage = res.data.nextPage
@@ -184,11 +452,54 @@ export default {
       this.typeId = id
       console.log('type', this.typeId)
       this.getOrderList()
+      if (this.typeId === 2 || this.typeId === 3 || this.typeId === 8) {
+        this.typeIdA = 0
+        this.typeIdB = 0
+        this.typeIdC = 0
+        this.typeStaus = 0
+      }
     },
     tabChangeA (id) {
-      this.pageNum = 1
-      this.typeIdA = id
-      this.getOrderList()
+      if (id === 0) {
+        this.pageNum = 1
+        this.typeIdA = id
+        this.getOrderList()
+        this.typeStaus = 0
+      } else {
+        this.orderList = ''
+        this.pageNum = 1
+        this.typeIdA = id
+        this.typeStaus = 1
+        this.getOrderListA()
+      }
+    },
+    tabChangB (id) {
+      if (id === 0) {
+        this.pageNum = 1
+        this.typeIdB = id
+        this.getOrderList()
+        this.typeStaus = 0
+      } else {
+        this.orderList = ''
+        this.pageNum = 1
+        this.typeIdB = id
+        this.typeStaus = 1
+        this.getOrderListB()
+      }
+    },
+    tabChangC (id) {
+      if (id === 0) {
+        this.pageNum = 1
+        this.typeIdC = id
+        this.getOrderList()
+        this.typeStaus = 0
+      } else {
+        this.orderList = ''
+        this.pageNum = 1
+        this.typeIdC = id
+        this.typeStaus = 1
+        this.getOrderListC()
+      }
     }
   },
   // 上拉加载
@@ -206,6 +517,11 @@ export default {
   },
   // 下拉刷新
   async onPullDownRefresh () {
+    if (this.typeId === 2 || this.typeId === 3 || this.typeId === 8) {
+      this.typeIdA = 0
+      this.typeIdB = 0
+      this.typeIdC = 0
+    }
     this.pageNum = 1
     await this.getOrderList()
     // 停止下拉刷新
@@ -231,8 +547,87 @@ export default {
   height: 100%;
   width: 100%;
   background: #f0eff5;
-  .tab-box {
+  /*弹出框*/
+  .Popup{
     width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    right: 0;
+    background: rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    .mian{
+      width: 538rpx;
+      height: 308rpx;
+      padding: 30rpx;
+      background: #ffffff;
+      border-radius: 20rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      .icondel2{
+        position: absolute;
+        right: 20rpx;
+        top: 20rpx;
+        color: #000000;
+        font-size: 22rpx;
+      }
+      .express{
+        display: flex;
+        margin-bottom: 30rpx;
+        .choose{
+          width: 429rpx;
+          height: 67rpx;
+          display: inline-block;
+          line-height: 67rpx;
+          border: 1rpx solid #CCCCCC;
+          border-radius: 10rpx;
+          padding: 0 20rpx;
+          text-align: left;
+          .iconyouce{
+            display: inline-block;
+            color: #CCCCCC;
+            transform: rotate(90deg);
+            float: right;
+          }
+        }
+      }
+      .number{
+        display: flex;
+        margin-bottom: 30rpx;
+        input{
+          width: 429rpx;
+          height: 67rpx;
+          line-height: 67rpx;
+          display: inline-block;
+          border: 1rpx solid #CCCCCC;
+          border-radius: 10rpx;
+          padding: 0 20rpx;
+          text-align: left;
+        }
+      }
+
+      .bt{
+        text-align: center;
+        display: inline-block;
+        button{
+          width: 202rpx;
+          height: 55rpx;
+          line-height: 55rpx;
+          font-size: 32rpx;
+          border-radius: 20rpx;
+          background: #FF903F;
+          color: #ffffff;
+        }
+      }
+    }
+  }
+  .tab-box {
+    width: 94%;
     background-color: #f9f9f9;
     color: #9b9b9b;
     font-size: 30rpx;
@@ -241,9 +636,12 @@ export default {
     position: fixed;
     top: 0;
     z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 3%;
     li {
       display: inline-block;
-      width: 20%;
       text-align: center;
     }
     .active {

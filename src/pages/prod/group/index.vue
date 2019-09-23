@@ -49,7 +49,7 @@
     methods: {
       routerTo (url) {
         wx.navigateTo({
-          url: 'pages/addGroup/main'
+          url: 'pages/prod/addGroup/main'
         })
       }
     }

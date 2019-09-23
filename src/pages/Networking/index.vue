@@ -2,7 +2,7 @@
     <div class="Net">
       <div class="NetTop">
         <div class="title">
-          <span>动态</span>
+          <span>{{title}}</span>
         </div>
         <div class="infoA">
           <div class="inputClass">
@@ -167,9 +167,18 @@
                 </div>
               </div>
             </div>
-            <div class="banner" v-else-if="item.image">
-              <img class="imgMain" :src="item.image" mode="scaleToFill" />
+            <!--广告-->
+            <div v-else-if="item.image">
+              <div v-if="item.appId" class="banner" @click="goToClassBanner(item)">
+                <img class="imgMain" :src="item.image" mode="scaleToFill	" />
+              </div>
+              <div class="excitation" v-else>
+                <ad :unit-id="item.appId"></ad>
+              </div>
             </div>
+            <!--<div class="banner" v-else-if="item.image">-->
+              <!--<img class="imgMain" :src="item.image" mode="scaleToFill" />-->
+            <!--</div>-->
           </div>
         </div>
         <div v-else class="new-listBottom">
@@ -212,6 +221,7 @@
         typeList: [],
         tab: 1,
         TypeName: '',
+        title: '动态',
         imgUrls: [{
           src: 'https://images.unsplash.com/photo-1551334787-21e6bd3ab135?w=640'
         }, {
@@ -270,7 +280,8 @@
         browseCount: '',
         newsCount: '',
         postForm: false,
-        pushName: ''
+        pushName: '',
+        commentId: ''
       }
     },
     onShareAppMessage (res) {
@@ -307,6 +318,7 @@
       // this.pageNum = 1
       // this.getNews({})
       // 动态开关
+      this.getTitle()
       this.dynamicStatus = wx.getStorageSync('dynamicStatus')
       // this.tradeStatus = 1
       if (options.newsId) {
@@ -320,11 +332,13 @@
       this.latitude = wx.getStorageSync('latitude')
       this.getNum()
       this.changTab(1)
-      this.getNewsA()
+      // this.getNewsA()
     },
     onShow () {
       this.TypeName = ''
       this.getInfo()
+      this.getNewsA()
+      this.getTitle()
       // this.getCard()
     },
     async onReachBottom () {
@@ -343,6 +357,7 @@
       this.pageNum = 1
       this.getNewsA()
       this.getNews({ type: 0 })
+      this.getTitle()
       // 停止下拉刷新
       wx.stopPullDownRefresh()
     },
@@ -396,6 +411,50 @@
       }
     },
     methods: {
+      // 跳转小程序 或 查看大图
+      goToClassBanner (res) {
+        // console.log('banner', res)
+        if (res.type === 0) {
+          wx.previewImage({
+            current: res.image,
+            urls: [res.image]
+          })
+        } else if (res.type === 2) {
+          wx.navigateToMiniProgram({
+            appId: res.appId,
+            path: 'pages/loading/main',
+            extraData: {
+              fromWay: 0
+            },
+            envVersion: 'release',
+            success (res) {
+              // 打开其他小程序成功同步触发
+              wx.showToast({
+                title: '跳转成功'
+              })
+            }
+          })
+        }
+      },
+      // 自定义标题栏
+      getTitle () {
+        const businessId = wx.getStorageSync('businessId')
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/busiPageTitle/selectOne',
+          body: {
+            'businessId': businessId,
+            'pageType': 6
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            this.title = res.data.name
+          }
+          // console.log('title', res)
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      },
       // 获取广告
       getNewsA () {
         this.$fly.request({
@@ -635,17 +694,17 @@
           icon: 'loading',
           mask: true
         })
+        this.newsList.map(item => {
+          if (item.id === this.commentId) {
+            item.newsCommentList.push({ name: this.name, content: this.msgContent })
+          }
+        })
         let userId = wx.getStorageSync('userId')
         await apiNews.addNewsA({
           commentType: 0,
           commentUserId: userId,
           commentNewsId: this.commentId,
           content: this.msgContent
-        })
-        this.newsList.map(item => {
-          if (item.id === this.commentId) {
-            item.newsCommentList.push({ name: this.name, content: this.msgContent })
-          }
         })
         wx.hideToast()
         this.showTextarea = false
@@ -700,7 +759,7 @@
         if (code === 200) {
           this.typeList = data
           // this.typeId = data[0].id
-          console.log('this.typeId', data)
+          // console.log('this.typeId', data)
           // this.getNews({})
         } else {
           wx.showToast({
@@ -727,7 +786,7 @@
         const data = result.data
         // console.log('newList', result)
         if (code === 200) {
-          console.log('newList', result)
+          // console.log('newList', result)
           data.list.map(item => {
             if (!item.image) {
               item.showTotal = true
@@ -757,7 +816,7 @@
               this.newsList.push(e)
             })
           }
-          console.log('newList', this.newsList)
+          // console.log('newList', this.newsList)
           this.pageNum = data.pageNum
           this.lastPage = data.lastPage
           this.nextPage = data.nextPage

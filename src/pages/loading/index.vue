@@ -188,6 +188,7 @@
         this.businessId = wx.getStorageSync('businessId', businessId)
         wx.setStorageSync('token', token)
         // wx.setStorageSync('businessId', businessId)
+        console.log('token', token)
         setIsSalesMan(isSalesman)
         wx.setStorageSync('userId', id)
         const updateManager = wx.getUpdateManager()
