@@ -65,8 +65,9 @@
     </div>
     <div class="check">
       <div class="check-in">
-        <img  @click="goIntegral" src="https://oss.tzyizan.com/salesInfo/201908071432331565159553627.png">
-        <div class="info"  @click="goIntegral">
+        <img src="https://oss.tzyizan.com/salesInfo/201908071432331565159553627.png">
+        <!--@click="goIntegral"-->
+        <div class="info">
           <div class="info-left">
             <p class="num">{{numA}}分</p>
             <p class="size">签到积分</p>
@@ -333,6 +334,7 @@
       this.getRecord()
       this.getMerber()
       this.getTitle()
+      this.getIntegral()
     },
     onLoad () {
       setInterval(() => {
@@ -345,6 +347,7 @@
       // this.getShop()
     },
     async onPullDownRefresh () {
+      this.getIntegral()
       this.getInfo()
       this.getRecord()
       this.getMerber()
@@ -403,11 +406,22 @@
             body: {
             }
           }).then(res => {
+            console.log('res', res)
             if (res.code === 200) {
-              this.deleteShow = true
-              this.Check = 1
-              this.numA = this.numA + 5
-              this.count = this.count + 1
+              if (res.data === 0) {
+                this.deleteShow = true
+                // this.Check = 1
+                this.getIntegral()
+              } else {
+                this.getIntegral()
+                wx.showToast({
+                  title: res.message,
+                  duration: 2000,
+                  icon: 'none'
+                })
+              }
+              // this.numA = this.numA + 5
+              // this.count = this.count + 1
             }
           }).catch(err => {
             console.log(err.status, err.message)
@@ -419,6 +433,23 @@
             icon: 'none'
           })
         }
+      },
+      // 查询积分和次数
+      getIntegral () {
+        this.$fly.request({
+          method: 'post', // post/get 请求方式
+          url: '/sign/selectSign',
+          body: {
+          }
+        }).then(res => {
+          console.log('res', res)
+          if (res.code === 200) {
+            this.numA = res.data.score
+            this.count = res.data.total
+          }
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
       },
       // checkA () {
       //   this.$fly.request({
