@@ -31,7 +31,7 @@
 
 <script>
   import { UPLOAD_FILE } from '@/api/uploadFile'
-  
+
   export default {
     name: 'index',
     data () {
@@ -41,52 +41,44 @@
         // 反馈
         feedback: '',
         // 联系方式
-        phoneNumber: "",
+        phoneNumber: ''
       }
     },
     methods: {
       save () {
         // 发请求传给后端
-        if(this.feedback.trim() !== "" && this.phoneNumber.trim() !== ""){
-          this.$fly.request('/suggestions/add',{
-          text:this.feedback,
-          contactWay:this.phoneNumber,
-          imgUrls:this.richTextList}
-          ,{
-          method:'post',
-          timeout:5000,
-        })
-        .then(d =>{
-           console.log(d)
-          wx.showToast({
-          title: '反馈成功',
-          duration: 2000,
-          icon: 'none'
-        })
-          this.richTextList = [];
-          this.feedback = "";
-          this.phoneNumber = ""
-          setTimeout(() => {
-            wx.switchTab({url:'/pages/personal/main'})
-          }, 2000);
-        })
-        .catch(function(d){
-         
-          wx.showToast({
-            title: '反馈失败，请检查网络',
-            duration: 2000,
-            icon: 'none'
-           })
-        })
-        }else{
+        if (this.feedback.trim() !== '' && this.phoneNumber.trim() !== '') {
+          this.$fly.request({
+            method: 'post', // post/get 请求方式
+            url: '/suggestions/add',
+            body: {
+              text: this.feedback,
+              contactWay: this.phoneNumber,
+              imgUrls: this.richTextList
+            }
+          }).then(res => {
+            if (res.code === 200) {
+              // console.log('res', resy)
+              wx.showToast({
+                title: '反馈成功',
+                duration: 2000,
+                icon: 'none'
+              })
+              setTimeout(() => {
+                this.richTextList = []
+                this.feedback = ''
+                this.phoneNumber = ''
+                wx.switchTab({ url: '/pages/personal/main' })
+              }, 2000)
+            }
+          })
+        } else {
           wx.showToast({
             title: '必填项不能为空',
             duration: 2000,
             icon: 'none'
-           })
+          })
         }
-    
-    
       },
       // 删除图片
       deleteImgList (i) {
@@ -112,15 +104,13 @@
             let length = res.tempFilePaths.length // 总数
             let count = 0 // 第几张
             this.uploadOneByOne(res.tempFilePaths, successUp, failUp, count, length)
-           
           },
           fail: function () {
-             wx.showModal({
+            wx.showModal({
               title: '提示',
               content: '上传失败',
               showCancel: false
             })
-
           },
           complete: function () {
             wx.hideToast()
@@ -238,12 +228,12 @@
         flex-direction: row;
         align-items: center;
         .common-size {
-          width: 150rpx;
-          height: 150rpx;
+          width: ~'150rpx';
+          height: ~'150rpx';
         }
 
         .img-margin {
-          margin-right: 30rpx;
+          margin-right: ~'30rpx';
           position: relative;
         }
 
@@ -252,31 +242,31 @@
         }
 
         .add-img {
-          border: 2rpx dashed #ccc;
+          border: ~'2rpx' dashed #ccc;
           text-align: center;
-          padding-top: 10rpx;
+          padding-top: ~'10rpx';
           box-sizing: border-box;
-          font-size: 22rpx;
+          font-size: ~'22rpx';
           color: #bbb;
           display: inline-block;
         }
 
         .iconxiangji {
           color: #bbb;
-          font-size: 60rpx;
+          font-size: ~'60rpx';
           display: inline-block;
           line-height: 1;
         }
 
         .delete-img {
           position: absolute;
-          width: 50rpx;
-          right: -18rpx;
+          width: ~'50rpx';
+          right: ~'-18rpx';
           top: 0;
         }
         .iconshanchu-copy{
           color: #F2F2F2;
-          font-size: 32rpx;
+          font-size: ~'32rpx';
         }
       }
     }
