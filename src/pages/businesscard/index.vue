@@ -692,7 +692,7 @@
           if (res.code === 200) {
             this.banner = res.data.list
           }
-          console.log('News', res)
+          // console.log('News', res)
         }).catch(err => {
           console.log(err.status, err.message)
         })

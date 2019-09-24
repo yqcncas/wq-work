@@ -107,6 +107,14 @@
       }
     },
     onShow () {
+      const Member = wx.getStorageSync('vipId')
+      if (Member === 0 || Member === null || Member === '') {
+        this.Member = '无会员'
+        wx.setStorageSync('vipId', 0)
+      } else {
+        this.Member = ''
+        // console.log('aaaa')
+      }
       this.isBuy = wx.getStorageSync('isBuy')
       const imgUrl = wx.getStorageSync('avatarUrl')
       const nickName = wx.getStorageSync('nickName')

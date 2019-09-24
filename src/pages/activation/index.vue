@@ -36,7 +36,7 @@
               wx.setStorageSync('vipId', res.data.vipId)
               setTimeout(() => {
                 this.activation = ''
-                wx.navigateBack({ delta: 1 })
+                wx.navigateBack(-1)
               }, 2000)
             } else {
               wx.showToast({
