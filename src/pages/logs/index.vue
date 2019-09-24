@@ -194,7 +194,7 @@
                     </div>
                   </div>
                   <div v-else>
-                    <div v-if="items.appId == null" class="Gao">
+                    <div v-if="item.switch === false" class="Gao">
                       <img :src="items.image" mode="scaleToFill"/>
                     </div>
                     <div v-else class="excitation">

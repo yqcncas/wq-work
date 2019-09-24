@@ -137,7 +137,7 @@
           </div>
             <!--广告-->
             <div v-else-if="item.image">
-              <div v-if="item.appId" class="banner" @click="goToClassBanner(item)">
+              <div v-if="item.switch === false" class="banner" @click="goToClassBanner(item)">
                 <img class="imgMain" :src="item.image" mode="scaleToFill	" />
               </div>
               <div class="excitation" v-else>

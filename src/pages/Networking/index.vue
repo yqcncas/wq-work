@@ -21,7 +21,7 @@
           <swiper :indicator-dots="indicatorDots" :autoplay="autoplay" indicator-color= "#ffffff" :interval="interval" :duration="duration" :circular ="circular" class="bannerMain">
             <block v-for="item in imgUrls" :key="index">
               <swiper-item class="swiper">
-                <img :src="item.image" class="slide-image"/>
+                <img :src="item.image" @click="previewImageA(imgUrls,index)" class="slide-image"/>
               </swiper-item>
             </block>
           </swiper>
@@ -169,7 +169,7 @@
             </div>
             <!--广告-->
             <div v-else-if="item.image">
-              <div v-if="item.appId" class="banner" @click="goToClassBanner(item)">
+              <div v-if="item.switch === false" class="banner" @click="goToClassBanner(item)">
                 <img class="imgMain" :src="item.image" mode="scaleToFill	" />
               </div>
               <div class="excitation" v-else>
@@ -411,6 +411,17 @@
       }
     },
     methods: {
+      previewImageA (e, A) {
+        var imgs = e
+        var temp = []
+        imgs.map(res => {
+          temp.push(res.image)
+        })
+        wx.previewImage({
+          current: temp[A],
+          urls: temp
+        })
+      },
       // 跳转小程序 或 查看大图
       goToClassBanner (res) {
         // console.log('banner', res)
