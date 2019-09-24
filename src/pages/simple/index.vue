@@ -41,9 +41,9 @@
         <button v-if="isBuy === 0" class="save" @click="getSalesmanUpdate()">确定</button>
         <button v-else @click="getBuyCard()">确定</button>
       </div>
-      <!--<div class="activation" @click="goToAction()">-->
-        <!--<span>拥有激活码点击前往激活<i class="iconfont iconyouce"></i> </span>-->
-      <!--</div>-->
+      <div class="activation" @click="goToAction()">
+        <span>拥有激活码点击前往激活<i class="iconfont iconyouce"></i> </span>
+      </div>
 
       <div class="NetSucces" v-if="deleteShow === true">
         <div class="NetSucces-main">
