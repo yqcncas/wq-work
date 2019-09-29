@@ -137,8 +137,8 @@
                 <span class="right" >立即升级</span>
               </div>
               <div class="Member" @click="goToMember" v-else-if="Member == '钻石会员'">
-                <span class="left">尊 贵 的 钻 石 会 员 , 已 升 级 至 最 高 权 限</span>
-                <span class="right">最高权限</span>
+                <!--<span class="left">尊 贵 的 钻 石 会 员 , 已 升 级 至 最 高 权 限</span>-->
+                <!--<span class="right">最高权限</span>-->
               </div>
             </div>
           </div>
