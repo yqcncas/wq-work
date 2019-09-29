@@ -186,25 +186,25 @@
           <!-- 标签 -->
           <div class="over-grid">
             <div class="grid">
-              <div class="col-1" @click="makePhoneCall" v-if="postForm.phone">
+              <div class="col-1" @click="makePhoneCall(postForm.phone)" v-if="postForm.phone">
                 <div class="desc-wrap">
                   <span class="icon-wrap"><img class="icon-4" src="../../../static/images/phone.png"></span>
                   <text class="txt">{{ postForm.phone }}</text>
                 </div>
               </div>
-              <div class="col-1" @click="textPaste" v-if="postForm.weChat">
+              <div class="col-1" @click="textPaste(postForm.weChat)" v-if="postForm.weChat">
                 <div class="desc-wrap">
                   <span class="icon-wrap"><img class="icon-4" src="../../../static/images/wechat.png"></span>
                   <text class="txt">{{ postForm.weChat }}</text>
                 </div>
               </div>
-              <div class="col-1" @click="getAddress" v-if="postForm.salesAddDetailed">
+              <div class="col-1" @click="getAddress(postForm.latitude, postForm.longitude)" v-if="postForm.salesAddDetailed">
                 <div class="desc-wrap">
                   <span class="icon-wrap"><img class="icon-4" src="../../../static/images/dingwei.png"></span>
                   <text class="txt">{{ postForm.salesAddDetailed }}</text>
                 </div>
               </div>
-              <div class="col-1" @click="textPasteEmail" v-if="postForm.email">
+              <div class="col-1" @click="textPasteEmail(postForm.email)" v-if="postForm.email">
                 <div class="desc-wrap">
                   <span class="icon-wrap"><img class="icon-4" src="../../../static/images/email.png"></span>
                   <text class="txt">{{ postForm.email }}</text>
@@ -752,9 +752,9 @@
         await personApi.OperationInsert({ businessId: this.businessId, info, recordType, salesmanId: this.salesManId, userId: this.id })
       },
       // 微信复制
-      textPaste () {
+      textPaste (weChat) {
         wx.setClipboardData({
-          data: this.weChat,
+          data: weChat,
           success: (res) => {
             wx.showToast({
               title: '复制成功',
@@ -765,9 +765,9 @@
         })
       },
       // 邮箱内容复制
-      textPasteEmail () {
+      textPasteEmail (email) {
         wx.setClipboardData({
-          data: this.email,
+          data: email,
           success: (res) => {
             wx.showToast({
               title: '复制成功',
@@ -778,10 +778,10 @@
         })
       },
       // 跳到原生地址导航
-      getAddress () {
+      getAddress (latitude, longitude) {
         wx.openLocation({
-          latitude: parseFloat(this.latitude),
-          longitude: parseFloat(this.longitude),
+          latitude: Number(latitude),
+          longitude: Number(longitude),
           scale: 18,
           name: this.companyName,
           address: this.address,
@@ -791,9 +791,9 @@
         })
       },
       // 呼叫电话
-      makePhoneCall () {
+      makePhoneCall (phone) {
         wx.makePhoneCall({
-          phoneNumber: this.postForm.phone,
+          phoneNumber: phone,
           success: () => {
             this.insertOpera('拨打了电话', 20)
           }
