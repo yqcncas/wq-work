@@ -13,7 +13,7 @@
             <div class="cardHold-top-me">
               <div class="cardHold-top-main">
                 <span class="cardHold-top-main-img" v-if="imgUrl !== '' ">
-                  <img :src="imgUrl">
+                  <img :src="imgUrl" mode="aspectFit">
                 </span>
                 <span class="cardHold-top-main-img" v-else>
                   <img src="https://oss.wq1516.com/default-avatar.png">
@@ -148,7 +148,7 @@
                   <div class="cardTitle" v-if="!items.image">
                     <div class="cardData-left" @click="goToCard(items.id)">
                       <div class="headImg">
-                        <img :src="items.imgUrl">
+                        <img :src="items.imgUrl" mode="aspectFit">
                         <div class="meber">
                           <i v-if="items.leavelNum === 1">
                             <img src="../../../static/images/v1.png">
@@ -194,7 +194,7 @@
                     </div>
                   </div>
                   <div v-else>
-                    <div v-if="item.switch === false" class="Gao">
+                    <div v-if="items.switch === false" class="Gao" @click="goToClassBanner(item)">
                       <img :src="items.image" mode="scaleToFill"/>
                     </div>
                     <div v-else class="excitation">
@@ -402,6 +402,31 @@
       // console.log(this.toView)
     },
     methods: {
+      // 跳转小程序 或 查看大图
+      goToClassBanner (res) {
+        // console.log('banner', res)
+        if (res.type === 0) {
+          wx.previewImage({
+            current: res.image,
+            urls: [res.image]
+          })
+        } else if (res.type === 2) {
+          wx.navigateToMiniProgram({
+            appId: res.appId,
+            path: 'pages/loading/main',
+            extraData: {
+              fromWay: 0
+            },
+            envVersion: 'release',
+            success (res) {
+              // 打开其他小程序成功同步触发
+              wx.showToast({
+                title: '跳转成功'
+              })
+            }
+          })
+        }
+      },
       // 自定义标题栏
       getTitle () {
         const businessId = wx.getStorageSync('businessId')

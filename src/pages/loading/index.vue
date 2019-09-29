@@ -106,11 +106,13 @@
             wx.setStorageSync('isBuy', this.isBuy)
             const radarStatus = res.data.radarStatus
             wx.setStorageSync('radarStatus', radarStatus)
+            wx.setStorageSync('vipDistributorStatus', res.data.vipDistributorStatus)
           } else {
             wx.setStorageSync('isBuy', 0)
             wx.setStorageSync('radarStatus', 0)
+            wx.setStorageSync('vipDistributorStatus', 0)
           }
-          // console.log('isBuy', res.data)
+          console.log('isBuy', res.data)
         }).catch(err => {
           console.log(err)
         })

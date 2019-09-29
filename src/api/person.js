@@ -647,11 +647,11 @@ const person = {
     baseURL: baseUrlApi
   }),
   //  查询分销商的信息
-  distributorOne: () => request.get('/distributor/selectOne', {}, {
+  distributorOne: () => request.get('/orderSharingReceiver/selectWithdrawTotal', {}, {
     baseURL: baseUrlApi
   }),
   //  查询提现明细
-  cashDetail: (obj) => request.get('/orderToUser/selectDetail', obj, {
+  cashDetail: (obj) => request.get('/orderSharingReceiver/selectWithdraw', obj, {
     baseURL: baseUrlApi
   }),
   //  我的团队

@@ -289,6 +289,13 @@
 					"id": -1,
 					"name": "pages/classify/main",
 					"pathName": "pages/classify/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "快速创建",
+					"pathName": "pages/simple/main",
 					"scene": null
 				}
 			]

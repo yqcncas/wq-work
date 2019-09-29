@@ -99,7 +99,7 @@
               <img src="https://oss.wq1516.com/salesInfo/201906181125191560828319376.jpg" />
               <div class="cards-M">
                 <div class="cards-main">
-                  <p class="cards-img"><img :src="postForm.imgUrl || 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png' + '?x-oss-process=style/c400'"  @click="preview(postForm.imgUrl,[postForm.imgUrl])"/></p>
+                  <p class="cards-img"><img :src="postForm.imgUrl || 'https://wqcdn.oss-cn-zhangjiakou.aliyuncs.com/default-avatar.png' + '?x-oss-process=style/c400'"  @click="preview(postForm.imgUrl,[postForm.imgUrl])" mode="aspectFit"/></p>
                   <p class="cards-name">
                     <span v-if="postForm.name">{{ postForm.name }}</span>
                     <span v-else>无姓名</span>
@@ -128,7 +128,7 @@
                   <image class="qrcode-bg" src="/static/images/qrcode-bg.png" mode="aspectFill"></image>
                   <div class="name-job-wrap">
                     <p class="name">{{postForm.name}}</p>
-                    <p>{{postForm.job}}</p>
+                    <p class="job">{{postForm.job}}</p>
                   </div>
                   <div class="type-company">
                     <p class="type">{{postForm.organizeType}}</p>
@@ -622,7 +622,7 @@
           if (res.code === 200) {
             this.banner = res.data.list
           }
-          // console.log('News', res)
+          console.log('News', res)
         }).catch(err => {
           console.log(err.status, err.message)
         })

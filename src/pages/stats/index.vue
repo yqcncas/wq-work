@@ -304,11 +304,7 @@
             status: 1
           }
         }).then(res => {
-          this.statsD = res.data.list
-          const data = res.data.list
-          data.map(item => {
-            this.statsD.push(item)
-          })
+          this.statsC = res.data.list
           this.lastPageD = res.data.lastPage
           this.pageNumD = res.data.pageNum
           this.nextPageD = res.data.nextPage

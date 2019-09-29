@@ -45,15 +45,17 @@
         <span>拥有激活码点击前往激活<i class="iconfont iconyouce"></i> </span>
       </div>
 
-      <div class="NetSucces" v-if="deleteShow === true">
+      <div class="NetSucces" v-if="deleteShow === false">
         <div class="NetSucces-main">
           <div class="img">
-            <img src="https://oss.tzyizan.com/salesManImg/201908191106561566184016370.png">
+            <img src="https://oss.tzyizan.com/salesInfo/201909270826261569543986735.png">
             <div class="main">
-              <p class="suc">三分钟完善名片信息</p>
-              <p class="title">可以获得更多精准客户</p>
-              <p class="now" @click="goToIndex">完善名片</p>
-              <p class="late" @click="goToBus">稍后完善</p>
+              <p class="now" @click="goToIndex">
+                <img src="https://oss.tzyizan.com/salesInfo/201909270844231569545063288.png"/>
+              </p>
+              <p class="late" @click="goToBus">
+                <i class="iconfont icondel2"></i>
+              </p>
             </div>
           </div>
         </div>

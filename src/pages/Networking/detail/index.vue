@@ -179,7 +179,7 @@ export default {
         body: {
           pageNum: 1,
           pageSize: 5,
-          position: 6
+          position: 5
         }
       }).then(res => {
         if (res.code === 200) {

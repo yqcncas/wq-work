@@ -107,7 +107,7 @@
                       <div class="vivid-img">
                         <div class="img">
                           <i class="magnifier iconfont icon-fangdajing" @click="previewImg"></i>
-                          <img :src="imgUrl">
+                          <img :src="imgUrl" mode="aspectFit">
                         </div>
                       </div>
                       <div class="vivid-name">
@@ -126,7 +126,7 @@
           </div>
           <div  v-else-if="tab===3">
             <div class="intro-wrap">
-              <open-data class="header-img" type="userAvatarUrl"></open-data>
+              <open-data class="header-img" type="userAvatarUrl"  mode="aspectFit"></open-data>
               <text v-if="info === ''" class="text-area">{{infoA}}</text>
               <text v-else class="text-area">{{info}}</text>
               <p class="here-txt" @click="routeTo(info)">不会写简介？戳这里<i class="iconyouce iconfont"></i></p>
@@ -163,9 +163,9 @@
                     <div class="item-box-img">
                       <div>
                         <i class="delete-img iconfont iconshanchu-copy" @click="deleteImgList(index)"/>
-                        <img class="up-img-0" v-if="index===0" :src="item" mode="aspectFill">
-                        <img class="up-img-1" v-else-if="index===1||index===2" :src="item" mode="aspectFill">
-                        <img class="up-img-2" v-else :src="item" mode="aspectFill">
+                        <img class="up-img-0" v-if="index===0" :src="item" mode="aspectFit">
+                        <img class="up-img-1" v-else-if="index===1||index===2" :src="item" mode="aspectFit">
+                        <img class="up-img-2" v-else :src="item" mode="aspectFit">
                       </div>
                     </div>
                   </div>

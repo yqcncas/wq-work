@@ -30,7 +30,8 @@
             <div v-if="!item.image" class="">
             <div class="news-header flexRow">
               <div class="avatar-wrp" @click="goToCard(item.salesmanId)">
-                <img class="img" :src="item.salesmanImgUrl" />
+                <img  v-if="item.salesmanId" class="img" :src="item.salesmanImgUrl" mode="aspectFit"/>
+                <img  v-else class="img" :src="item.logo" mode="aspectFit"/>
               </div>
               <div class="author-info">
                 <div v-if="item.salesmanId"  class="author-name" @click="goToCard(item.salesmanId)">
@@ -71,8 +72,8 @@
               <div class="news-cover" v-if="item.imgUrl">
                 <div class="news" v-if="item.salesmanId">
                   <i v-for="(items,indexs) in item.imgUrl"  :key="indexs">
-                    <image v-if="item.imgUrl.length >1" :src="items" class="img" @click="previewImg(item.imgUrl,indexs)"  mode=""></image>
-                    <image v-else :src="item.imgUrl" class="imgA" @click="previewImg(item.imgUrl,indexs)"  mode="widthFix"></image>
+                    <image v-if="item.imgUrl.length >1" :src="items" class="img" @click="previewImg(item.imgUrl,indexs)"  mode="aspectFit"></image>
+                    <image v-else :src="item.imgUrl" class="imgA" @click="previewImg(item.imgUrl,indexs)"  mode="aspectFit"></image>
                   </i>
                 </div>
                 <div class="JiuImg" v-else @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
@@ -691,7 +692,7 @@ width: 100%;
         .banner{
           width: ~'658rpx';
           height: ~'258rpx';
-          margin:  ~'29rpx' auto 0;
+          margin: ~'0rpx' auto ~'-29rpx';
           display: block;
           padding: 0!important;
           .imgMain{
@@ -704,7 +705,7 @@ width: 100%;
         // 流量主
         .excitation{
           width: ~'658rpx';
-          margin: ~'29rpx' auto 0;
+          margin: ~'0rpx' auto ~'-29rpx';
         }
         //新闻item 头部
         .news-header {
@@ -835,7 +836,10 @@ width: 100%;
             }
             .JiuImg{
               .img {
+                height: 100%;
+                display: inline-block;
                 width: 100%;
+
               }
 
               .news-desc {
@@ -843,9 +847,9 @@ width: 100%;
                 max-height: ~'100rpx';
                 position: absolute;
                 left: 0;
-                bottom: 0;
+                bottom: ~'9rpx';
                 background: rgba(0, 0, 0, 0.47);
-                padding: ~'10rpx' ~'26rpx' 0;
+                padding: ~'10rpx' ~'26rpx';
                 font-size: ~'26rpx';
                 font-weight: 400;
                 box-sizing: border-box;

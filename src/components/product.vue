@@ -33,7 +33,7 @@
               <swiper :indicator-dots="indicatorDots" :autoplay="autoplay" indicator-color= "#ffffff" :interval="interval" :duration="duration" :circular ="circular" class="bannerMain">
                 <block v-for="item in imgUrls" :key="index">
                   <swiper-item class="swiper">
-                    <img :src="item.image" @click="previewImageA(imgUrls,index)" class="slide-image"/>
+                    <img :src="item.image"  @click="previewImageA(imgUrls,index)" class="slide-image"/>
                   </swiper-item>
                 </block>
               </swiper>
@@ -73,13 +73,17 @@
 
 
       <!--样式一-->
-      <div class="product-listA" v-if="goodsType === 0">
+      <div class="Amain" v-if="goodsType === 0">
+      <div class="product-listA">
         <div class="item-proA" v-for="(item,index) in productList" :key="index">
           <div class="item-pro" v-if="!item.image">
             <image  class="pro-img"  @click="routeTo(item.id,index)" :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
                    mode="aspectFill"></image>
             <div class="Forward">
-              <button open-type="share" :data-item="item" class="share-btn" @click="openInfo(index)">
+              <button v-if="shareMain === true" class="share-btn"  @click="shareGoods(item,index)">
+                  <i class="iconfont iconfenxiang3"></i>
+              </button>
+              <button v-else open-type="share" :data-item="item" class="share-btn" @click="openInfo(index)">
                 <i class="iconfont iconfenxiang3" @click="shareGoods"></i>
               </button>
             </div>
@@ -94,8 +98,65 @@
             </div>
           </div>
           <!--广告-->
+          <div class="main" v-else-if="item.image">
+            <div v-if="item.switch == false" class="banner" @click="goToClassBanner(item)">
+              <img class="imgMain" :src="item.image" mode="scaleToFill	" />
+            </div>
+            <div class="excitation" v-else>
+              <ad :unit-id="item.appId"></ad>
+            </div>
+          </div>
+          <!--<div v-else class="banner">-->
+            <!--<img class="imgMain" :src="item.image" mode="scaleToFill" />-->
+          <!--</div>-->
+        </div>
+      </div>
+      </div>
+
+
+      <!--样式二-->
+      <div class="product-listC" v-if="goodsType === 1">
+        <div class="" v-for="(item,index) in productList" :key="index">
+          <div class="item-pro" v-if="!item.image">
+          <!--<div class="topA">-->
+            <!--<span class="info">-->
+              <!--<i class="HeadImg" v-if="item.headUrl"><img :src="item.headUrl"></i>-->
+              <!--<i class="name" v-if="item.salesmanName !== null">{{item.salesmanName}}</i>-->
+            <!--</span>-->
+          <!--</div>-->
+          <image @click="routeTo(item.id, index)" class="pro-img" :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
+                 mode="aspectFill"></image>
+          <p class="bot-des" @click="routeTo(item.id,index)">{{item.name}}</p>
+          <div class="price-brow" @click="routeTo(item.id,index)">
+            <p v-if="item.priceStatus!==0" class="price-brow-main">
+              <span class="yang">￥</span>
+              <span class="price">{{item.price}}</span>
+              <sapn class="del">原价 ￥ {{item.price}}</sapn>
+            </p>
+          </div>
+          <div class="look-Num" @click="routeTo(item.id ,index)">
+            <p class="browseCount"><i class="iconfont iconyanjing"></i><span v-if="item.browseCount < 99" class="num">浏览{{ item.browseCount}}次</span><span v-else class="num">浏览99+次</span></p>
+            <p class="pushCount"><i class="iconfont iconfeiji1"></i><span v-if="item.forwardCount < 99" class="num">分享{{item.forwardCount}} 次</span><span v-else class="num">分享99+次</span></p>
+          </div>
+          <div class="Forward">
+            <button v-if="shareMain === true" class="share-btn"  @click="shareGoods(item,index)">
+              <i class="iconfont iconKHCFDC_fenxiang"></i>
+            </button>
+            <button v-else open-type="share" :data-item="item" class="share-btn" @click="openInfo(index)">
+              <i class="iconfont iconKHCFDC_fenxiang" @click="shareGoods"></i>
+            </button>
+            <!--<button open-type="share" :data-item="item" class="share-btn" @click="openInfo(index)">-->
+              <!--<i class="iconfont iconfenxiang3" @click="shareGoods"></i>-->
+            <!--</button>-->
+          </div>
+          <div class="purchase" @click="routeTo(item.id, index)">
+            <i class="iconfont iconxingzhuangfuzhi"></i>
+          </div>
+            <button class="buttonA">分享立赚￥{{item.getMoney}}</button>
+        </div>
+        <!--广告-->
           <div v-else-if="item.image">
-            <div v-if="item.switch === false" class="banner" @click="goToClassBanner(item)">
+            <div v-if="item.switch == false" class="banner" @click="goToClassBanner(item)">
               <img class="imgMain" :src="item.image" mode="scaleToFill	" />
             </div>
             <div class="excitation" v-else>
@@ -110,64 +171,19 @@
 
 
 
-      <!--样式二-->
-      <div class="product-listC" v-if="goodsType === 1">
-        <div class="" v-for="(item,index) in productList" :key="index">
-          <div class="item-pro" v-if="!item.image">
-          <div class="topA">
-            <span class="info">
-              <i class="HeadImg" v-if="item.headUrl"><img :src="item.headUrl"></i>
-              <i class="name" v-if="item.salesmanName !== null">{{item.salesmanName}}</i>
-            </span>
-          </div>
-          <image @click="routeTo(item.id, index)" class="pro-img" :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
-                 mode="aspectFill"></image>
-          <p class="bot-des" @click="routeTo(item.id,index)">{{item.name}}</p>
-          <div class="price-brow" @click="routeTo(item.id,index)">
-            <p v-if="item.priceStatus!==0" class="price-brow-main"><span class="yang">￥</span><span class="price">{{item.price}}</span></p>
-            <p class="box-brow" v-if="item.getMoney !== null">
-              <span class="getMoney">赚</span>
-              <span class="Money">￥ {{item.getMoney}}</span>
-            </p>
-          </div>
-          <div class="look-Num" @click="routeTo(item.id ,index)">
-            <p class="browseCount"><i class="iconfont iconyanjing"></i><span v-if="item.browseCount < 99" class="num">浏览{{ item.browseCount}}次</span><span v-else class="num">浏览99+次</span></p>
-            <p class="pushCount"><i class="iconfont iconfeiji1"></i><span v-if="item.forwardCount < 99" class="num">分享{{item.forwardCount}} 次</span><span v-else class="num">分享99+次</span></p>
-            <p class="renZ"><i class="iconfont iconrenzheng"></i><span class="num">已认证</span></p>
-          </div>
-          <div class="Forward">
-            <button open-type="share" :data-item="item" class="share-btn" @click="openInfo(index)">
-              <i class="iconfont iconfenxiang3" @click="shareGoods"></i>
-            </button>
-          </div>
-          <div class="purchase" @click="routeTo(item.id, index)">
-            <i class="iconfont iconiconjia"></i>
-          </div>
-        </div>
-        <!--广告-->
-        <div v-else-if="item.image">
-          <div v-if="item.appId" class="banner" @click="goToClassBanner(item)">
-            <img class="imgMain" :src="item.image" mode="scaleToFill	" />
-          </div>
-          <div class="excitation" v-else>
-            <ad :unit-id="item.appId"></ad>
-          </div>
-        </div>
-          <!--<div v-else class="banner">-->
-            <!--<img class="imgMain" :src="item.image" mode="scaleToFill" />-->
-          <!--</div>-->
-        </div>
-      </div>
-
-
-
       <!--样式三-->
       <div class="product-listB" v-if="goodsType === 2">
         <div class="" v-for="(item,index) in productList" :key="index">
           <div class="item-pro"  v-if="!item.image">
-            <button open-type="share" :data-item="item" class="share-btn" @click="openInfo(index)">
-                <i @click="shareGoods" class="iconfont icon31zhuanfa"></i>
+            <button v-if="shareMain === true" class="share-btn"  @click="shareGoods(item,index)">
+              <i class="iconfont iconfenxiang3"></i>
             </button>
+            <button v-else open-type="share" :data-item="item" class="share-btn" @click="openInfo(index)">
+              <i class="iconfont iconfenxiang3" @click="shareGoods"></i>
+            </button>
+            <!--<button open-type="share" :data-item="item" class="share-btn" @click="openInfo(index)">-->
+                <!--<i @click="shareGoods" class="iconfont icon31zhuanfa"></i>-->
+            <!--</button>-->
             <p  @click="routeTo(item.id,index )">
               <image class="pro-img" :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_350,h_350/quality,q_100'"
                      mode="aspectFill"></image>
@@ -190,7 +206,7 @@
           </div>
           <!--广告-->
           <div v-else-if="item.image">
-            <div v-if="item.appId" class="banner" @click="goToClassBanner(item)">
+            <div v-if="item.switch == false" class="banner" @click="goToClassBanner(item)">
               <img class="imgMain" :src="item.image" mode="scaleToFill	" />
             </div>
             <div class="excitation" v-else>
@@ -206,6 +222,24 @@
       <!--<CustomTabbar url="/pages/product/index"></CustomTabbar>-->
       <div class="footer" @click="goProduct">
         <span>发布<br>产品</span>
+      </div>
+    </div>
+
+    <div class="share" v-if="share === true">
+      <div class="main">
+        <p class="img"><img src="https://oss.tzyizan.com/businessFile/201909291116211569726981643.png"></p>
+        <p class="smallTitle">{{smallTitle}}</p>
+        <p class="bigTitle">{{bigTitle}}<span class="yellow">立赚{{getMoney}}元</span></p>
+        <div class="bt">
+          <button class="now" v-if="shareStatus == 0" @click="goTo('/pages/pageA/Member/main')">马上开通</button>
+          <button class="now" v-else @click="goTo('/pages/pageA/Pusher/main')">马上开通</button>
+          <button open-type="share" :data-item="ShareItem" class="goON" @click="openInfo(ShareIndex)">
+            继续分享
+          </button>
+        </div>
+        <p class="delete" @click="cancelDe">
+          <i class="iconfont icondel2"></i>
+        </p>
       </div>
     </div>
   </div>
@@ -237,6 +271,15 @@
           src: 'https://images.unsplash.com/photo-1551446591-142875a901a1?w=640'
         }
         ],
+        smallTitle: '自用省钱 分享赚钱',
+        bigTitle: '开通会员',
+        getMoney: '',
+        vipDistributorStatus: '',
+        share: false,
+        ShareItem: '',
+        ShareIndex: '',
+        shareStatus: 0,
+        shareMain: true,
         categoryA: [{
           businessId: 1,
           id: 0,
@@ -309,6 +352,12 @@
       this.getNews()
       this.getInfo()
       this.getTitle()
+      this.vipDistributorStatus = wx.getStorageSync('vipDistributorStatus')
+      if (this.vipDistributorStatus === 0) {
+        this.getShop()
+      } else {
+        this.getMerber()
+      }
     },
     onShow () {
       this.getInfo()
@@ -400,7 +449,71 @@
     //
     //   }
     // },
+    onHide () {
+      this.share = false
+    },
     methods: {
+      // 跳转
+      goTo (url) {
+        wx.navigateTo({
+          url
+        })
+      },
+      // 查询会员等级信息
+      getMerber () {
+        const businessId = wx.getStorageSync('businessId')
+        this.$fly.request({
+          method: 'get',
+          url: 'vip/findList',
+          body: {
+            'businessId': businessId
+          }
+        }).then(res => {
+          const Member = wx.getStorageSync('vipId')
+          this.silver = res.data
+          if (Member === 0 || Member === null || Member === '') {
+            this.Member = '无会员'
+            wx.setStorageSync('vipId', 0)
+            this.smallTitle = '自用省钱 分享赚钱'
+            this.bigTitle = '开通会员'
+            this.shareStatus = 0
+          } else {
+            this.getShop()
+            this.silver = res.data
+            this.silver.map((item) => {
+              if (Member === item.id) {
+                this.Member = item.levelName
+              }
+            })
+          }
+          console.log('resAAAA', this.Member)
+        }).catch(err => {
+          console.log('err', err)
+        })
+      },
+      // 获取分销商信息
+      getShop () {
+        this.$fly.request({
+          method: 'get', // post/get 请求方式
+          url: '/distributor/selectOne',
+          body: {
+          }
+        }).then(res => {
+          const isDistributor = res.data.isDistributor
+          console.log('isDistributor', isDistributor)
+          if (isDistributor === 1) {
+            this.shareMain = false
+            this.shareStatus = 0
+          } else {
+            this.shareMain = true
+            this.smallTitle = '自用省钱 分享赚钱'
+            this.bigTitle = '开通分销商'
+            this.shareStatus = 1
+          }
+        }).catch(err => {
+          console.log(err.status, err.message)
+        })
+      },
       previewImageA (e, A) {
         var imgs = e
         var temp = []
@@ -552,6 +665,7 @@
       openInfo (index) {
         // this.getProduct({ type: 0 })
         // console.log('info', this.info)
+        this.share = false
         this.productList[index].forwardCount = this.productList[index].forwardCount + 1
         // this.productList.map(async item => {
         //   item.forwardCount = item.forwardCount + 1
@@ -625,7 +739,15 @@
         })
       },
       //   分享
-      shareGoods () {
+      shareGoods (item, index) {
+        this.ShareIndex = index
+        this.ShareItem = item
+        this.share = true
+        this.getMoney = item.getMoney
+      },
+      // 取消分享界面
+      cancelDe () {
+        this.share = false
       },
       confirm (e) {
         this.searchContent = e.mp.detail.value
@@ -712,6 +834,82 @@
 </script>
 
 <style lang="scss" scoped>
+   // 产品分享
+   .share{
+     position: fixed;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     overflow-y: hidden;
+     background: rgba(0,0,0,0.5);
+     z-index: 9999!important;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     .main{
+       text-align: center;
+       .img{
+         width: 480rpx;
+         height: 322rpx;
+         img{
+           display: inline-block;
+           width: 377rpx;
+           height: 322rpx;
+         }
+       }
+       .smallTitle{
+          font-size: 44rpx;
+         color: #ffffff;
+         font-weight: 600;
+         margin-top: 15rpx;
+       }
+       .bigTitle{
+         font-size: 44rpx;
+         color: #ffffff;
+         font-weight: 600;
+         margin-top: 10rpx;
+         .yellow{
+           font-size: 56rpx;
+           color: #FEF104;
+           display: inline-block;
+           font-weight: 700;
+         }
+       }
+       .bt{
+         width: 450rpx;
+         display: flex;
+         justify-content: space-between;
+         margin-top: 20rpx;
+         .now{
+           width: 206rpx;
+           height: 65rpx;
+           background: #ffffff;
+           color: #FF4A29;
+           font-size: 28rpx;
+           display: inline-block;
+           border-radius: 30rpx;
+         }
+         .goON{
+           width: 206rpx;
+           height: 65rpx;
+           background: #FEF104;
+           color: #FF4A29;
+           font-size: 28rpx;
+           border-radius: 30rpx;
+           display: inline-block;
+         }
+       }
+       .delete{
+         margin-top: 100rpx;
+         .icondel2{
+           color: #ffffff;
+           font-size: 30rpx;
+         }
+       }
+     }
+   }
+
   .classImg{
     width: 87rpx!important;
     height: 87rpx!important;
@@ -1133,8 +1331,8 @@
       margin: 20rpx auto;
     }
     .item-pro {
-      width: 694rpx;
-      height: 200rpx;
+      width: 704rpx;
+      height: 236rpx;
       border-radius: 10rpx;
       background-color: #fff;
       display: inline-block;
@@ -1143,9 +1341,9 @@
       position: relative;
       /*z-index: 99;*/
       .pro-img {
-        width: 200rpx;
-        height: 200rpx;
-        /*float: left;*/
+        width: 236rpx;
+        height: 236rpx;
+        float: left;
         border-top-left-radius: 10rpx;
         border-bottom-left-radius: 10rpx;
       }
@@ -1189,7 +1387,7 @@
       font-size: 24rpx;
       color: #4a4a4a;
       font-weight: 600;
-      width: 400rpx;
+      width: 380rpx;
       height: 70rpx;
       margin: 20rpx 15rpx 0rpx;
       padding-left: 15rpx;
@@ -1201,9 +1399,9 @@
     }
     .look-Num{
       position: absolute;
-      top: 155rpx;
-      left: 180rpx;
-      font-size: 22rpx;
+      top: 145rpx;
+      left: 216rpx;
+      font-size: 16rpx;
       padding: 4rpx 30rpx 0rpx 28rpx;
       color: #9d9d9d;
       text-align: left;
@@ -1214,7 +1412,7 @@
         .iconyanjing{
           display: inline-block;
           color: #cccccc;
-          font-size: 26rpx;
+          font-size: 20rpx;
           vertical-align: top;
           margin-right: 10rpx;
         }
@@ -1226,7 +1424,7 @@
         .iconfeiji1{
           display: inline-block;
           color: #CCCCCC;
-          font-size: 26rpx;
+          font-size: 20rpx;
           vertical-align: top;
           margin-right: 10rpx;
         }
@@ -1254,15 +1452,21 @@
         float: left;
         margin: 10rpx 15rpx;
         .price {
-          font-size: 28rpx;
+          font-size: 34rpx;
           margin-left: 4rpx;
-          color: #FE5250;
+          color: #FD6A43;
         }
 
         .yang {
           font-size: 22rpx;
           color: #FE5250;
           margin-left: 4 rpx;
+        }
+        .del{
+          text-decoration: line-through;
+          text-decoration-color: #FD6A43;
+          font-size: 20rpx;
+          margin-left: 20rpx;
         }
       }
 
@@ -1299,14 +1503,14 @@
       right: 20rpx;
       .share-btn{
         padding: 0rpx 20rpx;
-        width: 43rpx;
-        height: 30rpx;
-        border-radius: 30rpx;
+        width: 40rpx;
+        height: 40rpx;
+        border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         background: #FF8331;
-        .iconfenxiang3{
+        .iconKHCFDC_fenxiang{
           color: #ffffff;
           font-size: 20rpx;
         }
@@ -1322,9 +1526,16 @@
       position: absolute;
       right: 20rpx;
       bottom: 12rpx;
-      border-radius: 10rpx;
-      .iconiconjia{
-        color:#FF8331;
+      width: 40rpx;
+      height: 40rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #FF553B;
+      border-radius: 50%;
+      .iconxingzhuangfuzhi{
+        color:#ffffff;
+        font-size: 22rpx;
       }
       span{
         font-size:24rpx;
@@ -1333,6 +1544,19 @@
         line-height: 38rpx;
         color: #4A4A4A;
       }
+    }
+    .buttonA{
+      display: block;
+      width: 212rpx;
+      height: 40rpx;
+      position: absolute;
+      bottom: 12rpx;
+      left: 250rpx;
+      border-radius: 30rpx;
+      background: linear-gradient(to right,#FF4F3B 33%, #FF793B 66%,#FF953B);
+      font-size: 20rpx;
+      line-height: 40rpx;
+      color: #ffffff;
     }
   }
 
@@ -1501,131 +1725,135 @@
     }
   }
   // 商品列表
-  .product-listA {
-    /*margin-top: 180rpx;*/
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
-    display: inline-block;
-    text-align: center;
+  .Amain{
+    width: 100%;
     margin: 20rpx 0;
-    font-size: 0;
-    .item-proA{
-      display: inline-block;
-      margin-bottom: 24rpx;
-      // 广告图片
-      .banner {
-        width: 656rpx;
-        height: 258rpx;
-        margin: 30rpx auto 0;
-        .imgMain{
-          width: 100%;
-          height: 100%;
-          display: inline-block;
-          border-radius: 10rpx;
-        }
-      }
-      .excitation{
-        width: 656rpx;
-        /*height: 258rpx;*/
-        margin: 30rpx auto 0;
-      }
-      .item-pro {
-        width: 364rpx;
-        height: 500rpx;
-        background-color: #fff;
+    .product-listA {
+      /*margin-top: 180rpx;*/
+      /*overflow: auto;*/
+      /*-webkit-overflow-scrolling: touch;*/
+      width: 728rpx;
+      margin: 0 auto;
+      .item-proA{
         display: inline-block;
-        /*margin-bottom: 24rpx;*/
-        box-sizing: border-box;
-        font-size: 0;
-        position: relative;;
-        // 转发
-        .Forward{
-          position: absolute;
-          top: 20rpx;
-          right: 20rpx;
-          .share-btn{
-            padding: 0rpx 20rpx;
-            width: 43rpx;
-            height: 30rpx;
-            border-radius: 30rpx;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #FF8331;
-            .iconfenxiang3{
-              color: #ffffff;
-              font-size: 20rpx;
+        margin-bottom: 24rpx;
+        // 广告图片
+        .main{
+          width: 728rpx;
+          .banner {
+            width: 656rpx;
+            height: 258rpx;
+            margin: 0 auto;
+            .imgMain{
+              width: 100%;
+              height: 100%;
+              display: inline-block;
+              border-radius: 10rpx;
             }
           }
+          .excitation{
+            width: 656rpx;
+            /*height: 258rpx;*/
+            margin: 0 auto;
+          }
         }
-        .pro-img {
-          width: 350rpx;
-          height: 350rpx;
+        .item-pro {
+          width: 364rpx;
+          height: 500rpx;
+          background-color: #fff;
           display: inline-block;
-          margin: 6rpx;
-        }
-        // 文字描述
-        .bot-des {
-          text-align: left;
-          font-size: 24rpx;
-          color: #4a4a4a;
-          width: 330rpx;
-          overflow: hidden;
-          text-overflow:ellipsis;
-          white-space: nowrap;
-          margin: 4rpx auto 0;
-        }
-        // 价格浏览
-        .price-brow {
-          font-size: 22rpx;
-          @extend %flexRow;
-          padding: 0 16rpx;
-          color: #9d9d9d;
-        }
-        .price {
-          font-size: 28rpx;
-          margin-left: 4rpx;
-        }
-        .box-browA {
-          /*float: left;*/
-          margin: 10rpx 5rpx;
-          color: #4A4A4A!important;
-          text-align: left!important;
-          .getMoney {
-            text-align: center;
-            float: left;
-            width: 43rpx;
-            height: 36rpx;
-            margin-left: 10rpx;
-            background: #FF424E;
-            color: #ffffff;
-            font-size: 22rpx;
-            border-top-left-radius: 10rpx;
-            border-bottom-left-radius: 10rpx;
+          /*margin-bottom: 24rpx;*/
+          box-sizing: border-box;
+          font-size: 0;
+          position: relative;;
+          // 转发
+          .Forward{
+            position: absolute;
+            top: 20rpx;
+            right: 20rpx;
+            .share-btn{
+              padding: 0rpx 20rpx;
+              width: 43rpx;
+              height: 30rpx;
+              border-radius: 30rpx;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background: #FF8331;
+              .iconfenxiang3{
+                color: #ffffff;
+                font-size: 20rpx;
+              }
+            }
           }
-          .MoneyA {
-            width: 108rpx;
-            height: 34rpx;
+          .pro-img {
+            width: 350rpx;
+            height: 350rpx;
             display: inline-block;
-            text-align: center;
-            border: 1rpx solid #FF424E;
-            border-top-right-radius: 10rpx;
-            border-bottom-right-radius: 10rpx;
-            color: #4A4A4A;
+            margin: 6rpx;
+          }
+          // 文字描述
+          .bot-des {
+            text-align: left;
+            font-size: 24rpx;
+            color: #4a4a4a;
+            width: 330rpx;
+            overflow: hidden;
+            text-overflow:ellipsis;
+            white-space: nowrap;
+            margin: 4rpx auto 0;
+          }
+          // 价格浏览
+          .price-brow {
             font-size: 22rpx;
+            @extend %flexRow;
+            padding: 0 16rpx;
+            color: #9d9d9d;
+          }
+          .price {
+            font-size: 28rpx;
+            margin-left: 4rpx;
+          }
+          .box-browA {
+            /*float: left;*/
+            margin: 10rpx 5rpx;
+            color: #4A4A4A!important;
+            text-align: left!important;
+            .getMoney {
+              text-align: center;
+              float: left;
+              width: 43rpx;
+              height: 36rpx;
+              margin-left: 10rpx;
+              background: #FF424E;
+              color: #ffffff;
+              font-size: 22rpx;
+              border-top-left-radius: 10rpx;
+              border-bottom-left-radius: 10rpx;
+            }
+            .MoneyA {
+              width: 108rpx;
+              height: 34rpx;
+              display: inline-block;
+              text-align: center;
+              border: 1rpx solid #FF424E;
+              border-top-right-radius: 10rpx;
+              border-bottom-right-radius: 10rpx;
+              color: #4A4A4A;
+              font-size: 22rpx;
+            }
+          }
+          .box-brow {
+            @extend %flexRow;
+          }
+          .icon-view {
+            line-height: 32rpx;
+            margin-right: 10rpx;
+            font-size: 32rpx;
           }
         }
-        .box-brow {
-          @extend %flexRow;
+        .item-pro:nth-child(odd) {
         }
-        .icon-view {
-          line-height: 32rpx;
-          margin-right: 10rpx;
-          font-size: 32rpx;
-        }
-      }
-      .item-pro:nth-child(2n) {
-        margin-left: 10rpx;
       }
     }
   }

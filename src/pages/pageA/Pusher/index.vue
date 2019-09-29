@@ -4,30 +4,38 @@
         <i @click="back()" class="iconfont iconE leftA"></i>
         <span>推客中心</span>
       </div>
-      <div :class="Active">
-        <div class="choose">
-          <div v-for="(item,index) in pusher" :key="index"  :class="{'selected':tabA === item.id,'block':true}" @click="changTabMeberA(item.id,item.upType)">
-            <div class="flex">
-              <div class="top">
-                <span class="title">{{item.levelName}}</span>
-                <span v-if="item.upType === 2" class="blue">￥{{item.upCondition}}</span>
-                <span v-else class="blue">消费满{{item.upCondition}}</span>
+      <div class="TopAmg">
+        <img src="https://oss.tzyizan.com/salesInfo/201909251128551569382135618.png"/>
+      </div>
+      <div class="personal">
+        <img src="https://oss.tzyizan.com/salesInfo/201909251112471569381167638.png"/>
+      </div>
+      <div class="action">
+        <div :class="Active">
+          <div class="choose">
+            <div v-for="(item,index) in pusher" :key="index"  :class="{'selected':tabA === item.id,'block':true}" @click="changTabMeberA(item.id,item.upType)">
+              <div class="flex">
+                <div class="top">
+                  <span class="title">{{item.levelName}}</span>
+                  <span v-if="item.upType === 2" class="blue">￥{{item.upCondition}}</span>
+                  <span v-else class="blue">消费满{{item.upCondition}}</span>
+                </div>
+                <div class="last">
+                  <span>直接比例:{{item.firstPercent}}%,间接比例:{{item.secondPercent}}%</span>
+                </div>
               </div>
-              <div class="last">
-                <span>直接比例:{{item.firstPercent}}%,间接比例:{{item.secondPercent}}%</span>
+              <div class="chooseImg">
+                <img v-if=" tabA === item.id" class="choose" src="/static/images/Tchoose-se.png"/>
+                <img v-else class="choose" src="/static/images/Tchoose.png"/>
               </div>
             </div>
-            <div class="chooseImg">
-              <img v-if=" tabA === item.id" class="choose" src="/static/images/Tchoose-se.png"/>
-              <img v-else class="choose" src="/static/images/Tchoose.png"/>
+            <div :class="classA"  @click="Opening(tabA,num)">
+              <button>{{title}}</button>
             </div>
-          </div>
-          <div :class="classA"  @click="Opening(tabA,num)">
-            <button>{{title}}</button>
-          </div>
-          <!--<div v-else class="open" @click="Opening(tabA)">-->
+            <!--<div v-else class="open" @click="Opening(tabA)">-->
             <!--<button>开通</button>-->
-          <!--</div>-->
+            <!--</div>-->
+          </div>
         </div>
       </div>
     </div>
@@ -58,28 +66,30 @@
       this.getShopGrade()
       this.getShop()
       this.height = wx.getSystemInfoSync().windowHeight
-      if (this.height > 800 && this.height < 1000) {
-        this.Active = 'mainA'
-        this.pusherA = 'pusher'
-      } else if (this.height > 1000 && this.height < 1025) {
-        this.pusherA = 'pusherA'
-        this.Active = 'mainB'
-      } else if (this.height > 1025 && this.height < 1113) {
-        this.pusherA = 'pusherA'
-        this.Active = 'mainC'
-      } else if (this.height > 1113 && this.height < 1367) {
-        this.pusherA = 'pusherA'
-        this.Active = 'mainD'
-      } else if (this.height > 750 && this.height < 761) {
-        this.pusherA = 'pusher'
-        this.Active = 'mainE'
-      } else if (this.height > 735 && this.height <= 736) {
-        this.pusherA = 'pusher'
-        this.Active = 'main'
-      } else {
-        this.pusherA = 'pusher'
-        this.Active = 'main'
-      }
+      this.pusherA = 'pusher'
+      this.Active = 'main'
+      // if (this.height > 800 && this.height < 1000) {
+      //   this.Active = 'mainA'
+      //   this.pusherA = 'pusher'
+      // } else if (this.height > 1000 && this.height < 1025) {
+      //   this.pusherA = 'pusherA'
+      //   this.Active = 'mainB'
+      // } else if (this.height > 1025 && this.height < 1113) {
+      //   this.pusherA = 'pusherA'
+      //   this.Active = 'mainC'
+      // } else if (this.height > 1113 && this.height < 1367) {
+      //   this.pusherA = 'pusherA'
+      //   this.Active = 'mainD'
+      // } else if (this.height > 750 && this.height < 761) {
+      //   this.pusherA = 'pusher'
+      //   this.Active = 'mainE'
+      // } else if (this.height > 735 && this.height <= 736) {
+      //   this.pusherA = 'pusher'
+      //   this.Active = 'main'
+      // } else {
+      //   this.pusherA = 'pusher'
+      //   this.Active = 'main'
+      // }
     },
     onUnload () {
       this.isDistributor = ''

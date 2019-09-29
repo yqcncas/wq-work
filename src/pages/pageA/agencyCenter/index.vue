@@ -31,7 +31,7 @@
             <p>可提现佣金（元）</p>
             <p class="main">
               <span class="money-num">{{detailData.moneyS}}</span>
-              <span class="btn-m" @click="routeTo(`../agCash/main?moneyS=${detailData.moneyS}&money=${detailData.money}`)">提现</span>
+              <!--<span class="btn-m" @click="routeTo(`../agCash/main?moneyS=${detailData.moneyS}&money=${detailData.money}`)">提现</span>-->
             </p>
           </div>
         </div>
@@ -39,12 +39,12 @@
     </div>
     <!-- 功能 -->
     <div class="function">
-      <div class="part-of-three" @click="routeTo(`../agCommission/main?detail=${JSON.stringify(detailData)}`)">
-        <div class="flex-wrap flexColumn">
-          <i class="iconfont iconjinqian"></i>
-          <p>分销佣金</p>
-        </div>
-      </div>
+      <!--<div class="part-of-three" @click="routeTo(`../agCommission/main?detail=${JSON.stringify(detailData)}`)">-->
+        <!--<div class="flex-wrap flexColumn">-->
+          <!--<i class="iconfont iconjinqian"></i>-->
+          <!--<p>分销佣金</p>-->
+        <!--</div>-->
+      <!--</div>-->
       <div class="part-of-three" @click="routeTo(`../agOrder/main?id=${detailData.id}&total=${detailData.totalS}`)">
         <div class="flex-wrap flexColumn">
           <i class="iconfont icondingdan1"></i>
@@ -125,8 +125,8 @@ export default {
     },
     async getInfo () {
       const { data } = await apiPerson.distributorOne()
-      data.getMoneyS = this.fmoney(data.getMoney, 2)// 已提现的钱 成功提现佣金
-      data.moneyS = this.fmoney(data.money, 2)// 可提现的钱
+      data.getMoneyS = this.fmoney(data.applyMoney, 2)// 已提现的钱 成功提现佣金
+      data.moneyS = this.fmoney(data.waitMoney, 2)// 可提现的钱
       data.totalS = this.fmoney(data.totalMoney, 2)// 累计佣金
       data.applyMoneyS = this.fmoney(data.applyMoney, 2)// 已申请佣金
       //   data.applyMoneyS = this.fmoney(data.applyMoney, 2)// 待打款佣金
@@ -134,6 +134,7 @@ export default {
       data.waitMoneyS = this.fmoney(data.waitMoney, 2)// 待收货佣金
       data.uncheckMoneyS = this.fmoney(data.uncheckMoney, 2)// 未结算佣金
       this.detailData = data
+      console.log('detailData', this.detailData)
     }
   },
   onLoad () {

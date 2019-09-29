@@ -70,7 +70,8 @@
             <div v-if="!item.image" class="">
               <div class="news-header flexRow">
                 <div class="avatar-wrp" @click="goToCard(item.salesmanId)">
-                  <img class="img" :src="item.salesmanImgUrl" />
+                  <img  v-if="item.salesmanId" class="img" :src="item.salesmanImgUrl" mode="aspectFit"/>
+                  <img  v-else class="img" :src="item.logo" mode="aspectFit"/>
                 </div>
                 <div class="author-info">
                   <div v-if="item.salesmanId"  class="author-name" @click="goToCard(item.salesmanId)">
@@ -114,8 +115,8 @@
                 <div class="news-cover" v-if="item.imgUrl">
                   <div class="news" v-if="item.salesmanId">
                     <i v-for="(items,indexs) in item.imgUrl"  :key="indexs">
-                      <image v-if="item.imgUrl.length >1" :src="items" class="img" @click="previewImg(item.imgUrl,indexs)"  mode=""></image>
-                      <image v-else :src="item.imgUrl" class="imgA" @click="previewImg(item.imgUrl,indexs)"  mode="widthFix"></image>
+                      <image v-if="item.imgUrl.length >1" :src="items" class="img" @click="previewImg(item.imgUrl,indexs)"  mode="aspectFit"></image>
+                      <image v-else :src="item.imgUrl" class="imgA" @click="previewImg(item.imgUrl,indexs)"  mode="aspectFit"></image>
                     </i>
                   </div>
                   <div class="JiuImg" v-else @click="routerToA(`/pages/Networking/detail/main?id=${item.id}`)">
@@ -827,7 +828,7 @@
               this.newsList.push(e)
             })
           }
-          // console.log('newList', this.newsList)
+          console.log('newList', this.newsList)
           this.pageNum = data.pageNum
           this.lastPage = data.lastPage
           this.nextPage = data.nextPage

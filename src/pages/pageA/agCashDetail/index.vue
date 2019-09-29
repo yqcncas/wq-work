@@ -10,10 +10,10 @@
       </div>
       <ul class="pay-list flexRow">
         <li :class="{'active':active===0}" @click="chooseWay(0)">所有</li>
-        <li :class="{'active':active===9}" @click="chooseWay(9)">待审核</li>
+        <!--<li :class="{'active':active===9}" @click="chooseWay(9)">待审核</li>-->
         <li :class="{'active':active===11}" @click="chooseWay(11)">待打款</li>
         <li :class="{'active':active===10}" @click="chooseWay(10)">已打款</li>
-        <li :class="{'active':active===5}" @click="chooseWay(5)">无效</li>
+        <li :class="{'active':active===7}" @click="chooseWay(7)">无效</li>
       </ul>
       <ul class="table-header flexRow">
         <li class="same">日期</li>
@@ -30,7 +30,7 @@
           <div class="flexRow same center-w">
             <i class="iconfont iconjinqian"></i>
             <div>
-              <p class="bold"> - {{i.money}}</p>
+              <p class="bold"> - {{i.amount}}</p>
               <p class="way">提现</p>
             </div>
           </div>
@@ -94,6 +94,7 @@ export default {
           this.list.push(e)
         })
       }
+      console.log('list', this.list)
     }
   },
   async onPullDownRefresh () {

@@ -153,7 +153,7 @@
           <img src="https://oss.tzyizan.com/salesInfo/201908161342141565934134542.png">
           <div class="main">
             <p class="suc">签到成功</p>
-            <p class="title">恭 喜 你 获 得 5 积 分</p>
+            <p class="title">恭 喜 你 获 得 积 分</p>
             <p class="info">积 分 可 用 于 名 片 置 顶 等 服 务</p>
           </div>
           <div class="delete">
@@ -811,6 +811,10 @@
   font-weight: 600;
   font-size: ~'30rpx';
   padding-right: ~'20rpx';
+  max-width: ~'300rpx';
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow:ellipsis;
 }
  .top-main .zhiding .job{
    color: #484848;
@@ -820,6 +824,10 @@
    margin-top: ~'5rpx';
    /*left: ~'300rpx';*/
    font-weight: 200;
+   max-width: ~'200rpx';
+   overflow: hidden;
+   white-space: nowrap;
+   text-overflow:ellipsis;
  }
  .top-main .comyname{
    top: ~'195rpx';
@@ -829,6 +837,10 @@
    font-size: ~'24rpx';
   bottom: ~'50rpx';
    font-weight: 200;
+   max-width: ~'500rpx';
+   overflow: hidden;
+   white-space: nowrap;
+   text-overflow:ellipsis;
  }
  .top-main .edit{
    position: absolute;
