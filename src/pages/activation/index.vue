@@ -19,12 +19,14 @@
     },
     methods: {
       activate () {
+        const token = wx.getStorageSync('token')
         if (this.activation.trim() !== '') {
           this.$fly.request({
             method: 'post', // post/get 请求方式
             url: '/actiCode/findBusinessIdByCode',
             body: {
-              'code': this.activation
+              'code': this.activation,
+              'token': token
             }
           }).then(res => {
             if (res.code === 200) {
