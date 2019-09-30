@@ -311,13 +311,13 @@ export default {
     this.insertOpera('分享了新闻', 13, this.id)
     return {
       title: this.title,
-      path: 'pages/loading/main?fromWay=1&param=news&newsId=' + this.id,
+      path: 'pages/loading/main?fromWay=4&param=news&newsId=' + this.id,
       imageUrl: this.imgUrl
     }
   },
   onLoad (options) {
     this.videoFlag = false
-    this.id = +options.id
+    this.id = options.id
     this.getNewsDetail(this.id)
     this.getNewsA()
   },

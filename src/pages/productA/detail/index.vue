@@ -2,7 +2,7 @@
   <div class="pro-detail">
     <!-- 轮播图 -->
     <div class="top">
-    <swiper class="swiper" indicator-dots="true" autoplay="true" interval="5000" duration="500">
+    <swiper class="swiper" :indicator-dots="indicator" autoplay="true" interval="5000" duration="500">
       <block v-for="(item,index) in goodsImgList" :key="index">
         <swiper-item class="swiper-item">
           <image :src="item.imgUrl+'?x-oss-process=image/resize,limit_0,m_fill,w_750,h_750/quality,q_100'" class="slide-image"
@@ -32,10 +32,10 @@
         <span class="left">尊 贵 的 黄 金 会 员 , 升 级 获 取 更 多 权 限</span>
         <span class="right">立即升级</span>
       </div>
-      <div class="Member"  @click="goToMember" v-else-if="Member == '钻石会员'">
-        <span class="left">尊 贵 的 钻 石 会 员 , 已 升 级 至 最 高 权 限</span>
-        <span class="right">最高权限</span>
-      </div>
+      <!--<div class="Member"  @click="goToMember" v-else-if="Member == '钻石会员'">-->
+        <!--<span class="left">尊 贵 的 钻 石 会 员 , 已 升 级 至 最 高 权 限</span>-->
+        <!--<span class="right">最高权限</span>-->
+      <!--</div>-->
     </div>
     </div>
     <!--购买产品信息轮播-->

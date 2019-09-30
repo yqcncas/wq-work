@@ -131,7 +131,7 @@
             <p v-if="item.priceStatus!==0" class="price-brow-main">
               <span class="yang">￥</span>
               <span class="price">{{item.price}}</span>
-              <sapn class="del">原价 ￥ {{item.price}}</sapn>
+              <sapn class="del">原价 ￥ {{item.promotionPrice}}</sapn>
             </p>
           </div>
           <div class="look-Num" @click="routeTo(item.id ,index)">
@@ -221,7 +221,8 @@
       <!--<FloatBox :home="false" phone="value"></FloatBox>-->
       <!--<CustomTabbar url="/pages/product/index"></CustomTabbar>-->
       <div class="footer" @click="goProduct">
-        <span>发布<br>产品</span>
+        <!--<span>发布<br>产品</span>-->
+        <img src="https://oss.tzyizan.com/salesInfo/201909301315041569820504250.png"/>
       </div>
     </div>
 
@@ -1861,17 +1862,21 @@
     position: fixed;
     bottom: 200rpx;
     right: 20rpx;
-    width: 100rpx;
-    height: 100rpx;
+    width: 130rpx;
+    height: 130rpx;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     border-radius: 50%;
-    background: rgba(0,0,0,0.2);
+    /*background: rgba(0,0,0,0.2);*/
     span{
       color: #ffffff;
       font-size: 24rpx;
+    }
+    img{
+      width: 130rpx;
+      height: 130rpx;
     }
   }
 </style>

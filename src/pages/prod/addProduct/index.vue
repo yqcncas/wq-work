@@ -14,6 +14,12 @@
             </span>
           </div>
           <div class="studs">
+            <span class="title">产品原价</span>
+            <span class="choose">
+              <input  v-model="promotionPrice" placeholder="填写价格" type="digit"/>
+            </span>
+          </div>
+          <div class="studs">
             <span class="title">分销金额</span>
             <span class="choose">
               <input  v-model="distributorAmount" placeholder="填写金额" type="digit"/>
@@ -123,6 +129,7 @@
           name: '',
           price: null,
           type: null,
+          promotionPrice: null,
           goodsStyleTypeId: null,
           goodsImgUrlList: [], // 产品展示
           imgUrl: '',
@@ -146,6 +153,7 @@
         typeId: 0,
         goodsStyleTypeId: '',
         edit: '',
+        promotionPrice: '',
         goodsId: '',
         coverImg: '',
         infoImgList: []
@@ -159,6 +167,7 @@
       this.edit = ''
       this.name = ''
       this.price = ''
+      this.promotionPrice = ''
       this.guiName = ''
       this.distributorAmount = ''
       this.stylesName = ''
@@ -400,6 +409,7 @@
           this.getStyles(res.data.goods.type)
           this.getMu(res.data.goods.goodsStyleTypeId)
           this.price = res.data.goods.price
+          this.promotionPrice = res.data.goods.promotionPrice
           this.distributorAmount = res.data.goods.distributorAmount
           this.goodsImgUrlList = res.data.goodsImgList
           this.imgUrl = res.data.goods.imgUrl
@@ -435,6 +445,12 @@
             icon: 'none',
             duration: 1000
           })
+        } else if (this.promotionPrice === '') {
+          wx.showToast({
+            title: '请填入产品原价',
+            icon: 'none',
+            duration: 1000
+          })
         } else if (this.goodsImgUrlList.length === 0) {
           wx.showToast({
             title: '请上传产品展示图',
@@ -467,6 +483,7 @@
               'goodsImgUrlList': this.goodsImgUrlList,
               'name': this.name,
               'price': this.price,
+              'promotionPrice': this.promotionPrice,
               'distributorAmount': this.distributorAmount,
               'info': this.info,
               'imgUrl': this.imgUrl
@@ -520,6 +537,12 @@
             icon: 'none',
             duration: 1000
           })
+        } else if (this.promotionPrice === '') {
+          wx.showToast({
+            title: '请填入产品原价',
+            icon: 'none',
+            duration: 1000
+          })
         } else if (this.goodsImgUrlList.length === 0) {
           wx.showToast({
             title: '请上传产品展示图',
@@ -538,6 +561,7 @@
               'goodsImgUrlList': this.goodsImgUrlList,
               'name': this.name,
               'price': this.price,
+              'promotionPrice': this.promotionPrice,
               'distributorAmount': this.distributorAmount,
               'info': this.info,
               'imgUrl': this.imgUrl,
