@@ -18,11 +18,11 @@
         </div>
         <div class="line"></div>
         <div class="pak">
-            <label>行业</label>
-            <div class="pick"  @click="showMulLinkageTwoPicker">
+          <label>行业</label>
+          <div class="pick"  @click="showMulLinkageTwoPicker">
             <text type="text" @click="showMulLinkageTwoPicker"  placeholder="请输入行业" class="picker">{{pickerText}}</text>
-            </div>
-            <mpvue-picker ref="mpvuePicker" :mode="mode" :deepLength="deepLength" :pickerValueDefault="pickerValueDefault" :themeColor="themeColor" @onChange="onChange" @onConfirm="onConfirm" @onCancel="onCancel" :pickerValueArray="pickerValueArray"></mpvue-picker>
+          </div>
+          <mpvue-picker ref="mpvuePicker" :mode="mode" :deepLength="deepLength" :pickerValueDefault="pickerValueDefault" :themeColor="themeColor" @onChange="onChange" @onConfirm="onConfirm" @onCancel="onCancel" :pickerValueArray="pickerValueArray"></mpvue-picker>
         </div>
         <div class="line"></div>
         <div class="PIMG">
@@ -519,7 +519,7 @@ export default {
     },
     gotoProduct () {
       wx.navigateTo({
-        url: `../product/main`
+        url: `../consummate/main`
       })
     }
   }
@@ -590,37 +590,45 @@ export default {
             }
         }
         .pak{
-            width: 100%;
-            height: 80rpx;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 40rpx 0 52rpx;
-            box-sizing: border-box;
-            .pick{
-              position: absolute;
-              top: ~'0rpx';
-              float: left;
-              width: 80%;
-              display: inline-block;
+          position: relative;
+          width: 100%;
+          height: 80rpx;
+          display: flex;
+          align-items: center;
+          padding: 0 40rpx 0 52rpx;
+          box-sizing: border-box;
+          label{
+          float: left;
+            margin-top: ~'5rpx';
+          }
+          .pick{
+            position: absolute;
+            top: ~'0rpx';
+            float: right;
+            width: 80%;
+            display: inline-block;
+            height: ~'60rpx';
+            border-bottom: none!important;
+            .picker{
+              width: 100%;
               height: ~'60rpx';
-              border-bottom: none!important;
-              .picker{
-                width: 100%;
-                height: ~'60rpx';
-                z-index: 9999;
-                padding-left: ~'40rpx';
-                font-size: ~'30rpx';
-                color: #9d9d9d;
-                }
+              z-index: 9999;
+              font-size: ~'30rpx';
+              color: #9d9d9d;
+              position: absolute;
+              transform:translate(90%,35%);
+              font-size: 32rpx;
             }
+          }
         }
         .PIMG{
-            padding: ~'20rpx' ~'60rpx' ~'40rpx';
+            padding: 0 40rpx 0 52rpx;
             background: #ffffff;
             border-bottom: ~'1rpx' solid #CCCCCC;
+            width: 100%;
+            height: 280rpx;
             .title{
-               
+               margin: 10rpx 0;
             }
             .img-wrap {
                 margin-top: ~'20rpx';
@@ -668,6 +676,9 @@ export default {
                 .iconshanchu-copy{
                 color: #F2F2F2;
                 font-size: 32rpx;
+                }
+                p{
+                  font-size: 28rpx;
                 }
           }
         }
