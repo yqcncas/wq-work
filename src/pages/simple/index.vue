@@ -206,7 +206,7 @@
       // 完善名片
       goToIndex () {
         wx.navigateTo({
-          url: '/pages/index/main'
+          url: '/pages/completeInformation/main'
         })
       },
       // 稍后完善

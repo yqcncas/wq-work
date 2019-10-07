@@ -1123,7 +1123,7 @@
       },
       goToCard () {
         wx.navigateTo({
-          url: '../index/main'
+          url: '../completeInformation/main'
         })
       },
       goToCardA () {

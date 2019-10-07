@@ -31,7 +31,10 @@
     "pages/productA/detail/buydetail/main",
     "pages/productA/detail/main",
     "pages/simple/main",
-    "pages/stats/main"
+    "pages/stats/main",
+    "pages/completeInformation/main",
+    "pages/product/main"
+    
   ],
   "navigateToMiniProgramAppIdList": [
     "wx2e3ab31dae91d019"
