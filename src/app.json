@@ -33,8 +33,8 @@
     "pages/simple/main",
     "pages/stats/main",
     "pages/completeInformation/main",
-    "pages/product/main",
-    "pages/consummate/main"
+    "pages/consummate/main",
+    "pages/product/main"
   ],
   "navigateToMiniProgramAppIdList": [
     "wx2e3ab31dae91d019"

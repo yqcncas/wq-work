@@ -167,7 +167,6 @@ export default {
         sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
         sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
         success: (res) => {
-          this.imgUrl = null
           let successUp = 0 // 成功
           let failUp = 0 // 失败
           let length = res.tempFilePaths.length // 总数
@@ -260,11 +259,6 @@ export default {
     },
     // 更新个人信息
     getSalesmanUpdate () {
-      if (this.judgeNull(this.name, '姓名')) return
-      if (this.judgeNull(this.salesCompanyName, '公司')) return
-      // if (this.judgeNull(this.pickerText, '行业')) return
-      if (this.judgeNull(this.job, '职位')) return
-      if (this.judgeNull(this.phone, '手机')) return
       // // 检测手机号
       // if (this.phone.length !== 0) {
       //   // var reg = /^1(3|4|5|7|8)\d{9}$/
@@ -519,7 +513,7 @@ export default {
     },
     gotoProduct () {
       wx.navigateTo({
-        url: `../consummate/main`
+        url: `../product/main`
       })
     }
   }
