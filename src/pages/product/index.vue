@@ -42,7 +42,7 @@
                  <img :src="item.imgUrl" @click="modify(item.id)">
                 <i class="iconfont iconshanchu-copy delete-img"  @click="deleteA(item.id, 0)"></i>
                 </div>
-              <div class="product-details" @click="updataProduct" v-if="productsA.length!==4">
+              <div class="product-details" @click="getInto" v-if="productsA.length!==4">
                 <i class="iconfont iconxiangji"></i>
                 <p>上传产品</p>
               </div>
@@ -265,6 +265,17 @@ export default {
     gotoConsummate () {
       wx.navigateTo({
         url: `../consummate/main`
+      })
+    },
+    modify (id) {
+      wx.navigateTo({
+        url: `../addProduct/main?id=` + id + '&edit=1'
+      })
+    },
+    // 添加产品跳转
+    getInto (e) {
+      wx.navigateTo({
+        url: `../prod/addProduct/main?add=1`
       })
     }
   }
